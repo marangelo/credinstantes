@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class Usuario extends Model {
     protected $table = "users";
 
-    public function Detalles(){
-        return $this->hasMany('App\Models\UsuarioRutas','id_usuario','id');
-    }
+    
     public function RolName(){
         return $this->hasOne('App\Models\Roles','id','id_rol');
     }

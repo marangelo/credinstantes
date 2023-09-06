@@ -13,13 +13,11 @@
           <!-- left column -->
           <div class="col-md-12">
             <!-- form start -->
-            <form id="frm_login" method="POST" action="{{ route('login') }}">
+            <form id="frm_login" method="get" action="Dashboard">
             @csrf
                 <div class="form-group">
                     <label for="lbl_email">Email</label>
-                    @error('email')
-                        <span class="invalid-feedback" ><strong>error</strong></span>
-                    @enderror
+                    
                     <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Digite email">
                 </div>
                 <div class="form-group">
