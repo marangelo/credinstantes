@@ -39,6 +39,8 @@ class LoginController extends Controller
     }
     public function login(Request $request) {
 
+ 
+
         $this->validateLogin($request);
 
         if ($this->hasTooManyLoginAttempts($request)) {
@@ -47,6 +49,7 @@ class LoginController extends Controller
 
             return $this->sendLockoutResponse($request);
         }
+  
 
 
         $user = $request->username;

@@ -13,4 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Auth::routes();
+
 Route::get('/', 'Auth\LoginController@showLoginForm');
+
+Route::get('Dashboard', 'HomeController@getDashboard')->name('Dashboard');
+Route::get('Clientes', 'HomeController@getClientes')->name('Clientes');
+Route::get('Usuarios', 'HomeController@getUsuarios')->name('Usuarios');
