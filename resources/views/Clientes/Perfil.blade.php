@@ -139,7 +139,8 @@
                       <th>Monto</th>
                       <th>Ultm. Abono</th>
                       <th>Salud</th>
-                      <th>Estao</th>
+                      <th>EStado</th>
+                      <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -150,6 +151,8 @@
                       <td>-</td>
                       <td>-</td>
                       <td>-</td>
+                      <td><a href="{{ route('voucher')}}" class="btn bg-secondary btn-sm" target="_blank"><i class="fas fa-print"></i></a></td>
+                      
                     </tr>
                     </tbody>
                   </table>

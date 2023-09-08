@@ -29,3 +29,5 @@ Route::get('Departamento', 'HomeController@getDepartamento')->name('Departamento
 Route::get('DiasSemna', 'HomeController@getDiasSemna')->name('DiasSemna');
 
 Route::get('Perfil/{id}', 'HomeController@getPerfil')->name('Perfil/{id}');
+
+Route::get('voucher', 'HomeController@prtVoucher')->name('voucher');
