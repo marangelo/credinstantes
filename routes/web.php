@@ -21,3 +21,9 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('Dashboard', 'HomeController@getDashboard')->name('Dashboard');
 Route::get('Clientes', 'HomeController@getClientes')->name('Clientes');
 Route::get('Usuarios', 'HomeController@getUsuarios')->name('Usuarios');
+
+Route::get('Municipios', 'HomeController@getMunicipios')->name('Municipios');
+Route::get('Departamento', 'HomeController@getDepartamento')->name('Departamento');
+Route::get('DiasSemna', 'HomeController@getDiasSemna')->name('DiasSemna');
+
+Route::get('Perfil/{id}', 'HomeController@getPerfil')->name('Perfil/{id}');
