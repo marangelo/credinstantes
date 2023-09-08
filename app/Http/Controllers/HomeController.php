@@ -17,6 +17,10 @@ class HomeController extends Controller {
         return view('Dashboard.home');
         
     }
+
+    public function prtVoucher(){
+        return view('Voucher.home');
+    }
     public function getClientes()
     {   
         $Clientes    = Clientes::getClientes();  
