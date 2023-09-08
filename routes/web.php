@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 Auth::routes();
 
-Route::get('/', 'Auth\LoginController@showLoginForm');
+#Route::get('/', 'Auth\LoginController@showLoginForm');
+Route::get('/', 'HomeController@getDashboard');
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('Dashboard', 'HomeController@getDashboard')->name('Dashboard');
