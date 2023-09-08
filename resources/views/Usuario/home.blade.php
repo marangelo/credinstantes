@@ -13,16 +13,16 @@
           <!-- left column -->
           <div class="col-md-12">
             <!-- form start -->
-            <form id="frm_login" method="get" action="Dashboard">
+            <form id="frm_login" method="POST" action="{{route('login')}}">
             @csrf
                 <div class="form-group">
                     <label for="lbl_email">Email</label>
                     
-                    <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Digite email">
+                    <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Digite email" value="demo@demo.com">
                 </div>
                 <div class="form-group">
                     <label for="lbl_pass">Contrasena</label>
-                    <input type="password" name="password" class="form-control" id="lbl_pass" placeholder="Contrasena">
+                    <input type="password" name="password" class="form-control" id="lbl_pass" placeholder="Contrasena" value="123456">
                 </div>
                 <!-- /.card-body -->
                 <div class="col-12">

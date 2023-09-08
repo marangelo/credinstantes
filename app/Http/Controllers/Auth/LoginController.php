@@ -17,7 +17,7 @@ class LoginController extends Controller
 
     public function redirectTo() {
 
-        return 'Dashboard';
+          return 'Dashboard';
     }
 
     /**
@@ -39,17 +39,17 @@ class LoginController extends Controller
     }
     public function login(Request $request) {
 
- 
-
         $this->validateLogin($request);
 
+        
+
         if ($this->hasTooManyLoginAttempts($request)) {
+            
 
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
         }
-  
 
 
         $user = $request->username;
@@ -60,16 +60,16 @@ class LoginController extends Controller
                 $Info_usuario = Usuario::find($queryResult);
                 $Rutas = '';
 
-                // foreach($Info_usuario as $user)
-                // {
-                //     $request->session()->put('name_session', $user->nombre);
-                //     $request->session()->put('name_rol', $user->RolName->descripcion);
-                //     $request->session()->put('rol', $user->id_rol);
+                foreach($Info_usuario as $user)
+                {
+                    $request->session()->put('name_session', $user->nombre);
+                    $request->session()->put('name_rol', $user->RolName->descripcion);
+                    $request->session()->put('rol', $user->id_rol);
                    
-                //     $request->session()->put('Rutas', $Rutas);
-                // }
+                    $request->session()->put('Rutas', $Rutas);
+                }
                 //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
-                //;
+                
                 return $this->sendLoginResponse($request);
             }
         }
