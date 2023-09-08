@@ -50,7 +50,6 @@
                     <th>Municipio</th>
                     <th>Departamento</th>
                     <th>Direccion</th>
-                    <th>Monto</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -60,9 +59,7 @@
                     <td>{{ strtoupper($c->telefono) }} </td>
                     <td> {{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
                     <td> {{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
-                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>                    
-                    <td>{{ strtoupper($c->id_clientes) }} </td>
-                  </tr>
+                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
                   @endforeach
                   </tbody>
                   <tfoot>
