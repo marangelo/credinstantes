@@ -94,7 +94,7 @@
 
                 <hr>
 
-                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+                <strong><i class="fas fa-pencil-alt mr-1"></i> --- </strong>
 
                 <p class="text-muted">
                   <span class="tag tag-danger">UI Design</span>

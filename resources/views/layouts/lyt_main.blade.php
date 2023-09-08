@@ -41,7 +41,7 @@
 
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('js/dashboard2.js') }}"></script>
+<script src="{{ asset('js/dashboard.js') }}"></script>
 
 
 </body>

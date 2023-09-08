@@ -30,9 +30,9 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function username() {
-        return 'username';
-    }
+    // public function username() {
+    //     return 'username';
+    // }
     public function logout () {        
         auth()->logout();
         return redirect('/');
@@ -52,8 +52,8 @@ class LoginController extends Controller
         }
 
 
-        $user = $request->username;
-        $queryResult = DB::table('users')->where('username', $user)->where('activo', 'S')->pluck('id');
+        $user = $request->email;
+        $queryResult = DB::table('users')->where('email', $user)->where('activo', 'S')->pluck('id');
         if (!$queryResult->isEmpty()) {
             if ($this->attemptLogin($request)) {
 
@@ -65,8 +65,6 @@ class LoginController extends Controller
                     $request->session()->put('name_session', $user->nombre);
                     $request->session()->put('name_rol', $user->RolName->descripcion);
                     $request->session()->put('rol', $user->id_rol);
-                   
-                    $request->session()->put('Rutas', $Rutas);
                 }
                 //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
                 
