@@ -115,7 +115,7 @@
               <div class="card-body">
                 <div class="d-flex">
                   <p class="d-flex flex-column">
-                    <span class="text-bold text-lg">$18,230.00</span>
+                    <span class="text-bold text-lg">C$18,230.00</span>
                     <span>Sales Over Time</span>
                   </p>
                   <p class="ml-auto d-flex flex-column text-right">
@@ -131,15 +131,7 @@
                   <canvas id="sales-chart" height="200"></canvas>
                 </div>
 
-                <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> This year
-                  </span>
-
-                  <span>
-                    <i class="fas fa-square text-gray"></i> Last year
-                  </span>
-                </div>
+                
               </div>
               <!-- ./card-body -->
               <div class="card-footer">
@@ -147,7 +139,7 @@
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
                       <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
-                      <h5 class="description-header">$35,210.43</h5>
+                      <h5 class="description-header">C$35,210.43</h5>
                       <span class="description-text">TOTAL REVENUE</span>
                     </div>
                     <!-- /.description-block -->
@@ -156,7 +148,7 @@
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
                       <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>
-                      <h5 class="description-header">$10,390.90</h5>
+                      <h5 class="description-header">C$10,390.90</h5>
                       <span class="description-text">TOTAL COST</span>
                     </div>
                     <!-- /.description-block -->
@@ -165,7 +157,7 @@
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
                       <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
-                      <h5 class="description-header">$24,813.53</h5>
+                      <h5 class="description-header">C$24,813.53</h5>
                       <span class="description-text">TOTAL PROFIT</span>
                     </div>
                     <!-- /.description-block -->
