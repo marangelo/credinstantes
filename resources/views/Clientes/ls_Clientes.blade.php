@@ -48,23 +48,22 @@
                     <th>Nombre</th>
                     <th>Telefono</th>
                     <th>Municipio</th>
+                    <th>Departamento</th>
                     <th>Direccion</th>
                     <th>Monto</th>
                   </tr>
                   </thead>
                   <tbody>
+                  @foreach ($Clientes as $c)  
                   <tr>
-                    <td>
-                    <a href="#" class="">
-                    Maryan Espinoza
-                  </a></td>
-                    <td>82449100</td>
-                    <td> JInotepe</td>
-                    <td>DGI, 6c al sur </td>                    
-                    <td>C$ 5,000.00</td>
-                  
+                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a></td>
+                    <td>{{ strtoupper($c->telefono) }} </td>
+                    <td> {{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
+                    <td> {{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
+                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>                    
+                    <td>{{ strtoupper($c->id_clientes) }} </td>
                   </tr>
-                  
+                  @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
@@ -102,18 +101,15 @@
               <div class="card-body">
                 <form>
                   <div class="col-sm-12">
-                      <!-- select -->
-                      <div class="form-group">
-                        <label>Dia de Pago</label>
-                        <select class="form-control">
-                          <option>Lunes</option>
-                          <option>Martes</option>
-                          <option>Miercoles</option>
-                          <option>Jueves</option>
-                          <option>Viernes</option>
-                        </select>
-                      </div>
+                    <div class="form-group">
+                      <label>Dia de Pago</label>
+                      <select class="form-control">
+                        @foreach ($DiasSemana as $d)
+                          <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                        @endforeach
+                      </select>
                     </div>
+                  </div>
                   <div class="row">
                     <div class="col-sm-12">
                       <!-- text input -->
@@ -132,23 +128,33 @@
                       </div>
                     </div>
                   </div>
-                   <div class="form-group">
-                  <label>Numero de Telefono:</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                  <div class="form-group">
+                    <label>Numero de Telefono:</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                      </div>
+                      <input type="text" class="form-control"data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
                     </div>
-                    <input type="text" class="form-control"data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                    <!-- /.input group -->
                   </div>
-                  
-                  <!-- /.input group -->
-                </div>
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>DIRECCION</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Direcion ..."></textarea>
                       </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Municipio</label>
+                      <select class="form-control">
+                        @foreach ($Municipios as $m)
+                          <option value="{{$m->ID}}"> {{strtoupper($m->nombre_municipio)}}</option>
+                        @endforeach
+                      </select>
                     </div>
                   </div>
 
@@ -178,7 +184,7 @@
                     <div class="col-sm-3">
                       <div class="form-group">
                         <label>Interes</label>
-                        <div class="input-group mb-3">
+                          <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                             </div>
@@ -189,7 +195,7 @@
                     <div class="col-sm-3">
                       <div class="form-group">
                         <label>N° Cuotas</label>
-                        <div class="input-group mb-3">
+                          <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
