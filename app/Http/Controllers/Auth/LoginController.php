@@ -17,7 +17,7 @@ class LoginController extends Controller
 
     public function redirectTo() {
 
-        return 'Dashboard';
+          return 'Dashboard';
     }
 
     /**
@@ -30,46 +30,44 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function username() {
-        return 'username';
-    }
+    // public function username() {
+    //     return 'username';
+    // }
     public function logout () {        
         auth()->logout();
         return redirect('/');
     }
     public function login(Request $request) {
 
- 
-
         $this->validateLogin($request);
 
+        
+
         if ($this->hasTooManyLoginAttempts($request)) {
+            
 
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
         }
-  
 
 
-        $user = $request->username;
-        $queryResult = DB::table('users')->where('username', $user)->where('activo', 'S')->pluck('id');
+        $user = $request->email;
+        $queryResult = DB::table('users')->where('email', $user)->where('activo', 'S')->pluck('id');
         if (!$queryResult->isEmpty()) {
             if ($this->attemptLogin($request)) {
 
                 $Info_usuario = Usuario::find($queryResult);
                 $Rutas = '';
 
-                // foreach($Info_usuario as $user)
-                // {
-                //     $request->session()->put('name_session', $user->nombre);
-                //     $request->session()->put('name_rol', $user->RolName->descripcion);
-                //     $request->session()->put('rol', $user->id_rol);
-                   
-                //     $request->session()->put('Rutas', $Rutas);
-                // }
+                foreach($Info_usuario as $user)
+                {
+                    $request->session()->put('name_session', $user->nombre);
+                    $request->session()->put('name_rol', $user->RolName->descripcion);
+                    $request->session()->put('rol', $user->id_rol);
+                }
                 //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
-                //;
+                
                 return $this->sendLoginResponse($request);
             }
         }
