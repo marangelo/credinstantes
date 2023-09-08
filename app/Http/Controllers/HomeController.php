@@ -8,7 +8,7 @@ class HomeController extends Controller {
     }
     public function getDashboard()
     {          
-        return view('Dashboard.Home');
+        return view('Dashboard.home');
         
     }
     public function getClientes()
