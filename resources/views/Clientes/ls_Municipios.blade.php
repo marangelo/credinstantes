@@ -1,7 +1,7 @@
 @extends('layouts.lyt_listas')
 
 @section('metodosjs')
-@include('jsViews.js_clientes')
+@include('jsViews.js_municipio')
 @endsection
 
 @section('content')
@@ -92,7 +92,18 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="Enter ...">
+                        <input type="text" id="txtNombre_Municipio" class="form-control" placeholder="Nombre ...">
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" id="selDepartamento">
+                          @foreach ($Departamentos as $d)
+                            <option value="{{$m->id_departamento}}"> {{strtoupper($d->nombre_departamento)}}</option>
+                          @endforeach
+                        </select>
                       </div>
                     </div>
                   </div>

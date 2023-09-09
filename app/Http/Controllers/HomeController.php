@@ -41,9 +41,11 @@ class HomeController extends Controller {
     }
     public function getMunicipios()
     {   
-        $Municipios = Municipios::getMunicipios();  
+        $Municipios = Municipios::getMunicipios(); 
+        $Departamentos = Departamentos::getDepartamentos();  
         
-        return view('Clientes.ls_Municipios', compact('Municipios'));
+        
+        return view('Clientes.ls_Municipios', compact('Municipios','Departamentos'));
         
     }
     public function getDepartamento()
@@ -72,5 +74,13 @@ class HomeController extends Controller {
         
         return response()->json($response);
     }
+
+    public function SaveNewMunicipio(Request $request)
+    {
+        $response = Municipios::SaveNewMunicipio($request);
+        
+        return response()->json($response);
+    }
+
 
 }  
