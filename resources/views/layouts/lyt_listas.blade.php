@@ -50,6 +50,8 @@
 <!-- Bootstrap 4 -->
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
 <!-- SweetAlert2 -->
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 

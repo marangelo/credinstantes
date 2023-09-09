@@ -100,7 +100,7 @@
                   <div class="col-sm-12">
                     <div class="form-group">
                       <label>Dia de Pago</label>
-                      <select class="form-control">
+                      <select class="form-control" id="selDiaSemana">
                         @foreach ($DiasSemana as $d)
                           <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
                         @endforeach
@@ -112,7 +112,7 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="Enter ...">
+                        <input type="text" name="txtNombre" class="form-control" placeholder="Enter ...">
                       </div>
                     </div>
                   </div>
@@ -121,7 +121,7 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Apellido</label>
-                        <input type="text" class="form-control" placeholder="Enter ...">
+                        <input type="text" name="txtApellido" class="form-control" placeholder="Enter ...">
                       </div>
                     </div>
                   </div>
@@ -131,7 +131,17 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                       </div>
-                      <input type="text" class="form-control"data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                      <input type="text" class="form-control" name="txtCedula" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                    </div>
+                    <!-- /.input group -->
+                  </div>
+                  <div class="form-group">
+                    <label>Numero de Cedula:</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                      </div>
+                      <input type="text" class="form-control" name="txtTelefono" data-inputmask="'mask': ['999-999999-9999', '+099 999999 999999']" data-mask>
                     </div>
                     <!-- /.input group -->
                   </div>
@@ -139,7 +149,7 @@
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>DIRECCION</label>
-                        <textarea class="form-control" rows="3" placeholder="Direcion ..."></textarea>
+                        <textarea class="form-control" name="txtDireccion" rows="3" placeholder="Direcion ..."></textarea>
                       </div>
                     </div>
                   </div>
@@ -147,9 +157,9 @@
                   <div class="col-sm-12">
                     <div class="form-group">
                       <label>Municipio</label>
-                      <select class="form-control">
+                      <select class="form-control" id="selMunicipio">
                         @foreach ($Municipios as $m)
-                          <option value="{{$m->ID}}"> {{strtoupper($m->nombre_municipio)}}</option>
+                          <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
                         @endforeach
                       </select>
                     </div>
@@ -161,9 +171,9 @@
                         <label>Monto</label>
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="C$ 0.00">
+                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00" >
                           </div>
                         </div>
                     </div>
@@ -174,7 +184,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="Numero de Meses">
+                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses">
                           </div>
                       </div>
                     </div>
@@ -185,7 +195,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="0.00 %">
+                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %">
                           </div>
                       </div>
                     </div>
@@ -196,7 +206,55 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="Numero de Cuotas">
+                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas">
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label>Total</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label>Cuota</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label>Saldos</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label>Intereses</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
                           </div>
                       </div>
                     </div>
