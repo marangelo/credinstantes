@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class Municipios extends Model
 {
-    protected $connection = 'sqlsrv';
+    #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "dbo.Cat_Municipio";
+    protected $table = "Cat_Municipio";
 
     public function getDepartamentos()
     {
@@ -21,30 +21,35 @@ class Municipios extends Model
     {
         return Municipios::where('activo',1)->get();
     }
-    public static function SaveNewMunicipio(Request $request)
+    public static function rmMunicipio($id)
     {
         try {
-            DB::transaction(function () use ($request) {
                 
+            $delete = Municipios::where('id_municipio', $id )->delete();
+            return  $delete;               
+        } catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
+    }
+    public static function SaveNewMunicipio(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
                 $nombre_municipio           = $request->input('Nombre_');
                 $Departamento               = $request->input('Departamento');
 
-                $mun                        = new Municipios();
-                $mun->nombre_municipio      = $nombre_municipio;
-                $mun->id_departamento       = $Departamento;
-                $response = $mun->save();
+                $datos_a_insertar[0]['nombre_municipio']           = $nombre_municipio;
+                $datos_a_insertar[0]['id_departamento']            = $Departamento;
 
-                return $response ;
+                $response = Municipios::insert($datos_a_insertar); 
+
+                return $response;
                 
-                
-
-            });
-        } catch (Exception $e) {
-            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-
-            dd($e->getMessage());
-
-            return $mensaje;
-        } 
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
     }
 }

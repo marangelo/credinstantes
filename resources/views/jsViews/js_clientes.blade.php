@@ -73,7 +73,7 @@
                 },
                 async: true,
                 success: function(response) {
-                    if(response.original){
+                    if(response){
                         Swal.fire({
                         title: 'Correcto',
                         icon: 'success',

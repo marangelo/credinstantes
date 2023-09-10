@@ -1,7 +1,7 @@
 @extends('layouts.lyt_listas')
 
 @section('metodosjs')
-@include('jsViews.js_clientes')
+@include('jsViews.js_departamento')
 @endsection
 
 @section('content')
@@ -46,18 +46,21 @@
                   <thead>
                   <tr>
                     <th>Nombre</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
                   @foreach ($Departamentos as $d)  
                   <tr>         
                     <td>{{ strtoupper($d->nombre_departamento) }} </td>
+                    <td><a href="#!" class="btn bg-danger btn-sm" onclick="rmDepartamento({{$d->id_departamento}})"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
                     <th>Nombre</th>
+                    <th></th>
                   </tr>
                   </tfoot>
                 </table>
@@ -92,7 +95,7 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="Enter ...">
+                        <input type="text" id="txtNombre_Departamento" class="form-control" placeholder="Enter ...">
                       </div>
                     </div>
                   </div>

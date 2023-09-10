@@ -1,7 +1,7 @@
 @extends('layouts.lyt_listas')
 
 @section('metodosjs')
-@include('jsViews.js_clientes')
+@include('jsViews.js_diaSemana')
 @endsection
 
 @section('content')
@@ -46,18 +46,21 @@
                   <thead>
                   <tr>
                     <th>Nombre</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
                   @foreach ($DiasSemana as $ds)  
                   <tr>                    
                     <td>{{ strtoupper($ds->dia_semana) }} </td>
+                    <td><a href="#!" class="btn bg-danger btn-sm" onclick="rmDiaSemana({{$ds->id_diassemana}})"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
                     <th>Nombre</th>
+                    <th></th>
                   </tr>
                   </tfoot>
                 </table>
@@ -92,7 +95,7 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="Enter ...">
+                        <input type="text" id="txtNombre_DiaSemana" class="form-control" placeholder="Enter ...">
                       </div>
                     </div>
                   </div>

@@ -35,3 +35,10 @@ Route::post('SaveNewCredito', 'HomeController@SaveNewCredito')->name('SaveNewCre
 
 
 Route::post('SaveNewMunicipio', 'HomeController@SaveNewMunicipio')->name('SaveNewMunicipio');
+Route::get('rmMunicipio/{id}', 'HomeController@rmMunicipio')->name('rmMunicipio/{id}');
+
+Route::post('SaveNewDepartamento', 'HomeController@SaveNewDepartamento')->name('SaveNewDepartamento');
+Route::get('rmDepartamento/{id}', 'HomeController@rmDepartamento')->name('rmDepartamento/{id}');
+
+Route::post('AddDiaSemana', 'HomeController@AddDiaSemana')->name('AddDiaSemana');
+Route::get('rmDiaSemana/{id}', 'HomeController@rmDiaSemana')->name('rmDiaSemana/{id}');

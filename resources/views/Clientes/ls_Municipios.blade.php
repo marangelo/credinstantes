@@ -46,18 +46,21 @@
                   <thead>
                   <tr>
                     <th>Nombre</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
                   @foreach ($Municipios as $m)  
                   <tr>
                     <td>{{ strtoupper($m->nombre_municipio) }} </td>
+                    <td><a href="#!" class="btn bg-danger btn-sm" onclick="rmMunicipio({{$m->id_municipio}})"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
                     <th>Nombre</th>
+                    <th></th>
                   </tr>
                   </tfoot>
                 </table>

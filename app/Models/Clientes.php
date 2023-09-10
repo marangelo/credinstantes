@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class Clientes extends Model
 {
-    protected $connection = 'sqlsrv';
+    #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "dbo.Tbl_Clientes";
+    protected $table = "Tbl_Clientes";
     protected $primaryKey = 'id_clientes';
 
     public function getMunicipio()
@@ -25,9 +25,9 @@ class Clientes extends Model
 
     public static function SaveNewCredito(Request $request)
     {
-        try {
-            DB::transaction(function () use ($request) {
-                
+
+        if ($request->ajax()) {
+            try {
                 $id_municipio           = $request->input('Municipio_');
                 $nombre                 = $request->input('Nombre_');
                 $apellidos              = $request->input('Apellido_');
@@ -37,26 +37,25 @@ class Clientes extends Model
                 $score                  = 100;
                 $activo                 = 1;
 
-                $cln                        = new Clientes();
-                $cln->id_municipio          = $id_municipio;
-                $cln->nombre                = $nombre;
-                $cln->apellidos             = $apellidos;
-                $cln->direccion_domicilio   = $direccion_domicilio;
-                $cln->cedula                = $cedula;
-                $cln->telefono              = $telefono;
-                $cln->score                 = $score;
-                $cln->activo                = $activo;
-                //$cln->USUARIO             = Auth::id();
-                $response = $cln->save();
 
-                return $response ;
+                $datos_a_insertar[0]['id_municipio']         = $id_municipio;
+                $datos_a_insertar[0]['nombre']               = $nombre;
+                $datos_a_insertar[0]['apellidos']            = $apellidos;
+                $datos_a_insertar[0]['direccion_domicilio']  = $direccion_domicilio;
+                $datos_a_insertar[0]['cedula']               = $cedula;
+                $datos_a_insertar[0]['telefono']             = $telefono;
+                $datos_a_insertar[0]['score']                = $score;
+                $datos_a_insertar[0]['activo']               = $activo;
+
+                $response = Clientes::insert($datos_a_insertar); 
+
+                return $response;
                 
-
-            });
-        } catch (Exception $e) {
-            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-
-            return $mensaje;
-        } 
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+        
     }
 }

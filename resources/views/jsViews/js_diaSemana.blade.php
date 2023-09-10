@@ -14,23 +14,20 @@
         $("#btn_save_credito").click(function(){
 
 
-            var Nombre_         = $("#txtNombre_Municipio").val();   
-            var Departamento    = $("#selDepartamento option:selected").val();  
+            var Nombre_         = $("#txtNombre_DiaSemana").val();    
             
             Nombre_             = isValue(Nombre_,'N/D',true)
-            Departamento        = isValue(Departamento,'N/D',true)
 
 
-            if(Nombre_ === 'N/D' || Departamento === 'N/D'){
+            if(Nombre_ === 'N/D' ){
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
 
                 $.ajax({
-                url: "SaveNewMunicipio",
+                url: "AddDiaSemana",
                 type: 'post',
                 data: {
                     Nombre_   : Nombre_,
-                    Departamento:Departamento,
                     _token  : "{{ csrf_token() }}" 
                 },
                 async: true,
@@ -65,14 +62,15 @@
         });
 
 
-      
+
+        
 
     })
 
-    function rmMunicipio(idMuni) {
+    function rmDiaSemana(id) {
         Swal.fire({
-            title: 'Eliminar este Municipio',
-            text: "¿Desea eliminar este Municipio?",
+            title: 'Eliminar este Departamento',
+            text: "¿Desea eliminar este Departamento?",
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -82,7 +80,7 @@
         }).then((result) => {
             Swal.fire("Removido", "con exito", "success");
         if (result.value) {
-            $.getJSON("rmMunicipio/"+idMuni, function(json) {
+            $.getJSON("rmDiaSemana/"+id, function(json) {
                 if (json) {
                     location.reload();
                 }

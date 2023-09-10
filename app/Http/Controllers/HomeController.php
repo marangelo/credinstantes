@@ -82,5 +82,40 @@ class HomeController extends Controller {
         return response()->json($response);
     }
 
+    public function rmMunicipio($id)
+    {
+        $response = Municipios::rmMunicipio($id);
+        
+        return response()->json($response);
+    }
+
+    public function SaveNewDepartamento(Request $request)
+    {
+        $response = Departamentos::SaveNewDepartamento($request);
+        
+        return response()->json($response);
+    }
+
+    public function rmDepartamento($id)
+    {
+        $response = Departamentos::rmDepartamento($id);
+        
+        return response()->json($response);
+    }
+
+    public function AddDiaSemana(Request $request)
+    {
+        $response = DiasSemana::AddDiaSemana($request);
+        
+        return response()->json($response);
+    }
+
+    public function rmDiaSemana($id)
+    {
+        $response = DiasSemana::rmDiaSemana($id);
+        
+        return response()->json($response);
+    }
+
 
 }  
