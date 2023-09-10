@@ -35,8 +35,9 @@ class HomeController extends Controller {
     {   
         
         $perfil_cliente = Clientes::find($id);  
+        $DiasSemana = DiasSemana::getDiasSemana();
         
-        return view('Clientes.Perfil', compact('perfil_cliente'));
+        return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana'));
         
     }
     public function getMunicipios()

@@ -1,15 +1,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        $('[data-mask]').inputmask()
+       
 
-        $("#tbl_clientes").DataTable({
-            "responsive": true, 
-            "lengthChange": false, 
-            "autoWidth": false,
-            "buttons": ["copy", "excel", "print"]
-        }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
-
+       
 
         $("#btn_save_credito").click(function(){
 
@@ -131,6 +125,11 @@
         
 
     })
+
+    function getIdCredi(id){
+        $("#lbl_credito").html(id);
+        console.log()
+    }
 
     function isValue(value, def, is_return) {
         if ( $.type(value) == 'null'

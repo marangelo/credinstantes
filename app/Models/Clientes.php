@@ -22,6 +22,10 @@ class Clientes extends Model
     {
         return Clientes::limit(5)->orderBy('id_clientes', 'desc')->get();
     }
+    public function getCreditos()
+    {
+        return $this->hasMany(Credito::class, 'id_clientes','id_clientes');;
+    }
 
     public static function SaveNewCredito(Request $request)
     {
@@ -37,17 +41,47 @@ class Clientes extends Model
                 $score                  = 100;
                 $activo                 = 1;
 
+                $DiaSemana_         = $request->input('DiaSemana_');
+                $Monto_             = $request->input('Monto_');
+                $Plato_             = $request->input('Plato_');
+                $Interes_           = $request->input('Interes_');
+                $Total_             = $request->input('Total_');
+                $Cuotas_             = $request->input('Cuotas_');
 
-                $datos_a_insertar[0]['id_municipio']         = $id_municipio;
-                $datos_a_insertar[0]['nombre']               = $nombre;
-                $datos_a_insertar[0]['apellidos']            = $apellidos;
-                $datos_a_insertar[0]['direccion_domicilio']  = $direccion_domicilio;
-                $datos_a_insertar[0]['cedula']               = $cedula;
-                $datos_a_insertar[0]['telefono']             = $telefono;
-                $datos_a_insertar[0]['score']                = $score;
-                $datos_a_insertar[0]['activo']               = $activo;
+                $vlCuota           = $request->input('vlCuota');
+                $vlInteres             = $request->input('vlInteres');
+                $Saldos_             = $request->input('Saldos_');
 
-                $response = Clientes::insert($datos_a_insertar); 
+
+                $datos_a_insertar = [
+                    'id_municipio'         => $id_municipio,
+                    'nombre'               => $nombre,
+                    'apellidos'            => $apellidos,
+                    'direccion_domicilio'  => $direccion_domicilio,
+                    'cedula'               => $cedula,
+                    'telefono'             => $telefono,
+                    'score'                => $score,
+                    'activo'               => $activo,
+                ];
+                $idInsertado = Clientes::insertGetId($datos_a_insertar);
+
+                $datos_credito = [
+                    'creado_por'          => Auth::id(),
+                    'fecha_apertura'      => date('Y-m-d H:i:s'),
+                    'id_diassemana'       => $DiaSemana_,
+                    'id_clientes'         => $idInsertado,
+                    'monto_credito'       => $Monto_,
+                    'plazo'               => $Plato_,
+                    'taza_interes'        => $Interes_,
+                    'numero_cuotas'       => $Cuotas_,
+                    'total'               => $Total_,
+                    'cuota'               => $vlCuota,
+                    'interes'             => $vlInteres,
+                    'saldo'               => $Saldos_,
+                ];
+                $response = Credito::insert($datos_credito);
+                
+
 
                 return $response;
                 

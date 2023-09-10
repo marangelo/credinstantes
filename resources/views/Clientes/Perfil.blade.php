@@ -1,6 +1,6 @@
-@extends('layouts.lyt_main')
+@extends('layouts.lyt_listas  ')
 @section('metodosjs')
-@include('jsViews.js_dashboard')
+@include('jsViews.js_perfil')
 @endsection
 @section('content')
 <div class="wrapper">
@@ -80,7 +80,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <strong><i class="fas fa-book mr-1"></i> Identficacion</strong>
+                <strong><i class="fas fa-book mr-1"></i> Cedula</strong>
 
                 <p class="text-muted">
                 {{ strtoupper($perfil_cliente->cedula) }}
@@ -94,16 +94,11 @@
 
                 <hr>
 
-                <strong><i class="fas fa-pencil-alt mr-1"></i> --- </strong>
+                <strong><i class="fas fa-pencil-alt mr-1"></i> Telefono </strong>
 
                 <p class="text-muted">
-                  <span class="tag tag-danger">UI Design</span>
-                  <span class="tag tag-success">Coding</span>
-                  <span class="tag tag-info">Javascript</span>
-                  <span class="tag tag-warning">PHP</span>
-                  <span class="tag tag-primary">Node.js</span>
+                {{ strtoupper($perfil_cliente->telefono) }}
                 </p>
-
                 <hr>
 
                 <strong><i class="far fa-file-alt mr-1"></i> --</strong>
@@ -139,21 +134,28 @@
                       <th>Monto</th>
                       <th>Ultm. Abono</th>
                       <th>Salud</th>
-                      <th>EStado</th>
+                      <th>Estado</th>
+                      <th></th>
                       <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                      <td><a href="{{ route('voucher')}}" class="btn bg-secondary btn-sm" target="_blank"><i class="fas fa-print"></i></a></td>
+                    
+                      @foreach ($perfil_cliente->getCreditos as $c)
+                      <tr>
+                        <td>{{$c->id_creditos}}</td>
+                        <td>{{$c->fecha_apertura}}</td>
+                        <td>C$ {{$c->monto_credito}}</td>
+                        <td>{{$c->fecha_ultimo_abono}}</td>
+                        <td>{{$c->salud_credito}}</td>
+                        <td>{{$c->estado_credito}}</td>
+
+                        <td><button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="{{ route('voucher')}}" class="text-white" target="_blank">Imprimir</a></button></td>
+                        <td><button type="button" onclick="getIdCredi({{$c->id_creditos}})" class="btn btn-block bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-lg">Abonar</button></td>
+                      </tr>
+                      @endforeach
                       
-                    </tr>
+                    
                     </tbody>
                   </table>
                 </div>
@@ -163,54 +165,115 @@
                   </div>
                   <div class="tab-pane" id="new_credit">
                     <form class="form-horizontal">
-                      <div class="form-group row">
-                        <label for="inputName" class="col-sm-2 col-form-label">Monto</label>
-                        <div class="col-sm-10">
+
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>Dia de Pago</label>
+                        <select class="form-control" id="selDiaSemana">
+                          @foreach ($DiasSemana as $d)
+                            <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-sm-6 col-md-3">
                         <div class="form-group">
+                          <label>Monto</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                              </div>
+                              <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00" >
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                          <label>Plazo</label>
                           <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                              </div>
+                              <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses">
                             </div>
-                            <input type="email" class="form-control" placeholder="C$ 0.00">
-                          </div>
-                        </div>
                         </div>
                       </div>
-                      <div class="form-group row">
-                        <label for="inputEmail" class="col-sm-2 col-form-label">Plazo</label>
-                        <div class="col-sm-10">
+                      <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                          <label>Interes</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                              </div>
+                              <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                          <label>N° Cuotas</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                              </div>
+                              <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas">
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                          <label>Total</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                              </div>
+                              <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                          <label>Cuota</label>
                           <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                              </div>
+                              <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
                             </div>
-                            <input type="email" class="form-control" placeholder="Numero de Meses">
-                          </div>
                         </div>
                       </div>
+                      <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                          <label>Saldos</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                              </div>
+                              <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                          <label>Intereses</label>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                              </div>
+                              <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                        
                       <div class="form-group row">
-                        <label for="inputName2" class="col-sm-2 col-form-label">Interes</label>
                         <div class="col-sm-10">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-percentage"></i></span>
-                            </div>
-                            <input type="email" class="form-control" placeholder="0.00 %">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputSkills" class="col-sm-2 col-form-label"> N° Cuotas </label>
-                        <div class="col-sm-10">
-                          <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                            </div>
-                            <input type="email" class="form-control" placeholder="Numero de Cuotas">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
                           <button type="submit" class="btn btn-danger">Aplicar</button>
                         </div>
                       </div>
@@ -231,7 +294,52 @@
     <!-- /.content -->
   </div>
  
-  
+  <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+                <div class="user-block">
+                  <img class="img-circle" src="{{asset('img/user.png')}}" alt="User Image">
+                  <span class="username"><a href="#">{{ $perfil_cliente->nombre}} {{ $perfil_cliente->apellidos}}</a></span>
+                  <span class="description"># Cliente : <span>{{ $perfil_cliente->id_clientes}}</span> - # Credito: <span id="lbl_credito"> 0 </span></span></span>
+                </div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                  <label>Capital</label>
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="text" id="txt_Capital" class="form-control" placeholder="C$ 0.00">
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                  <label>Interes</label>
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="text" id="txt_Interes" class="form-control" placeholder="C$ 0.00">
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-success">Aplicar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 
   <!-- /.content-wrapper -->
 

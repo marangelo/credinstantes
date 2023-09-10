@@ -112,7 +112,7 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" name="txtNombre" class="form-control" placeholder="Enter ...">
+                        <input type="text" id="txtNombre" class="form-control" placeholder="Enter ...">
                       </div>
                     </div>
                   </div>
@@ -121,7 +121,7 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Apellido</label>
-                        <input type="text" name="txtApellido" class="form-control" placeholder="Enter ...">
+                        <input type="text" id="txtApellido" class="form-control" placeholder="Enter ...">
                       </div>
                     </div>
                   </div>
@@ -131,7 +131,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                       </div>
-                      <input type="text" class="form-control" name="txtCedula" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                      <input type="text" class="form-control" id="txtTelefono" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
                     </div>
                     <!-- /.input group -->
                   </div>
@@ -141,7 +141,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                       </div>
-                      <input type="text" class="form-control" name="txtTelefono" data-inputmask="'mask': ['999-999999-9999', '+099 999999 999999']" data-mask>
+                      <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999', '+099 999999 999999']" data-mask>
                     </div>
                     <!-- /.input group -->
                   </div>
@@ -149,7 +149,7 @@
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>DIRECCION</label>
-                        <textarea class="form-control" name="txtDireccion" rows="3" placeholder="Direcion ..."></textarea>
+                        <textarea class="form-control" id="txtDireccion" rows="3" placeholder="Direcion ..."></textarea>
                       </div>
                     </div>
                   </div>

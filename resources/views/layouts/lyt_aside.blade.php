@@ -58,7 +58,7 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-table"></i>
               <p>
-                Clientes
+                Catalogos
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -67,7 +67,7 @@
               <li class="nav-item">
                   <a href="{{ route('Clientes')}}" class="nav-link {{ (request()->is('Clientes') || request()->segment(1)  == 'Perfil' ) ? 'active' : '' }}">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>Lista</p>
+                      <p>Clientes</p>
                   </a>
               </li>
 
