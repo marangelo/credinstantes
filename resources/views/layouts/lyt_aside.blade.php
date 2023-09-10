@@ -91,8 +91,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Reportes
@@ -102,7 +102,7 @@
             
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="Reporte" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}" >
                       <i class="far fa-circle nav-icon"></i>
                       <p>Reporte 01</p>
                   </a>

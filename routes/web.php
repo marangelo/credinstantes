@@ -24,6 +24,8 @@ Route::get('Dashboard', 'HomeController@getDashboard')->name('Dashboard');
 Route::get('Clientes', 'HomeController@getClientes')->name('Clientes');
 Route::get('Usuarios', 'HomeController@getUsuarios')->name('Usuarios');
 
+Route::get('Reporte', 'HomeController@getReporte')->name('Reporte');
+
 Route::get('Municipios', 'HomeController@getMunicipios')->name('Municipios');
 Route::get('Departamento', 'HomeController@getDepartamento')->name('Departamento');
 Route::get('DiasSemna', 'HomeController@getDiasSemna')->name('DiasSemna');
