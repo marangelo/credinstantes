@@ -100,36 +100,32 @@
         var btns = $('#txtMonto,#txtPlazo,#txtInteres,#txtCuotas');
 
         btns.on('keyup', function(e){
+            if(isNumberKey(e)){
+                var Monto_     = $("#txtMonto").val();   
+                var Plato_     = $("#txtPlazo").val();   
+                var Interes_   = $("#txtInteres").val();
+                var Cuotas_    = $("#txtCuotas").val();
 
-            var Monto_     = $("#txtMonto").val();   
-            var Plato_     = $("#txtPlazo").val();   
-            var Interes_   = $("#txtInteres").val();
-            var Cuotas_    = $("#txtCuotas").val();
+                Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
+                Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
+                Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
+                Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
 
-            //var Total_     = $("#txtTotal").val();
+                Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Cuotas_) ) + parseFloat(Monto_))
 
-            Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
-            Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
-            Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
-            Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
+                vlCuota        = Total_ / parseFloat(Cuotas_);
+                vlCuota        = numeral(isValue(vlCuota,0,true)).format('00.00')
 
-            Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Cuotas_) ) + parseFloat(Monto_))
+                vlInteres      = parseFloat(Total_) - parseFloat(Monto_)
 
-            vlCuota        = Total_ / parseFloat(Cuotas_);
-            vlCuota        = numeral(isValue(vlCuota,0,true)).format('00.00')
+                $("#txtTotal").val(Total_);
+                $("#txtVlCuota").val(vlCuota);
+                $("#txtIntereses").val(vlInteres);
+                $("#txtSaldos").val(Total_);
 
-            vlInteres      = parseFloat(Total_) - parseFloat(Monto_)
-
-            $("#txtTotal").val(Total_);
-            $("#txtVlCuota").val(vlCuota);
-            $("#txtIntereses").val(vlInteres);
-            $("#txtSaldos").val(Total_);
-            
+            }
 
         });
-
-        
-
     })
 
     function isValue(value, def, is_return) {
@@ -144,6 +140,14 @@
         } else {
             return ($.type(is_return) == 'boolean' && is_return === true ? value : true);
         }
+    }
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
     }
 
 </script>

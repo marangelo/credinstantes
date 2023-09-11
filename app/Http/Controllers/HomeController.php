@@ -6,6 +6,7 @@ use App\Models\Clientes;
 use App\Models\Municipios;
 use App\Models\Departamentos;
 use App\Models\DiasSemana;
+use App\Models\Abono;
 
 class HomeController extends Controller {
     public function __construct()
@@ -121,6 +122,20 @@ class HomeController extends Controller {
         $response = DiasSemana::rmDiaSemana($id);
         
         return response()->json($response);
+    }
+
+    public function SaveNewAbono(Request $request)
+    {
+        $response = Abono::SaveNewAbono($request);
+        
+        return response()->json($response);
+    }
+
+    public function getHistoricoAbono($IdCredito)
+    {
+        $Abonos =  Abono::getHistorico($IdCredito);
+
+        return response()->json($Abonos);
     }
 
 

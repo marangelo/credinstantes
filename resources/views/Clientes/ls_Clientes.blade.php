@@ -136,15 +136,16 @@
                     <!-- /.input group -->
                   </div>
                   <div class="form-group">
-                    <label>Numero de Cedula:</label>
+                    <label>Cedula:</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
                       </div>
-                      <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999', '+099 999999 999999']" data-mask>
+                      <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask>
                     </div>
                     <!-- /.input group -->
                   </div>
+
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
@@ -173,7 +174,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00" >
+                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'>
                           </div>
                         </div>
                     </div>
@@ -184,7 +185,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses">
+                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
                           </div>
                       </div>
                     </div>
@@ -195,7 +196,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                             </div>
-                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %">
+                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
                           </div>
                       </div>
                     </div>
@@ -206,7 +207,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas">
+                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
                           </div>
                       </div>
                     </div>

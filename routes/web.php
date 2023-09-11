@@ -44,3 +44,6 @@ Route::get('rmDepartamento/{id}', 'HomeController@rmDepartamento')->name('rmDepa
 
 Route::post('AddDiaSemana', 'HomeController@AddDiaSemana')->name('AddDiaSemana');
 Route::get('rmDiaSemana/{id}', 'HomeController@rmDiaSemana')->name('rmDiaSemana/{id}');
+
+Route::post('SaveNewAbono', 'HomeController@SaveNewAbono')->name('SaveNewAbono');
+Route::get('getHistoricoAbono/{ID}', 'HomeController@getHistoricoAbono')->name('getHistoricoAbono');
