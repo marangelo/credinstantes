@@ -68,11 +68,13 @@
                                 <tr>
                                   <th>#</th>
                                   <th>Apertura</th>
+                                  <th>Plazo</th>
                                   <th>Monto</th>
+                                  <th>Total</th>
+                                  <th>Saldo</th>
+                                  <th>Cuotas</th>
                                   <th>Ultm. Abono</th>
-                                  <th>Salud</th>
                                   <th>Estado</th>
-                                  <th></th>
                                   <th></th>
                                 </tr>
                                 </thead>
@@ -82,7 +84,11 @@
                                   <tr>
                                     <td>{{$c->id_creditos}}</td>
                                     <td>{{date('D, M d, Y', strtotime($c->fecha_apertura))}}</td>
-                                    <td>C$ {{number_format($c->monto_credito,2)}}</td>
+                                    <td>{{number_format($c->plazo,0)}}</td>
+                                    <td> C$ {{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
+                                    <td>C$ {{number_format($c->total,2)}}</td>
+                                    <td>C$ {{number_format($c->saldo,2)}}</td>
+                                    <td>{{number_format($c->abonosCount(), 0)}} / {{number_format($c->numero_cuotas, 0)}}</td>
                                     <td>
                                         @if($c->abonos->isNotEmpty())
                                             {{date('D, M d, Y', strtotime($c->abonos->first()->fecha_cuota))}}
@@ -90,7 +96,6 @@
                                             -
                                         @endif
                                     </td>
-                                    <td>{{$c->salud_credito}}</td>
                                     <td>
                                         <span class="badge @switch($c->estado_credito)
                                             @case(1)
@@ -106,8 +111,25 @@
                                                 ''
                                         @endswitch">{{ strtoupper($c->Estado->nombre_estado) }}</span>
                                     </td>
-                                    <td><button type="button" onclick="getIdCredi({{$c->id_creditos}})" class="btn btn-block bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-lg"><i class="fas fa-hand-holding-usd"></i></button></td>
-                                    <td><button type="button" onclick="getModalHistorico({{$c->id_creditos}})" class="btn btn-block bg-gradient-primary btn-sm" ><i class="fas fa-history"></i></button></td>
+                                    
+                                    <td class="project-actions text-right">
+                                        <a class="btn btn-primary btn-sm" href="#"  onclick="getModalHistorico({{$c->id_creditos}})">
+                                            <i class="fas fa-history">
+                                            </i>
+                                            Historico
+                                        </a>
+                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c->id_creditos}})"  data-toggle="modal" data-target="#modal-lg">
+                                            
+                                        <i class="far fa-money-bill-alt"></i>
+                                            </i>
+                                            Abonar
+                                        </a>
+                                        <a class="btn btn-danger btn-sm" href="#">
+                                            <i class="fas fa-trash">
+                                            </i>
+                                            Remover
+                                        </a>
+                                    </td>
                                   </tr>
                                   @endforeach
                                   
@@ -277,6 +299,7 @@
           </button>
         </div>
         <div class="modal-body">
+        
           <div class="col-sm-12 col-md-12">
             <div class="form-group">
               <label>Capital</label>
@@ -310,6 +333,9 @@
                 </div>
             </div>
           </div>
+
+          
+          
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

@@ -17,6 +17,10 @@ class Credito extends Model
     {
         return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->orderBy('id_abonoscreditos', 'desc')->limit(1);
     }
+    public function abonosCount()
+    {
+        return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->count();
+    }
     public function Estado()
     {
         return $this->hasOne(Estados::class, 'id_estados','estado_credito');
