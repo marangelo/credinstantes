@@ -95,56 +95,76 @@
             <div class="card card-warning">
             
               <!-- /.card-header -->
-              <div class="card-body">
-                <form>
-                  <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Dia de Pago</label>
-                      <select class="form-control" id="selDiaSemana">
-                        @foreach ($DiasSemana as $d)
-                          <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
+              <div class="card-body">                  
                   <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Dia de Pago</label>
+                        <select class="form-control" id="selDiaSemana">
+                          @foreach ($DiasSemana as $d)
+                            <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                          @endforeach
+                        </select>
+                    </div>
+                    </div>
+                    <div class="col-sm-4">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" id="txtNombre" class="form-control" placeholder="Enter ...">
+                        <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ...">
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="txtApellido" class="form-control" placeholder="Apellido ...">
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-sm-12">
-                      <!-- text input -->
+                    <div class="col-sm-4">
+
                       <div class="form-group">
-                        <label>Apellido</label>
-                        <input type="text" id="txtApellido" class="form-control" placeholder="Enter ...">
+                        <label>Numero de Telefono:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="txtTelefono" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                        </div>
                       </div>
+
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Numero de Telefono:</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Cedula:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask>
+                        </div>
                       </div>
-                      <input type="text" class="form-control" id="txtTelefono" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                      
                     </div>
-                    <!-- /.input group -->
-                  </div>
-                  <div class="form-group">
-                    <label>Cedula:</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" id="selMunicipio">
+                          @foreach ($Municipios as $m)
+                            <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
+                          @endforeach
+                        </select>
                       </div>
-                      <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask>
+                        
                     </div>
-                    <!-- /.input group -->
+                    
                   </div>
+                  
+                  
 
                   <div class="row">
                     <div class="col-sm-12">
@@ -155,19 +175,8 @@
                     </div>
                   </div>
 
-                  <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Municipio</label>
-                      <select class="form-control" id="selMunicipio">
-                        @foreach ($Municipios as $m)
-                          <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
-
                   <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Monto</label>
                           <div class="input-group mb-3">
@@ -178,7 +187,7 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Plazo</label>
                         <div class="input-group mb-3">
@@ -189,7 +198,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Interes</label>
                           <div class="input-group mb-3">
@@ -200,7 +209,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>N° Cuotas</label>
                           <div class="input-group mb-3">
@@ -211,11 +220,7 @@
                           </div>
                       </div>
                     </div>
-                  </div>
-
-
-                  <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Total</label>
                           <div class="input-group mb-3">
@@ -226,7 +231,7 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Cuota</label>
                         <div class="input-group mb-3">
@@ -237,7 +242,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Saldos</label>
                           <div class="input-group mb-3">
@@ -248,9 +253,9 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
-                        <label>Intereses</label>
+                        <label>Intereses </label>
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
@@ -259,15 +264,23 @@
                           </div>
                       </div>
                     </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Intereses por cuota </label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
                   </div>
 
-                  
 
-
-          
-
-
-                </form>
+                  <div class="row">
+                    
+                  </div>
               </div>
               <!-- /.card-body -->
             </div>

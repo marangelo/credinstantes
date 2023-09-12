@@ -30,6 +30,7 @@
             var Total_     = $("#txtTotal").val();
             var vlCuota    = $("#txtVlCuota").val();
             var vlInteres  = $("#txtIntereses").val();
+            var InteresesPorCuota  = $("#txtInteresesPorCuota").val();
             var Saldos_    = $("#txtSaldos").val();
 
         
@@ -63,6 +64,7 @@
                     Total_       : Total_,
                     vlCuota      : vlCuota,
                     vlInteres    : vlInteres,
+                    InteresesPorCuota:InteresesPorCuota,
                     Saldos_      : Saldos_,
                     _token  : "{{ csrf_token() }}" 
                 },
@@ -98,30 +100,61 @@
 
 
         var btns = $('#txtMonto,#txtPlazo,#txtInteres,#txtCuotas');
+        btns.on('keyup touchend', function(){
+            var Monto_              = $("#txtMonto").val();   
+            var Plato_              = $("#txtPlazo").val();   
+            var Interes_            = $("#txtInteres").val();
+            var Cuotas_             = $("#txtCuotas").val();
+            
+
+            Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
+            Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
+            Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
+            Plato_        = numeral(isValue(Plato_,0,true)).format('0.00')
+
+            Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Plato_) ) + parseFloat(Monto_))
+
+            vlCuota        = Total_ / parseFloat(Cuotas_);
+            vlCuota        = numeral(isValue(vlCuota,0,true)).format('00.00')
+
+            vlInteres      = parseFloat(Total_) - parseFloat(Monto_)
+            vlInterePorCuota  = parseFloat(vlInteres) / parseFloat(Cuotas_)
+            vlInterePorCuota        = numeral(isValue(vlInterePorCuota,0,true)).format('0.00')
+
+            $("#txtTotal").val(Total_);
+            $("#txtVlCuota").val(vlCuota);
+            $("#txtIntereses").val(vlInteres);
+            $("#txtSaldos").val(Total_);
+            $("#txtInteresesPorCuota").val(vlInterePorCuota);
+        });
 
         btns.on('keyup', function(e){
             if(isNumberKey(e)){
-                var Monto_     = $("#txtMonto").val();   
-                var Plato_     = $("#txtPlazo").val();   
-                var Interes_   = $("#txtInteres").val();
-                var Cuotas_    = $("#txtCuotas").val();
+                var Monto_              = $("#txtMonto").val();   
+                var Plato_              = $("#txtPlazo").val();   
+                var Interes_            = $("#txtInteres").val();
+                var Cuotas_             = $("#txtCuotas").val();
+                
 
                 Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
                 Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
                 Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
-                Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
+                Plato_        = numeral(isValue(Plato_,0,true)).format('0.00')
 
-                Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Cuotas_) ) + parseFloat(Monto_))
+                Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Plato_) ) + parseFloat(Monto_))
 
                 vlCuota        = Total_ / parseFloat(Cuotas_);
                 vlCuota        = numeral(isValue(vlCuota,0,true)).format('00.00')
 
                 vlInteres      = parseFloat(Total_) - parseFloat(Monto_)
+                vlInterePorCuota  = parseFloat(vlInteres) / parseFloat(Cuotas_)
+                vlInterePorCuota        = numeral(isValue(vlInterePorCuota,0,true)).format('0.00')
 
                 $("#txtTotal").val(Total_);
                 $("#txtVlCuota").val(vlCuota);
                 $("#txtIntereses").val(vlInteres);
                 $("#txtSaldos").val(Total_);
+                $("#txtInteresesPorCuota").val(vlInterePorCuota);
 
             }
 

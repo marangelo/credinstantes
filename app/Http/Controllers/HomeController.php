@@ -7,6 +7,7 @@ use App\Models\Municipios;
 use App\Models\Departamentos;
 use App\Models\DiasSemana;
 use App\Models\Abono;
+use App\Models\Credito;
 
 class HomeController extends Controller {
     public function __construct()
@@ -77,7 +78,7 @@ class HomeController extends Controller {
 
     public function SaveNewCredito(Request $request)
     {
-        $response = Clientes::SaveNewCredito($request);
+        $response = Credito::SaveNewCredito($request);
         
         return response()->json($response);
     }
@@ -136,6 +137,13 @@ class HomeController extends Controller {
         $Abonos =  Abono::getHistorico($IdCredito);
 
         return response()->json($Abonos);
+    }
+
+    public function AddCredito(Request $request)
+    {
+        $response = Credito::AddCredito($request);
+        
+        return response()->json($response);
     }
 
 

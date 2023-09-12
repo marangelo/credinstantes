@@ -52,7 +52,7 @@ class Abono extends Model
                     'pago_intereses'        => $Interes_,
                     'cuota_credito'         => $Info_Credito->cuota,
                     'cuota_cobrada'         => $Total_,
-                    // 'intereses_por_cuota'   => $XXXXXX,
+                    'intereses_por_cuota'   => $Info_Credito->intereses_por_cuota,
                     // 'abono_dia1'            => $XXXXXX,
                     // 'abono_dia2'            => $XXXXXX,
                     // 'fecha_cuota_secc1'     => $XXXXXX,
@@ -61,6 +61,10 @@ class Abono extends Model
                     // 'fecha_cuota_secc2'     => $XXXXXX,
                 ];
                 $response = Abono::insert($datos_credito);
+
+                Credito::where('id_creditos',  $IdCred)->update([
+                    "fecha_ultimo_abono"    => date('Y-m-d H:i:s')
+                ]);
                 
 
 

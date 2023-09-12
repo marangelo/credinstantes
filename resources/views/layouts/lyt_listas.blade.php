@@ -26,6 +26,10 @@
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
 
+ <!-- Preloader -->
+ <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__wobble" src="{{asset('img/Logo.png')}}" alt="AdminLTELogo" height="60" width="60">
+  </div>
 
   <!-- Main Sidebar Container -->
   @include('layouts.lyt_aside')
@@ -33,12 +37,7 @@
   
   @yield('content')
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
-    </div>
-    <strong>Copyright &copy; {{date('Y')}} <a href="http://pullpos.com/">pullpos.com</a>.</strong> All rights reserved.
-  </footer>
+  @include('layouts.lyt_footer')
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">

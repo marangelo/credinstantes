@@ -14,51 +14,38 @@
 
 
 
-        $("#btn_save_credito").click(function(){
+        $("#btn_add_credito").click(function(){
 
             var DiaSemana_  = $("#selDiaSemana option:selected").val();  
-            var Municipio_  = $("#selMunicipio option:selected").val();  
 
-            var Nombre_      = $("#txtNombre").val();   
-            var Apellido_    = $("#txtApellido").val();   
-            var Cedula_      = $("#txtCedula").val();
-            var Tele_        = $("#txtTelefono").val();
-            var Dire_        = $("#txtDireccion").val();
+            var Monto_      = $("#txtMonto").val();   
+            var Plato_      = $("#txtPlazo").val();   
+            var Interes_    = $("#txtInteres").val();
+            var Cuotas_     = $("#txtCuotas").val();
 
-            var Monto_     = $("#txtMonto").val();   
-            var Plato_     = $("#txtPlazo").val();   
-            var Interes_   = $("#txtInteres").val();
-            var Cuotas_    = $("#txtCuotas").val();
-
-            var Total_     = $("#txtTotal").val();
-            var vlCuota    = $("#txtVlCuota").val();
-            var vlInteres  = $("#txtIntereses").val();
-            var Saldos_    = $("#txtSaldos").val();
+            var Total_      = $("#txtTotal").val();
+            var vlCuota     = $("#txtVlCuota").val();
+            var vlInteres   = $("#txtIntereses").val();
+            var Saldos_     = $("#txtSaldos").val();
 
         
             DiaSemana_      = isValue(DiaSemana_,'N/D',true)
-            Municipio_      = isValue(Municipio_,'N/D',true)            
-            Nombre_         = isValue(Nombre_,'N/D',true)
-            Apellido_       = isValue(Apellido_,'N/D',true)
-            Cedula_         = isValue(Cedula_,'000-000000-00000',true)
-            Tele_           = isValue(Tele_,'00-0000-0000',true)
-            Dire_           = isValue(Dire_,'N/D',true)
+            Plato_          = isValue(Plato_,'N/D',true)            
+            Interes_        = isValue(Interes_,'N/D',true)
+            Cuotas_         = isValue(Cuotas_,'N/D',true)
+            IdClientes      =  {{request()->segment(2) }}
+            var InteresesPorCuota  = $("#txtInteresesPorCuota").val();
 
 
-            if(DiaSemana_ === 'N/D' || Municipio_ ==='N/D'||Nombre_ === 'N/D' || Apellido_ ==='N/D'){
+            if(Monto_ === 'N/D' || Plato_ ==='N/D'||Interes_ === 'N/D' || Cuotas_ ==='N/D'){
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
                 $.ajax({
-                url: "SaveNewCredito",
+                url: "../AddCredito",
                 type: 'post',
                 data: {
                     DiaSemana_   : DiaSemana_,
-                    Municipio_   : Municipio_,
-                    Nombre_      : Nombre_,
-                    Apellido_    : Apellido_ , 
-                    Cedula_      : Cedula_,
-                    Tele_        : Tele_,
-                    Dire_        : Dire_,
+                    IdClientes   : IdClientes,
                     Monto_       : Monto_,  
                     Plato_       : Plato_,  
                     Interes_     : Interes_,
@@ -67,6 +54,7 @@
                     vlCuota      : vlCuota,
                     vlInteres    : vlInteres,
                     Saldos_      : Saldos_,
+                    InteresesPorCuota:InteresesPorCuota,
                     _token  : "{{ csrf_token() }}" 
                 },
                 async: true,
@@ -100,9 +88,36 @@
         });
 
 
-        var btns = $('#txtMonto,#txtPlazo,#txtInteres,#txtCuotas');
+        var btns_01 = $('#txtMonto,#txtPlazo,#txtInteres,#txtCuotas');
+        btns_01.on('keyup touchend', function(){
+            var Monto_     = $("#txtMonto").val();   
+            var Plato_     = $("#txtPlazo").val();   
+            var Interes_   = $("#txtInteres").val();
+            var Cuotas_    = $("#txtCuotas").val();
 
-        btns.on('keyup', function(e){
+            Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
+            Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
+            Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
+            Plato_         = numeral(isValue(Plato_,0,true)).format('0.00')
+
+            Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Plato_) ) + parseFloat(Monto_))
+
+            vlCuota        = Total_ / parseFloat(Cuotas_);
+            vlCuota        = numeral(isValue(vlCuota,0,true)).format('00.00')
+
+            vlInteres      = parseFloat(Total_) - parseFloat(Monto_)
+            vlInterePorCuota  = parseFloat(vlInteres) / parseFloat(Cuotas_)
+            vlInterePorCuota        = numeral(isValue(vlInterePorCuota,0,true)).format('0.00')
+
+            $("#txtTotal").val(Total_);
+            $("#txtVlCuota").val(vlCuota);
+            $("#txtIntereses").val(vlInteres);
+            $("#txtSaldos").val(Total_);
+            $("#txtInteresesPorCuota").val(vlInterePorCuota);
+
+        })
+
+        btns_01.on('keyup', function(e){
             if(isNumberKey(e)){
                 var Monto_     = $("#txtMonto").val();   
                 var Plato_     = $("#txtPlazo").val();   
@@ -112,19 +127,22 @@
                 Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
                 Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
                 Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
-                Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
+                Plato_         = numeral(isValue(Plato_,0,true)).format('0.00')
 
-                Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Cuotas_) ) + parseFloat(Monto_))
+                Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Plato_) ) + parseFloat(Monto_))
 
                 vlCuota        = Total_ / parseFloat(Cuotas_);
                 vlCuota        = numeral(isValue(vlCuota,0,true)).format('00.00')
 
                 vlInteres      = parseFloat(Total_) - parseFloat(Monto_)
+                vlInterePorCuota  = parseFloat(vlInteres) / parseFloat(Cuotas_)
+                vlInterePorCuota        = numeral(isValue(vlInterePorCuota,0,true)).format('0.00')
 
                 $("#txtTotal").val(Total_);
                 $("#txtVlCuota").val(vlCuota);
                 $("#txtIntereses").val(vlInteres);
                 $("#txtSaldos").val(Total_);
+                $("#txtInteresesPorCuota").val(vlInterePorCuota);
 
             }
 
@@ -185,9 +203,20 @@
 
         })
 
-        var btns = $('#txt_Capital,#txt_Interes');
+        var btns_02 = $('#txt_Capital,#txt_Interes');
+        btns_02.on('keyup touchend', function(){
+            var Capital_    = $("#txt_Capital").val();   
+            var Interes_    = $("#txt_Interes").val();   
 
-        btns.on('keyup', function(e){
+            Capital_        = numeral(isValue(Capital_,0,true)).format('0.00')
+            Interes_        = numeral(isValue(Interes_,0,true)).format('0.00')
+
+            Total_          = parseFloat(Capital_) + parseFloat(Interes_)
+
+            $("#txt_Total_abono").val(Total_);
+        })
+
+        btns_02.on('keyup', function(e){
             if(isNumberKey(e)){
                 var Capital_    = $("#txt_Capital").val();   
                 var Interes_    = $("#txt_Interes").val();   
@@ -247,6 +276,11 @@
                 {"title": "Monto Abono","data": "cuota_cobrada", "render": function(data, type, row, meta) {
                     return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.cuota_cobrada).format('0,00.00')  +`</span> `
                 }},
+
+                {"title": "","data": "cuota_cobrada", "render": function(data, type, row, meta) {
+                    return `<button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="{{ route('voucher')}}" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>`
+                }},
+
                 ],
         });
     }

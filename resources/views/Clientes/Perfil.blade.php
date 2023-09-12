@@ -26,7 +26,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Perfil</h1>
+            <h1>{{ $perfil_cliente->nombre}} {{ $perfil_cliente->apellidos}}</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -41,230 +41,227 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <div class="row">
-          
-            <div class="col-md-3">
-              <div class="card card-primary card-outline">
-                <div class="card-body box-profile">
-                  <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle"
-                          src="{{ asset('img/user.png')}}"
-                          alt="User profile picture">
+
+      <div class="card card-widget">
+              <div class="card-header">
+                <div class="user-block">
+                  <img class="img-circle" src="{{asset('img/user.png')}}" alt="User Image">
+                  <span class="username"><a href="#">{{ strtoupper($perfil_cliente->getMunicipio->nombre_municipio) }} / {{ strtoupper($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) }}</a></span>
+                  <span class="description text-white"> {{ strtoupper($perfil_cliente->direccion_domicilio) }}</span>
+                  <span class="description text-white ">Tel. {{ strtoupper($perfil_cliente->telefono) }} - Cedula. {{ strtoupper($perfil_cliente->cedula) }} </span>
+                </div>
+                <!-- /.user-block -->
+                <div class="card-tools">                  
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-xl">
+                    Nuevo
+                  </button>
+                </div>
+      
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+
+                <div class="row">
+                  <div class="col-12 table-responsive">             
+                    <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Apertura</th>
+                                  <th>Monto</th>
+                                  <th>Ultm. Abono</th>
+                                  <th>Salud</th>
+                                  <th>Estado</th>
+                                  <th></th>
+                                  <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                
+                                  @foreach ($perfil_cliente->getCreditos as $c)
+                                  <tr>
+                                    <td>{{$c->id_creditos}}</td>
+                                    <td>{{date('D, M d, Y', strtotime($c->fecha_apertura))}}</td>
+                                    <td>C$ {{number_format($c->monto_credito,2)}}</td>
+                                    <td>
+                                        @if($c->abonos->isNotEmpty())
+                                            {{date('D, M d, Y', strtotime($c->abonos->first()->fecha_cuota))}}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td>{{$c->salud_credito}}</td>
+                                    <td>
+                                        <span class="badge @switch($c->estado_credito)
+                                            @case(1)
+                                                bg-success
+                                                @break
+                                            @case(2)
+                                                bg-danger
+                                                @break
+                                            @case(3)
+                                                bg-warning
+                                                @break
+                                            @default
+                                                ''
+                                        @endswitch">{{ strtoupper($c->Estado->nombre_estado) }}</span>
+                                    </td>
+                                    <td><button type="button" onclick="getIdCredi({{$c->id_creditos}})" class="btn btn-block bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-lg"><i class="fas fa-hand-holding-usd"></i></button></td>
+                                    <td><button type="button" onclick="getModalHistorico({{$c->id_creditos}})" class="btn btn-block bg-gradient-primary btn-sm" ><i class="fas fa-history"></i></button></td>
+                                  </tr>
+                                  @endforeach
+                                  
+                                
+                                </tbody>
+                    </table>
                   </div>
-
-                  <h3 class="profile-username text-center">{{ $perfil_cliente->nombre}} {{ $perfil_cliente->apellidos}}</h3>
-
-                  <p class="text-muted text-center">{{ strtoupper($perfil_cliente->getMunicipio->nombre_municipio) }} / {{ strtoupper($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) }}</p>
-
-                  <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
-                    <strong><i class="fas fa-address-card mr-1"></i> Cedula</strong> <a class="float-right"> {{ strtoupper($perfil_cliente->cedula) }}</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b><strong><i class="fas fa-building mr-1"></i> Direccion</strong></b> <a class="float-right">{{ strtoupper($perfil_cliente->direccion_domicilio) }}</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b><strong><i class="fas fa-pencil-alt mr-1"></i> Telefono </strong></b> <a class="float-right">{{ strtoupper($perfil_cliente->telefono) }}</a>
-                    </li>
-                  </ul>
+                </div>
                 </div>
                 <!-- /.card-body -->
+      
               </div>
-          
-            
-            </div>
-          <!-- /.col -->
-          
-          <!-- /.col -->
-          
-        <div class="col-md-9">
-            <div class="card">
-              <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#credits" data-toggle="tab">Creditos</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#new_credit" data-toggle="tab">Agregar Credito</a></li>
-                </ul>
-              </div><!-- /.card-header -->
-              <div class="card-body">
-                <div class="tab-content">
-                  <div class="active tab-pane" id="credits">
 
-                  <div class="row">
-                    <div class="col-12 table-responsive">
-                      <table class="table table-striped">
-                        <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Apertura</th>
-                          <th>Monto</th>
-                          <th>Ultm. Abono</th>
-                          <th>Salud</th>
-                          <th>Estado</th>
-                          <th></th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        
-                          @foreach ($perfil_cliente->getCreditos as $c)
-                          <tr>
-                            <td>{{$c->id_creditos}}</td>
-                            <td>{{$c->fecha_apertura}}</td>
-                            <td>C$ {{$c->monto_credito}}</td>
-                            <td>
-                                @if($c->abonos->isNotEmpty())
-                                    {{$c->abonos->first()->fecha_cuota}}
-                                @else
-                                    N/D
-                                @endif
-                            </td>
-                            <td>{{$c->salud_credito}}</td>
-                            <td>{{$c->estado_credito}}</td>
-
-                            <td><button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="{{ route('voucher')}}" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button></td>
-                            <td><button type="button" onclick="getIdCredi({{$c->id_creditos}})" class="btn btn-block bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-lg"><i class="fas fa-hand-holding-usd"></i></button></td>
-                            <td><button type="button" onclick="getModalHistorico({{$c->id_creditos}})" class="btn btn-block bg-gradient-primary btn-sm" ><i class="fas fa-history"></i></button></td>
-                          </tr>
-                          @endforeach
-                          
-                        
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                    
-                  </div>
-                  <div class="tab-pane" id="new_credit">
-                    <form class="form-horizontal">
-                      <div class="col-sm-12">
-                        <div class="form-group">
-                          <label>Dia de Pago</label>
-                          <select class="form-control" id="selDiaSemana">
-                            @foreach ($DiasSemana as $d)
-                              <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
-                            @endforeach
-                          </select>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>Monto</label>
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                              </div>
-                              <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'  >
-                              
-                            </div>
-                          </div>
-                      </div>
-
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>Plazo</label>
-                          <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                              </div>
-                              <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>Interes</label>
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-percentage"></i></span>
-                              </div>
-                              <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>N° Cuotas</label>
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                              </div>
-                              <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div class="row">
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>Total</label>
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                              </div>
-                              <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
-                            </div>
-                          </div>
-                      </div>
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>Cuota</label>
-                          <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                              </div>
-                              <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>Saldos</label>
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                              </div>
-                              <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-md-3">
-                        <div class="form-group">
-                          <label>Intereses</label>
-                            <div class="input-group mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                              </div>
-                              <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                        
-                      <div class="form-group row">
-                        <div class="col-sm-10">
-                          <button type="submit" class="btn btn-danger">Aplicar</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                  <!-- /.tab-pane -->
-                </div>
-                <!-- /.tab-content -->
-              </div><!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      
+       
     </section>
     <!-- /.content -->
   </div>
+
+  <div class="modal fade" id="modal-xl">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Nuevo Credito</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Dia de Pago</label>
+                      <select class="form-control" id="selDiaSemana">
+                        @foreach ($DiasSemana as $d)
+                          <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Monto</label>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                          </div>
+                          <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'  >
+                          
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Plazo</label>
+                      <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                          </div>
+                          <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Interes</label>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                          </div>
+                          <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>N° Cuotas</label>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                          </div>
+                          <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Total</label>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                          </div>
+                          <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Cuota</label>
+                      <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                          </div>
+                          <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Saldos</label>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                          </div>
+                          <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Intereses</label>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                          </div>
+                          <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label>Intereses por cuota</label>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                          </div>
+                          <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" id="btn_add_credito">Aplicar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
  
   <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
@@ -338,10 +335,12 @@
           </button>
         </div>
         <div class="modal-body">
+            <div class="row">
+                  <div class="col-12 table-responsive">   
           <table id="tbl_lista_abonos"  class="table table-striped" style="width:100%"></table>
          
           
-        </div>
+          </div>    </div>    </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           <button type="button" class="btn btn-success" >Aplicar</button>

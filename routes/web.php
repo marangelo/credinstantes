@@ -47,3 +47,5 @@ Route::get('rmDiaSemana/{id}', 'HomeController@rmDiaSemana')->name('rmDiaSemana/
 
 Route::post('SaveNewAbono', 'HomeController@SaveNewAbono')->name('SaveNewAbono');
 Route::get('getHistoricoAbono/{ID}', 'HomeController@getHistoricoAbono')->name('getHistoricoAbono');
+
+Route::post('AddCredito', 'HomeController@AddCredito')->name('AddCredito');

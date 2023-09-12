@@ -15,6 +15,11 @@
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+     <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__wobble" src="{{asset('img/Logo.png')}}" alt="AdminLTELogo" height="60" width="60">
+  </div>
+
 @yield('content')
 <!-- ./wrapper -->
 

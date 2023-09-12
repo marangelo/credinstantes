@@ -1,42 +1,46 @@
 @extends('layouts.lyt_login')
 @section('content')    
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#!"><b>Credin</b>Stantes</a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">Inicia sesión para iniciar tu sesión</p>
 
-      <div class="row">
-          <!-- left column -->
-          <div class="col-md-12">
-            <!-- form start -->
-            <form id="frm_login" method="POST" action="{{route('login')}}">
-            @csrf
-                <div class="form-group">
-                    <label for="lbl_email">Email</label>
-                    
-                    <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Digite email" value="demo@demo.com">
-                </div>
-                <div class="form-group">
-                    <label for="lbl_pass">Contrasena</label>
-                    <input type="password" name="password" class="form-control" id="lbl_pass" placeholder="Contrasena" value="123456">
-                </div>
-                <!-- /.card-body -->
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary btn-block">Acceder</button>
-                </div>
-              </form>
-            </div>
-          <!--/.col (left) -->
-         
-        </div>
+<div class="login-box">
+  <!-- /.login-logo -->
+  <div class="card card-outline card-success">
+    <div class="card-header text-center">
+      <div class="text-center mb-1">
+        <img class="profile-user-img img-fluid img-circle" src="{{ asset('img/Logo.png') }}" alt="User profile picture">
+      </div>
+      <a href="#" class="h1"><b>CREDIN$</b>TANTE</a>
     </div>
-    <!-- /.login-card-body -->
+    <div class="card-body">
+      <p class="login-box-msg">Ingrese sus Credenciales</p>
+
+      <form id="frm_login" method="POST" action="{{route('login')}}">
+      @csrf
+        <div class="input-group mb-3">
+          <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Email" value="demo@demo.com">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="password" class="form-control" id="lbl_pass" placeholder="Contrasena" value="123456">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="social-auth-links text-center mt-2 mb-3">
+          <button type="submit" class="btn btn-success btn-block">Acceder</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.card-body -->
   </div>
+  <!-- /.card -->
 </div>
+
 @endsection
 
 @section('metodosjs')

@@ -1,34 +1,79 @@
-<html>
-    <head>
-        <link href="{{ asset('css/styles_voucher.css')}}" media="all" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
-    </head>
-    <body>
-        <div class="ps">
-            <div class="ps-header">
-                <div class="ps-reminder">Comprobante digital. No es necesario imprimir.</div>
-                <div class="ps-info">
-                    <div class="ps-amount">
-                        <h3>Monto a Credito</h3>
-                        <h2>C$ 0,000.00 <sup>NIO</sup></h2>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing </p>
-                    </div>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="">
+    <div class="">
+        <div class="">
+          
+            <div class="">
+            <div class="text-center">
+                    <h3>NOmbre empressa</h3>
                 </div>
-                <div class="ps-reference">
-                    <h3>CRED</h3>
-                    <h1>0000000000000000000</h1>
-                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>No RECIBO</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-md-9"><em>FECHA</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>HORA</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>NOMBRE</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>CONCEPTO</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>DIAS MORA</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>CUOTA</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-9"><em>FECHA VENCIMIENTO</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>ABONO PRESTAMO</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>TOTAL PAGO</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>SALDO ANTERIOR</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>SLADO ACTUAL</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>USUARIO</em></h4></td>
+                            <td class="col-md-1 text-center">xxxx</td>
+                        </tr>
+                    </tbody>
+                </table>
+               </td>
             </div>
-            <div class="ps-instructions">
-                <h3>Lorem ipsum </h3>
-                <ol>
-                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing </li>
-                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing. <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing </strong>.</li>
-                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing , <strong>dLorem ipsum dolor sit amet, consectetuer adipiscing </strong>.</li>
-                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing . <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing .</strong> Lorem ipsum dolor sit amet, consectetuer adipiscing .</li>
-                </ol>
-                <div class="ps-footnote">Lorem ipsum dolor sit amet, consectetuer adipiscing  <strong>Lorem ipsum dolor </strong> Lorem ipsum dolor .</div>
-            </div>
-        </div>    
-    </body>
-</html>
+        </div>
+    </div>
