@@ -150,18 +150,14 @@
 
         $("#btn_save_abono").click(function(){
 
-            var Capital_    = $("#txt_Capital").val();   
-            var Interes_    = $("#txt_Interes").val();   
             var Total_      = $("#txt_Total_abono").val();
 
             var IdCred      = $("#lbl_credito").text();
-
-            Capital_      = isValue(Capital_,'N/D',true)
-            Interes_      = isValue(Interes_,'N/D',true)            
+          
             Total_         = isValue(Total_,'N/D',true)
             IdCred         = isValue(IdCred,0,true)
 
-            if(Capital_ === 'N/D' || Interes_ ==='N/D'||Total_ === 'N/D' ){
+            if(Total_ === 'N/D' ){
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
 
@@ -169,8 +165,6 @@
                     url: "{{ route('SaveNewAbono')}}",
                     type: 'post',
                     data: {
-                        Capital_   : Capital_,
-                        Interes_   : Interes_,
                         Total_      : Total_,
                         IdCred      : IdCred,
                         _token  : "{{ csrf_token() }}" 
@@ -203,34 +197,7 @@
 
         })
 
-        var btns_02 = $('#txt_Capital,#txt_Interes');
-        btns_02.on('keyup touchend', function(){
-            var Capital_    = $("#txt_Capital").val();   
-            var Interes_    = $("#txt_Interes").val();   
-
-            Capital_        = numeral(isValue(Capital_,0,true)).format('0.00')
-            Interes_        = numeral(isValue(Interes_,0,true)).format('0.00')
-
-            Total_          = parseFloat(Capital_) + parseFloat(Interes_)
-
-            $("#txt_Total_abono").val(Total_);
-        })
-
-        btns_02.on('keyup', function(e){
-            if(isNumberKey(e)){
-                var Capital_    = $("#txt_Capital").val();   
-                var Interes_    = $("#txt_Interes").val();   
-
-                Capital_        = numeral(isValue(Capital_,0,true)).format('0.00')
-                Interes_        = numeral(isValue(Interes_,0,true)).format('0.00')
-
-                Total_          = parseFloat(Capital_) + parseFloat(Interes_)
-
-                $("#txt_Total_abono").val(Total_);
-
-            }
-
-        });
+    
 
     })
 
@@ -351,8 +318,10 @@
             });
     }
 
-    function getIdCredi(id){
-        $("#lbl_credito").html(id);
+    function getIdCredi(obj){
+        var Cuota = numeral(isValue(obj.cuota,0,true)).format('00.00')
+        $("#txt_Total_abono").val(Cuota);
+        $("#lbl_credito").html(obj.id_creditos);
     }
 
     function isValue(value, def, is_return) {

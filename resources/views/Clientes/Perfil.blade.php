@@ -118,7 +118,7 @@
                                             </i>
                                             Historico
                                         </a>
-                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c->id_creditos}})"  data-toggle="modal" data-target="#modal-lg">
+                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c}})"  data-toggle="modal" data-target="#modal-lg">
                                             
                                         <i class="far fa-money-bill-alt"></i>
                                             </i>
@@ -299,37 +299,14 @@
           </button>
         </div>
         <div class="modal-body">
-        
           <div class="col-sm-12 col-md-12">
             <div class="form-group">
-              <label>Capital</label>
+              <label>Cuota a pagar</label>
               <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                   </div>
-                  <input type="text" id="txt_Capital" class="form-control" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)' >
-                </div>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12">
-            <div class="form-group">
-              <label>Intereses</label>
-              <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                  </div>
-                  <input type="text" id="txt_Interes" class="form-control" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)' >
-                </div>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12">
-            <div class="form-group">
-              <label>Total a Pagar</label>
-              <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                  </div>
-                  <input type="text" id="txt_Total_abono" class="form-control" placeholder="C$ 0.00" disabled>
+                  <input type="text" id="txt_Total_abono" class="form-control" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)'>
                 </div>
             </div>
           </div>

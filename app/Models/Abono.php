@@ -35,14 +35,14 @@ class Abono extends Model
 
         if ($request->ajax()) {
             try {
-
                 $IdCred             = $request->input('IdCred');
-                $Capital_           = $request->input('Capital_');
-                $Interes_           = $request->input('Interes_');
-                $Total_             = $request->input('Total_');
-                
                 $Info_Credito = Credito::find($IdCred);
 
+                $Total_             = $request->input('Total_');
+                
+
+                $Capital_           = $Total_  - $Info_Credito->intereses_por_cuota;
+                $Interes_           = $Info_Credito->intereses_por_cuota;
 
                 $datos_credito = [                    
                     'id_creditos'           => $IdCred,
