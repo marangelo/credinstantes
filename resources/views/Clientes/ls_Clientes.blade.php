@@ -16,7 +16,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
               <li class="breadcrumb-item active">Clientes</li>
             </ol>
           </div>
@@ -50,6 +50,7 @@
                     <th>Municipio</th>
                     <th>Departamento</th>
                     <th>Direccion</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -60,6 +61,19 @@
                     <td> {{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
                     <td> {{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
                     <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
+                    <td>
+                          <a class="btn btn-primary btn-sm" href="#"  onclick="getModalHistorico({{$c->id_clientes}})">
+                              <i class="fas fa-pencil-alt">
+                              </i>
+                              Editar
+                          </a>
+                          
+                          <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
+                              <i class="fas fa-trash">
+                              </i>
+                              Remover
+                          </a>
+                      </td>
                   @endforeach
                   </tbody>
                   <tfoot>
@@ -69,6 +83,7 @@
                     <th>Municipio</th>
                     <th>Direccion</th>
                     <th>Monto</th>
+                    <th></th>
                   </tr>
                   </tfoot>
                 </table>

@@ -30,7 +30,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
               <li class="breadcrumb-item active">Perfil de Usuario</li>
             </ol>
           </div>
@@ -83,7 +83,8 @@
                                   @foreach ($perfil_cliente->getCreditos as $c)
                                   <tr>
                                     <td>{{$c->id_creditos}}</td>
-                                    <td>{{date('D, M d, Y', strtotime($c->fecha_apertura))}}</td>
+                                    <!-- <td>{{date('D, M d, Y', strtotime($c->fecha_apertura))}}</td> -->
+                                    <td>{{$c->fecha_apertura->locale('es')->translatedFormat(('M Y')) }}</td>
                                     <td>{{number_format($c->plazo,0)}}</td>
                                     <td> C$ {{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
                                     <td>C$ {{number_format($c->total,2)}}</td>
@@ -91,7 +92,7 @@
                                     <td>{{number_format($c->abonosCount(), 0)}} / {{number_format($c->numero_cuotas, 0)}}</td>
                                     <td>
                                         @if($c->abonos->isNotEmpty())
-                                            {{date('D, M d, Y', strtotime($c->abonos->first()->fecha_cuota))}}
+                                        {{date('D, M d, Y', strtotime($c->abonos->first()->fecha_cuota))}}
                                         @else
                                             -
                                         @endif
@@ -124,7 +125,7 @@
                                             </i>
                                             Abonar
                                         </a>
-                                        <a class="btn btn-danger btn-sm" href="#">
+                                        <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_creditos}})">
                                             <i class="fas fa-trash">
                                             </i>
                                             Remover

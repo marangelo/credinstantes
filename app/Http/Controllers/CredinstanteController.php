@@ -8,8 +8,9 @@ use App\Models\Departamentos;
 use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
+use App\Models\Credinstante;
 
-class HomeController extends Controller {
+class CredinstanteController extends Controller {
     public function __construct()
     {
         $this->middleware('auth');
@@ -118,6 +119,13 @@ class HomeController extends Controller {
         return response()->json($response);
     }
 
+    public function AddCredito(Request $request)
+    {
+        $response = Credito::AddCredito($request);
+        
+        return response()->json($response);
+    }
+
     public function rmDiaSemana($id)
     {
         $response = DiasSemana::rmDiaSemana($id);
@@ -139,12 +147,14 @@ class HomeController extends Controller {
         return response()->json($Abonos);
     }
 
-    public function AddCredito(Request $request)
+    public function Remover(Request $request)
     {
-        $response = Credito::AddCredito($request);
+        $response = Credinstante::Remover($request);
         
         return response()->json($response);
     }
+
+    
 
 
 }  

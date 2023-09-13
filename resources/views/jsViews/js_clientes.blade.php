@@ -161,6 +161,60 @@
         });
     })
 
+    function rmItem(IdElem){
+
+        var vTable  = "Tbl_Clientes" ; 
+        var nmCamp  = "id_clientes" ; 
+
+        Swal.fire({
+            title: '¿Estas Seguro de remover el registro  ?',
+            text: "¡Se removera la informacion permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target: document.getElementById('mdlMatPrima'),
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "rmElem",
+                    data: {
+                        IdElem  : IdElem,
+                        vTable  : vTable,
+                        nmCamp  : nmCamp,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    type: 'post',
+                    async: true,
+                    success: function(response) {
+                        if(response){
+                            Swal.fire({
+                                title: 'Registro Removido Correctamente ' ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    //location.reload();
+                                    }
+                                })
+                            }
+                        },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                    }).done(function(data) {
+                        //CargarDatos(nMes,annio);
+                    });
+                },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
+    }
+
     function isValue(value, def, is_return) {
         if ( $.type(value) == 'null'
             || $.type(value) == 'undefined'

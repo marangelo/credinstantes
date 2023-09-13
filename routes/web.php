@@ -17,35 +17,38 @@ Auth::routes();
 */
 
 Route::get('/', 'Auth\LoginController@showLoginForm');
-//Route::get('/', 'HomeController@getDashboard');
+//Route::get('/', 'CredinstanteController@getDashboard');
 Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::get('Dashboard', 'HomeController@getDashboard')->name('Dashboard');
-Route::get('Clientes', 'HomeController@getClientes')->name('Clientes');
-Route::get('Usuarios', 'HomeController@getUsuarios')->name('Usuarios');
+Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard');
+Route::get('Clientes', 'CredinstanteController@getClientes')->name('Clientes');
+Route::get('Usuarios', 'CredinstanteController@getUsuarios')->name('Usuarios');
 
-Route::get('Reporte', 'HomeController@getReporte')->name('Reporte');
+Route::get('Reporte', 'CredinstanteController@getReporte')->name('Reporte');
 
-Route::get('Municipios', 'HomeController@getMunicipios')->name('Municipios');
-Route::get('Departamento', 'HomeController@getDepartamento')->name('Departamento');
-Route::get('DiasSemna', 'HomeController@getDiasSemna')->name('DiasSemna');
+Route::get('Municipios', 'CredinstanteController@getMunicipios')->name('Municipios');
+Route::get('Departamento', 'CredinstanteController@getDepartamento')->name('Departamento');
+Route::get('DiasSemna', 'CredinstanteController@getDiasSemna')->name('DiasSemna');
 
-Route::get('Perfil/{id}', 'HomeController@getPerfil')->name('Perfil/{id}');
+Route::get('Perfil/{id}', 'CredinstanteController@getPerfil')->name('Perfil/{id}');
 
-Route::get('voucher', 'HomeController@prtVoucher')->name('voucher');
-Route::post('SaveNewCredito', 'HomeController@SaveNewCredito')->name('SaveNewCredito');
+Route::get('voucher', 'CredinstanteController@prtVoucher')->name('voucher');
+Route::post('SaveNewCredito', 'CredinstanteController@SaveNewCredito')->name('SaveNewCredito');
 
 
-Route::post('SaveNewMunicipio', 'HomeController@SaveNewMunicipio')->name('SaveNewMunicipio');
-Route::get('rmMunicipio/{id}', 'HomeController@rmMunicipio')->name('rmMunicipio/{id}');
+Route::post('SaveNewMunicipio', 'CredinstanteController@SaveNewMunicipio')->name('SaveNewMunicipio');
+Route::get('rmMunicipio/{id}', 'CredinstanteController@rmMunicipio')->name('rmMunicipio/{id}');
 
-Route::post('SaveNewDepartamento', 'HomeController@SaveNewDepartamento')->name('SaveNewDepartamento');
-Route::get('rmDepartamento/{id}', 'HomeController@rmDepartamento')->name('rmDepartamento/{id}');
+Route::post('SaveNewDepartamento', 'CredinstanteController@SaveNewDepartamento')->name('SaveNewDepartamento');
+Route::get('rmDepartamento/{id}', 'CredinstanteController@rmDepartamento')->name('rmDepartamento/{id}');
 
-Route::post('AddDiaSemana', 'HomeController@AddDiaSemana')->name('AddDiaSemana');
-Route::get('rmDiaSemana/{id}', 'HomeController@rmDiaSemana')->name('rmDiaSemana/{id}');
+Route::post('AddDiaSemana', 'CredinstanteController@AddDiaSemana')->name('AddDiaSemana');
+Route::get('rmDiaSemana/{id}', 'CredinstanteController@rmDiaSemana')->name('rmDiaSemana/{id}');
 
-Route::post('SaveNewAbono', 'HomeController@SaveNewAbono')->name('SaveNewAbono');
-Route::get('getHistoricoAbono/{ID}', 'HomeController@getHistoricoAbono')->name('getHistoricoAbono');
+Route::post('SaveNewAbono', 'CredinstanteController@SaveNewAbono')->name('SaveNewAbono');
+Route::get('getHistoricoAbono/{ID}', 'CredinstanteController@getHistoricoAbono')->name('getHistoricoAbono');
 
-Route::post('AddCredito', 'HomeController@AddCredito')->name('AddCredito');
+Route::post('AddCredito', 'CredinstanteController@AddCredito')->name('AddCredito');
+
+
+Route::post('rmElem', 'CredinstanteController@Remover')->name('rmElem');

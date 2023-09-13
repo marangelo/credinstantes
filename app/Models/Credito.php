@@ -15,21 +15,27 @@ class Credito extends Model
 
     public function abonos()
     {
-        return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->orderBy('id_abonoscreditos', 'desc')->limit(1);
+        return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->where('activo',1)->orderBy('id_abonoscreditos', 'desc')->limit(1);
     }
+    
     public function abonosCount()
     {
-        return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->count();
+        return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->where('activo',1)->count();
     }
     public function Estado()
     {
         return $this->hasOne(Estados::class, 'id_estados','estado_credito');
     }
 
+    public function getAbonos()
+    {
+        return $this->hasMany(Abono::class, 'id_creditos','id_creditos')->where('activo',1);
+    }
+
 
     public static function getCreditos()
     {
-        return Credito::all();
+        return Credito::where('activo',1)->get();
     }
     public static function SaveNewCredito(Request $request)
     {
@@ -135,6 +141,7 @@ class Credito extends Model
                     'saldo'               => $Saldos_,
                     'intereses_por_cuota'=>$InteresesPorCuota,
                     'estado_credito'               => 1,
+                    'activo'               => 1,
                 ];
                 $response = Credito::insert($datos_credito);
                 

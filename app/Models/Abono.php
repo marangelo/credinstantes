@@ -59,6 +59,7 @@ class Abono extends Model
                     // 'fecha_cuota_secc2'     => $XXXXXX,
                     // 'completado'            => 1,
                     // 'fecha_cuota_secc2'     => $XXXXXX,
+                    'activo'           => 1,
                 ];
                 $response = Abono::insert($datos_credito);
 

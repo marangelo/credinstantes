@@ -20,11 +20,11 @@ class Clientes extends Model
 
     public static function getClientes()
     {
-        return Clientes::limit(5)->orderBy('id_clientes', 'desc')->get();
+        return Clientes::where('activo',1)->orderBy('id_clientes', 'asc')->where('activo',1)->get();
     }
     public function getCreditos()
     {
-        return $this->hasMany(Credito::class, 'id_clientes','id_clientes');;
+        return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->where('activo',1);
     }
 
    
