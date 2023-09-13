@@ -83,8 +83,7 @@
                                   @foreach ($perfil_cliente->getCreditos as $c)
                                   <tr>
                                     <td>{{$c->id_creditos}}</td>
-                                    <!-- <td>{{date('D, M d, Y', strtotime($c->fecha_apertura))}}</td> -->
-                                    <td>{{$c->fecha_apertura->locale('es')->translatedFormat(('M Y')) }}</td>
+                                    <td>{{ Date::parse($c->fecha_apertura)->format('D, M d, Y') }}</td>
                                     <td>{{number_format($c->plazo,0)}}</td>
                                     <td> C$ {{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
                                     <td>C$ {{number_format($c->total,2)}}</td>
@@ -92,7 +91,7 @@
                                     <td>{{number_format($c->abonosCount(), 0)}} / {{number_format($c->numero_cuotas, 0)}}</td>
                                     <td>
                                         @if($c->abonos->isNotEmpty())
-                                        {{date('D, M d, Y', strtotime($c->abonos->first()->fecha_cuota))}}
+                                        {{Date::parse($c->abonos->first()->fecha_cuota)->format('D, M d, Y') }}
                                         @else
                                             -
                                         @endif

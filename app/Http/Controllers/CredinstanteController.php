@@ -9,6 +9,7 @@ use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
 use App\Models\Credinstante;
+use CodersFree\Date\Date;
 
 class CredinstanteController extends Controller {
     public function __construct()
