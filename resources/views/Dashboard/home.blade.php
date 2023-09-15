@@ -39,10 +39,9 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 01</span>
+                <span class="info-box-text">Capital</span>
                 <span class="info-box-number">
-                  10
-                  <small>%</small>
+                  20,0000<small>NIO</small>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -55,8 +54,10 @@
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 02</span>
-                <span class="info-box-number">41,410</span>
+                <span class="info-box-text">Interes</span>
+                <span class="info-box-number">
+                  20,0000<small>NIO</small>
+                </span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -102,7 +103,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">Monthly Recap Report</h5>
+                <h5 class="card-title">Abonos Recuperados Del Mes</h5>
               </div>
               <!-- /.card-header -->
               <div class="card-body">

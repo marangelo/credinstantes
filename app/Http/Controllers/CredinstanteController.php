@@ -25,11 +25,7 @@ class CredinstanteController extends Controller {
     public function prtVoucher(){
         return view('Voucher.home');
     }
-    public function getReporte()
-    {           
-        return view('Clientes.ls_reports');
-        
-    }
+    
     public function getClientes()
     {   
         $Clientes    = Clientes::getClientes();  

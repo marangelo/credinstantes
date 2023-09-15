@@ -103,22 +103,22 @@
             
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                  <a href="{{route('Reporte')}}" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}" >
+                  <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
                       <i class="far fa-circle nav-icon"></i>
-                      <p>Reporte 01</p>
+                      <p>Visitar</p>
                   </a>
               </li>
 
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Reporte 02</p>
+                  <p>Abonos</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Reporte 03</p>
+                  <p>Morosidad</p>
                 </a>
               </li>
               <li class="nav-item">

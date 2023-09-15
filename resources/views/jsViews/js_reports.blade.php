@@ -10,8 +10,53 @@
             "buttons": ["copy", "excel", "print"]
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
+        //Initialize Select2 Elements
+        $('.select2').select2()
+
         //Date range picker
-    $('#reservation').daterangepicker()
+        $('#reservation').daterangepicker()
+        //Date range as a button
+        $('#date-range-picker').daterangepicker({
+            format: 'DD/MM/YYYY',
+            dateLimit: { days: 30 },
+            locale: {
+                "format": "DD/MM/YYYY",
+                "separator": " - ",
+                "applyLabel": "Aplicar",
+                "cancelLabel": "Cancelar",
+                "fromLabel": "Desde",
+                "toLabel": "Hasta",
+                "customRangeLabel": "Custom",
+                "daysOfWeek": [
+                    "Do",
+                    "Lu",
+                    "Ma",
+                    "Mi",
+                    "Ju",
+                    "Vi",
+                    "Sa"
+                ],
+                "monthNames": [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junnio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre"
+                ],
+                "firstDay": 1
+            },
+        },
+        function(start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+            $("lbl_periodo").html('')
+        });
 
 
         

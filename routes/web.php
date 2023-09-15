@@ -24,8 +24,6 @@ Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard'
 Route::get('Clientes', 'CredinstanteController@getClientes')->name('Clientes');
 Route::get('Usuarios', 'CredinstanteController@getUsuarios')->name('Usuarios');
 
-Route::get('Reporte', 'CredinstanteController@getReporte')->name('Reporte');
-
 Route::get('Municipios', 'CredinstanteController@getMunicipios')->name('Municipios');
 Route::get('Departamento', 'CredinstanteController@getDepartamento')->name('Departamento');
 Route::get('DiasSemna', 'CredinstanteController@getDiasSemna')->name('DiasSemna');
@@ -50,5 +48,9 @@ Route::get('getHistoricoAbono/{ID}', 'CredinstanteController@getHistoricoAbono')
 
 Route::post('AddCredito', 'CredinstanteController@AddCredito')->name('AddCredito');
 
-
 Route::post('rmElem', 'CredinstanteController@Remover')->name('rmElem');
+
+//RUTAS DE REPORTES
+Route::get('Visitar', 'ReportsController@Visitar')->name('Visitar');
+Route::get('Abonos', 'ReportsController@Abonos')->name('Abonos');
+Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');

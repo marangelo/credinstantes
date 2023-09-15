@@ -39,10 +39,19 @@ class Abono extends Model
                 $Info_Credito = Credito::find($IdCred);
 
                 $Total_             = $request->input('Total_');
-                
+                $Saldo_actual_credito = $Info_Credito->saldo - $Total_;
 
+                //RESTAR EL VALOR PENDIENTE SI EXISTE
+                $lastAbonoSaldo = ($Info_Credito->abonos->isNotEmpty()) ? $Info_Credito->abonos->first()->saldo_cuota : 0 ;
+                $Total_         = $Total_ - $lastAbonoSaldo;
+
+                //RESTAR EL VALOR DE INTERES POR CUATA AL VALOR INGRESADO
                 $Capital_           = $Total_  - $Info_Credito->intereses_por_cuota;
                 $Interes_           = $Info_Credito->intereses_por_cuota;
+
+                $Saldo_Cuota     = $Info_Credito->cuota - $Total_ ;
+
+                $Completado = ($Saldo_Cuota === 0 ) ? 0 : 1 ;
 
                 $datos_credito = [                    
                     'id_creditos'           => $IdCred,
@@ -53,18 +62,19 @@ class Abono extends Model
                     'cuota_credito'         => $Info_Credito->cuota,
                     'cuota_cobrada'         => $Total_,
                     'intereses_por_cuota'   => $Info_Credito->intereses_por_cuota,
-                    // 'abono_dia1'            => $XXXXXX,
+                    'abono_dia1'            => $Total_,
                     // 'abono_dia2'            => $XXXXXX,
-                    // 'fecha_cuota_secc1'     => $XXXXXX,
+                    'fecha_cuota_secc1'     => date('Y-m-d H:i:s'),
                     // 'fecha_cuota_secc2'     => $XXXXXX,
-                    // 'completado'            => 1,
-                    // 'fecha_cuota_secc2'     => $XXXXXX,
+                    'completado'            => $Completado,
+                    'saldo_cuota'            => $Saldo_Cuota,
                     'activo'           => 1,
                 ];
                 $response = Abono::insert($datos_credito);
 
                 Credito::where('id_creditos',  $IdCred)->update([
-                    "fecha_ultimo_abono"    => date('Y-m-d H:i:s')
+                    "fecha_ultimo_abono"    => date('Y-m-d H:i:s'),
+                    "saldo" => $Saldo_actual_credito
                 ]);
                 
 
