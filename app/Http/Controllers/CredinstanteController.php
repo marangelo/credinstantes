@@ -41,7 +41,7 @@ class CredinstanteController extends Controller {
         
         $perfil_cliente = Clientes::find($id);  
         $DiasSemana = DiasSemana::getDiasSemana();
-        
+    
         return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana'));
         
     }
@@ -147,6 +147,12 @@ class CredinstanteController extends Controller {
     public function Remover(Request $request)
     {
         $response = Credinstante::Remover($request);
+        
+        return response()->json($response);
+    }
+    public function rmAbono(Request $request)
+    {
+        $response = Abono::rmAbono($request);
         
         return response()->json($response);
     }

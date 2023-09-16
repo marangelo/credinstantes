@@ -243,9 +243,15 @@
                 {"title": "Monto Abono","data": "cuota_cobrada", "render": function(data, type, row, meta) {
                     return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.cuota_cobrada).format('0,00.00')  +`</span> `
                 }},
+                {"title": "Pendiente","data": "saldo_cuota", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
+                }},
 
                 {"title": "","data": "cuota_cobrada", "render": function(data, type, row, meta) {
-                    return `<button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="{{ route('voucher')}}" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>`
+                    return `
+                    <button type="button" class="btn btn-block bg-gradient-danger btn-sm"><a href="#" onclick="rmAbono(`+row.id_abonoscreditos+`)" class="text-white"><i class="fas fa-trash"></i></a></button>
+                    <button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="{{ route('voucher')}}" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>
+                    `
                 }},
 
                 ],
@@ -274,6 +280,56 @@
                         IdElem  : IdElem,
                         vTable  : vTable,
                         nmCamp  : nmCamp,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    type: 'post',
+                    async: true,
+                    success: function(response) {
+                        if(response){
+                            Swal.fire({
+                                title: 'Registro Removido Correctamente ' ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                    }
+                                })
+                            }
+                        },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                    }).done(function(data) {
+                        //CargarDatos(nMes,annio);
+                    });
+                },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
+    }
+    function rmAbono(IdElem){
+
+        
+
+        Swal.fire({
+            title: '¿Estas Seguro de remover el registro  ?',
+            text: "¡Se removera la informacion permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target: document.getElementById('mdlMatPrima'),
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "../rmAbono",
+                    data: {
+                        IdElem  : IdElem,
                         _token  : "{{ csrf_token() }}" 
                     },
                     type: 'post',

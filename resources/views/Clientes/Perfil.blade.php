@@ -69,11 +69,12 @@
                                   <th>#</th>
                                   <th>Apertura</th>
                                   <th>Plazo</th>
-                                  <th>Monto</th>
-                                  <th>Total</th>
-                                  <th>Saldo</th>
+                                  <th>Monto C$</th>
+                                  <th>Total C$</th>
+                                  <th>Saldo C$</th>
                                   <th>Cuotas</th>
                                   <th>Ultm. Abono</th>
+                                  <th>Saldo Pendiente</th>
                                   <th>Estado</th>
                                   <th></th>
                                 </tr>
@@ -85,15 +86,22 @@
                                     <td>{{$c->id_creditos}}</td>
                                     <td>{{ Date::parse($c->fecha_apertura)->format('D, M d, Y') }}</td>
                                     <td>{{number_format($c->plazo,0)}}</td>
-                                    <td> C$ {{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
-                                    <td>C$ {{number_format($c->total,2)}}</td>
-                                    <td>C$ {{number_format($c->saldo,2)}}</td>
+                                    <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
+                                    <td>{{number_format($c->total,2)}}</td>
+                                    <td>{{number_format($c->saldo,2)}}</td>
                                     <td>{{number_format($c->abonosCount(), 0)}} / {{number_format($c->numero_cuotas, 0)}}</td>
                                     <td>
                                         @if($c->abonos->isNotEmpty())
                                         {{Date::parse($c->abonos->first()->fecha_cuota)->format('D, M d, Y') }}
                                         @else
                                             -
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($c->abonos->isNotEmpty())
+                                          {{number_format($c->abonos->first()->saldo_cuota,2)}}
+                                        @else
+                                          -
                                         @endif
                                     </td>
                                     <td>
@@ -115,19 +123,16 @@
                                     <td class="project-actions text-right">
                                         <a class="btn btn-primary btn-sm" href="#"  onclick="getModalHistorico({{$c->id_creditos}})">
                                             <i class="fas fa-history">
-                                            </i>
-                                            Historico
+                                            </i>                                            
                                         </a>
                                         <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c}})"  data-toggle="modal" data-target="#modal-lg">
                                             
                                         <i class="far fa-money-bill-alt"></i>
-                                            </i>
-                                            Abonar
+                                            </i>                                            
                                         </a>
                                         <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_creditos}})">
                                             <i class="fas fa-trash">
-                                            </i>
-                                            Remover
+                                            </i>                                            
                                         </a>
                                     </td>
                                   </tr>

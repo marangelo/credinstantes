@@ -92,6 +92,7 @@ class Credito extends Model
                     'intereses_por_cuota'=>$InteresesPorCuota,
                     'saldo'               => $Saldos_,
                     'estado_credito'               => $Estado,
+                    'activo'            => 1
                 ];
                 $response = Credito::insert($datos_credito);
                 
