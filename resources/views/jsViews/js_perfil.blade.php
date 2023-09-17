@@ -8,15 +8,20 @@
             "buttons": ["copy", "excel", "print"]
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
-
-        
-
-
+        $('#reservationdate').datetimepicker({
+            format: 'DD/MM/yyyy'
+        });
+        $('#dtAbono').datetimepicker({
+            format: 'DD/MM/yyyy'
+        });
 
 
         $("#btn_add_credito").click(function(){
 
-            var DiaSemana_  = $("#selDiaSemana option:selected").val();  
+            var DateOPen      = $("#dtApertura").val(); 
+            const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
+
+            var DiaSemana_  = fechaAnalizada.day();  
 
             var Monto_      = $("#txtMonto").val();   
             var Plato_      = $("#txtPlazo").val();   
@@ -55,6 +60,7 @@
                     vlInteres    : vlInteres,
                     Saldos_      : Saldos_,
                     InteresesPorCuota:InteresesPorCuota,
+                    FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
                     _token  : "{{ csrf_token() }}" 
                 },
                 async: true,
@@ -153,6 +159,9 @@
             var Total_      = $("#txt_Total_abono").val();
 
             var IdCred      = $("#lbl_credito").text();
+
+            var DateAbono   = $("#IddtApertura").val();
+            const dtAbono   = moment(DateAbono, 'DD/MM/YYYY');
           
             Total_         = isValue(Total_,'N/D',true)
             IdCred         = isValue(IdCred,0,true)
@@ -167,6 +176,7 @@
                     data: {
                         Total_      : Total_,
                         IdCred      : IdCred,
+                        FechaAbono    : dtAbono.format('YYYY-MM-DD'),
                         _token  : "{{ csrf_token() }}" 
                     },
                     async: true,

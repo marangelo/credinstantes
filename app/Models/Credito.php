@@ -2,9 +2,12 @@
 
 namespace App\Models;
 use Auth;
+use DateTime;
+use DateInterval;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+
 
 class Credito extends Model
 {
@@ -63,6 +66,10 @@ class Credito extends Model
                 $vlInteres             = $request->input('vlInteres');
                 $Saldos_             = $request->input('Saldos_');
                 $InteresesPorCuota             = $request->input('InteresesPorCuota');
+                $FechaOpen             = $request->input('FechaOpen');
+
+                $fecha = new DateTime($FechaOpen);
+                $Fecha_abonos = [];
 
 
                 $datos_a_insertar = [
@@ -79,7 +86,7 @@ class Credito extends Model
 
                 $datos_credito = [
                     'creado_por'          => Auth::id(),
-                    'fecha_apertura'      => date('Y-m-d H:i:s'),
+                    'fecha_apertura'      => date('Y-m-d',strtotime($FechaOpen)),
                     'id_diassemana'       => $DiaSemana_,
                     'id_clientes'         => $idInsertado,
                     'monto_credito'       => $Monto_,
@@ -94,7 +101,19 @@ class Credito extends Model
                     'estado_credito'               => $Estado,
                     'activo'            => 1
                 ];
-                $response = Credito::insert($datos_credito);
+
+                $IdCredito = Credito::insertGetId($datos_credito);
+
+                for ($i = 1; $i <= 10; $i++) {
+                    $Fecha_abonos[] = [
+                        'id_creditos'    => $IdCredito,
+                        'numero_pago'  => $i, 
+                        'FechaPago'   => $fecha->format('Y-m-d')
+                    ];
+                    $fecha->add(new DateInterval('P1W')); 
+                }
+
+                $response = RefAbonos::insert($Fecha_abonos); 
                 
 
 
@@ -126,10 +145,14 @@ class Credito extends Model
                 $vlInteres          = $request->input('vlInteres');
                 $Saldos_             = $request->input('Saldos_');
                 $InteresesPorCuota             = $request->input('InteresesPorCuota');
+                $FechaOpen             = $request->input('FechaOpen');
+
+                $fecha = new DateTime($FechaOpen);
+                $Fecha_abonos = [];
 
                 $datos_credito = [
                     'creado_por'          => Auth::id(),
-                    'fecha_apertura'      => date('Y-m-d H:i:s'),
+                    'fecha_apertura'      => $FechaOpen,
                     'id_diassemana'       => $DiaSemana_,
                     'id_clientes'         => $idInsertado,
                     'monto_credito'       => $Monto_,
@@ -146,8 +169,20 @@ class Credito extends Model
                 ];
 
 
+
                 
-                $response = Credito::insert($datos_credito);
+                $IdCredito = Credito::insertGetId($datos_credito);
+
+                for ($i = 1; $i <= 10; $i++) {
+                    $Fecha_abonos[] = [
+                        'id_creditos'    => $IdCredito,
+                        'numero_pago'  => $i, 
+                        'FechaPago'   => $fecha->format('Y-m-d')
+                    ];
+                    $fecha->add(new DateInterval('P1W')); 
+                }
+
+                $response = RefAbonos::insert($Fecha_abonos); 
                 
 
 

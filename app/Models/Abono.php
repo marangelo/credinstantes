@@ -37,6 +37,7 @@ class Abono extends Model
         if ($request->ajax()) {
             try {
                 $IdCred         = $request->input('IdCred');
+                $FechaAbono     = $request->input('FechaAbono');
 
                 //OBTENEMOS LA INFORMACION DEL CREDITO
                 $Info_Credito   = Credito::find($IdCred);
@@ -57,7 +58,7 @@ class Abono extends Model
                         "saldo_cuota"           => 0,
                         "completado"            => 1,
                         'abono_dia2'            => $lastAbonoSaldo,
-                        'fecha_cuota_secc2'     => date('Y-m-d H:i:s'),
+                        'fecha_cuota_secc2'     => $FechaAbono,
                     ]);
                     
                 } 
@@ -83,7 +84,7 @@ class Abono extends Model
                     $datos_credito = [                    
                         'id_creditos'           => $IdCred,
                         'registrado_por'        => Auth::id(),
-                        'fecha_cuota'           => date('Y-m-d H:i:s'),
+                        'fecha_cuota'           => $FechaAbono,
                         'pago_capital'          => $Capital_,
                         'pago_intereses'        => $Interes_,
                         'cuota_credito'         => $Info_Credito->cuota,
@@ -91,7 +92,7 @@ class Abono extends Model
                         'intereses_por_cuota'   => $Info_Credito->intereses_por_cuota,
                         'abono_dia1'            => $Total_,
                         //'abono_dia2'            => $XXXXXX,
-                        'fecha_cuota_secc1'     => date('Y-m-d H:i:s'),
+                        'fecha_cuota_secc1'     => $FechaAbono,
                         //'fecha_cuota_secc2'     => $XXXXXX,
                         'completado'            => $Completado,
                         'saldo_cuota'           => $Saldo_Cuota,

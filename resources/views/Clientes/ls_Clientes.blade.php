@@ -113,14 +113,15 @@
               <div class="card-body">                  
                   <div class="row">
                     <div class="col-sm-4">
-                      <div class="form-group">
-                        <label>Dia de Pago</label>
-                        <select class="form-control" id="selDiaSemana">
-                          @foreach ($DiasSemana as $d)
-                            <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
-                          @endforeach
-                        </select>
-                    </div>
+                    <div class="form-group">
+                      <label>Fecha Apertura</label>
+                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura"/>
+                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>                      
                     </div>
                     <div class="col-sm-4">
                       <!-- text input -->

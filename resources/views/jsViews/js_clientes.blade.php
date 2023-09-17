@@ -2,6 +2,10 @@
     $(document).ready(function () {
 
         $('[data-mask]').inputmask()
+    
+        $('#reservationdate').datetimepicker({
+            format: 'DD/MM/yyyy'
+        });
 
         $("#tbl_clientes").DataTable({
             "responsive": true, 
@@ -75,7 +79,10 @@
 
         $("#btn_save_credito").click(function(){
 
-            var DiaSemana_  = $("#selDiaSemana option:selected").val();  
+            var DateOPen      = $("#dtApertura").val(); 
+            const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
+
+            var DiaSemana_  = fechaAnalizada.day();  
             var Municipio_  = $("#selMunicipio option:selected").val();  
 
             var Nombre_      = $("#txtNombre").val();   
@@ -128,6 +135,7 @@
                     vlInteres    : vlInteres,
                     InteresesPorCuota:InteresesPorCuota,
                     Saldos_      : Saldos_,
+                    FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
                     _token  : "{{ csrf_token() }}" 
                 },
                 async: true,
