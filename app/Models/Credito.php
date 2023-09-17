@@ -144,6 +144,9 @@ class Credito extends Model
                     'estado_credito'               => 1,
                     'activo'               => 1,
                 ];
+
+
+                
                 $response = Credito::insert($datos_credito);
                 
 

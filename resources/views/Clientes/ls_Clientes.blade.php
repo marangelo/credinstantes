@@ -62,7 +62,7 @@
                     <td> {{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
                     <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
                     <td>
-                          <a class="btn btn-primary btn-sm" href="#"  onclick="getModalHistorico({{$c->id_clientes}})">
+                          <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                               <i class="fas fa-pencil-alt">
                               </i>
                               Editar
@@ -141,7 +141,7 @@
                     <div class="col-sm-4">
 
                       <div class="form-group">
-                        <label>Numero de Telefono:</label>
+                        <label>Telefono:</label>
                         <div class="input-group">
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
@@ -303,6 +303,104 @@
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
               <button type="button" class="btn btn-primary" id="btn_save_credito">Aplicar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <!-- /.container-fluid -->
+      <div class="modal fade" id="mdl_edit_cliente">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Editar Cliente</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                <span id="edtIdClient" style="display:none" ></span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <div class="card card-warning">
+            
+              <!-- /.card-header -->
+              <div class="card-body">                  
+                  <div class="row">
+
+                    <div class="col-sm-6">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="edtNombre" class="form-control" placeholder="Nombre ...">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="edtApellido" class="form-control" placeholder="Apellido ...">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Telefono:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="edtTelefono" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Cedula:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="edtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" id="edtMunicipio">
+                          @foreach ($Municipios as $m)
+                            <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                        
+                    </div>                    
+                  </div>
+                  
+                  
+
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>DIRECCION</label>
+                        <textarea class="form-control" id="edtDireccion" rows="3" placeholder="Direcion ..."></textarea>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" id="btn_edit_credito">Aplicar</button>
             </div>
           </div>
           <!-- /.modal-content -->

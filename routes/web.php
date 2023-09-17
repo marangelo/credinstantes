@@ -32,6 +32,7 @@ Route::get('Perfil/{id}', 'CredinstanteController@getPerfil')->name('Perfil/{id}
 
 Route::get('voucher', 'CredinstanteController@prtVoucher')->name('voucher');
 Route::post('SaveNewCredito', 'CredinstanteController@SaveNewCredito')->name('SaveNewCredito');
+Route::post('editClient', 'CredinstanteController@editClient')->name('editClient');
 
 
 Route::post('SaveNewMunicipio', 'CredinstanteController@SaveNewMunicipio')->name('SaveNewMunicipio');

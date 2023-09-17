@@ -10,6 +10,68 @@
             "buttons": ["copy", "excel", "print"]
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
+        $("#btn_edit_credito").click(function(){
+            
+                var Municipio_  = $("#edtMunicipio option:selected").val();  
+                var Nombre_      = $("#edtNombre").val();   
+                var Apellido_    = $("#edtApellido").val();   
+                var Cedula_      = $("#edtCedula").val();
+                var Tele_        = $("#edtTelefono").val();
+                var Dire_        = $("#edtDireccion").val();
+                var IdCl_        = $("#edtIdClient").text();
+
+                Municipio_      = isValue(Municipio_,'N/D',true)            
+                Nombre_         = isValue(Nombre_,'N/D',true)
+                Apellido_       = isValue(Apellido_,'N/D',true)
+                Cedula_         = isValue(Cedula_,'000-000000-00000',true)
+                Tele_           = isValue(Tele_,'00-0000-0000',true)
+                Dire_           = isValue(Dire_,'N/D',true)
+
+                if(Municipio_ ==='N/D'||Nombre_ === 'N/D' || Apellido_ ==='N/D'){
+                    Swal.fire("Oops", "Datos no Completos", "error");
+                }else{
+                    $.ajax({
+                        url: "editClient",
+                        type: 'post',
+                        data: {
+                            IdCl_:IdCl_,
+                            Municipio_   : Municipio_,
+                            Nombre_      : Nombre_,
+                            Apellido_    : Apellido_ , 
+                            Cedula_      : Cedula_,
+                            Tele_        : Tele_,
+                            Dire_        : Dire_,
+                            _token  : "{{ csrf_token() }}" 
+                        },
+                        async: true,
+                        success: function(response) {
+                            if(response){
+                                Swal.fire({
+                                title: 'Correcto',
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }   
+                                })
+                            }
+                        },
+                        error: function(response) {
+                            Swal.fire("Oops", "No se ha podido guardar!", "error");
+                        }
+                    }).done(function(data) {
+                        //location.reload();
+                    });
+
+                
+            }
+
+        })
+
 
         $("#btn_save_credito").click(function(){
 
@@ -236,5 +298,22 @@
 
         return true;
     }
+
+    function eCliente(c) {
+        $("#edtNombre").val(c.nombre);
+        $("#edtApellido").val(c.apellidos);
+
+        $("#edtTelefono").val(c.telefono);
+        $("#edtCedula").val(c.cedula);
+        $("#edtMunicipio").val(c.id_municipio).change();
+
+        $("#edtDireccion").text(c.direccion_domicilio);
+
+        $("#edtIdClient").html(c.id_clientes)
+        
+
+        $('#mdl_edit_cliente').modal('show')
+    }
+   
 
 </script>

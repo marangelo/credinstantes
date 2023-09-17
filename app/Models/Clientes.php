@@ -27,5 +27,34 @@ class Clientes extends Model
         return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->where('activo',1);
     }
 
-   
+    public static function editClient(Request $request) {
+        if ($request->ajax()) {
+            try {
+
+                $IdCl_          = $request->input('IdCl_');
+
+                $Municipio_     = $request->input('Municipio_');
+                $Nombre_        = $request->input('Nombre_');
+                $Apellido_      = $request->input('Apellido_');
+                $Dire_          = $request->input('Dire_');
+                $Cedula_        = $request->input('Cedula_');
+                $Tele_          = $request->input('Tele_');
+
+                $response =   Clientes::where('id_clientes',  $IdCl_)->update([
+                    "id_municipio"          => $Municipio_,
+                    "nombre"                => $Nombre_,
+                    "apellidos"             => $Apellido_,
+                    "direccion_domicilio"   => $Dire_,
+                    "cedula"                => $Cedula_,
+                    "telefono"              => $Tele_,
+                ]);
+
+                return response()->json($response);
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+    }
 }

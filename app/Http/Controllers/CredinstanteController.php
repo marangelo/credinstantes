@@ -81,6 +81,13 @@ class CredinstanteController extends Controller {
         return response()->json($response);
     }
 
+    public function editClient(Request $request)
+    {
+        $response = Clientes::editClient($request);
+        
+        return response()->json($response);
+    }
+
     public function SaveNewMunicipio(Request $request)
     {
         $response = Municipios::SaveNewMunicipio($request);
