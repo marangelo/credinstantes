@@ -170,7 +170,7 @@
                   <div class="form-group">
                       <label>Fecha Apertura</label>
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura"/>
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
                             <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -308,7 +308,7 @@
           <div class="form-group">
             <label>Fecha Abono</label>
               <div class="input-group date" id="dtAbono" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IddtApertura"/>
+                  <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IddtApertura" value="{{ date('d/m/y') }}"/>
                   <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                   </div>

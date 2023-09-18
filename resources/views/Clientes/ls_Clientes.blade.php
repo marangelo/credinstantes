@@ -50,6 +50,7 @@
                     <th>Municipio</th>
                     <th>Departamento</th>
                     <th>Direccion</th>
+                    <th>Estado</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -58,9 +59,44 @@
                   <tr>
                     <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a></td>
                     <td>{{ strtoupper($c->telefono) }} </td>
-                    <td> {{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
-                    <td> {{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
                     <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
+                    <td>
+                        @if ($c->tieneCreditoVencido->isNotEmpty())
+                            <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
+                                            @case(1)
+                                                bg-success
+                                                @break
+                                            @case(2)
+                                                bg-danger
+                                                @break
+                                            @case(3)
+                                                bg-warning
+                                                @break
+                                            @default
+                                                ''
+                                        @endswitch">{{ $c->tieneCreditoVencido->first()->Estado->nombre_estado }}</span>
+                        @else
+                          @if ($c->getCreditos->isNotEmpty())
+                              <span class="badge @switch($c->getCreditos->first()->estado_credito)
+                                            @case(1)
+                                                bg-success
+                                                @break
+                                            @case(2)
+                                                bg-danger
+                                                @break
+                                            @case(3)
+                                                bg-warning
+                                                @break
+                                            @default
+                                                ''
+                                        @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
+                          @else
+                              <p>- </p>
+                          @endif
+                        @endif
+                    </td>
                     <td>
                           <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                               <i class="fas fa-pencil-alt">
@@ -76,16 +112,7 @@
                       </td>
                   @endforeach
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Telefono</th>
-                    <th>Municipio</th>
-                    <th>Direccion</th>
-                    <th>Monto</th>
-                    <th></th>
-                  </tr>
-                  </tfoot>
+                  
                 </table>
               </div>
               <!-- /.card-body -->
@@ -116,7 +143,7 @@
                     <div class="form-group">
                       <label>Fecha Apertura</label>
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura"/>
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
                             <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>

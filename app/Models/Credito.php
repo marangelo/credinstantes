@@ -105,12 +105,13 @@ class Credito extends Model
                 $IdCredito = Credito::insertGetId($datos_credito);
 
                 for ($i = 1; $i <= 10; $i++) {
+                    $fecha->add(new DateInterval('P1W')); 
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
                         'numero_pago'  => $i, 
                         'FechaPago'   => $fecha->format('Y-m-d')
                     ];
-                    $fecha->add(new DateInterval('P1W')); 
+                    
                 }
 
                 $response = RefAbonos::insert($Fecha_abonos); 
@@ -174,12 +175,13 @@ class Credito extends Model
                 $IdCredito = Credito::insertGetId($datos_credito);
 
                 for ($i = 1; $i <= 10; $i++) {
+                    $fecha->add(new DateInterval('P1W')); 
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
                         'numero_pago'  => $i, 
                         'FechaPago'   => $fecha->format('Y-m-d')
                     ];
-                    $fecha->add(new DateInterval('P1W')); 
+                    
                 }
 
                 $response = RefAbonos::insert($Fecha_abonos); 

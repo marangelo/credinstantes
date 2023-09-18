@@ -26,7 +26,11 @@ class Clientes extends Model
     {
         return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->where('activo',1);
     }
-
+    
+    public function tieneCreditoVencido()
+    {
+        return $this->getCreditos()->whereIn('estado_credito', [3, 2]);
+    }
     public static function editClient(Request $request) {
         if ($request->ajax()) {
             try {
