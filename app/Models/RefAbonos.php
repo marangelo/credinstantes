@@ -11,4 +11,9 @@ class RefAbonos extends Model {
     protected $table = "Tbl_PagosAbonos";    
     protected $primaryKey = 'id_pagoabono';
 
+    public function Creditos()
+    {
+        return $this->hasMany(Credito::class, 'id_creditos', 'id_creditos');
+    }
+
 }

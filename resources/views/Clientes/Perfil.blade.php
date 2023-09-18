@@ -167,7 +167,7 @@
               <form class="form-horizontal">
                 <div class="row">
                   <div class="col-sm-12">
-                  <div class="form-group">
+                    <div class="form-group">
                       <label>Fecha Apertura</label>
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                             <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>

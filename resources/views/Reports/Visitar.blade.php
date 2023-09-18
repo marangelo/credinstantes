@@ -1,7 +1,7 @@
 @extends('layouts.lyt_listas')
 
 @section('metodosjs')
-@include('jsViews.js_reports')
+@include('jsViews.js_visita')
 @endsection
 
 @section('content')
@@ -32,19 +32,30 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title" id="lbl_periodo">Periodo del 00/00/0000 al 00/00/0000</h3>
+                <h3 class="card-title" id="lbl_periodo">Clientes a Visitar <span id="lbl_visitar" ></span>  </h3>
                 <div class="card-tools">
-                <div class="form-group">
 
-                <div class="form-group">
-                  <select class="form-control" style="width: 100%;">
-                    <option selected="selected">Dia de semana</option>
-                    @foreach ($DiasSemana as $d)
-                      <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
-                    @endforeach
-                  </select>
+                <div class="row">
+                  <div class="col-8">
+                  <div class="form-group">
+                      <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                          <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/Y') }}"/>
+                          <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                          </div>
+                      </div>
+                  </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                      <div class="input-group">                        
+                      <button type="button" class="btn btn-success" id="btn-buscar">Buscar</button>
+                      </div>
+                    </div>  
+                  </div>
                 </div>
-                </div>            
+                  
+
                 
                 </div>
               </div>
@@ -52,32 +63,7 @@
               <div class="card-body">
                 <table id="tbl_clientes" class="table table-bordered table-striped">
                   <thead>
-                  <tr>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>- </td> 
-                  </tr>
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                  </tr>
-                  </tfoot>
+                  
                 </table>
               </div>
               <!-- /.card-body -->

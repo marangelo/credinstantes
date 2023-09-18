@@ -4,7 +4,7 @@
         $('[data-mask]').inputmask()
     
         $('#reservationdate').datetimepicker({
-            format: 'DD/MM/YYYY'
+            format: 'DD/MM/yyyy'
         });
 
         $("#tbl_clientes").DataTable({

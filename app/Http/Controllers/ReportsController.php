@@ -9,6 +9,7 @@ use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
 use App\Models\Credinstante;
+use App\Models\ReportsModels;
 use CodersFree\Date\Date;
 
 class ReportsController extends Controller {
@@ -32,6 +33,13 @@ class ReportsController extends Controller {
     {           
         return view('Reports.Morosidad');
         
+    }
+
+    public function getVisitar(Request $request)
+    {
+        $response = ReportsModels::getVisitar($request);
+        
+        return response()->json($response);
     }
 
 }

@@ -57,3 +57,5 @@ Route::post('rmAbono', 'CredinstanteController@rmAbono')->name('rmAbono');
 Route::get('Visitar', 'ReportsController@Visitar')->name('Visitar');
 Route::get('Abonos', 'ReportsController@Abonos')->name('Abonos');
 Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');
+
+Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');

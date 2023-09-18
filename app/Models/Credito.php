@@ -16,6 +16,11 @@ class Credito extends Model
     protected $table = "Tbl_Creditos";    
     protected $primaryKey = 'id_creditos';
 
+    public function Clientes()
+    {
+        return $this->hasOne(Clientes::class, 'id_clientes','id_clientes');
+    }
+
     public function abonos()
     {
         return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->where('activo',1)->orderBy('id_abonoscreditos', 'desc')->limit(1);
