@@ -258,9 +258,11 @@
                 }},
 
                 {"title": "","data": "cuota_cobrada", "render": function(data, type, row, meta) {
+
+
                     return `
                     <button type="button" class="btn btn-block bg-gradient-danger btn-sm"><a href="#" onclick="rmAbono(`+row.id_abonoscreditos+`)" class="text-white"><i class="fas fa-trash"></i></a></button>
-                    <button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="{{ route('voucher')}}" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>
+                    <button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="{{ route('voucher')}}/`+row.id_abonoscreditos+`" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>
                     `
                 }},
 

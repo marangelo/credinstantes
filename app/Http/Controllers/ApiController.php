@@ -41,7 +41,7 @@ class ApiController extends Controller{
 
                 $datos_a_creditos[$key] = [
                     'id_creditos'       => $c->id_creditos,
-                    'estado_credito'    => $isMora
+                    'estado_credito'    => $idEstado
                 ];
             
             }

@@ -128,7 +128,7 @@
                 
               </div>
               <!-- ./card-body -->
-              <div class="card-footer">
+              <div class="card-footer" style = "display:none">
                 <div class="row">
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">

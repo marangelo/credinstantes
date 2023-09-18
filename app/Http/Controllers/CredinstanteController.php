@@ -22,8 +22,9 @@ class CredinstanteController extends Controller {
         
     }
 
-    public function prtVoucher(){
-        return view('Voucher.home');
+    public function prtVoucher($Id){
+        $Abono    = Abono::find($Id); 
+        return view('Voucher.home', compact('Abono'));
     }
     
     public function getClientes()
