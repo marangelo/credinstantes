@@ -9,10 +9,10 @@
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
         $('#reservationdate').datetimepicker({
-            format: 'DD/MM/yyyy'
+            format: 'DD/MM/YYYY'
         });
         $('#dtAbono').datetimepicker({
-            format: 'DD/MM/yyyy'
+            format: 'DD/MM/YYYY'
         });
 
 
@@ -46,46 +46,46 @@
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
                 $.ajax({
-                url: "../AddCredito",
-                type: 'post',
-                data: {
-                    DiaSemana_   : DiaSemana_,
-                    IdClientes   : IdClientes,
-                    Monto_       : Monto_,  
-                    Plato_       : Plato_,  
-                    Interes_     : Interes_,
-                    Cuotas_      : Cuotas_,
-                    Total_       : Total_,
-                    vlCuota      : vlCuota,
-                    vlInteres    : vlInteres,
-                    Saldos_      : Saldos_,
-                    InteresesPorCuota:InteresesPorCuota,
-                    FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
-                    _token  : "{{ csrf_token() }}" 
-                },
-                async: true,
-                success: function(response) {
-                    if(response){
-                        Swal.fire({
-                        title: 'Correcto',
-                        icon: 'success',
-                        showCancelButton: false,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }   
-                        })
+                    url: "../AddCredito",
+                    type: 'post',
+                    data: {
+                        DiaSemana_   : DiaSemana_,
+                        IdClientes   : IdClientes,
+                        Monto_       : Monto_,  
+                        Plato_       : Plato_,  
+                        Interes_     : Interes_,
+                        Cuotas_      : Cuotas_,
+                        Total_       : Total_,
+                        vlCuota      : vlCuota,
+                        vlInteres    : vlInteres,
+                        Saldos_      : Saldos_,
+                        InteresesPorCuota:InteresesPorCuota,
+                        FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    async: true,
+                    success: function(response) {
+                        if(response){
+                            Swal.fire({
+                            title: 'Correcto',
+                            icon: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }   
+                            })
+                        }
+                    },
+                    error: function(response) {
+                        Swal.fire("Oops", "No se ha podido guardar!", "error");
                     }
-                },
-                error: function(response) {
-                    Swal.fire("Oops", "No se ha podido guardar!", "error");
-                }
-            }).done(function(data) {
-                //location.reload();
-            });
+                }).done(function(data) {
+                    //location.reload();
+                });
 
                 
             }

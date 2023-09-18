@@ -20,6 +20,10 @@ class Credito extends Model
     {
         return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->where('activo',1)->orderBy('id_abonoscreditos', 'desc')->limit(1);
     }
+    public function refAbonos()
+    {
+        return $this->hasMany(RefAbonos::class, 'id_creditos', 'id_creditos')->orderBy('numero_pago', 'desc')->limit(1);
+    }
     
     public function abonosCount()
     {
@@ -39,6 +43,10 @@ class Credito extends Model
     public static function getCreditos()
     {
         return Credito::where('activo',1)->get();
+    }
+    public static function getCreditosActivos()
+    {
+        return Credito::where('activo',1)->whereNotIn('estado_credito',[2,3,4])->get();
     }
     public static function SaveNewCredito(Request $request)
     {
