@@ -37,14 +37,14 @@
 
                 <div class="row">
                   <div class="col-8">
-                  <div class="form-group">
+                    <div class="form-group">
                       <div class="input-group date" id="reservationdate" data-target-input="nearest">
                           <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/Y') }}"/>
                           <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
                       </div>
-                  </div>
+                    </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">

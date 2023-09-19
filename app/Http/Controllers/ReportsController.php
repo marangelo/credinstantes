@@ -31,13 +31,20 @@ class ReportsController extends Controller {
     }
     public function Morosidad()
     {           
-        return view('Reports.Morosidad');
+        $Clientes    = Clientes::getClientes();
+        return view('Reports.Morosidad',compact('Clientes'));
         
     }
 
     public function getVisitar(Request $request)
     {
         $response = ReportsModels::getVisitar($request);
+        
+        return response()->json($response);
+    }
+    public function getAbonos(Request $request)
+    {
+        $response = ReportsModels::getAbonos($request);
         
         return response()->json($response);
     }

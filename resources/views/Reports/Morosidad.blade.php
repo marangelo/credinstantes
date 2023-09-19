@@ -1,7 +1,7 @@
 @extends('layouts.lyt_listas')
 
 @section('metodosjs')
-@include('jsViews.js_reports')
+@include('jsViews.js_morosidad')
 @endsection
 
 @section('content')
@@ -32,20 +32,42 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title" id="lbl_periodo">Periodo del 00/00/0000 al 00/00/0000</h3>
-                <div class="card-tools">
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <i class="far fa-calendar-alt"></i>
-                      </span>
+              <div class="row">
+                  <div class="col-md-4">
+                    <label>Clientes</label>
+                    <div class="form-group">
+                      <select class="form-control select2" style="width: 100%;" id="id_select_cliente">
+                          <option value="-1"  selected="selected">Todos</option>
+                        @foreach ($Clientes as $c)
+                          <option value="{{$c->id_clientes}}"> {{strtoupper($c->nombre) }}</option>
+                        @endforeach
+                      </select>
                     </div>
-                    <input type="text" class="form-control float-right" id="date-range-picker">
                   </div>
-                  <!-- /.input group -->
-                </div>         
-                
+                  <div class="col-md-4">
+                    <label>INICIO</label>
+                    <div class="form-group">
+                      <div class="input-group date" id="dt-ini" data-target-input="nearest">
+                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" value="{{ date('d/m/Y') }}"/>
+                          <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <label>CULMINA</label>
+                    <div class="form-group">
+                      <div class="input-group date" id="dt-end" data-target-input="nearest">
+                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" value="{{ date('d/m/Y') }}"/>
+                          <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                              <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="btn-buscar-abonos">Buscar</button>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
               <!-- /.card-header -->

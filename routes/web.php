@@ -59,3 +59,5 @@ Route::get('Abonos', 'ReportsController@Abonos')->name('Abonos');
 Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');
 
 Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
+Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
+
