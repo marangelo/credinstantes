@@ -20,8 +20,7 @@
             vTableArticulos.search(this.value).draw();
         });
 
-        
-
+      
        
         
 

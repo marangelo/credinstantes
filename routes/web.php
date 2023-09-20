@@ -60,6 +60,10 @@ Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');
 
 Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
 Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
+Route::post('getMorosidad', 'ReportsController@getMorosidad')->name('getMorosidad');
 
 Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');
+
+Route::post('exportAbonos', 'ReportsController@exportAbonos')->name('exportAbonos');
+Route::post('exportVisita', 'ReportsController@exportVisita')->name('exportVisita');
 

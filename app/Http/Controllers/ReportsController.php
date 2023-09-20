@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Exports\ExportAbonos;
+use App\Exports\ExportVisitar;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\Clientes;
 use App\Models\Municipios;
@@ -20,19 +23,22 @@ class ReportsController extends Controller {
     public function Visitar()
     {           
         $DiasSemana  = DiasSemana::getDiasSemana();  
-        return view('Reports.Visitar', compact('DiasSemana'));
+        $Titulo         = "Visitar";
+        return view('Reports.Visitar', compact('DiasSemana','Titulo'));
         
     }
     public function Abonos()
     {           
         $Clientes    = Clientes::getClientes();  
-        return view('Reports.Abonos', compact('Clientes'));
+        $Titulo         = "Abonos";
+        return view('Reports.Abonos', compact('Clientes','Titulo'));
         
     }
     public function Morosidad()
     {           
         $Clientes    = Clientes::getClientes();
-        return view('Reports.Morosidad',compact('Clientes'));
+        $Titulo         = "Morosidad";
+        return view('Reports.Morosidad',compact('Clientes','Titulo'));
         
     }
 
@@ -47,6 +53,26 @@ class ReportsController extends Controller {
         $response = ReportsModels::getAbonos($request);
         
         return response()->json($response);
+    }
+    public function getMorosidad(Request $request)
+    {
+        $response = ReportsModels::getMorosidad($request);
+        
+        return response()->json($response);
+    }
+
+    public function exportAbonos(Request $request)
+    {
+        //return Excel::download(new ExportAbonos($request), 'Abonos.xlsx');
+        $export = new ExportAbonos($request);
+    
+        $fileName = 'abonos.xlsx';
+    
+        return Excel::download($export, $fileName);
+    }
+    public function exportVisita(Request $request)
+    {
+        return Excel::download(new ExportVisitar($request), 'Visita.xlsx');
     }
 
 }

@@ -81,7 +81,7 @@ class Clientes extends Model
 
                 if($isCreditoVencido===false){
                      // COMPRUEBA EL PORCENTAJE DE PAGOS QUE TIENEN SU PRIMER ABONO
-                    $Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100: b ;
+                    $Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100 : 0 ;
 
                     $creditCheck = ($Cumplimiento >= 50 && $credito_totals >= 6000)  ? true : false ;
                 }else{

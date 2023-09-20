@@ -37,16 +37,19 @@
 
                 <div class="row">
                   <div class="col-md-12">
-                    <div class="form-group">
-                      <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                          <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/Y') }}"/>
-                          <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                          </div>
-                          <div class="input-group-text" id="btn-buscar"><i class="fa fa-filter"></i></div>
-                          <div class="input-group-text" id="btn-to-excel"><i class="fa fa-file-excel"></i></div>
+                    <form action="{{ route('exportVisita') }}" method="POST">@csrf
+                      <div class="form-group">                      
+                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" name="Fecha_" value="{{ date('d/m/Y') }}"/>
+                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                            <div class="input-group-text" id="btn-buscar"><i class="fa fa-filter"></i></div>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-file-excel"></i></button>
+                        </div>
+                        
                       </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
                   

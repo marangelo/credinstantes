@@ -1,26 +1,12 @@
 <script type="text/javascript">
     $(document).ready(function () {
+        InitTable();
 
-        $("#tbl_clientes").DataTable({
-            "responsive": true, 
-            "lengthChange": false, 
-            "autoWidth": false,
-            "language": {
-            "zeroRecords": "NO HAY COINCIDENCIAS",
-            "paginate": {
-                "first": "Primera",
-                "last": "Última ",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            },
-            "lengthMenu": "MOSTRAR _MENU_",
-            "emptyTable": "-",
-            "search": "BUSCAR"
-            },
-        }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
-        $("#tbl_clientes_length").hide();
-        $("#tbl_clientes_filter").hide();
+        $("#btn-buscar-morosidad").click(function(){
+            InitTable();
+        })
 
+   
         $('#dt-ini,#dt-end').datetimepicker({
             format: 'DD/MM/YYYY'
         });
@@ -31,6 +17,41 @@
         
 
     })
+
+    function InitTable() {
+
+        $("#tbl_clientes").DataTable({
+            "responsive": true, 
+            "lengthChange": false, 
+            "destroy": true,
+            "autoWidth": false,
+            "info": false,
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },    
+            },
+            "ajax":{
+                "url": "getMorosidad",
+                "type": 'POST',
+                'dataSrc': '',
+                "data": {               
+                    _token  : "{{ csrf_token() }}" 
+                }
+            },
+            'columns': [
+                { "title": "NOMBRE",              "data": "nombre" },
+                { "title": "APELLIDOS",            "data": "apellidos" },
+                { "title": "ESTADO",            "data": "Estado" },
+            ],
+        })
+        $("#tbl_clientes_length").hide();
+        $("#tbl_clientes_filter").hide();
+    }
 
     function isValue(value, def, is_return) {
         if ( $.type(value) == 'null'

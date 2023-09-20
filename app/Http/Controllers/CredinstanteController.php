@@ -18,7 +18,8 @@ class CredinstanteController extends Controller {
     }
     public function getDashboard()
     {          
-        return view('Dashboard.home');
+        $Titulo = "Dashboard";
+        return view('Dashboard.home',compact('Titulo'));
         
     }
 
@@ -32,8 +33,9 @@ class CredinstanteController extends Controller {
         $Clientes    = Clientes::getClientes();  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();  
+        $Titulo      = "Clientes";
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana'));
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Titulo'));
         
     }
 
@@ -41,32 +43,36 @@ class CredinstanteController extends Controller {
     {   
         
         $perfil_cliente = Clientes::find($id);  
-        $DiasSemana = DiasSemana::getDiasSemana();
+        $DiasSemana     = DiasSemana::getDiasSemana();
+        $Titulo         = "Perfil del Clientes";
     
-        return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana'));
+        return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana','Titulo'));
         
     }
     public function getMunicipios()
     {   
         $Municipios = Municipios::getMunicipios(); 
         $Departamentos = Departamentos::getDepartamentos();  
+        $Titulo         = "Municipio";
         
         
-        return view('Clientes.ls_Municipios', compact('Municipios','Departamentos'));
+        return view('Clientes.ls_Municipios', compact('Municipios','Departamentos','Titulo'));
         
     }
     public function getDepartamento()
     {   
         $Departamentos = Departamentos::getDepartamentos();  
+        $Titulo         = "Departamento";
         
-        return view('Clientes.ls_Departamentos', compact('Departamentos'));
+        return view('Clientes.ls_Departamentos', compact('Departamentos','Titulo'));
         
     }
     public function getDiasSemna()
     {   
         $DiasSemana = DiasSemana::getDiasSemana();  
+        $Titulo         = "Dia de Semana";
         
-        return view('Clientes.ls_DiasSemana', compact('DiasSemana'));
+        return view('Clientes.ls_DiasSemana', compact('DiasSemana','Titulo'));
         
     }
     public function getUsuarios ()

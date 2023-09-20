@@ -12,7 +12,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Morisiadad</h1>
+            <h1>Morosidad</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -31,7 +31,7 @@
           <div class="col-12">
             <!-- /.card -->
             <div class="card">
-              <div class="card-header">
+              <div class="card-header" style="display:none">
               <div class="row">
                   <div class="col-md-4">
                     <label>Buscar</label>
@@ -62,7 +62,7 @@
                           <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
-                          <div class="input-group-text" id="btn-buscar-abonos"><i class="fa fa-filter"></i></div>
+                          <div class="input-group-text" id="btn-buscar-morosidad"><i class="fa fa-filter"></i></div>
                       </div>
                     </div>
                   </div>
@@ -75,29 +75,15 @@
                   <thead>
                   <tr>
                     <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
+                    <th>-</th>  
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>- </td> 
-                  </tr>
+                  
                   </tbody>
                   <tfoot>
-                  <tr>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>-</th>
-                  </tr>
+                 
                   </tfoot>
                 </table>
               </div>
