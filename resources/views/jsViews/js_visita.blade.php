@@ -33,6 +33,18 @@
             "lengthChange": false, 
             "destroy": true,
             "autoWidth": false,
+            "language": {
+            "zeroRecords": "NO HAY COINCIDENCIAS",
+            "paginate": {
+                "first": "Primera",
+                "last": "Última ",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "-",
+            "search": "BUSCAR"
+            },
             "ajax":{
                 "url": "getVisitar",
                 "type": 'POST',

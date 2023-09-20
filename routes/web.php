@@ -61,3 +61,5 @@ Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');
 Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
 Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
 
+Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');
+

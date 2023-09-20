@@ -14,6 +14,12 @@
             InitTable();
         })
 
+
+        $('#id_txt_buscar').on('keyup', function() {   
+            var vTableArticulos = $('#tbl_clientes').DataTable();     
+            vTableArticulos.search(this.value).draw();
+        });
+
         
 
        
@@ -37,13 +43,28 @@
 
         dt_Ini_ = dt_Ini.format('YYYY-MM-DD');
         dt_End_ = dt_End.format('YYYY-MM-DD');
+        
 
+       
 
         $("#tbl_clientes").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "destroy": true,
             "autoWidth": false,
+            "info": false,
+            "language": {
+            "zeroRecords": "NO HAY COINCIDENCIAS",
+            "paginate": {
+                "first": "Primera",
+                "last": "Última ",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "-",
+            "search": "BUSCAR"
+            },
             "ajax":{
                 "url": "getAbonos",
                 "type": 'POST',
@@ -76,6 +97,8 @@
                 },                  
             ],
         })
+        $("#tbl_clientes_length").hide();
+        $("#tbl_clientes_filter").hide();
     }
 
     function isValue(value, def, is_return) {

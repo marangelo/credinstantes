@@ -52,7 +52,7 @@
                 </div>
                 <!-- /.user-block -->
                 <div class="card-tools">                  
-                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-xl">
+                  <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
                     Nuevo
                   </button>
                 </div>
@@ -158,7 +158,7 @@
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Nuevo Credito</h4>
+              <h4 class="modal-title">Nuevo Credito en paralelo</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

@@ -165,6 +165,13 @@ class CredinstanteController extends Controller {
         return response()->json($response);
     }
 
+    public function creditCheck(Request $request)
+    {
+        $response = Clientes::creditCheck($request);
+        
+        return response()->json($response);
+    }
+
     
 
 

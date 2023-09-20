@@ -1,14 +1,25 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        $('[data-mask]').inputmask()
-
         $("#tbl_clientes").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "autoWidth": false,
-            "buttons": ["copy", "excel", "print"]
+            "language": {
+            "zeroRecords": "NO HAY COINCIDENCIAS",
+            "paginate": {
+                "first": "Primera",
+                "last": "Última ",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "-",
+            "search": "BUSCAR"
+            },
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
+        $("#tbl_clientes_length").hide();
+        $("#tbl_clientes_filter").hide();
 
         $('#dt-ini,#dt-end').datetimepicker({
             format: 'DD/MM/YYYY'

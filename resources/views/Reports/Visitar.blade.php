@@ -36,22 +36,17 @@
                 <div class="card-tools">
 
                 <div class="row">
-                  <div class="col-8">
+                  <div class="col-md-12">
                     <div class="form-group">
                       <div class="input-group date" id="reservationdate" data-target-input="nearest">
                           <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/Y') }}"/>
                           <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
+                          <div class="input-group-text" id="btn-buscar"><i class="fa fa-filter"></i></div>
+                          <div class="input-group-text" id="btn-to-excel"><i class="fa fa-file-excel"></i></div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="form-group">
-                      <div class="input-group">                        
-                      <button type="button" class="btn btn-success" id="btn-buscar">Buscar</button>
-                      </div>
-                    </div>  
                   </div>
                 </div>
                   

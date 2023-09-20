@@ -375,6 +375,41 @@
 
     }
 
+    
+
+    $("#btn_mdl_credito").click(function(){
+
+        var Cliente = {{request()->segment(2)}}
+
+        $.ajax({
+            url: "../creditCheck",
+            type: 'post',
+            data: {
+                Cliente      : Cliente,
+                _token  : "{{ csrf_token() }}" 
+            },
+            async: true,
+            success: function(response) {
+                if (response.original.creditCheck) {
+                    $('#modal-xl').modal('show');
+                    $("#txtMonto").val(response.original.MontoMaximo)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title:  'Credito en paralelo',
+                        text: 'Este cliente no clasifica para un credito en paralelo',
+                    })
+                }
+            },
+            error: function(response) {
+                
+            }
+        }).done(function(data) {
+
+        });
+
+    })
+
    
     function getModalHistorico(id){
         $("#lbl_mdl_id_credito").html(id);

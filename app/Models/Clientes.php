@@ -61,4 +61,51 @@ class Clientes extends Model
             }
         }
     }
+    public static function creditCheck(Request $request) {
+        if ($request->ajax()) {
+            try {
+
+                $IdCl_      = $request->input('Cliente');
+
+                $Cliente    = Clientes::find($IdCl_);
+
+                $creditos_activos = $Cliente->tieneCreditoVencido;
+                $credito_abonos   = $Cliente->getCreditos[0]->abonosCount();
+                $credito_cuotas   = $Cliente->getCreditos[0]->numero_cuotas;
+                $credito_totals   = $Cliente->getCreditos[0]->total; 
+
+                $tieneCreditoVencido = count($creditos_activos);
+
+                //VERIFICA EL ESTADO DE SALUD DEL CLIENTE EN CASO QUE TENGA CREDITO VENCIDOS O EN MORA
+                $isCreditoVencido = ($tieneCreditoVencido > 0 ) ? true : false ;
+
+                if($isCreditoVencido===false){
+                     // COMPRUEBA EL PORCENTAJE DE PAGOS QUE TIENEN SU PRIMER ABONO
+                    $Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100: b ;
+
+                    $creditCheck = ($Cumplimiento >= 50 && $credito_totals >= 6000)  ? true : false ;
+                }else{
+                    $creditCheck = false;
+                }
+
+                $array = [
+                    "creditCheck"       => $creditCheck,
+                    "MontoMaximo"       => $credito_totals * (60 / 100),
+                ];
+
+                
+
+            
+            
+
+                return response()->json($array);
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+    }
+
+
 }

@@ -12,7 +12,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Abonos</h1>
+            <h1>Listado de abonos realizados</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -34,6 +34,15 @@
               <div class="card-header">
               <div class="row">
                   <div class="col-md-4">
+                    <label>Buscar</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="id_txt_buscar">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
                     <label>Clientes</label>
                     <div class="form-group">
                       <select class="form-control select2" style="width: 100%;" id="id_select_cliente">
@@ -42,9 +51,10 @@
                           <option value="{{$c->id_clientes}}"> {{strtoupper($c->nombre) }}</option>
                         @endforeach
                       </select>
+                      
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-2">
                     <label>INICIO</label>
                     <div class="form-group">
                       <div class="input-group date" id="dt-ini" data-target-input="nearest">
@@ -52,18 +62,20 @@
                           <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
+                          
+                          <div class="input-group-text"><i class="fa fa-file-excel"></i></div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-2">
                     <label>CULMINA</label>
                     <div class="form-group">
                       <div class="input-group date" id="dt-end" data-target-input="nearest">
                           <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" value="{{ date('d/m/Y') }}"/>
                           <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                              <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="btn-buscar-abonos">Buscar</button>
                           </div>
+                          <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>
                       </div>
                     </div>
                   </div>
