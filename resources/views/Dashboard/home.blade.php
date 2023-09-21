@@ -39,9 +39,8 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Capital</span>
-                <span class="info-box-number">
-                  20,0000<small>NIO</small>
+                <span class="info-box-text">INGRESO NETO</span>
+                <span class="info-box-number"><span id="lblIngreso" ></span><small>NIO</small>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -54,9 +53,8 @@
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Interes</span>
-                <span class="info-box-number">
-                  20,0000<small>NIO</small>
+                <span class="info-box-text">CAPITAL</span>
+                <span class="info-box-number"><span id="lblCapital"></span><small>NIO</small>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -73,8 +71,8 @@
               <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 03</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-text">INTERESES</span>
+                <span class="info-box-number"><span id="lblInteres"></span><small>NIO</small></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -86,8 +84,8 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 04</span>
-                <span class="info-box-number">2,000</span>
+                <span class="info-box-text">Creditos Activos</span>
+                <span class="info-box-number"><span id="lblClientes"></span></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -103,22 +101,11 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">Abonos Recuperados Del Mes</h5>
+                <h5 class="card-title">INGRESO POR MES</h5>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div class="d-flex">
-                  <p class="d-flex flex-column">
-                    <span class="text-bold text-lg">C$18,230.00</span>
-                    <span>Sales Over Time</span>
-                  </p>
-                  <p class="ml-auto d-flex flex-column text-right">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 33.1%
-                    </span>
-                    <span class="text-muted">Since last month</span>
-                  </p>
-                </div>
+                
                 <!-- /.d-flex -->
 
                 <div class="position-relative mb-4">

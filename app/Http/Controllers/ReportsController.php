@@ -30,7 +30,7 @@ class ReportsController extends Controller {
     public function Abonos()
     {           
         $Clientes    = Clientes::getClientes();  
-        $Titulo         = "Abonos";
+        $Titulo         = "Ingresos Diarios";
         return view('Reports.Abonos', compact('Clientes','Titulo'));
         
     }
@@ -60,15 +60,17 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
+    public function getDashboard(Request $request)
+    {
+        $response = ReportsModels::getDashboard($request);
+        
+        return response()->json($response);
+    }
+
 
     public function exportAbonos(Request $request)
     {
-        //return Excel::download(new ExportAbonos($request), 'Abonos.xlsx');
-        $export = new ExportAbonos($request);
-    
-        $fileName = 'abonos.xlsx';
-    
-        return Excel::download($export, $fileName);
+        return Excel::download(new ExportAbonos($request), 'Ingresos.xlsx');
     }
     public function exportVisita(Request $request)
     {

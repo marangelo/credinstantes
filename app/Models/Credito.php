@@ -53,6 +53,28 @@ class Credito extends Model
     {
         return Credito::where('activo',1)->whereNotIn('estado_credito',[2,3,4])->get();
     }
+    public static function ChanceStatus(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $Credi_     = $request->input('Credi_');
+                $Value_     = $request->input('Value_');
+                
+                $response =   Credito::where('id_creditos',  $Credi_)->update([
+                    "estado_credito" => $Value_,
+                ]);
+
+                return response()->json($response);
+
+
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+
+    }
     public static function SaveNewCredito(Request $request)
     {
 

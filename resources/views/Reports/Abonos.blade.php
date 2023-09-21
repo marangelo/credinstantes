@@ -12,12 +12,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Listado de abonos realizados</h1>
+            <h1 id="lbl_titulo_reporte"></h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">Morosidad</li>
+              <li class="breadcrumb-item active">Ingresos</li>
             </ol>
           </div>
         </div>
@@ -91,8 +91,6 @@
                   <thead>
                   <tr>
                     <th>NOMBRE</th>
-                    <th>APELLIDO</th>
-                    <th>FECHA CUOTA</th>
                     <th>CUOTA COBRADA</th>
                     <th>PAGO A CAPITAL</th>
                     <th>PAGO A INTERES</th>
@@ -102,6 +100,30 @@
                   
                   </tbody>
                 </table>
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-sm-4 col-md-4">
+                    <div class="description-block border-right">
+                      <h5 class="description-header text-primary" >C$ <span id="id_lbl_ingreso"></span></h5>
+                      <span class="description-text">TOTAL INGRESO BRUTO</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 col-md-4">
+                    <div class="description-block border-right">
+                      <h5 class="description-header text-success" >C$ <span id="id_lbl_capital" ></span></h5>
+                      <span class="description-text">CAPITAL PARA REINVERCION</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 col-md-4">
+                    <div class="description-block">
+                      <h5 class="description-header text-warning">C$ <span id="id_lbl_interes"></span></h5>
+                      <span class="description-text">ITERESES O (UTILIDAD DEL DIA)</span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                </div>
+                <!-- /.row -->
               </div>
               <!-- /.card-body -->
             </div>

@@ -112,7 +112,7 @@
               <li class="nav-item">
                 <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Abonos</p>
+                  <p>Ingresos</p>
                 </a>
               </li>
               <li class="nav-item">

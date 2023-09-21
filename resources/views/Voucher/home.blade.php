@@ -44,6 +44,10 @@
                             <td class="col-md-1 text-center">C$ {{ $Abono->cuota_cobrada}}</td>
                         </tr>
                         <tr>
+                            <td class="col-md-9"><em>SALDO ANTERIOR</em></h4></td>
+                            <td class="col-md-1 text-center">C$ {{ $Abono->saldo_anterior}}</td>
+                        </tr>
+                        <tr>
                             <td class="col-md-9"><em>TOTAL PAGO</em></h4></td>
                             <td class="col-md-1 text-center">C$ {{ $Abono->cuota_cobrada}}</td>
                         </tr>

@@ -11,6 +11,19 @@
             "responsive": true, 
             "lengthChange": false, 
             "autoWidth": false,
+            "info": false,
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            },
             "buttons": ["copy", "excel", "print"]
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
@@ -308,6 +321,19 @@
     }
 
     function eCliente(c) {
+        dta_table = [];
+        const Estados ={
+            "1" : "ACTIVO",
+            "2" : "MORA", 
+            "3" : "VENCIDO",
+            "4" : "INACTIVO"
+        }
+        const Colors ={
+            "1" : "bg-success",
+            "2" : "bg-danger", 
+            "3" : "bg-warning",
+            "4" : ""
+        }
         $("#edtNombre").val(c.nombre);
         $("#edtApellido").val(c.apellidos);
 
@@ -321,7 +347,161 @@
         
 
         $('#mdl_edit_cliente').modal('show')
+
+       
+        Cliente_         = isValue(c.id_clientes,0,true);
+        $.ajax({
+            url: "getAllCredit",
+            type: 'post',
+            data: {
+                Cliente_   : Cliente_,
+                _token  : "{{ csrf_token() }}" 
+            },
+            async: true,
+            success: function(response) {
+
+
+                response.forEach((response) => {
+                    var span = `<span class="badge `+ Colors[response.estado_credito]+`  ">`+  (Estados[response.estado_credito])?? 'N/A' +`</span>`
+                    dta_table.push({ 
+                        id_creditos         : response.id_creditos,
+                        fecha_apertura      : response.fecha_apertura,
+                        fecha_ultimo_abono  : response.fecha_ultimo_abono,
+                        saldo               : response.saldo,
+                        total               : response.total,
+                        estado_credito      : span
+                    })
+
+                });
+
+                dta_header = [
+                    {"title": "#","data": "id_creditos"},                         
+                    {"title": "Fecha Apertura","data": "fecha_apertura"}, 
+                    {"title": "Ultm Abono","data": "fecha_ultimo_abono"},                                     
+                    {"title": "SALDO","data": "saldo"},
+                    {"title": "TOTAL","data": "total"},
+                    {"title": "ESTADO","data": "estado_credito"},
+                    {"title": "","data": "ID", "render": function(data, type, row, meta) {                        
+                        return`<button type="button" class="btn btn-block bg-gradient-primary" onClick="ChanceStatus(`+ row.id_creditos +`)">CAMBIAR</button>`;
+                    }}
+                ]
+
+                dta_columnDefs = [
+                    {"visible": false,"searchable": false,"targets": []},
+                    {"className": "align-middle dt-right", "targets": []},
+                    {"width": "40%","targets": [1]},
+                    {"className": "align-middle dt-center", "targets": []},
+                ]
+                
+                table_render('#tblCreditosCliente',dta_table,dta_header,dta_columnDefs,false)
+                
+            },
+            error: function(response) {
+                Swal.fire("Oops", "No se ha podido guardar!", "error");
+            }
+        }).done(function(data) {
+            //location.reload();
+        });
     }
-   
+
+    
+
+    function ChanceStatus(Credito) {
+        Swal.fire({
+            title: 'Que estado desea Aplicar',
+            input: 'select',
+            inputOptions: {
+                'Esatdos': {
+                    1: 'Activo',
+                    2: 'Mora',
+                    3: 'Vencido',
+                    4: 'Inactivo'
+                },
+            },
+            inputPlaceholder: 'Seleccin un Estado',
+            showCancelButton: true,
+            inputValidator: (value) => {
+
+                Value_         = isValue(value,0,true)
+                Credi_         = isValue(Credito,0,true)
+
+                $.ajax({
+                    url: "ChanceStatus",
+                    type: 'post',
+                    data: {
+                        Credi_      : Credi_,
+                        Value_      : Value_,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    async: true,
+                    success: function(response) {
+
+                        if(response){
+                            Swal.fire({
+                                title: 'Registro Actualizado Correctamente ' ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                    }
+                                })
+                            }
+                        
+                    },
+                    error: function(response) {
+                        
+                    }
+                }).done(function(data) {
+
+                });
+            }
+        })
+    }
+
+    function table_render(Table,datos,Header,columnDefs,Filter){
+
+        TableExcel = $(Table).DataTable({
+            "data": datos,
+            "destroy": true,
+            "info": false,
+            "bPaginate": true,
+            "order": [
+                [0, "DESC"]
+            ],
+            "lengthMenu": [
+                [7, -1],
+                [7, "Todo"]
+            ],
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            },
+            'columns': Header,
+            "columnDefs": columnDefs,
+            rowCallback: function( row, data, index ) {
+                if ( data.Index == 'N/D' ) {
+                    $(row).addClass('table-danger');
+                } 
+            }
+        });
+        if(!Filter){
+            $(Table+"_length").hide();
+            $(Table+"_filter").hide();
+        }
+
+    }
+
 
 </script>

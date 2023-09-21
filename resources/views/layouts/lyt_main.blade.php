@@ -45,7 +45,7 @@
 <script src="{{ asset('js/usa_states.min.js') }}"></script>
 <!-- ChartJS -->
 <script src="{{ asset('js/chart.js/Chart.min.js') }}"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('js/dashboard.js') }}"></script>

@@ -97,6 +97,7 @@ class Abono extends Model
                         'completado'            => $Completado,
                         'saldo_cuota'           => $Saldo_Cuota,
                         'activo'                => 1,
+                        'saldo_anterior'        =>$Info_Credito->saldo
                     ];
                     $response = Abono::insert($datos_credito);
     

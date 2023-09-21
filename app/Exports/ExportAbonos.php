@@ -35,9 +35,7 @@ class ExportAbonos implements FromCollection
         foreach ($Abonos as $a) {
             $array_abonos[] = [
                 "id_abonoscreditos" => $a->id_abonoscreditos,
-                "fecha_cuota" => $a->fecha_cuota,
-                "Nombre" => $a->credito->Clientes->nombre,
-                "apellido" => $a->credito->Clientes->apellidos,
+                "Nombre" => $a->credito->Clientes->nombre. ' ' . $a->credito->Clientes->apellidos,
                 "cuota_cobrada" => $a->cuota_cobrada,
                 "pago_capital" => $a->pago_capital,
                 "pago_intereses" => $a->pago_intereses

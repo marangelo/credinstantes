@@ -319,11 +319,6 @@
                       </div>
                     </div>
                   </div>
-
-
-                  <div class="row">
-                    
-                  </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -355,7 +350,6 @@
               <!-- /.card-header -->
               <div class="card-body">                  
                   <div class="row">
-
                     <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
@@ -369,7 +363,7 @@
                         <label>Apellido</label>
                         <input type="text" id="edtApellido" class="form-control" placeholder="Apellido ...">
                       </div>
-                    </div>
+                    </div>  
                   </div>
                   <div class="row">
                     <div class="col-sm-4">
@@ -411,9 +405,6 @@
                         
                     </div>                    
                   </div>
-                  
-                  
-
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
@@ -421,6 +412,26 @@
                         <textarea class="form-control" id="edtDireccion" rows="3" placeholder="Direcion ..."></textarea>
                       </div>
                     </div>
+                  </div>
+
+                 
+                  <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table class="table " id="tblCreditosCliente" style="width:100%">
+                          <thead>
+                              <tr>
+                                  <th></th>
+                                  <th></th>
+                                  <th></th>
+                                  <th></th>
+                                  <th></th>
+                                  <th></th>
+                                  <th></th>
+                              </tr>
+                          </thead>
+                          <tbody ></tbody>
+                        </table>
+                      </div>
                   </div>
               </div>
               <!-- /.card-body -->

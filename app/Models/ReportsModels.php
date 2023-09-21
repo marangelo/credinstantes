@@ -86,6 +86,10 @@ class ReportsModels extends Model {
                         $Color = 'bg-warning';
                         $isAdded =  true;
                         break;
+                    case 4:
+                        $Color = '';
+                        $isAdded =  false;
+                        break;
                     
                     default:
                         $Color = '';
@@ -107,6 +111,10 @@ class ReportsModels extends Model {
                         case 3:
                             $Color = 'bg-warning';
                             $isAdded =  true;
+                            break;
+                        case 4:
+                            $Color = '';
+                            $isAdded =  false;
                             break;
                         
                         default:
@@ -135,5 +143,39 @@ class ReportsModels extends Model {
         return $array_clientes;
     }
 
+    public static function getDashboard(Request $request)
+    {
+        $array_dashboard = [];
+        $vLabel          = [];
+        $vData           = [];
+
+        $dtNow  = date('Y-m-d');
+        $D1     = date('Y-m-01', strtotime($dtNow));
+        $D2     = date('Y-m-t', strtotime($dtNow));
+
+        $Abonos     = Abono::whereBetween('fecha_cuota', [$D1, $D2])->get();
+        $Clientes   = Clientes::getClientes();
+        $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')->whereBetween('fecha_cuota', [$D1, $D2])->groupByRaw('DAY(fecha_cuota)')->get();
+        
+        $ttPagoCapital      = $Abonos->sum('pago_capital');
+        $ttPagoIntereses    = $Abonos->sum('pago_intereses');
+        $ttCuotaCobrada     = $Abonos->sum('cuota_cobrada');
+
+        foreach ($Dias as $dia) {
+            $vLabel[]   = 'D' . $dia->dy; 
+            $vData[]    = $dia->total; 
+        }
+
+        $array_dashboard = [
+            "INGRESO"           => $ttCuotaCobrada,
+            "CAPITAL"           => $ttPagoCapital,
+            "INTERESES"         => $ttPagoIntereses,
+            "clientes_activos"  => $Clientes->count(),
+            "label"             => $vLabel,
+            "Data"              => $vData
+        ];
+
+        return $array_dashboard;
+    }
     
 }

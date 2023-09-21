@@ -62,8 +62,11 @@ Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
 Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
 Route::post('getMorosidad', 'ReportsController@getMorosidad')->name('getMorosidad');
 
-Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');
+Route::get('getDashboard', 'ReportsController@getDashboard')->name('getDashboard');
 
+Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');
 Route::post('exportAbonos', 'ReportsController@exportAbonos')->name('exportAbonos');
 Route::post('exportVisita', 'ReportsController@exportVisita')->name('exportVisita');
+Route::post('getAllCredit', 'CredinstanteController@getAllCredit')->name('getAllCredit');
+Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('ChanceStatus');
 

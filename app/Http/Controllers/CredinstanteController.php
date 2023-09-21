@@ -178,6 +178,21 @@ class CredinstanteController extends Controller {
         return response()->json($response);
     }
 
+    public function ChanceStatus(Request $request)
+    {
+        $response = Credito::ChanceStatus($request);
+        
+        return response()->json($response);
+    }
+
+    public function getAllCredit(Request $request)
+    {
+        $IdCl_           = $request->input('Cliente_');
+        $Credito_Cliente = Clientes::find($IdCl_);
+        
+        return response()->json($Credito_Cliente->getCreditos);
+    }
+
     
 
 
