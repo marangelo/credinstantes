@@ -8,7 +8,7 @@
       <div class="text-center mb-1">
         <img class="profile-user-img img-fluid img-circle" src="{{ asset('img/Logo.png') }}" alt="User profile picture">
       </div>
-      <a href="#" class="h1"><b>CREDIN$TANTE</b></a>
+      <a href="#" class="h1"><b>CREDIDEMO</b></a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Ingrese sus Credenciales</p>
