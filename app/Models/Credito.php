@@ -139,7 +139,7 @@ class Credito extends Model
 
                 $IdCredito = Credito::insertGetId($datos_credito);
 
-                for ($i = 1; $i <= 10; $i++) {
+                for ($i = 1; $i <= Cuotas_; $i++) {
                     $fecha->add(new DateInterval('P1W')); 
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
@@ -148,9 +148,12 @@ class Credito extends Model
                     ];
                     
                 }
+                
+                Credito::where('id_creditos',  $IdCredito)->update([
+                    "fecha_ultimo_abono"    => $Fecha_abonos[$Cuotas_-1]['FechaPago']
+                ]);
 
                 $response = RefAbonos::insert($Fecha_abonos); 
-                
 
 
                 return $response;
@@ -218,6 +221,10 @@ class Credito extends Model
                     ];
                     
                 }
+
+                Credito::where('id_creditos',  $IdCredito)->update([
+                    "fecha_ultimo_abono"    => $Fecha_abonos[$Cuotas_-1]['FechaPago']
+                ]);
 
                 $response = RefAbonos::insert($Fecha_abonos); 
                 
