@@ -104,7 +104,7 @@ class Abono extends Model
                 }
 
                 Credito::where('id_creditos',  $IdCred)->update([
-                    "fecha_ultimo_abono"    => date('Y-m-d H:i:s'),
+                    //"fecha_ultimo_abono"    => date('Y-m-d H:i:s'),
                     "saldo" => $Saldo_actual_credito,
                     "estado_credito"=>$Estado
                 ]);

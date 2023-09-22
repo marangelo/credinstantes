@@ -67,7 +67,8 @@
                                 <thead>
                                 <tr>
                                   <th>#</th>
-                                  <th>Apertura</th>
+                                  <th>Inicia</th>
+                                  <th>Culmina</th>
                                   <th>Plazo</th>
                                   <th>Monto C$</th>
                                   <th>Total C$</th>
@@ -85,6 +86,7 @@
                                   <tr>
                                     <td>{{$c->id_creditos}}</td>
                                     <td>{{ Date::parse($c->fecha_apertura)->format('D, M d, Y') }}</td>
+                                    <td>{{ Date::parse($c->fecha_ultimo_abono)->format('D, M d, Y') }}</td>
                                     <td>{{number_format($c->plazo,0)}}</td>
                                     <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
                                     <td>{{number_format($c->total,2)}}</td>
