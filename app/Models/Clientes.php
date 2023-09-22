@@ -69,31 +69,40 @@ class Clientes extends Model
 
                 $Cliente    = Clientes::find($IdCl_);
 
-                $creditos_activos = $Cliente->tieneCreditoVencido;
-                $credito_abonos   = $Cliente->getCreditos[0]->abonosCount();
-                $credito_cuotas   = $Cliente->getCreditos[0]->numero_cuotas;
-                $credito_totals   = $Cliente->getCreditos[0]->total; 
+                if (isset($Cliente->getCreditos[0])) {
+                    $creditos_activos = $Cliente->tieneCreditoVencido;
+                    $credito_abonos   = $Cliente->getCreditos[0]->abonosCount();
+                    $credito_cuotas   = $Cliente->getCreditos[0]->numero_cuotas;
+                    $credito_totals   = $Cliente->getCreditos[0]->total; 
 
-                $tieneCreditoVencido = count($creditos_activos);
+                    $tieneCreditoVencido = count($creditos_activos);
 
-                //VERIFICA EL ESTADO DE SALUD DEL CLIENTE EN CASO QUE TENGA CREDITO VENCIDOS O EN MORA
-                $isCreditoVencido = ($tieneCreditoVencido > 0 ) ? true : false ;
+                    //VERIFICA EL ESTADO DE SALUD DEL CLIENTE EN CASO QUE TENGA CREDITO VENCIDOS O EN MORA
+                    $isCreditoVencido = ($tieneCreditoVencido > 0 ) ? true : false ;
 
-                if($isCreditoVencido===false){
-                     // COMPRUEBA EL PORCENTAJE DE PAGOS QUE TIENEN SU PRIMER ABONO
-                    $Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100 : 0 ;
+                    if($isCreditoVencido===false){
+                         // COMPRUEBA EL PORCENTAJE DE PAGOS QUE TIENEN SU PRIMER ABONO
+                        $Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100 : 0 ;
 
-                    $creditCheck = ($Cumplimiento >= 50 && $credito_totals >= 6000)  ? true : false ;
-                }else{
-                    $creditCheck = false;
+                        $creditCheck = ($Cumplimiento >= 50 && $credito_totals >= 6000)  ? true : false ;
+                    }else{
+                        $creditCheck = false;
+                    }
+
+                    
+                } else {
+                    $creditCheck = true;
+                    $credito_totals = 0;
+
                 }
+                
+
+                
 
                 $array = [
                     "creditCheck"       => $creditCheck,
                     "MontoMaximo"       => $credito_totals * (60 / 100),
                 ];
-
-                
 
             
             
