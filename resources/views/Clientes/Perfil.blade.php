@@ -4,22 +4,8 @@
 @endsection
 @section('content')
 <div class="wrapper">
-
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__wobble" src="{{ asset('img/AdminLTELogo.png')}}" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
-
-
   <!-- Main Sidebar Container -->
   @include('layouts.lyt_aside')
- 
-
-  <!-- Content Wrapper. Contains page content -->
-
-  
-
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -67,8 +53,9 @@
                                 <thead>
                                 <tr>
                                   <th>#</th>
-                                  <th>Inicia</th>
-                                  <th>Culmina</th>
+                                  <th>Inicio</th>
+                                  <th>Fin</th>
+                                  <th>Culmino</th>
                                   <th>Plazo</th>
                                   <th>Monto C$</th>
                                   <th>Total C$</th>
@@ -87,7 +74,8 @@
                                     <td>{{$c->id_creditos}}</td>
                                     <td>{{ Date::parse($c->fecha_apertura)->format('D, M d, Y') }}</td>
                                     <td>{{ Date::parse($c->fecha_ultimo_abono)->format('D, M d, Y') }}</td>
-                                    <td>{{number_format($c->plazo,0)}}</td>
+                                    <td>{{ is_null($c->fecha_culmina) ? '-' : Date::parse($c->fecha_culmina)->format('D, M d, Y')   }}</td>
+                                    <td>{{number_format($c->plazo,1)}}</td>
                                     <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
                                     <td>{{number_format($c->total,2)}}</td>
                                     <td>{{number_format($c->saldo,2)}}</td>
@@ -127,7 +115,7 @@
                                             <i class="fas fa-history">
                                             </i>                                            
                                         </a>
-                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c}})"  data-toggle="modal" data-target="#modal-lg">
+                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c}})" >
                                             
                                         <i class="far fa-money-bill-alt"></i>
                                             </i>                                            
@@ -168,7 +156,7 @@
             <div class="modal-body">
               <form class="form-horizontal">
                 <div class="row">
-                  <div class="col-sm-12">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label>Fecha Apertura</label>
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
@@ -177,6 +165,16 @@
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
+                    </div> 
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Dia de Visita</label>
+                      <select class="form-control" id="slDiaVisita">
+                        @foreach ($DiasSemana as $d)
+                          <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                        @endforeach
+                      </select>                        
                     </div> 
                   </div>
                   <div class="col-sm-6 col-md-4">

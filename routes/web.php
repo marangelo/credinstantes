@@ -19,6 +19,7 @@ Auth::routes();
 Route::get('/', 'Auth\LoginController@showLoginForm');
 //Route::get('/', 'CredinstanteController@getDashboard');
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::post('updatePassword', 'CredinstanteController@updatePassword')->name('updatePassword');;
 
 Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard');
 Route::get('Clientes', 'CredinstanteController@getClientes')->name('Clientes');
@@ -61,7 +62,7 @@ Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');
 Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
 Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
 Route::post('getMorosidad', 'ReportsController@getMorosidad')->name('getMorosidad');
-
+Route::get('getSaldoAbono/{ID}', 'CredinstanteController@getSaldoAbono')->name('getSaldoAbono');
 Route::get('getDashboard', 'ReportsController@getDashboard')->name('getDashboard');
 
 Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');

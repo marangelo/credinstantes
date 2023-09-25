@@ -21,7 +21,7 @@
             var DateOPen      = $("#dtApertura").val(); 
             const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
 
-            var DiaSemana_  = fechaAnalizada.day();  
+            var DiaSemana_  = $("#slDiaVisita option:selected").val(); 
 
             var Monto_      = $("#txtMonto").val();   
             var Plato_      = $("#txtPlazo").val();   
@@ -390,6 +390,7 @@
             },
             async: true,
             success: function(response) {
+
                 if (response.original.creditCheck) {
                     $('#modal-xl').modal('show');
                     $("#txtMonto").val(response.original.MontoMaximo)
@@ -397,9 +398,10 @@
                     Swal.fire({
                         icon: 'error',
                         title:  'Credito en paralelo',
-                        text: 'Este cliente no clasifica para un credito en paralelo',
+                        text: 'Este cliente tiene un '+response.original.cumplimiento_porcentaje+'% Avanzado ',
                     })
                 }
+                
             },
             error: function(response) {
                 
@@ -414,33 +416,48 @@
     function getModalHistorico(id){
         $("#lbl_mdl_id_credito").html(id);
         $('#modal-historico').modal('show');
-            var IdCredito = $("#lbl_mdl_id_credito").text();
+        var IdCredito = $("#lbl_mdl_id_credito").text();
 
-            $.get( "../getHistoricoAbono/" + IdCredito, function( data ) {
-                initTable_modal('#tbl_lista_abonos',data);
+        $.get( "../getHistoricoAbono/" + IdCredito, function( data ) {
+            initTable_modal('#tbl_lista_abonos',data);
 
-            });
+        });
     }
 
     function getIdCredi(obj){
+
         var Cuota = numeral(isValue(obj.cuota,0,true)).format('00.00')
-        $("#txt_Total_abono").val(Cuota);
-        $("#lbl_credito").html(obj.id_creditos);
+        var saldo = numeral(isValue(obj.saldo,0,true)).format('00.00')
+        var IdCredito = obj.id_creditos
+
+        
+
+       
+        if ((parseFloat(saldo) > 0) ) {
+
+            $.get( "../getSaldoAbono/" + IdCredito, function( data ) {
+
+                dtSaldo = numeral(isValue(data,0,true)).format('00.00')
+                
+                $("#txt_Total_abono").val(dtSaldo);
+
+            });
+
+            $('#modal-lg').modal('show');
+            
+            $("#lbl_credito").html(obj.id_creditos);
+
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title:  'Credito',
+                text: 'Este cliente no tiene saldo pendiente',
+            })
+        }
+        
     }
 
-    function isValue(value, def, is_return) {
-        if ( $.type(value) == 'null'
-            || $.type(value) == 'undefined'
-            || $.trim(value) == '(en blanco)'
-            || $.trim(value) == ''
-            || ($.type(value) == 'number' && !$.isNumeric(value))
-            || ($.type(value) == 'array' && value.length == 0)
-            || ($.type(value) == 'object' && $.isEmptyObject(value)) ) {
-            return ($.type(def) != 'undefined') ? def : false;
-        } else {
-            return ($.type(is_return) == 'boolean' && is_return === true ? value : true);
-        }
-    }
+
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))

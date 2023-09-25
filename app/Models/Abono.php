@@ -28,7 +28,15 @@ class Abono extends Model
         $Abonos = Abono::where('id_creditos',$IdCredito)->where('activo',1)->get();
         return $Abonos;
     }
+    public static function getSaldoAbono($IdCredito)
+    {  
 
+        $Credito = Credito::where('id_creditos',$IdCredito)->where('activo',1)->first();
+
+        $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
+
+        return $Abono ;
+    }
     
 
     public static function SaveNewAbono(Request $request)
@@ -79,6 +87,13 @@ class Abono extends Model
                 $Estado     = ($Saldo_Cuota > 0 ) ? 2 : 1 ;
 
 
+                $LastDate = ($Saldo_actual_credito <= 0) ? $FechaAbono: null ;
+
+                $Estado = ($Saldo_actual_credito <= 0) ? 4 : $Estado ;
+
+                $Saldo_Cuota = ($Saldo_actual_credito <= 0) ? 0 : $Saldo_Cuota ;
+
+
                 if($Total_ > 0){
 
                     $datos_credito = [                    
@@ -96,6 +111,7 @@ class Abono extends Model
                         //'fecha_cuota_secc2'     => $XXXXXX,
                         'completado'            => $Completado,
                         'saldo_cuota'           => $Saldo_Cuota,
+                        'saldo_actual'           => $Saldo_actual_credito,
                         'activo'                => 1,
                         'saldo_anterior'        =>$Info_Credito->saldo
                     ];
@@ -106,7 +122,8 @@ class Abono extends Model
                 Credito::where('id_creditos',  $IdCred)->update([
                     //"fecha_ultimo_abono"    => date('Y-m-d H:i:s'),
                     "saldo" => $Saldo_actual_credito,
-                    "estado_credito"=>$Estado
+                    "estado_credito"=>$Estado,
+                    "fecha_culmina"=>$LastDate
                 ]);
 
                 

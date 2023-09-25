@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
   <link rel="icon" type="image/x-icon" href="{{asset('img/favicon.ico')}}">
     <title>CREDIN$TANTES | {{$Titulo}} </title>
@@ -15,11 +16,14 @@
     <link rel="stylesheet" href="{{ asset('css/OverlayScrollbars.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
+      <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-     <!-- Preloader -->
+  
+<!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__wobble" src="{{asset('img/Logo.png')}}" alt="AdminLTELogo" height="60" width="60">
+    <img class="animation__wobble" src="{{asset('img/Logo.png')}}" alt="Logo" height="60" width="60">
   </div>
 
 @yield('content')
@@ -36,6 +40,8 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('js/adminlte.min.js') }}"></script>
 
+<!-- SweetAlert2 -->
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
@@ -49,6 +55,7 @@
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('js/dashboard.js') }}"></script>
+<script src="{{ asset('js/Funciones.js') }}"></script>
 
 
 </body>

@@ -71,7 +71,7 @@
               <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">INTERESES</span>
+                <span class="info-box-text">RECUPERACION DEL MES</span>
                 <span class="info-box-number"><span id="lblInteres"></span><small>NIO</small></span>
               </div>
               <!-- /.info-box-content -->
@@ -84,7 +84,7 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Creditos Activos</span>
+                <span class="info-box-text">CREDITOS ACTIVOS</span>
                 <span class="info-box-number"><span id="lblClientes"></span></span>
               </div>
               <!-- /.info-box-content -->

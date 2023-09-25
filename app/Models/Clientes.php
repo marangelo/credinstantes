@@ -26,6 +26,14 @@ class Clientes extends Model
     {
         return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->where('activo',1);
     }
+
+    public function Credito_activo()
+    {
+        return $this->hasMany(Credito::class, 'id_clientes', 'id_clientes')
+                    ->where('activo', 1)
+                    ->where('estado_credito', 1);
+    }
+
     
     public function tieneCreditoVencido()
     {
@@ -69,11 +77,17 @@ class Clientes extends Model
 
                 $Cliente    = Clientes::find($IdCl_);
 
-                if (isset($Cliente->getCreditos[0])) {
+                $creditCheck = true;
+                $credito_cuotas = 0;
+                $cumplimiento_porcentaje = 0;
+
+
+                if (isset($Cliente->Credito_activo[0])) {
+
                     $creditos_activos = $Cliente->tieneCreditoVencido;
-                    $credito_abonos   = $Cliente->getCreditos[0]->abonosCount();
-                    $credito_cuotas   = $Cliente->getCreditos[0]->numero_cuotas;
-                    $credito_totals   = $Cliente->getCreditos[0]->total; 
+                    $credito_abonos   = $Cliente->Credito_activo[0]->saldo;
+                    $credito_cuotas   = $Cliente->Credito_activo[0]->total;
+                    //$credito_totals   = $Cliente->getCreditos[0]->total; 
 
                     $tieneCreditoVencido = count($creditos_activos);
 
@@ -81,27 +95,24 @@ class Clientes extends Model
                     $isCreditoVencido = ($tieneCreditoVencido > 0 ) ? true : false ;
 
                     if($isCreditoVencido===false){
+                        
                          // COMPRUEBA EL PORCENTAJE DE PAGOS QUE TIENEN SU PRIMER ABONO
-                        $Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100 : 0 ;
+                        //$Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100 : 0 ;
+                        $cumplimiento_porcentaje = (($credito_cuotas - $credito_abonos) / $credito_cuotas) * 100;
 
-                        $creditCheck = ($Cumplimiento >= 50 && $credito_totals >= 6000)  ? true : false ;
+                        $creditCheck = ($cumplimiento_porcentaje >= 50 && $credito_cuotas >= 6000)  ? true : false ;
                     }else{
                         $creditCheck = false;
                     }
 
                     
-                } else {
-                    $creditCheck = true;
-                    $credito_totals = 0;
-
-                }
-                
+                } 
 
                 
-
                 $array = [
                     "creditCheck"       => $creditCheck,
-                    "MontoMaximo"       => $credito_totals * (60 / 100),
+                    "MontoMaximo"       => $credito_cuotas * (60 / 100),
+                    "cumplimiento_porcentaje"       => $cumplimiento_porcentaje,
                 ];
 
             

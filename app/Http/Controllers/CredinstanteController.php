@@ -9,6 +9,7 @@ use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
 use App\Models\Credinstante;
+use App\Models\Usuario;
 use CodersFree\Date\Date;
 
 class CredinstanteController extends Controller {
@@ -192,7 +193,18 @@ class CredinstanteController extends Controller {
         
         return response()->json($Credito_Cliente->getCreditos);
     }
+    public function updatePassword(Request $request)
+    {
+        $response = Usuario::updatePassword($request);
+        
+        return response()->json($response);
+    }
+    public function getSaldoAbono($IdCredito)
+    {
+        $Abonos =  Abono::getSaldoAbono($IdCredito);
 
+        return response()->json($Abonos);
+    }
     
 
 
