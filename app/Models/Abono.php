@@ -25,7 +25,7 @@ class Abono extends Model
 
     public static function getHistorico($IdCredito)
     {  
-        $Abonos = Abono::where('id_creditos',$IdCredito)->where('activo',1)->get();
+        $Abonos = Abono::where('id_creditos',$IdCredito)->where('activo',1)->orderBy('id_abonoscreditos', 'desc')->get();
         return $Abonos;
     }
     public static function getSaldoAbono($IdCredito)
@@ -46,6 +46,7 @@ class Abono extends Model
             try {
                 $IdCred         = $request->input('IdCred');
                 $FechaAbono     = $request->input('FechaAbono');
+                $CompletarPago  = false;
 
                 //OBTENEMOS LA INFORMACION DEL CREDITO
                 $Info_Credito   = Credito::find($IdCred);
@@ -61,13 +62,15 @@ class Abono extends Model
 
                 if ($lastAbonoSaldo > 0) {
                     $Total_         = $Total_ - $lastAbonoSaldo;
-                    $IdABono = $Info_Credito->abonos->first()->id_abonoscreditos;
+                    $IdABono        = $Info_Credito->abonos->first()->id_abonoscreditos;
                     $response = Abono::where('id_abonoscreditos', $IdABono)->update([
                         "saldo_cuota"           => 0,
                         "completado"            => 1,
                         'abono_dia2'            => $lastAbonoSaldo,
                         'fecha_cuota_secc2'     => $FechaAbono,
                     ]);
+
+                    $CompletarPago  = true;
                     
                 } 
                 
@@ -84,14 +87,15 @@ class Abono extends Model
 
                 $Completado     = ($Saldo_Cuota > 0 ) ? 0 : 1 ;
 
-                $Estado     = ($Saldo_Cuota > 0 ) ? 2 : 1 ;
-
+                $Estado         = ($Saldo_Cuota > 0 ) ? 2 : 1 ;
 
                 $LastDate = ($Saldo_actual_credito <= 0) ? $FechaAbono: null ;
 
                 $Estado = ($Saldo_actual_credito <= 0) ? 4 : $Estado ;
 
                 $Saldo_Cuota = ($Saldo_actual_credito <= 0) ? 0 : $Saldo_Cuota ;
+
+                $Estado = ($CompletarPago) ? 1 : $Estado ;
 
 
                 if($Total_ > 0){

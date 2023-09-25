@@ -254,7 +254,13 @@
                     return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.cuota_cobrada).format('0,00.00')  +`</span> `
                 }},
                 {"title": "Pendiente","data": "saldo_cuota", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
+
+                    if(row.saldo_cuota > 0){
+                        return `<a href="#" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+`)" class=""><span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> </a>  `
+                    }else{
+                        return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
+                    }
+                    
                 }},
 
                 {"title": "","data": "cuota_cobrada", "render": function(data, type, row, meta) {
@@ -269,6 +275,57 @@
 
                 ],
         });
+    }
+
+    function AbonoPendiente(Monto,Id){
+        const FechaAbono = moment().format('YYYY-MM-DD HH:mm:ss');
+        Swal.fire({
+            title: '¿Quiere realizar el pago pendiente  ?',
+            text: "¡Se aplicara el pago pendiente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target: document.getElementById('mdlMatPrima'),
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "../SaveNewAbono",
+                    data: {
+                        IdCred      : Id,
+                        Total_      : Monto,
+                        FechaAbono  : FechaAbono,
+                        _token      : "{{ csrf_token() }}" 
+                    },
+                    type: 'post',
+                    async: true,
+                    success: function(response) {
+                        if(response){
+                            Swal.fire({
+                                title: 'Abono Aplicado Correctamente ' ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                    }
+                                })
+                            }
+                        },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                    }).done(function(data) {
+                        //CargarDatos(nMes,annio);
+                    });
+                },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
     }
 
     function rmItem(IdElem){
