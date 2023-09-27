@@ -50,19 +50,13 @@
                     <th>Municipio</th>
                     <th>Departamento</th>
                     <th>Direccion</th>
-                    <th>Estado</th>
                     <th></th>
                   </tr>
                   </thead>
                   <tbody>
                   @foreach ($Clientes as $c)  
                   <tr>
-                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a></td>
-                    <td>{{ strtoupper($c->telefono) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
-                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
-                    <td>
+                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
                         @if ($c->tieneCreditoVencido->isNotEmpty())
                             <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
                                             @case(1)
@@ -97,6 +91,11 @@
                           @endif
                         @endif
                     </td>
+                    <td>{{ strtoupper($c->telefono) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
+                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
+                    
                     <td>
                           <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                               <i class="fas fa-pencil-alt">
@@ -356,7 +355,7 @@
               </button>
             </div>
             <div class="modal-body">
-            <div class="card card-warning">
+              <div class="card card-warning">
             
               <!-- /.card-header -->
               <div class="card-body">                  

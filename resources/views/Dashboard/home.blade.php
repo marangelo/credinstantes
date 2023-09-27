@@ -35,9 +35,8 @@
         <!-- Info boxes -->
         <div class="row">
           <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
-
+            <div class="info-box ">
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-wallet"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">INGRESO NETO</span>
                 <span class="info-box-number"><span id="lblIngreso" ></span><small>NIO</small>
@@ -50,7 +49,7 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-cash-register"></i></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">CAPITAL</span>
@@ -68,7 +67,7 @@
 
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-search-dollar"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">RECUPERACION DEL MES</span>
@@ -81,7 +80,7 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">CREDITOS ACTIVOS</span>

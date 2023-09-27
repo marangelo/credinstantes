@@ -17,7 +17,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">Perfil de Usuario</li>
+              <li class="breadcrumb-item active">Perfil</li>
             </ol>
           </div>
         </div>
@@ -52,18 +52,17 @@
                     <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                  <th>#</th>
-                                  <th>Inicio</th>
-                                  <th>Fin</th>
-                                  <th>Culmino</th>
-                                  <th>Plazo</th>
-                                  <th>Monto C$</th>
-                                  <th>Total C$</th>
-                                  <th>Saldo C$</th>
-                                  <th>Cuotas</th>
-                                  <th>Ultm. Abono</th>
-                                  <th>Saldo Pendiente</th>
-                                  <th>Estado</th>
+                                  <th>COD/ESTADO</th>
+                                  <th>INICIO</th>
+                                  <th>FIN</th>
+                                  <th>CULMINO</th>
+                                  <th>PLAZO</th>
+                                  <th>MONTO C$</th>
+                                  <th>TOTAL C$</th>
+                                  <th>SALDO C$</th>
+                                  <th>CUOTAS</th>
+                                  <th>ULTM. ABONO</th>
+                                  <th>PENDIENTE C$</th>
                                   <th></th>
                                 </tr>
                                 </thead>
@@ -71,7 +70,21 @@
                                 
                                   @foreach ($perfil_cliente->getCreditos as $c)
                                   <tr>
-                                    <td>{{$c->id_creditos}}</td>
+                                    <td>#{{$c->id_creditos}}
+                                        <span class="badge @switch($c->estado_credito)
+                                            @case(1)
+                                                bg-success
+                                                @break
+                                            @case(2)
+                                                bg-danger
+                                                @break
+                                            @case(3)
+                                                bg-warning
+                                                @break
+                                            @default
+                                                ''
+                                        @endswitch">{{ strtoupper($c->Estado->nombre_estado) }}</span>
+                                    </td>
                                     <td>{{ Date::parse($c->fecha_apertura)->format('D, M d, Y') }}</td>
                                     <td>{{ Date::parse($c->fecha_ultimo_abono)->format('D, M d, Y') }}</td>
                                     <td>{{ is_null($c->fecha_culmina) ? '-' : Date::parse($c->fecha_culmina)->format('D, M d, Y')   }}</td>
@@ -94,21 +107,7 @@
                                           -
                                         @endif
                                     </td>
-                                    <td>
-                                        <span class="badge @switch($c->estado_credito)
-                                            @case(1)
-                                                bg-success
-                                                @break
-                                            @case(2)
-                                                bg-danger
-                                                @break
-                                            @case(3)
-                                                bg-warning
-                                                @break
-                                            @default
-                                                ''
-                                        @endswitch">{{ strtoupper($c->Estado->nombre_estado) }}</span>
-                                    </td>
+                                    
                                     
                                     <td class="project-actions text-right">
                                         <a class="btn btn-primary btn-sm" href="#"  onclick="getModalHistorico({{$c->id_creditos}})">
@@ -340,7 +339,7 @@
   </div>
 
   <div class="modal fade" id="modal-historico">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
             <div class="user-block">
@@ -377,13 +376,6 @@
   </aside>
   <!-- /.control-sidebar -->
 
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; {{date('Y')}} <a href="http://pullpos.com/">pullpos.com</a>.</strong> All rights reserved.
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
+
 </div>
 @endsection

@@ -238,30 +238,31 @@
                 "search": "BUSCAR"
             },
             'columns':  [         
-                {"title": "Fecha Cuota","data": "fecha_cuota", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">`+ row.fecha_cuota  +`</span> `
+                {"title": "FEHA","data": "fecha_cuota", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">`+ row.fecha_cuota  +`</span> `
                 }},
-                {"title": "Capital","data": "pago_capital", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.pago_capital).format('0,00.00')  +`</span> `
+                {"title": "CAPITAL","data": "pago_capital", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info text-success">C$  `+ numeral(row.pago_capital).format('0,00.00')  +`</span> `
                 }},
-                {"title": "Interes","data": "pago_intereses", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.pago_intereses).format('0,00.00')  +`</span> `
+                {"title": "INTERES","data": "pago_intereses", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info text-warning">C$  `+ numeral(row.pago_intereses).format('0,00.00')  +`</span> `
                 }},
-                {"title": "Cuota Credito","data": "cuota_credito", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.cuota_credito).format('0,00.00')  +`</span> `
-                }},
-                {"title": "Monto Abono","data": "cuota_cobrada", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.cuota_cobrada).format('0,00.00')  +`</span> `
-                }},
-                {"title": "Pendiente","data": "saldo_cuota", "render": function(data, type, row, meta) {
+                {"title": "PENDIENTE","data": "saldo_cuota", "render": function(data, type, row, meta) {
 
                     if(row.saldo_cuota > 0){
-                        return `<a href="#" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+`)" class=""><span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> </a>  `
+                        return `<a href="#" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+`)" class=""><span class="badge rounded-pill ms-3 badge-soft-info text-danger">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> </a>  `
                     }else{
-                        return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
+                        return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
                     }
-                    
+
                 }},
+                {"title": "CUOTA","data": "cuota_credito", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.cuota_credito).format('0,00.00')  +`</span> `
+                }},
+                {"title": "ABONO","data": "cuota_cobrada", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.cuota_cobrada).format('0,00.00')  +`</span> `
+                }},
+                
 
                 {"title": "","data": "cuota_cobrada", "render": function(data, type, row, meta) {
 
@@ -416,6 +417,7 @@
                                 }).then((result) => {
                                 if (result.isConfirmed) {
                                     location.reload();
+                                    
                                     }
                                 })
                             }

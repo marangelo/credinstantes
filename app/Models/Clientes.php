@@ -82,8 +82,8 @@ class Clientes extends Model
                 $cumplimiento_porcentaje = 0;
 
 
-                if (isset($Cliente->Credito_activo[0])) {
 
+                if (isset($Cliente->Credito_activo[0])) {
                     $creditos_activos = $Cliente->tieneCreditoVencido;
                     $credito_abonos   = $Cliente->Credito_activo[0]->saldo;
                     $credito_cuotas   = $Cliente->Credito_activo[0]->total;
@@ -106,7 +106,9 @@ class Clientes extends Model
                     }
 
                     
-                } 
+                } else{
+                    $creditCheck = false;
+                }
 
                 
                 $array = [
