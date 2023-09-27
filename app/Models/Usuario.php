@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -84,5 +84,21 @@ class Usuario extends Model {
             }
         }
 
+    }
+
+    public static function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+        $currentPassword = $request->input('currentPassword');
+        $newPassword = $request->input('newPassword');
+    
+        if (!Hash::check($currentPassword, $user->password)) {
+            return response()->json(['success' => false]);
+        }
+    
+        $user->password = Hash::make($newPassword);
+        $user->save();
+    
+        return response()->json(['success' => true]);
     }
 }

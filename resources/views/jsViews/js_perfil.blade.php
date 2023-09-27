@@ -21,7 +21,7 @@
             var DateOPen      = $("#dtApertura").val(); 
             const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
 
-            var DiaSemana_  = fechaAnalizada.day();  
+            var DiaSemana_  = $("#slDiaVisita option:selected").val(); 
 
             var Monto_      = $("#txtMonto").val();   
             var Plato_      = $("#txtPlazo").val();   
@@ -238,24 +238,31 @@
                 "search": "BUSCAR"
             },
             'columns':  [         
-                {"title": "Fecha Cuota","data": "fecha_cuota", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">`+ row.fecha_cuota  +`</span> `
+                {"title": "FEHA","data": "fecha_cuota", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">`+ row.fecha_cuota  +`</span> `
                 }},
-                {"title": "Capital","data": "pago_capital", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.pago_capital).format('0,00.00')  +`</span> `
+                {"title": "CAPITAL","data": "pago_capital", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info text-success">C$  `+ numeral(row.pago_capital).format('0,00.00')  +`</span> `
                 }},
-                {"title": "Interes","data": "pago_intereses", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.pago_intereses).format('0,00.00')  +`</span> `
+                {"title": "INTERES","data": "pago_intereses", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info text-warning">C$  `+ numeral(row.pago_intereses).format('0,00.00')  +`</span> `
                 }},
-                {"title": "Cuota Credito","data": "cuota_credito", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.cuota_credito).format('0,00.00')  +`</span> `
+                {"title": "PENDIENTE","data": "saldo_cuota", "render": function(data, type, row, meta) {
+
+                    if(row.saldo_cuota > 0){
+                        return `<a href="#" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+`)" class=""><span class="badge rounded-pill ms-3 badge-soft-info text-danger">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> </a>  `
+                    }else{
+                        return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
+                    }
+
                 }},
-                {"title": "Monto Abono","data": "cuota_cobrada", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.cuota_cobrada).format('0,00.00')  +`</span> `
+                {"title": "CUOTA","data": "cuota_credito", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.cuota_credito).format('0,00.00')  +`</span> `
                 }},
-                {"title": "Pendiente","data": "saldo_cuota", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill ms-3 badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
+                {"title": "ABONO","data": "cuota_cobrada", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.cuota_cobrada).format('0,00.00')  +`</span> `
                 }},
+                
 
                 {"title": "","data": "cuota_cobrada", "render": function(data, type, row, meta) {
 
@@ -269,6 +276,57 @@
 
                 ],
         });
+    }
+
+    function AbonoPendiente(Monto,Id){
+        const FechaAbono = moment().format('YYYY-MM-DD HH:mm:ss');
+        Swal.fire({
+            title: '¿Quiere realizar el pago pendiente  ?',
+            text: "¡Se aplicara el pago pendiente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target: document.getElementById('mdlMatPrima'),
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "../SaveNewAbono",
+                    data: {
+                        IdCred      : Id,
+                        Total_      : Monto,
+                        FechaAbono  : FechaAbono,
+                        _token      : "{{ csrf_token() }}" 
+                    },
+                    type: 'post',
+                    async: true,
+                    success: function(response) {
+                        if(response){
+                            Swal.fire({
+                                title: 'Abono Aplicado Correctamente ' ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                    }
+                                })
+                            }
+                        },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                    }).done(function(data) {
+                        //CargarDatos(nMes,annio);
+                    });
+                },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
     }
 
     function rmItem(IdElem){
@@ -359,6 +417,7 @@
                                 }).then((result) => {
                                 if (result.isConfirmed) {
                                     location.reload();
+                                    
                                     }
                                 })
                             }
@@ -390,6 +449,7 @@
             },
             async: true,
             success: function(response) {
+
                 if (response.original.creditCheck) {
                     $('#modal-xl').modal('show');
                     $("#txtMonto").val(response.original.MontoMaximo)
@@ -397,9 +457,10 @@
                     Swal.fire({
                         icon: 'error',
                         title:  'Credito en paralelo',
-                        text: 'Este cliente no clasifica para un credito en paralelo',
+                        text: 'Este cliente tiene un '+response.original.cumplimiento_porcentaje+'% Avanzado ',
                     })
                 }
+                
             },
             error: function(response) {
                 
@@ -414,33 +475,48 @@
     function getModalHistorico(id){
         $("#lbl_mdl_id_credito").html(id);
         $('#modal-historico').modal('show');
-            var IdCredito = $("#lbl_mdl_id_credito").text();
+        var IdCredito = $("#lbl_mdl_id_credito").text();
 
-            $.get( "../getHistoricoAbono/" + IdCredito, function( data ) {
-                initTable_modal('#tbl_lista_abonos',data);
+        $.get( "../getHistoricoAbono/" + IdCredito, function( data ) {
+            initTable_modal('#tbl_lista_abonos',data);
 
-            });
+        });
     }
 
     function getIdCredi(obj){
+
         var Cuota = numeral(isValue(obj.cuota,0,true)).format('00.00')
-        $("#txt_Total_abono").val(Cuota);
-        $("#lbl_credito").html(obj.id_creditos);
+        var saldo = numeral(isValue(obj.saldo,0,true)).format('00.00')
+        var IdCredito = obj.id_creditos
+
+        
+
+       
+        if ((parseFloat(saldo) > 0) ) {
+
+            $.get( "../getSaldoAbono/" + IdCredito, function( data ) {
+
+                dtSaldo = numeral(isValue(data,0,true)).format('00.00')
+                
+                $("#txt_Total_abono").val(dtSaldo);
+
+            });
+
+            $('#modal-lg').modal('show');
+            
+            $("#lbl_credito").html(obj.id_creditos);
+
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title:  'Credito',
+                text: 'Este cliente no tiene saldo pendiente',
+            })
+        }
+        
     }
 
-    function isValue(value, def, is_return) {
-        if ( $.type(value) == 'null'
-            || $.type(value) == 'undefined'
-            || $.trim(value) == '(en blanco)'
-            || $.trim(value) == ''
-            || ($.type(value) == 'number' && !$.isNumeric(value))
-            || ($.type(value) == 'array' && value.length == 0)
-            || ($.type(value) == 'object' && $.isEmptyObject(value)) ) {
-            return ($.type(def) != 'undefined') ? def : false;
-        } else {
-            return ($.type(is_return) == 'boolean' && is_return === true ? value : true);
-        }
-    }
+
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))

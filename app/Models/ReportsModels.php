@@ -36,9 +36,9 @@ class ReportsModels extends Model {
         
         
         if ($IdCln < 0) {
-            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->get();
+            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->where('activo', 1)->get();
         } else {
-            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->whereHas('credito', function ($query) use ($IdCln) {
+            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd]) ->where('activo', 1)->whereHas('credito', function ($query) use ($IdCln) {
                             $query->where('id_clientes', $IdCln);
                         })->get();
         }
@@ -153,9 +153,9 @@ class ReportsModels extends Model {
         $D1     = date('Y-m-01', strtotime($dtNow));
         $D2     = date('Y-m-t', strtotime($dtNow));
 
-        $Abonos     = Abono::whereBetween('fecha_cuota', [$D1, $D2])->get();
+        $Abonos     = Abono::whereBetween('fecha_cuota', [$D1, $D2])->where('activo', 1)->get();
         $Clientes   = Clientes::getClientes();
-        $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')->whereBetween('fecha_cuota', [$D1, $D2])->groupByRaw('DAY(fecha_cuota)')->get();
+        $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')->whereBetween('fecha_cuota', [$D1, $D2]) ->where('activo', 1)->groupByRaw('DAY(fecha_cuota)')->get();
         
         $ttPagoCapital      = $Abonos->sum('pago_capital');
         $ttPagoIntereses    = $Abonos->sum('pago_intereses');

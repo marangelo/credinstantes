@@ -95,7 +95,7 @@
             var DateOPen      = $("#dtApertura").val(); 
             const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
 
-            var DiaSemana_  = fechaAnalizada.day();  
+            var DiaSemana_  = $("#slDiaVisita option:selected").val();  
             var Municipio_  = $("#selMunicipio option:selected").val();  
 
             var Nombre_      = $("#txtNombre").val();   
@@ -188,6 +188,7 @@
             var Plato_              = $("#txtPlazo").val();   
             var Interes_            = $("#txtInteres").val();
             var Cuotas_             = $("#txtCuotas").val();
+            var DiaSemana_  = $("#slDiaVisita option:selected").val();  
             
 
             Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
@@ -298,20 +299,6 @@
 
     }
 
-    function isValue(value, def, is_return) {
-        if ( $.type(value) == 'null'
-            || $.type(value) == 'undefined'
-            || $.trim(value) == '(en blanco)'
-            || $.trim(value) == ''
-            || ($.type(value) == 'number' && !$.isNumeric(value))
-            || ($.type(value) == 'array' && value.length == 0)
-            || ($.type(value) == 'object' && $.isEmptyObject(value)) ) {
-            return ($.type(def) != 'undefined') ? def : false;
-        } else {
-            return ($.type(is_return) == 'boolean' && is_return === true ? value : true);
-        }
-    }
-
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
@@ -344,6 +331,8 @@
         $("#edtDireccion").text(c.direccion_domicilio);
 
         $("#edtIdClient").html(c.id_clientes)
+
+        
         
 
         $('#mdl_edit_cliente').modal('show')

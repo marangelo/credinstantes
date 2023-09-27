@@ -29,17 +29,13 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="{{ asset('img/user.png')}}" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">{{Session::get('name_session')}}</a>
+      <div class="card-header">
+        <div class="user-block">
+          <img class="img-circle" src="{{ asset('img/user.png')}}" alt="User Image">
+          <span class="username"><a href="#">{{Session::get('name_session')}}</a></span>
+          <span class="description mt-1" id="chance_password">Cambiar Contraseña</span>
         </div>
       </div>
-
-
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -156,7 +152,7 @@
 
           <li class="nav-item">
             <a href="{{route('logout')}}" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
                 Salir
               </p>

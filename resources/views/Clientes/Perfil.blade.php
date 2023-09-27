@@ -4,22 +4,8 @@
 @endsection
 @section('content')
 <div class="wrapper">
-
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__wobble" src="{{ asset('img/AdminLTELogo.png')}}" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
-
-
   <!-- Main Sidebar Container -->
   @include('layouts.lyt_aside')
- 
-
-  <!-- Content Wrapper. Contains page content -->
-
-  
-
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -31,7 +17,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">Perfil de Usuario</li>
+              <li class="breadcrumb-item active">Perfil</li>
             </ol>
           </div>
         </div>
@@ -66,17 +52,17 @@
                     <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                  <th>#</th>
-                                  <th>Inicia</th>
-                                  <th>Culmina</th>
-                                  <th>Plazo</th>
-                                  <th>Monto C$</th>
-                                  <th>Total C$</th>
-                                  <th>Saldo C$</th>
-                                  <th>Cuotas</th>
-                                  <th>Ultm. Abono</th>
-                                  <th>Saldo Pendiente</th>
-                                  <th>Estado</th>
+                                  <th>COD/ESTADO</th>
+                                  <th>INICIO</th>
+                                  <th>FIN</th>
+                                  <th>CULMINO</th>
+                                  <th>PLAZO</th>
+                                  <th>MONTO C$</th>
+                                  <th>TOTAL C$</th>
+                                  <th>SALDO C$</th>
+                                  <th>CUOTAS</th>
+                                  <th>ULTM. ABONO</th>
+                                  <th>PENDIENTE C$</th>
                                   <th></th>
                                 </tr>
                                 </thead>
@@ -84,10 +70,25 @@
                                 
                                   @foreach ($perfil_cliente->getCreditos as $c)
                                   <tr>
-                                    <td>{{$c->id_creditos}}</td>
+                                    <td>#{{$c->id_creditos}}
+                                        <span class="badge @switch($c->estado_credito)
+                                            @case(1)
+                                                bg-success
+                                                @break
+                                            @case(2)
+                                                bg-danger
+                                                @break
+                                            @case(3)
+                                                bg-warning
+                                                @break
+                                            @default
+                                                ''
+                                        @endswitch">{{ strtoupper($c->Estado->nombre_estado) }}</span>
+                                    </td>
                                     <td>{{ Date::parse($c->fecha_apertura)->format('D, M d, Y') }}</td>
                                     <td>{{ Date::parse($c->fecha_ultimo_abono)->format('D, M d, Y') }}</td>
-                                    <td>{{number_format($c->plazo,0)}}</td>
+                                    <td>{{ is_null($c->fecha_culmina) ? '-' : Date::parse($c->fecha_culmina)->format('D, M d, Y')   }}</td>
+                                    <td>{{number_format($c->plazo,1)}}</td>
                                     <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
                                     <td>{{number_format($c->total,2)}}</td>
                                     <td>{{number_format($c->saldo,2)}}</td>
@@ -106,28 +107,14 @@
                                           -
                                         @endif
                                     </td>
-                                    <td>
-                                        <span class="badge @switch($c->estado_credito)
-                                            @case(1)
-                                                bg-success
-                                                @break
-                                            @case(2)
-                                                bg-danger
-                                                @break
-                                            @case(3)
-                                                bg-warning
-                                                @break
-                                            @default
-                                                ''
-                                        @endswitch">{{ strtoupper($c->Estado->nombre_estado) }}</span>
-                                    </td>
+                                    
                                     
                                     <td class="project-actions text-right">
                                         <a class="btn btn-primary btn-sm" href="#"  onclick="getModalHistorico({{$c->id_creditos}})">
                                             <i class="fas fa-history">
                                             </i>                                            
                                         </a>
-                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c}})"  data-toggle="modal" data-target="#modal-lg">
+                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c}})" >
                                             
                                         <i class="far fa-money-bill-alt"></i>
                                             </i>                                            
@@ -168,7 +155,7 @@
             <div class="modal-body">
               <form class="form-horizontal">
                 <div class="row">
-                  <div class="col-sm-12">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label>Fecha Apertura</label>
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
@@ -177,6 +164,16 @@
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
+                    </div> 
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Dia de Visita</label>
+                      <select class="form-control" id="slDiaVisita">
+                        @foreach ($DiasSemana as $d)
+                          <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                        @endforeach
+                      </select>                        
                     </div> 
                   </div>
                   <div class="col-sm-6 col-md-4">
@@ -342,7 +339,7 @@
   </div>
 
   <div class="modal fade" id="modal-historico">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
             <div class="user-block">
@@ -379,13 +376,6 @@
   </aside>
   <!-- /.control-sidebar -->
 
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; {{date('Y')}} <a href="http://pullpos.com/">pullpos.com</a>.</strong> All rights reserved.
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
+
 </div>
 @endsection

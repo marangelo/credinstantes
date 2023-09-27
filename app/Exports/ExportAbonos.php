@@ -23,9 +23,9 @@ class ExportAbonos implements FromCollection
         $dtEnd = date("Y-m-d", strtotime(str_replace('/', '-', $dtEnd)));
 
         if ($IdCln < 0) {
-            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->get();
+            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->where('activo', 1)->get();
         } else {
-            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->whereHas('credito', function ($query) use ($IdCln) {
+            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->where('activo', 1)->whereHas('credito', function ($query) use ($IdCln) {
                 $query->where('id_clientes', $IdCln);
             })->get();
         }

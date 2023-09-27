@@ -100,7 +100,7 @@ $(function () {
                     value += 'k'
                 }
   
-                return '$' + value
+                return 'C$' + value
                 }
             }, ticksStyle)
             }],

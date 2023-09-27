@@ -50,19 +50,13 @@
                     <th>Municipio</th>
                     <th>Departamento</th>
                     <th>Direccion</th>
-                    <th>Estado</th>
                     <th></th>
                   </tr>
                   </thead>
                   <tbody>
                   @foreach ($Clientes as $c)  
                   <tr>
-                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a></td>
-                    <td>{{ strtoupper($c->telefono) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
-                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
-                    <td>
+                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
                         @if ($c->tieneCreditoVencido->isNotEmpty())
                             <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
                                             @case(1)
@@ -97,6 +91,11 @@
                           @endif
                         @endif
                     </td>
+                    <td>{{ strtoupper($c->telefono) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
+                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
+                    
                     <td>
                           <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                               <i class="fas fa-pencil-alt">
@@ -139,16 +138,27 @@
               <!-- /.card-header -->
               <div class="card-body">                  
                   <div class="row">
-                    <div class="col-sm-4">
-                    <div class="form-group">
-                      <label>Fecha Apertura</label>
-                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
-                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                        </div>
-                    </div>                      
+                    
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                          <label>Fecha Inicio</label>
+                          <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
+                              <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                              </div>
+                          </div>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                        <label>Dia de Visita</label>
+                        <select class="form-control" id="slDiaVisita">
+                          @foreach ($DiasSemana as $d)
+                            <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                          @endforeach
+                        </select>
+                      </div>                      
                     </div>
                     <div class="col-sm-4">
                       <!-- text input -->
@@ -345,7 +355,7 @@
               </button>
             </div>
             <div class="modal-body">
-            <div class="card card-warning">
+              <div class="card card-warning">
             
               <!-- /.card-header -->
               <div class="card-body">                  

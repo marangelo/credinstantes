@@ -25,10 +25,47 @@ class Abono extends Model
 
     public static function getHistorico($IdCredito)
     {  
-        $Abonos = Abono::where('id_creditos',$IdCredito)->where('activo',1)->get();
-        return $Abonos;
-    }
+        $Abonos = Abono::where('id_creditos',$IdCredito)->where('activo',1)->orderBy('id_abonoscreditos', 'desc')->get();
+        
+        $abonosArray = [];
 
+        foreach ($Abonos as $Key => $abono) {
+            
+            $abonosArray[$Key] = [
+                'id_abonoscreditos' => $abono->id_abonoscreditos,
+                'id_creditos' => $abono->id_creditos,
+                'registrado_por' => $abono->registrado_por,
+                'fecha_cuota' =>  \Date::parse($abono->fecha_cuota)->format('D, M d, Y'),
+                'pago_capital' => $abono->pago_capital,
+                'pago_intereses' => $abono->pago_intereses,
+                'cuota_credito' => $abono->cuota_credito,
+                'cuota_cobrada' => $abono->cuota_cobrada,
+                'intereses_por_cuota' => $abono->intereses_por_cuota,
+                'abono_dia1' => $abono->abono_dia1,
+                'abono_dia2' => $abono->abono_dia2,
+                'fecha_cuota_secc1' => $abono->fecha_cuota_secc1,
+                'fecha_cuota_secc2' => $abono->fecha_cuota_secc2,
+                'fecha_programada' => $abono->fecha_programada,
+                'completado' => $abono->completado,
+                'saldo_cuota' => $abono->saldo_cuota,
+                'saldo_anterior' => $abono->saldo_anterior,
+                'saldo_actual' => $abono->saldo_actual,
+                'activo' => $abono->activo,
+            ];
+
+        }
+
+        return $abonosArray;
+    }
+    public static function getSaldoAbono($IdCredito)
+    {  
+
+        $Credito = Credito::where('id_creditos',$IdCredito)->where('activo',1)->first();
+
+        $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
+
+        return $Abono ;
+    }
     
 
     public static function SaveNewAbono(Request $request)
@@ -38,6 +75,7 @@ class Abono extends Model
             try {
                 $IdCred         = $request->input('IdCred');
                 $FechaAbono     = $request->input('FechaAbono');
+                $CompletarPago  = false;
 
                 //OBTENEMOS LA INFORMACION DEL CREDITO
                 $Info_Credito   = Credito::find($IdCred);
@@ -45,38 +83,56 @@ class Abono extends Model
                 $Total_         = $request->input('Total_');
                 $cuota_cobrada  = $Total_;
 
-                // RESTAMOS EL MONTO TOTAL DEL ABONO AL CREDITO
                 $Saldo_actual_credito = $Info_Credito->saldo - $Total_;
 
-                //RESTAR EL VALOR PENDIENTE SI EXISTE
                 $lastAbonoSaldo = ($Info_Credito->abonos->isNotEmpty()) ? $Info_Credito->abonos->first()->saldo_cuota : 0 ;                
 
                 if ($lastAbonoSaldo > 0) {
                     $Total_         = $Total_ - $lastAbonoSaldo;
-                    $IdABono = $Info_Credito->abonos->first()->id_abonoscreditos;
+                    $IdABono        = $Info_Credito->abonos->first()->id_abonoscreditos;
+
+                    $pago_capital       = $Info_Credito->abonos->first()->pago_capital;
+                    $cuota_cobrada      = $Info_Credito->abonos->first()->cuota_cobrada;
+                    $saldo_actual       = $Info_Credito->abonos->first()->saldo_actual;
+
+                    $pago_capital       = $pago_capital  + $lastAbonoSaldo;
+                    $cuota_cobrada      = $cuota_cobrada + $lastAbonoSaldo;
+                    $saldo_actual       = $saldo_actual  - $lastAbonoSaldo;
+
                     $response = Abono::where('id_abonoscreditos', $IdABono)->update([
                         "saldo_cuota"           => 0,
                         "completado"            => 1,
                         'abono_dia2'            => $lastAbonoSaldo,
                         'fecha_cuota_secc2'     => $FechaAbono,
+                        'cuota_cobrada'     => $cuota_cobrada,
+                        'pago_capital'     => $pago_capital,
+                        'saldo_actual'     => $saldo_actual,
                     ]);
+
+                    $CompletarPago  = true;
+
                     
                 } 
                 
 
                 
-                //RESTAR EL VALOR DE INTERES POR CUOTA AL VALOR INGRESADO
                 $Capital_       = $Total_  - $Info_Credito->intereses_por_cuota;
                 $Interes_       = $Info_Credito->intereses_por_cuota;
 
 
-                //RESTAMOS EL VALOR TOTAL DEL ABONO , AL SALDO DEL CREDITO
                 $Saldo_Cuota    = $Info_Credito->cuota - $Total_ ;
                 $Saldo_Cuota    = ($Saldo_Cuota < 0) ? 0 : $Saldo_Cuota ;
 
                 $Completado     = ($Saldo_Cuota > 0 ) ? 0 : 1 ;
 
-                $Estado     = ($Saldo_Cuota > 0 ) ? 2 : 1 ;
+                $Estado         = ($Saldo_Cuota > 0 ) ? 2 : 1 ;
+
+                $LastDate = ($Saldo_actual_credito <= 0) ? $FechaAbono: null ;
+                $Estado = ($Saldo_actual_credito <= 0) ? 4 : $Estado ;
+
+                $Saldo_Cuota = ($Saldo_actual_credito <= 0) ? 0 : $Saldo_Cuota ;
+
+                $Estado = ($CompletarPago) ? 1 : $Estado ;
 
 
                 if($Total_ > 0){
@@ -96,6 +152,7 @@ class Abono extends Model
                         //'fecha_cuota_secc2'     => $XXXXXX,
                         'completado'            => $Completado,
                         'saldo_cuota'           => $Saldo_Cuota,
+                        'saldo_actual'           => $Saldo_actual_credito,
                         'activo'                => 1,
                         'saldo_anterior'        =>$Info_Credito->saldo
                     ];
@@ -106,7 +163,8 @@ class Abono extends Model
                 Credito::where('id_creditos',  $IdCred)->update([
                     //"fecha_ultimo_abono"    => date('Y-m-d H:i:s'),
                     "saldo" => $Saldo_actual_credito,
-                    "estado_credito"=>$Estado
+                    "estado_credito"=>$Estado,
+                    "fecha_culmina"=>$LastDate
                 ]);
 
                 
