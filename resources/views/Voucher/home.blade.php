@@ -22,7 +22,7 @@
             <div class="">
                 <div class="text-center">
                     <h3><img src="{{ asset('img/logo-gris.jpg') }}" alt="Logo" class="mt-3" style="opacity: .8" width="70" height="80"></h3>
-                    <h3>CREDIN$TANTES</h3>
+                    <h3>CREDIN$TANTE</h3>
                     <h3>JINOTEPE - CARAZO</h3>
                     <h3>TELEF: 2533 - 2870</h3>
                     <h4>CEL: 8784 - 1877 Tigo</h4>
