@@ -85,7 +85,8 @@ class Abono extends Model
 
                 $Saldo_actual_credito = $Info_Credito->saldo - $Total_;
 
-                $lastAbonoSaldo = ($Info_Credito->abonos->isNotEmpty()) ? $Info_Credito->abonos->first()->saldo_cuota : 0 ;                
+                $lastAbonoSaldo = ($Info_Credito->abonos->isNotEmpty()) ? $Info_Credito->abonos->first()->saldo_cuota : 0 ;
+             
 
                 if ($lastAbonoSaldo > 0) {
                     $Total_         = $Total_ - $lastAbonoSaldo;
@@ -108,6 +109,8 @@ class Abono extends Model
                         'pago_capital'     => $pago_capital,
                         'saldo_actual'     => $saldo_actual,
                     ]);
+
+                    $Saldo_actual_credito = $saldo_actual;
 
                     $CompletarPago  = true;
 
