@@ -71,3 +71,6 @@ Route::post('exportVisita', 'ReportsController@exportVisita')->name('exportVisit
 Route::post('getAllCredit', 'CredinstanteController@getAllCredit')->name('getAllCredit');
 Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('ChanceStatus');
 
+
+Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');
+

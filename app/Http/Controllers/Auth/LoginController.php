@@ -18,7 +18,22 @@ class LoginController extends Controller
 
     public function redirectTo() {
 
-          return 'Dashboard';
+        $role = Auth::User()->id_rol;
+    
+        switch ($role) {
+            case '1':
+                return 'Dashboard';
+            break;
+
+            case '2':
+                return 'Clientes';
+            break;
+
+            default:
+                return '/';
+            break;
+        }
+
     }
 
     /**
@@ -31,9 +46,6 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    // public function username() {
-    //     return 'username';
-    // }
     public function logout () {        
         auth()->logout();
         return redirect('/');

@@ -40,16 +40,16 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item">
+        @if( Session::get('rol') == '1')
+          <li class="nav-item">
             <a href="{{ route('Dashboard')}}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
               </p>
             </a>
-          </li>
-        
-          
+          </li>        
+          @endif
           <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-table"></i>
@@ -66,7 +66,7 @@
                       <p>Clientes</p>
                   </a>
               </li>
-
+              @if( Session::get('rol') == '1')
               <li class="nav-item">
                 <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
                   <i class="far fa-map nav-icon"></i>
@@ -88,67 +88,45 @@
             </ul>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
-              <i class="nav-icon fas fa-file-invoice-dollar"></i>
-           
-              <p>
-                Reportes
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
+              <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
+                <i class="nav-icon fas fa-file-invoice-dollar"></i>
             
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                  <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Visitar</p>
+                <p>
+                  Reportes
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+            
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Visitar</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                  <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Ingresos</p>
                   </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Ingresos</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Morosidad</p>
-                </a>
-              </li>
-            </ul>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Morosidad</p>
+                  </a>
+                </li>
+              </ul>
           </li>
 
-          <li class="nav-item" style="display:none">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Usuario
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('Usuarios')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Lista</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/data.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Item</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/jsgrid.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Item</p>
-                </a>
-              </li>
-            </ul>
+          <li class="nav-item">
+              <a href="{{ route('Usuarios')}}" class="nav-link {{ (request()->is('Usuarios')) ? 'active' : '' }}">
+                  <i class="fas fa-users nav-icon"></i>
+                  <p>Usuarios</p>
+              </a>
           </li>
+          @endif
 
           <li class="nav-item">
             <a href="{{route('logout')}}" class="nav-link">

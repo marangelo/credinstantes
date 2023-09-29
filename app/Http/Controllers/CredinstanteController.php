@@ -10,6 +10,7 @@ use App\Models\Abono;
 use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\Usuario;
+use App\Models\Roles;
 use CodersFree\Date\Date;
 
 class CredinstanteController extends Controller {
@@ -78,7 +79,10 @@ class CredinstanteController extends Controller {
     }
     public function getUsuarios ()
     {          
-        return view('Usuario.lista');
+        $Titulo         = "USUARIOS";
+        $Usuarios       = Usuario::getUsuarios();
+        $Roles          = Roles::getRoles();
+        return view('Usuario.lista',compact('Titulo','Usuarios','Roles'));
         
     }
 
@@ -204,6 +208,13 @@ class CredinstanteController extends Controller {
         $Abonos =  Abono::getSaldoAbono($IdCredito);
 
         return response()->json($Abonos);
+    }
+
+    public function AddNewUser(Request $request)
+    {
+        $response = Usuario::SaveUsuario($request);
+        
+        return response()->json($response);
     }
     
 
