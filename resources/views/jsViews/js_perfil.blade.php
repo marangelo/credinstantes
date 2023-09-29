@@ -269,7 +269,9 @@
                     var id_voucher = numeral(isValue(row.id_abonoscreditos,0,true)).format('0')
 
                     return `
+                    @if( Session::get('rol') == '1')
                     <button type="button" class="btn btn-block bg-gradient-danger btn-sm"><a href="#" onclick="rmAbono(`+row.id_abonoscreditos+`)" class="text-white"><i class="fas fa-trash"></i></a></button>
+                    @endif
                     <button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="../voucher/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>
                     `
                 }},

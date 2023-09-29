@@ -37,10 +37,12 @@
                   <span class="description text-white ">Tel. {{ strtoupper($perfil_cliente->telefono) }} - Cedula. {{ strtoupper($perfil_cliente->cedula) }} </span>
                 </div>
                 <!-- /.user-block -->
-                <div class="card-tools">                  
+                <div class="card-tools">
+                @if( Session::get('rol') == '1')                  
                   <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
                     Nuevo
                   </button>
+                  @endif
                 </div>
       
               </div>
@@ -119,10 +121,12 @@
                                         <i class="far fa-money-bill-alt"></i>
                                             </i>                                            
                                         </a>
+                                        @if( Session::get('rol') == '1')
                                         <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_creditos}})">
                                             <i class="fas fa-trash">
                                             </i>                                            
                                         </a>
+                                        @endif
                                     </td>
                                   </tr>
                                   @endforeach

@@ -96,7 +96,7 @@
                     <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
                     <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
                     
-                    <td>
+                    <td>  @if( Session::get('rol') == '1')
                           <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                               <i class="fas fa-pencil-alt">
                               </i>
@@ -108,6 +108,7 @@
                               </i>
                               Remover
                           </a>
+                          @endif
                       </td>
                   @endforeach
                   </tbody>
