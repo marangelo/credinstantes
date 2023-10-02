@@ -203,9 +203,9 @@ class CredinstanteController extends Controller {
         
         return response()->json($response);
     }
-    public function getSaldoAbono($IdCredito)
+    public function getSaldoAbono($IdCredito,$opt)
     {
-        $Abonos =  Abono::getSaldoAbono($IdCredito);
+        $Abonos =  Abono::getSaldoAbono($IdCredito,$opt);
 
         return response()->json($Abonos);
     }

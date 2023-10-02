@@ -14,6 +14,24 @@
         $('#dtAbono').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+        
+
+        $("#slTipoAbono").change(function() {
+            
+            var IdC_      = $("#lbl_credito").text();
+            $("#txt_Total_abono").val(0.00);
+
+            $("#id_lbl_cuota").text("Calculando....")
+            setTimeout(function() {
+                $("#id_lbl_cuota").text(" Cuota a pagar ");
+                getIdCredi(IdC_)
+            }, 3000);
+            
+        });
+
+       
+
+
 
 
         $("#btn_add_credito").click(function(){
@@ -237,8 +255,9 @@
                 "emptyTable": "-",
                 "search": "BUSCAR"
             },
-            'columns':  [         
-                {"title": "FEHA","data": "fecha_cuota", "render": function(data, type, row, meta) {
+            'columns':  [ 
+                {"title": "#","data": "id"},        
+                {"title": "FECHA","data": "fecha_cuota", "render": function(data, type, row, meta) {
                     return `<span class="badge rounded-pill badge-soft-info ">`+ row.fecha_cuota  +`</span> `
                 }},
                 {"title": "CAPITAL","data": "pago_capital", "render": function(data, type, row, meta) {
@@ -272,6 +291,7 @@
                     @if( Session::get('rol') == '1')
                     <button type="button" class="btn btn-block bg-gradient-danger btn-sm"><a href="#" onclick="rmAbono(`+row.id_abonoscreditos+`)" class="text-white"><i class="fas fa-trash"></i></a></button>
                     @endif
+                    
                     <button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="../voucher/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>
                     `
                 }},
@@ -473,7 +493,32 @@
 
     })
 
-   
+    function getIdCredi(IdCredito){
+
+        var opt  = $("#slTipoAbono option:selected").val(); 
+
+        $.get( "../getSaldoAbono/" + IdCredito + "/" +opt , function( data ) {
+
+            dtSaldo = numeral(isValue(data,0,true)).format('00.00')
+
+            if ((parseFloat(dtSaldo) > 0) ) {
+                $('#modal-lg').modal('show');                
+                $("#lbl_credito").html(IdCredito);
+                $("#txt_Total_abono").val(dtSaldo);
+            }else{
+
+                Swal.fire({
+                    icon: 'error',
+                    title:  'Credito',
+                    text: 'Este cliente no tiene saldo pendiente',
+                })
+
+            }
+        });
+
+
+    }
+
     function getModalHistorico(id){
         $("#lbl_mdl_id_credito").html(id);
         $('#modal-historico').modal('show');
@@ -485,40 +530,7 @@
         });
     }
 
-    function getIdCredi(obj){
-
-        var Cuota = numeral(isValue(obj.cuota,0,true)).format('00.00')
-        var saldo = numeral(isValue(obj.saldo,0,true)).format('00.00')
-        var IdCredito = obj.id_creditos
-
-        
-
-       
-        if ((parseFloat(saldo) > 0) ) {
-
-            $.get( "../getSaldoAbono/" + IdCredito, function( data ) {
-
-                dtSaldo = numeral(isValue(data,0,true)).format('00.00')
-                
-                $("#txt_Total_abono").val(dtSaldo);
-
-            });
-
-            $('#modal-lg').modal('show');
-            
-            $("#lbl_credito").html(obj.id_creditos);
-
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title:  'Credito',
-                text: 'Este cliente no tiene saldo pendiente',
-            })
-        }
-        
-    }
-
-
+  
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))

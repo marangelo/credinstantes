@@ -25,9 +25,9 @@ class Usuario extends Model {
         if ($request->ajax()) {
             try {
 
-                $usuario        = $request->input('UserName');
-                $nombre         = $request->input('FullName');
-                $passwprd       = Hash::make($request->input('Pass01'));
+                $usuario        = $request->input('Usuario');
+                $nombre         = $request->input('Nombre');
+                $passwprd       = Hash::make($request->input('Contrasena'));
                 $Estado         = $request->input('Estado');
                 $id_rol         = $request->input('Permiso');
 

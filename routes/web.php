@@ -62,7 +62,7 @@ Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');
 Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
 Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
 Route::post('getMorosidad', 'ReportsController@getMorosidad')->name('getMorosidad');
-Route::get('getSaldoAbono/{ID}', 'CredinstanteController@getSaldoAbono')->name('getSaldoAbono');
+Route::get('getSaldoAbono/{ID}/{OP}', 'CredinstanteController@getSaldoAbono')->name('getSaldoAbono');
 Route::get('getDashboard', 'ReportsController@getDashboard')->name('getDashboard');
 
 Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');

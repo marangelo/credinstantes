@@ -25,13 +25,14 @@ class Abono extends Model
 
     public static function getHistorico($IdCredito)
     {  
-        $Abonos = Abono::where('id_creditos',$IdCredito)->where('activo',1)->orderBy('id_abonoscreditos', 'desc')->get();
+        $Abonos = Abono::where('id_creditos',$IdCredito)->where('activo',1)->orderBy('id_abonoscreditos', 'asc')->get();
         
         $abonosArray = [];
 
         foreach ($Abonos as $Key => $abono) {
             
             $abonosArray[$Key] = [
+                'id' => $Key + 1 ,
                 'id_abonoscreditos' => $abono->id_abonoscreditos,
                 'id_creditos' => $abono->id_creditos,
                 'registrado_por' => $abono->registrado_por,
@@ -57,12 +58,27 @@ class Abono extends Model
 
         return $abonosArray;
     }
-    public static function getSaldoAbono($IdCredito)
+    public static function getSaldoAbono($IdCredito,$Opt)
     {  
-
+        $Abono = 0;
+        
         $Credito = Credito::where('id_creditos',$IdCredito)->where('activo',1)->first();
 
-        $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
+
+        if ($Opt==0) {
+            $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
+        } else {
+            $Cuotas_pendientes = $Credito->numero_cuotas - $Credito->abonosCount();
+
+            $Saldo_to_cancelar = $Credito->saldo + ($Credito->intereses_por_cuota * $Cuotas_pendientes);
+
+            $Abono = $Saldo_to_cancelar;
+        }
+        
+
+        
+
+        
 
         return $Abono ;
     }
@@ -107,7 +123,7 @@ class Abono extends Model
                         'fecha_cuota_secc2'     => $FechaAbono,
                         'cuota_cobrada'     => $cuota_cobrada,
                         'pago_capital'     => $pago_capital,
-                        'saldo_actual'     => $saldo_actual,
+                        'saldo_actual'     => ($saldo_actual <=0) ? 0 : $saldo_actual ,
                     ]);
 
                     $Saldo_actual_credito = $saldo_actual;
@@ -133,7 +149,7 @@ class Abono extends Model
                 $LastDate = ($Saldo_actual_credito <= 0) ? $FechaAbono: null ;
                 $Estado = ($Saldo_actual_credito <= 0) ? 4 : $Estado ;
 
-                $Saldo_Cuota = ($Saldo_actual_credito <= 0) ? 0 : $Saldo_Cuota ;
+                //$Saldo_Cuota = ($Saldo_actual_credito <= 0) ? 0 : $Saldo_Cuota ;
 
                 $Estado = ($CompletarPago) ? 1 : $Estado ;
 
@@ -154,8 +170,8 @@ class Abono extends Model
                         'fecha_cuota_secc1'     => $FechaAbono,
                         //'fecha_cuota_secc2'     => $XXXXXX,
                         'completado'            => $Completado,
-                        'saldo_cuota'           => $Saldo_Cuota,
-                        'saldo_actual'           => $Saldo_actual_credito,
+                        'saldo_cuota'           => (($Saldo_Cuota <= 0) ? 0 : $Saldo_Cuota) ,
+                        'saldo_actual'           => (($Saldo_actual_credito <= 0) ? 0 : $Saldo_actual_credito),
                         'activo'                => 1,
                         'saldo_anterior'        =>$Info_Credito->saldo
                     ];
@@ -165,7 +181,7 @@ class Abono extends Model
 
                 Credito::where('id_creditos',  $IdCred)->update([
                     //"fecha_ultimo_abono"    => date('Y-m-d H:i:s'),
-                    "saldo" => $Saldo_actual_credito,
+                    "saldo" => (($Saldo_actual_credito <= 0) ? 0 : $Saldo_actual_credito),
                     "estado_credito"=>$Estado,
                     "fecha_culmina"=>$LastDate
                 ]);
