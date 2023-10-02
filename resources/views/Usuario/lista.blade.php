@@ -103,7 +103,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Nuevo Usuarios</h4>
-              <span id="id_estado" >Estado</span>
+              <span id="id_estado" style="display:none" >Estado</span>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

@@ -107,7 +107,7 @@ class Clientes extends Model
 
                     
                 } else{
-                    $creditCheck = false;
+                    $creditCheck = TRUE;
                 }
 
                 

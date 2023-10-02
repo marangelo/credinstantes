@@ -116,7 +116,7 @@
                                             <i class="fas fa-history">
                                             </i>                                            
                                         </a>
-                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c}})" >
+                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c->id_creditos}})" >
                                             
                                         <i class="far fa-money-bill-alt"></i>
                                             </i>                                            
@@ -308,26 +308,39 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label>Fecha Abono</label>
-              <div class="input-group date" id="dtAbono" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IddtApertura" value="{{ date('d/m/y') }}"/>
-                  <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-              </div>
-          </div> 
-          <div class="col-sm-12 col-md-12">
+
             <div class="form-group">
-              <label>Cuota a pagar</label>
-              <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                  </div>
-                  <input type="text" id="txt_Total_abono" class="form-control" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)'>
+              <label>Fecha Abono</label>
+                <div class="input-group date" id="dtAbono" data-target-input="nearest">
+                    <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                    <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IddtApertura" value="{{ date('d/m/y') }}"/>
                 </div>
+            </div> 
+
+            <div class="form-group">
+              <label id="id_lbl_cuota">Cuota a pagar</label>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                </div>
+                <input type="text" id="txt_Total_abono" class="form-control" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)'>
+              </div>
             </div>
-          </div>
+
+            <div class="form-group">
+              <label>Tipo de Abono</label>
+              <div class="input-group date">
+                <div class="input-group-append" >
+                    <div class="input-group-text"><i class="fa fa-dollar-sign"></i></div>
+                </div>
+                <select class="form-control" id="slTipoAbono">
+                  <option value="0">ABONO</option>
+                  <option value="1">CANCELACION</option>
+                </select>   
+              </div>
+            </div>
 
           
           

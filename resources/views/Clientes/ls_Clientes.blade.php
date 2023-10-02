@@ -96,7 +96,8 @@
                     <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
                     <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
                     
-                    <td>  @if( Session::get('rol') == '1')
+                    <td><div class="card-tools text-center">  
+                      @if( Session::get('rol') == '1')
                           <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                               <i class="fas fa-pencil-alt">
                               </i>
@@ -109,6 +110,7 @@
                               Remover
                           </a>
                           @endif
+                          </div>
                       </td>
                   @endforeach
                   </tbody>
@@ -185,7 +187,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input type="text" class="form-control" id="txtTelefono" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                          <input type="text" class="form-control" id="txtTelefono" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
                         </div>
                       </div>
 

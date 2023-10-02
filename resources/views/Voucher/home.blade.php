@@ -57,6 +57,7 @@
                             <td class="col-md-9"><em>FECHA DE VENC.</em></h4></td>
                             <td class="col-md-1 text-right">{{ date('d-m-y',strtotime($Abono->credito->fecha_ultimo_abono))}}</td>
                         </tr>
+                        
                         <tr>
                             <td class="col-md-9"><em>CUOTA:</em></h4></td>
                             <td class="col-md-1 text-right">C$ {{ number_format($Abono->cuota_credito,2)}}</td>
@@ -66,6 +67,17 @@
                             <td class="col-md-9"><em>MONTO PAGADO:</em></h4></td>
                             <td class="col-md-1 text-right">C$ {{ number_format($Abono->cuota_cobrada,2)}}</td>
                         </tr>
+
+                        
+
+                        @if($Abono->saldo_cuota !== "0.0000" || number_format($Abono->abono_dia2,2) > 0)
+                        <tr>
+                            <td class="col-md-9"><em>SALDO PENDIENTE:</em></h4></td>
+                            <td class="col-md-1 text-right">C$ {{                                  
+                                ($Abono->saldo_cuota !== "0.0000") ? number_format($Abono->saldo_cuota,2) : number_format($Abono->abono_dia2,2) 
+                            }}</td>
+                        </tr>
+                        @endif
 
                         <tr>
                             <td class="col-md-9"><em>SALDO ANTERIOR:</em></h4></td>

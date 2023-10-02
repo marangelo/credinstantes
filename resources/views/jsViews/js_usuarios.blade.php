@@ -20,6 +20,17 @@
     }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
     $("#btn_form_add_user").click(function(){
+        // Limpiar los campos de entrada
+        $("#txtFullName").val("");
+        $("#txtUserName").val("");
+        $("#txtPassWord_one").val("");
+        $("#txtPassWord_two").val("");
+        $("#txtComentario").val("");
+
+        // Restablecer el select a su valor predeterminado (1 en este caso)
+        $("#sclPrivi").val(1);
+
+        // Llamar a la función para guardar el formulario
         $('#modal_xl_add_user').modal('show');     
         $("#id_estado").html(0);   
     });
@@ -82,8 +93,8 @@
         $("#txtFullName").val(usr.nombre);
         $("#txtUserName").val(usr.email);
         $("#id_estado").html(usr.id);
-        // $("#txtPassWord_one").val(usr.password);
-        // $("#txtPassWord_two").val(usr.password);
+        $("#txtPassWord_one").val("password-hide");
+        $("#txtPassWord_two").val("password-hide");
         $("#txtComentario").val(usr.Comment);
         $("#sclPrivi").val(usr.id_rol).change();
     }
@@ -100,9 +111,9 @@
 
         const Formulario = {
             Permiso     : isValue(Permiso, 'N/D', true),
-            FullName    : isValue(FullName, 'N/D', true),
-            UserName    : isValue(UserName, 'N/D', true),
-            Pass01      : isValue(Pass01, 'N/D', true),
+            Nombre    : isValue(FullName, 'N/D', true),
+            Usuario    : isValue(UserName, 'N/D', true),
+            Contrasena      : isValue(Pass01, 'N/D', true),
             Estado      : isValue(Estado, 'N/D', true),
             Commit      : isValue(Commit, 'N/D', true),
             _token      : "{{ csrf_token() }}" 
@@ -113,7 +124,14 @@
 
 
         if (claveEncontrada) {
-            Swal.fire("Oops", "Datos no Completos", "error");
+            Swal.fire({
+            title: '<strong>REQUERIDO: <u>' + claveEncontrada + '</u></strong>',
+            icon: 'error',
+            showCloseButton: true,
+            showCancelButton: false,
+            focusConfirm: false,
+          
+            })
         } else {
             if (Pass01 !== Pass02) {
                 Swal.fire("Oops", "Contraseña no Coincide!", "error");
@@ -155,9 +173,6 @@
     }
 
     $("#btn_save_user").click(function(){
-
-        Save_Form();
-
-        
+        Save_Form();        
     });
 </script>
