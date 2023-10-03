@@ -60,8 +60,13 @@
                 { "title": "DIRECCION",       "data": "direccion_domicilio" },
                 { "title": "TELEFONO",       "data": "telefono" },
                 {
-                    "title": "MONTO",
+                    "title": "CUOTA",
                     "data": "cuota",
+                    render: $.fn.dataTable.render.number(',', '.', 2, '')
+                },  
+                {
+                    "title": "PENDIENTE",
+                    "data": "pendiente",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },                  
             ],

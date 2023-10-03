@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="social-auth-links text-center mt-2 mb-3">
-          <button type="submit" class="btn btn-success btn-block">Acceder</button>
+          <button type="submit" class="btn btn-credi-primary btn-block text-white">Acceder</button>
         </div>
       </form>
     </div>

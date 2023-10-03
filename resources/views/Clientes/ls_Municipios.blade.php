@@ -53,7 +53,7 @@
                   @foreach ($Municipios as $m)  
                   <tr>
                     <td>{{ strtoupper($m->nombre_municipio) }} </td>
-                    <td><a href="#!" class="btn bg-danger btn-sm" onclick="rmMunicipio({{$m->id_municipio}})"><i class="fas fa-trash"></i></a> </td>
+                    <td class="text-center"><a href="#!" class="btn bg-danger btn-sm" onclick="rmMunicipio({{$m->id_municipio}})"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   @endforeach
                   </tbody>

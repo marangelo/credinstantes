@@ -53,7 +53,7 @@
                   @foreach ($Departamentos as $d)  
                   <tr>         
                     <td>{{ strtoupper($d->nombre_departamento) }} </td>
-                    <td><a href="#!" class="btn bg-danger btn-sm" onclick="rmDepartamento({{$d->id_departamento}})"><i class="fas fa-trash"></i></a> </td>
+                    <td class="text-center"><a href="#!" class="btn bg-danger btn-sm" onclick="rmDepartamento({{$d->id_departamento}})"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   @endforeach
                   </tbody>

@@ -38,7 +38,7 @@
                 </div>
                 <!-- /.user-block -->
                 <div class="card-tools">
-                @if( Session::get('rol') == '1')                  
+                  @if( Session::get('rol') == '1')                  
                   <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
                     Nuevo
                   </button>
@@ -51,7 +51,7 @@
 
                 <div class="row">
                   <div class="col-12 table-responsive">             
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="tbl_abonos_creditos">
                                 <thead>
                                 <tr>
                                   <th>COD/ESTADO</th>
@@ -112,21 +112,24 @@
                                     
                                     
                                     <td class="project-actions text-right">
-                                        <a class="btn btn-primary btn-sm" href="#"  onclick="getModalHistorico({{$c->id_creditos}})">
-                                            <i class="fas fa-history">
-                                            </i>                                            
-                                        </a>
-                                        <a class="btn btn-success btn-sm" href="#"  onclick="getIdCredi({{$c->id_creditos}})" >
-                                            
-                                        <i class="far fa-money-bill-alt"></i>
-                                            </i>                                            
-                                        </a>
-                                        @if( Session::get('rol') == '1')
-                                        <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_creditos}})">
-                                            <i class="fas fa-trash">
-                                            </i>                                            
-                                        </a>
-                                        @endif
+
+                                      <div class="row">
+                                        <div class="col-md-4 col-4">
+                                            <button type="button" class="btn btn-primary btn-block btn-sm" onclick="getModalHistorico({{$c->id_creditos}})"><i class="fas fa-history"></i></button>
+                                        </div>
+                                        <div class="col-md-4 col-4">
+                                          <button type="button" class="btn btn-success btn-block btn-sm" onclick="getIdCredi({{$c->id_creditos}})"><i class="fas fa-money-bill-alt"></i></button>
+                                        </div>
+                                        <div class="col-md-4 col-4">
+                                          @if( Session::get('rol') == '1')
+                                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmItem({{$c->id_creditos}})"><i class="fas fa-trash"></i></button>
+                                          @endif                                          
+                                        </div>                                        
+                                      </div>
+
+
+
+                                    
                                     </td>
                                   </tr>
                                   @endforeach
@@ -371,7 +374,7 @@
         <div class="modal-body">
             <div class="row">
                   <div class="col-12 table-responsive">   
-          <table id="tbl_lista_abonos"  class="table table-striped" style="width:100%"></table>
+          <table id="tbl_lista_abonos"  class="table table-striped " style="width:100%"></table>
          
           
           </div>    </div>    </div>

@@ -370,7 +370,7 @@
                     {"title": "SALDO","data": "saldo"},
                     {"title": "TOTAL","data": "total"},
                     {"title": "ESTADO","data": "estado_credito"},
-                    {"title": "","data": "ID", "render": function(data, type, row, meta) {                        
+                    {"title": "","data": "estado_credito", "render": function(data, type, row, meta) {                        
                         return`<button type="button" class="btn btn-block bg-gradient-primary" onClick="ChanceStatus(`+ row.id_creditos +`)">CAMBIAR</button>`;
                     }}
                 ]
@@ -457,6 +457,7 @@
             "data": datos,
             "destroy": true,
             "info": false,
+            responsive: true,
             "bPaginate": true,
             "order": [
                 [0, "DESC"]
