@@ -18,8 +18,9 @@
     <link rel="stylesheet" href="{{ asset('css/icheck-bootstrap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 </head>
-<body class="hold-transition login-page dark-mode">
+<body class="hold-transition login-page">
 
 @yield('content')
 

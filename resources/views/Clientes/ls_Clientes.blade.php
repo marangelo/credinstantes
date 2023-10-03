@@ -431,18 +431,7 @@
                   <div class="row">
                     <div class="col-sm-12 table-responsive">
                         <table class="table " id="tblCreditosCliente" style="width:100%">
-                          <thead>
-                              <tr>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                              </tr>
-                          </thead>
-                          <tbody ></tbody>
+                          
                         </table>
                       </div>
                   </div>

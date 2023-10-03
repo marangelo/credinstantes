@@ -10,22 +10,22 @@ class ReportsModels extends Model {
 
     public static function getVisitar(Request $request)
     {
-        $Date    = $request->input('Fecha_');
-        $Visitas =  RefAbonos::whereDate('FechaPago','=',$Date)->get() ;
+        $Date   = $request->input('Fecha_');
+        $Day    = date('N', strtotime($Date));
+        $Creditos =  Credito::where('id_diassemana',$Day)->where('activo', 1)->get();
+     
         $array_vista = array();
-
-        foreach ($Visitas as $key => $v) {
+        foreach ($Creditos as $key => $v) {
             $array_vista[$key] = [
-                "id_pagoabono" => $v->id_pagoabono,
-                "numero_pago" => $v->numero_pago,
-                "Nombre"    => $v->Creditos[0]->Clientes->nombre,
-                "apellido"    => $v->Creditos[0]->Clientes->apellidos,
-                "direccion_domicilio"    => $v->Creditos[0]->Clientes->direccion_domicilio,
-                "telefono"    => $v->Creditos[0]->Clientes->telefono,
-                "cuota"    => $v->Creditos[0]->cuota
+                "id_pagoabono"           => $v->id_creditos,
+                "Nombre"                 => $v->Clientes->nombre,
+                "apellido"               => $v->Clientes->apellidos,
+                "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                "telefono"               => $v->Clientes->telefono,
+                "cuota"                  => $v->cuota,
+                "pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 
             ];
         }
-
         return $array_vista;
     }
     public static function getAbonos(Request $request)

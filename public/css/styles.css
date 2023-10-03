@@ -1,0 +1,11 @@
+table.dataTable > tbody > tr.child ul.dtr-details {
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.btn-credi-primary {
+    color: #000;
+    background-color: #86B817;
+    border-color: #86B817;
+  }

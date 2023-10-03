@@ -53,7 +53,7 @@
                   @foreach ($DiasSemana as $ds)  
                   <tr>                    
                     <td>{{ strtoupper($ds->dia_semana) }} </td>
-                    <td><a href="#!" class="btn bg-danger btn-sm" onclick="rmDiaSemana({{$ds->id_diassemana}})"><i class="fas fa-trash"></i></a> </td>
+                    <td class="text-center"><a href="#!" class="btn bg-danger btn-sm" onclick="rmDiaSemana({{$ds->id_diassemana}})"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   @endforeach
                   </tbody>

@@ -22,6 +22,7 @@ class Clientes extends Model
     {
         return Clientes::where('activo',1)->orderBy('id_clientes', 'asc')->where('activo',1)->get();
     }
+    
     public function getCreditos()
     {
         return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->where('activo',1);

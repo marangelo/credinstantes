@@ -230,10 +230,11 @@
     })
 
     function initTable_modal(id,datos){
-        $(id).DataTable({
+        var tabla = $(id).DataTable({
             "data": datos,
             "destroy": true,
             "info": false,
+            responsive: true,
             "bPaginate": false,
             "searching": false,
             "order": [
@@ -259,6 +260,8 @@
                 {"title": "#","data": "id"},        
                 {"title": "FECHA","data": "fecha_cuota", "render": function(data, type, row, meta) {
                     return `<span class="badge rounded-pill badge-soft-info ">`+ row.fecha_cuota  +`</span> `
+
+                    
                 }},
                 {"title": "CAPITAL","data": "pago_capital", "render": function(data, type, row, meta) {
                     return `<span class="badge rounded-pill badge-soft-info text-success">C$  `+ numeral(row.pago_capital).format('0,00.00')  +`</span> `
@@ -283,21 +286,26 @@
                 }},
                 
 
-                {"title": "","data": "cuota_cobrada", "render": function(data, type, row, meta) {
+                {"title": "------","data": "cuota_cobrada", "render": function(data, type, row, meta) {
 
                     var id_voucher = numeral(isValue(row.id_abonoscreditos,0,true)).format('0')
 
-                    return `
-                    @if( Session::get('rol') == '1')
-                    <button type="button" class="btn btn-block bg-gradient-danger btn-sm"><a href="#" onclick="rmAbono(`+row.id_abonoscreditos+`)" class="text-white"><i class="fas fa-trash"></i></a></button>
-                    @endif
-                    
-                    <button type="button" class="btn btn-block bg-gradient-primary btn-sm"><a href="../voucher/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i></a></button>
-                    `
+                    return `<div class="row">
+                        <div class="col-md-6 col-6">
+                            <button type="button" class="btn btn-primary btn-block btn-sm"><a href="../voucher/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i> </a></button>
+                        </div>
+                        <div class="col-md-6 col-6">
+                            @if( Session::get('rol') == '1')        
+                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmAbono(`+row.id_abonoscreditos+`)"><i class="fas fa-trash"></i></button>      
+                            @endif
+                        </div>
+                        
+                    </div>`
                 }},
 
                 ],
         });
+        
     }
 
     function AbonoPendiente(Monto,Id){

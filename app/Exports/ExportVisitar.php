@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\RefAbonos;
+use App\Models\Credito;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
@@ -16,20 +16,21 @@ class ExportVisitar implements FromCollection
     public function collection()
     {
 
-        $dtIni    = $this->request->input('Fecha_');
-        $dtIni = date("Y-m-d", strtotime(str_replace('/', '-', $dtIni)));
-        $Visitas =  RefAbonos::whereDate('FechaPago','=',$dtIni)->get() ;
-        $array_vista =[];
-
-        foreach ($Visitas as $key => $v) {
-            $array_vista[] = [
-                "id_pagoabono" => $v->id_pagoabono,
-                "numero_pago" => $v->numero_pago,
-                "Nombre"    => $v->Creditos[0]->Clientes->nombre,
-                "apellido"    => $v->Creditos[0]->Clientes->apellidos,
-                "direccion_domicilio"    => $v->Creditos[0]->Clientes->direccion_domicilio,
-                "telefono"    => $v->Creditos[0]->Clientes->telefono,
-                "cuota"    => $v->Creditos[0]->cuota
+        $Date   = $this->request->input('Fecha_');
+        $Date   = date("Y-m-d", strtotime(str_replace('/', '-', $Date)));
+        $Day    = date('N', strtotime($Date));
+        $Creditos =  Credito::where('id_diassemana',$Day)->where('activo', 1)->get();
+     
+        $array_vista = array();
+        foreach ($Creditos as $key => $v) {
+            $array_vista[$key] = [
+                "id_pagoabono"           => $v->id_creditos,
+                "Nombre"                 => $v->Clientes->nombre,
+                "apellido"               => $v->Clientes->apellidos,
+                "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                "telefono"               => $v->Clientes->telefono,
+                "cuota"                  => $v->cuota,
+                "pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 
             ];
         }
 
