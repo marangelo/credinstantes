@@ -51,7 +51,27 @@
           </li>        
           @endif
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+              <a href="#" class="nav-link active">
+                <i class="nav-icon fas fa-table"></i>
+                  <p>Clientes<i class="fas fa-angle-left right"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('Activos')}}" class="nav-link {{ (request()->is('Activos')) ? 'active' : '' }} ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Activos</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('Inactivos')}}" class="nav-link {{ (request()->is('Inactivos')) ? 'active' : '' }} ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Inactivos</p>
+                    </a>
+                </li>
+              </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Catalogos
@@ -60,12 +80,8 @@
             </a>
             
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                  <a href="{{ route('Clientes')}}" class="nav-link {{ (request()->is('Clientes') || request()->segment(1)  == 'Perfil' ) ? 'active' : '' }}">
-                      <i class="fas fa-user nav-icon"></i>
-                      <p>Clientes</p>
-                  </a>
-              </li>
+              
+             
               @if( Session::get('rol') == '1')
               <li class="nav-item">
                 <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
@@ -87,7 +103,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item ">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
             

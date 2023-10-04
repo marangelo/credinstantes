@@ -114,15 +114,15 @@
                                     <td class="project-actions text-right">
 
                                       <div class="row">
-                                        <div class="col-md-4 col-4">
-                                            <button type="button" class="btn btn-primary btn-block btn-sm" onclick="getModalHistorico({{$c->id_creditos}})"><i class="fas fa-history"></i></button>
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-primary btn-block btn-sm" onclick="getModalHistorico({{$c->id_creditos}})"><i class="fas fa-history"></i> </button>
                                         </div>
-                                        <div class="col-md-4 col-4">
-                                          <button type="button" class="btn btn-success btn-block btn-sm" onclick="getIdCredi({{$c->id_creditos}})"><i class="fas fa-money-bill-alt"></i></button>
+                                        <div class="col-md-12">
+                                          <button type="button" class="btn btn-success btn-block btn-sm" onclick="getIdCredi({{$c->id_creditos}})"><i class="fas fa-money-bill-alt"></i> </button>
                                         </div>
-                                        <div class="col-md-4 col-4">
+                                        <div class="col-md-12">
                                           @if( Session::get('rol') == '1')
-                                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmItem({{$c->id_creditos}})"><i class="fas fa-trash"></i></button>
+                                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmItem({{$c->id_creditos}})"><i class="fas fa-trash"></i> </button>
                                           @endif                                          
                                         </div>                                        
                                       </div>

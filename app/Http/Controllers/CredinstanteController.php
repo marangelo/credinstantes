@@ -27,7 +27,12 @@ class CredinstanteController extends Controller {
 
     public function prtVoucher($Id){
         $Abono    = Abono::find($Id); 
-        return view('Voucher.home', compact('Abono'));
+        return view('Voucher.completo', compact('Abono'));
+    }
+
+    public function prtVoucherParcial($Id){
+        $Abono    = Abono::find($Id); 
+        return view('Voucher.parcial', compact('Abono'));
     }
     
     public function getClientes()
@@ -35,7 +40,17 @@ class CredinstanteController extends Controller {
         $Clientes    = Clientes::getClientes();  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();  
-        $Titulo      = "Clientes";
+        $Titulo      = "Clientes Activos";
+        
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Titulo'));
+        
+    }
+    public function getInactivos()
+    {   
+        $Clientes    = Clientes::getInactivos();  
+        $Municipios  = Municipios::getMunicipios();  
+        $DiasSemana  = DiasSemana::getDiasSemana();  
+        $Titulo      = "Clientes Inactivos";
         
         return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Titulo'));
         

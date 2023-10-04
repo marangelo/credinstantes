@@ -23,6 +23,7 @@ class ReportsModels extends Model {
                 "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
                 "telefono"               => $v->Clientes->telefono,
                 "cuota"                  => $v->cuota,
+                "saldo"                  => $v->saldo,
                 "pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 
             ];
         }

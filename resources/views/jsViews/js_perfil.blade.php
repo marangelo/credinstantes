@@ -286,17 +286,30 @@
                 }},
                 
 
-                {"title": "------","data": "cuota_cobrada", "render": function(data, type, row, meta) {
+                {"title": "--------------","data": "cuota_cobrada", "render": function(data, type, row, meta) {
 
-                    var id_voucher = numeral(isValue(row.id_abonoscreditos,0,true)).format('0')
+                   
+
+                    var isPagoParcial   = numeral(isValue(row.abono_dia2,0,true)).format('0,00.00')
+
+                    var id_voucher      = numeral(isValue(row.id_abonoscreditos,0,true)).format('0')
+
+                    var isCol = (isPagoParcial > 0)? '4' : '6';
+
+                    var isHide = (isPagoParcial > 0)? '' : 'style="display:none"';
 
                     return `<div class="row">
-                        <div class="col-md-6 col-6">
-                            <button type="button" class="btn btn-primary btn-block btn-sm"><a href="../voucher/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i> </a></button>
+
+                        <div class="col-md-`+isCol+` col-xl-`+isCol+`  " `+isHide+`>
+                            <button type="button" class="btn btn-warning btn-block btn-sm"><a href="../voucherParcial/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i> Parcial</a></button>
                         </div>
-                        <div class="col-md-6 col-6">
+
+                        <div class="col-md-`+isCol+` col-xl-`+isCol+`  ">
+                            <button type="button" class="btn btn-primary btn-block btn-sm"><a href="../voucher/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i> Completo</a></button>
+                        </div>
+                        <div class="col-md-`+isCol+` col-xl-`+isCol+`  ">
                             @if( Session::get('rol') == '1')        
-                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmAbono(`+row.id_abonoscreditos+`)"><i class="fas fa-trash"></i></button>      
+                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmAbono(`+row.id_abonoscreditos+`)"><i class="fas fa-trash"></i> Remover</button>      
                             @endif
                         </div>
                         

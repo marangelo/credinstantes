@@ -33,11 +33,12 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Listado de Clientes</h3>
-                <div class="card-tools">                  
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
-                    Nuevo
-                </button>
-                  
+                <div class="card-tools">  
+                  @if (request()->is('Activos'))       
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
+                      Nuevo
+                  </button>
+                  @endif
                 </div>
               </div>
               <!-- /.card-header -->
@@ -86,7 +87,7 @@
                                             @default
                                                 ''
                                         @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
-                          @else
+                          @else 
                               <p>- </p>
                           @endif
                         @endif

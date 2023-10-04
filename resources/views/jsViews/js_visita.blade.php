@@ -65,8 +65,13 @@
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },  
                 {
-                    "title": "PENDIENTE",
+                    "title": "SALDO PENDIENTE",
                     "data": "pendiente",
+                    render: $.fn.dataTable.render.number(',', '.', 2, '')
+                },
+                {
+                    "title": "SALDO",
+                    "data": "saldo",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },                  
             ],

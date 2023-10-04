@@ -22,7 +22,10 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::post('updatePassword', 'CredinstanteController@updatePassword')->name('updatePassword');;
 
 Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard');
-Route::get('Clientes', 'CredinstanteController@getClientes')->name('Clientes');
+
+Route::get('Activos', 'CredinstanteController@getClientes')->name('Activos');
+Route::get('Inactivos', 'CredinstanteController@getInactivos')->name('Inactivos');
+
 Route::get('Usuarios', 'CredinstanteController@getUsuarios')->name('Usuarios');
 
 Route::get('Municipios', 'CredinstanteController@getMunicipios')->name('Municipios');
@@ -32,6 +35,8 @@ Route::get('DiasSemna', 'CredinstanteController@getDiasSemna')->name('DiasSemna'
 Route::get('Perfil/{id}', 'CredinstanteController@getPerfil')->name('Perfil/{id}');
 
 Route::get('voucher/{id}', 'CredinstanteController@prtVoucher')->name('voucher/{id}');
+Route::get('voucherParcial/{id}', 'CredinstanteController@prtVoucherParcial')->name('voucherParcial/{id}');
+
 Route::post('SaveNewCredito', 'CredinstanteController@SaveNewCredito')->name('SaveNewCredito');
 Route::post('editClient', 'CredinstanteController@editClient')->name('editClient');
 
