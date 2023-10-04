@@ -32,6 +32,8 @@ Route::get('DiasSemna', 'CredinstanteController@getDiasSemna')->name('DiasSemna'
 Route::get('Perfil/{id}', 'CredinstanteController@getPerfil')->name('Perfil/{id}');
 
 Route::get('voucher/{id}', 'CredinstanteController@prtVoucher')->name('voucher/{id}');
+Route::get('voucherParcial/{id}', 'CredinstanteController@prtVoucherParcial')->name('voucherParcial/{id}');
+
 Route::post('SaveNewCredito', 'CredinstanteController@SaveNewCredito')->name('SaveNewCredito');
 Route::post('editClient', 'CredinstanteController@editClient')->name('editClient');
 
