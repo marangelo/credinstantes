@@ -20,12 +20,23 @@ class Clientes extends Model
 
     public static function getClientes()
     {
-        return Clientes::where('activo',1)->orderBy('id_clientes', 'asc')->where('activo',1)->get();
+        $e = 1;
+        return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
+            $query->where('estado_credito', $e);
+        })->get();
+    }
+    public static function getInactivos()
+    {
+        $e = 4;
+        
+        return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
+            $query->where('estado_credito', $e);
+        })->get();
     }
     
     public function getCreditos()
     {
-        return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->where('activo',1);
+        return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->orderBy('id_creditos', 'desc')->where('activo',1);
     }
 
     public function Credito_activo()
