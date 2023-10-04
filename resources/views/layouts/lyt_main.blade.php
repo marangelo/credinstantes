@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Credin$tantes | Dashboard </title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+  <link rel="icon" type="image/x-icon" href="{{asset('img/favicon.ico')}}">
+    <title>CREDIN$TANTES | {{$Titulo}} </title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -13,8 +16,16 @@
     <link rel="stylesheet" href="{{ asset('css/OverlayScrollbars.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
+      <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+  
+<!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__wobble" src="{{asset('img/Logo.png')}}" alt="Logo" height="60" width="60">
+  </div>
+
 @yield('content')
 <!-- ./wrapper -->
 
@@ -29,6 +40,8 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('js/adminlte.min.js') }}"></script>
 
+<!-- SweetAlert2 -->
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
@@ -38,10 +51,11 @@
 <script src="{{ asset('js/usa_states.min.js') }}"></script>
 <!-- ChartJS -->
 <script src="{{ asset('js/chart.js/Chart.min.js') }}"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('js/dashboard.js') }}"></script>
+<script src="{{ asset('js/Funciones.js') }}"></script>
 
 
 </body>

@@ -17,17 +17,62 @@ Auth::routes();
 */
 
 Route::get('/', 'Auth\LoginController@showLoginForm');
-//Route::get('/', 'HomeController@getDashboard');
+//Route::get('/', 'CredinstanteController@getDashboard');
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::post('updatePassword', 'CredinstanteController@updatePassword')->name('updatePassword');;
 
-Route::get('Dashboard', 'HomeController@getDashboard')->name('Dashboard');
-Route::get('Clientes', 'HomeController@getClientes')->name('Clientes');
-Route::get('Usuarios', 'HomeController@getUsuarios')->name('Usuarios');
+Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard');
+Route::get('Clientes', 'CredinstanteController@getClientes')->name('Clientes');
+Route::get('Usuarios', 'CredinstanteController@getUsuarios')->name('Usuarios');
 
-Route::get('Municipios', 'HomeController@getMunicipios')->name('Municipios');
-Route::get('Departamento', 'HomeController@getDepartamento')->name('Departamento');
-Route::get('DiasSemna', 'HomeController@getDiasSemna')->name('DiasSemna');
+Route::get('Municipios', 'CredinstanteController@getMunicipios')->name('Municipios');
+Route::get('Departamento', 'CredinstanteController@getDepartamento')->name('Departamento');
+Route::get('DiasSemna', 'CredinstanteController@getDiasSemna')->name('DiasSemna');
 
-Route::get('Perfil/{id}', 'HomeController@getPerfil')->name('Perfil/{id}');
+Route::get('Perfil/{id}', 'CredinstanteController@getPerfil')->name('Perfil/{id}');
 
-Route::get('voucher', 'HomeController@prtVoucher')->name('voucher');
+Route::get('voucher/{id}', 'CredinstanteController@prtVoucher')->name('voucher/{id}');
+Route::get('voucherParcial/{id}', 'CredinstanteController@prtVoucherParcial')->name('voucherParcial/{id}');
+
+Route::post('SaveNewCredito', 'CredinstanteController@SaveNewCredito')->name('SaveNewCredito');
+Route::post('editClient', 'CredinstanteController@editClient')->name('editClient');
+
+
+Route::post('SaveNewMunicipio', 'CredinstanteController@SaveNewMunicipio')->name('SaveNewMunicipio');
+Route::get('rmMunicipio/{id}', 'CredinstanteController@rmMunicipio')->name('rmMunicipio/{id}');
+
+Route::post('SaveNewDepartamento', 'CredinstanteController@SaveNewDepartamento')->name('SaveNewDepartamento');
+Route::get('rmDepartamento/{id}', 'CredinstanteController@rmDepartamento')->name('rmDepartamento/{id}');
+
+Route::post('AddDiaSemana', 'CredinstanteController@AddDiaSemana')->name('AddDiaSemana');
+Route::get('rmDiaSemana/{id}', 'CredinstanteController@rmDiaSemana')->name('rmDiaSemana/{id}');
+
+Route::post('SaveNewAbono', 'CredinstanteController@SaveNewAbono')->name('SaveNewAbono');
+Route::get('getHistoricoAbono/{ID}', 'CredinstanteController@getHistoricoAbono')->name('getHistoricoAbono');
+
+Route::post('AddCredito', 'CredinstanteController@AddCredito')->name('AddCredito');
+
+//RUTAS PARA REMOVER
+Route::post('rmElem', 'CredinstanteController@Remover')->name('rmElem');
+Route::post('rmAbono', 'CredinstanteController@rmAbono')->name('rmAbono');
+
+//RUTAS DE REPORTES
+Route::get('Visitar', 'ReportsController@Visitar')->name('Visitar');
+Route::get('Abonos', 'ReportsController@Abonos')->name('Abonos');
+Route::get('Morosidad', 'ReportsController@Morosidad')->name('Morosidad');
+
+Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
+Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
+Route::post('getMorosidad', 'ReportsController@getMorosidad')->name('getMorosidad');
+Route::get('getSaldoAbono/{ID}/{OP}', 'CredinstanteController@getSaldoAbono')->name('getSaldoAbono');
+Route::get('getDashboard', 'ReportsController@getDashboard')->name('getDashboard');
+
+Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');
+Route::post('exportAbonos', 'ReportsController@exportAbonos')->name('exportAbonos');
+Route::post('exportVisita', 'ReportsController@exportVisita')->name('exportVisita');
+Route::post('getAllCredit', 'CredinstanteController@getAllCredit')->name('getAllCredit');
+Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('ChanceStatus');
+
+
+Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');
+

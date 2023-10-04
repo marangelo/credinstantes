@@ -16,7 +16,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
               <li class="breadcrumb-item active">Clientes</li>
             </ol>
           </div>
@@ -50,27 +50,71 @@
                     <th>Municipio</th>
                     <th>Departamento</th>
                     <th>Direccion</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
                   @foreach ($Clientes as $c)  
                   <tr>
-                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a></td>
+                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
+                        @if ($c->tieneCreditoVencido->isNotEmpty())
+                            <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
+                                            @case(1)
+                                                bg-success
+                                                @break
+                                            @case(2)
+                                                bg-danger
+                                                @break
+                                            @case(3)
+                                                bg-warning
+                                                @break
+                                            @default
+                                                ''
+                                        @endswitch">{{ $c->tieneCreditoVencido->first()->Estado->nombre_estado }}</span>
+                        @else
+                          @if ($c->getCreditos->isNotEmpty())
+                              <span class="badge @switch($c->getCreditos->first()->estado_credito)
+                                            @case(1)
+                                                bg-success
+                                                @break
+                                            @case(2)
+                                                bg-danger
+                                                @break
+                                            @case(3)
+                                                bg-warning
+                                                @break
+                                            @default
+                                                ''
+                                        @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
+                          @else
+                              <p>- </p>
+                          @endif
+                        @endif
+                    </td>
                     <td>{{ strtoupper($c->telefono) }} </td>
-                    <td> {{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
-                    <td> {{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
+                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
                     <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
+                    
+                    <td><div class="card-tools text-center">  
+                      @if( Session::get('rol') == '1')
+                          <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
+                              <i class="fas fa-pencil-alt">
+                              </i>
+                              Editar
+                          </a>
+                          
+                          <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
+                              <i class="fas fa-trash">
+                              </i>
+                              Remover
+                          </a>
+                          @endif
+                          </div>
+                      </td>
                   @endforeach
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Telefono</th>
-                    <th>Municipio</th>
-                    <th>Direccion</th>
-                    <th>Monto</th>
-                  </tr>
-                  </tfoot>
+                  
                 </table>
               </div>
               <!-- /.card-body -->
@@ -95,120 +139,199 @@
             <div class="card card-warning">
             
               <!-- /.card-header -->
-              <div class="card-body">
-                <form>
-                  <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Dia de Pago</label>
-                      <select class="form-control">
-                        @foreach ($DiasSemana as $d)
-                          <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
+              <div class="card-body">                  
                   <div class="row">
-                    <div class="col-sm-12">
+                    
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                          <label>Fecha Inicio</label>
+                          <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
+                              <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                              </div>
+                          </div>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                        <label>Dia de Visita</label>
+                        <select class="form-control" id="slDiaVisita">
+                          @foreach ($DiasSemana as $d)
+                            <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                          @endforeach
+                        </select>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-4">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="Enter ...">
+                        <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ...">
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="txtApellido" class="form-control" placeholder="Apellido ...">
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-sm-12">
-                      <!-- text input -->
+                    <div class="col-sm-4">
+
                       <div class="form-group">
-                        <label>Apellido</label>
-                        <input type="text" class="form-control" placeholder="Enter ...">
+                        <label>Telefono:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="txtTelefono" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
+                        </div>
                       </div>
+
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Numero de Telefono:</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Cedula:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask>
+                        </div>
                       </div>
-                      <input type="text" class="form-control"data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                      
                     </div>
-                    <!-- /.input group -->
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" id="selMunicipio">
+                          @foreach ($Municipios as $m)
+                            <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                        
+                    </div>
+                    
                   </div>
+                  
+                  
+
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>DIRECCION</label>
-                        <textarea class="form-control" rows="3" placeholder="Direcion ..."></textarea>
+                        <textarea class="form-control" id="txtDireccion" rows="3" placeholder="Direcion ..."></textarea>
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Municipio</label>
-                      <select class="form-control">
-                        @foreach ($Municipios as $m)
-                          <option value="{{$m->ID}}"> {{strtoupper($m->nombre_municipio)}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
-
                   <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Monto</label>
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="C$ 0.00">
+                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'>
                           </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Plazo</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="Numero de Meses">
+                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Interes</label>
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="0.00 %">
+                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>N° Cuotas</label>
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="email" class="form-control" placeholder="Numero de Cuotas">
+                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Total</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Cuota</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Saldos</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Intereses </label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Intereses por cuota </label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled>
                           </div>
                       </div>
                     </div>
                   </div>
-
-                  
-
-
-          
-
-
-                </form>
               </div>
               <!-- /.card-body -->
             </div>
@@ -216,6 +339,109 @@
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
               <button type="button" class="btn btn-primary" id="btn_save_credito">Aplicar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <!-- /.container-fluid -->
+      <div class="modal fade" id="mdl_edit_cliente">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Editar Cliente</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                <span id="edtIdClient" style="display:none" ></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="card card-warning">
+            
+              <!-- /.card-header -->
+              <div class="card-body">                  
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="edtNombre" class="form-control" placeholder="Nombre ...">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="edtApellido" class="form-control" placeholder="Apellido ...">
+                      </div>
+                    </div>  
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Telefono:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="edtTelefono" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Cedula:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="edtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" id="edtMunicipio">
+                          @foreach ($Municipios as $m)
+                            <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                        
+                    </div>                    
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>DIRECCION</label>
+                        <textarea class="form-control" id="edtDireccion" rows="3" placeholder="Direcion ..."></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                 
+                  <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table class="table " id="tblCreditosCliente" style="width:100%">
+                          
+                        </table>
+                      </div>
+                  </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" id="btn_edit_credito">Aplicar</button>
             </div>
           </div>
           <!-- /.modal-content -->

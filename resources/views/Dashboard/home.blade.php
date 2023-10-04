@@ -5,13 +5,6 @@
 @section('content')
 <div class="wrapper">
 
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__wobble" src="/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
-
-
   <!-- Main Sidebar Container -->
   @include('layouts.lyt_aside')
  
@@ -27,7 +20,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
               <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </div><!-- /.col -->
@@ -42,14 +35,11 @@
         <!-- Info boxes -->
         <div class="row">
           <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
-
+            <div class="info-box ">
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-wallet"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 01</span>
-                <span class="info-box-number">
-                  10
-                  <small>%</small>
+                <span class="info-box-text">INGRESO NETO</span>
+                <span class="info-box-number"><span id="lblIngreso" ></span><small>NIO</small>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -59,11 +49,12 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-cash-register"></i></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 02</span>
-                <span class="info-box-number">41,410</span>
+                <span class="info-box-text">CAPITAL</span>
+                <span class="info-box-number"><span id="lblCapital"></span><small>NIO</small>
+                </span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -76,11 +67,11 @@
 
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-search-dollar"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 03</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-text">RECUPERACION DEL MES</span>
+                <span class="info-box-number"><span id="lblInteres"></span><small>NIO</small></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -89,11 +80,11 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Indicador 04</span>
-                <span class="info-box-number">2,000</span>
+                <span class="info-box-text">CREDITOS ACTIVOS</span>
+                <span class="info-box-number"><span id="lblClientes"></span></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -109,22 +100,11 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">Monthly Recap Report</h5>
+                <h5 class="card-title">INGRESO POR MES</h5>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div class="d-flex">
-                  <p class="d-flex flex-column">
-                    <span class="text-bold text-lg">C$18,230.00</span>
-                    <span>Sales Over Time</span>
-                  </p>
-                  <p class="ml-auto d-flex flex-column text-right">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 33.1%
-                    </span>
-                    <span class="text-muted">Since last month</span>
-                  </p>
-                </div>
+                
                 <!-- /.d-flex -->
 
                 <div class="position-relative mb-4">
@@ -134,7 +114,7 @@
                 
               </div>
               <!-- ./card-body -->
-              <div class="card-footer">
+              <div class="card-footer" style = "display:none">
                 <div class="row">
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
@@ -196,12 +176,6 @@
   <!-- /.control-sidebar -->
 
   <!-- Main Footer -->
-  <footer class="main-footer">
-  <strong>Copyright &copy; {{date('Y')}} <a href="http://pullpos.com/">pullpos.com</a>.</strong> All rights reserved.
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
-    </div>
-  </footer>
+  @include('layouts.lyt_footer')
 </div>
 @endsection

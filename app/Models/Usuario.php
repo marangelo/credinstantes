@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,39 +19,35 @@ class Usuario extends Model {
     {
         return Usuario::where('activo','S')->get();
     }
-    public static function getUsuarioVendedor()
-    {
-        return UsuarioVendedor::where('activo','S')->where('username', 'LIKE','F%')->get();
-    }
 
-    public static function getUsuariosSAC()
-    {
-        return Usuario::where('activo','S')->where('id_rol',9)->get();
-    }
-
+   
     public static function SaveUsuario(Request $request) {
         if ($request->ajax()) {
             try {
 
-                $usuario        = $request->input('usuario');
-                $nombre         = $request->input('nombre');
-                $passwprd       = Hash::make($request->input('passwprd'));
+                $usuario        = $request->input('Usuario');
+                $nombre         = $request->input('Nombre');
+                $passwprd       = Hash::make($request->input('Contrasena'));
                 $Estado         = $request->input('Estado');
-                $id_rol         = $request->input('id_rol');
+                $id_rol         = $request->input('Permiso');
+
+                $Comment        = $request->input('Commit');
 
 
                 if ($Estado=="0") {
                     $obj = new Usuario();   
-                    $obj->username      = $usuario;                
+                    $obj->email      = $usuario;                
                     $obj->nombre        = $nombre;
                     $obj->password      = $passwprd;
                     $obj->id_rol        = $id_rol;
+                    $obj->Comment       = $Comment;
                     $obj->activo        = 'S';                 
                     $response = $obj->save();
                 } else {
                     $response =   Usuario::where('id',  $Estado)->update([
-                        "username" => $usuario,
+                        "email" => $usuario,
                         "nombre" => $nombre,
+                        "Comment" => $Comment,
                         "id_rol" => $id_rol,
                     ]);
                 }
@@ -84,5 +80,21 @@ class Usuario extends Model {
             }
         }
 
+    }
+
+    public static function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+        $currentPassword = $request->input('currentPassword');
+        $newPassword = $request->input('newPassword');
+    
+        if (!Hash::check($currentPassword, $user->password)) {
+            return response()->json(['success' => false]);
+        }
+    
+        $user->password = Hash::make($newPassword);
+        $user->save();
+    
+        return response()->json(['success' => true]);
     }
 }
