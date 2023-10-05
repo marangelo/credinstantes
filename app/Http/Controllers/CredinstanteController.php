@@ -11,6 +11,7 @@ use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\Usuario;
 use App\Models\Roles;
+use App\Models\DateRecord;
 use CodersFree\Date\Date;
 
 class CredinstanteController extends Controller {
@@ -19,9 +20,13 @@ class CredinstanteController extends Controller {
         $this->middleware('auth');
     }
     public function getDashboard()
-    {          
+    {         
+        $IsCalc = DateRecord::Check();
+
+        $View = ($IsCalc) ? 'Dashboard.update' : 'Dashboard.home' ;
+
         $Titulo = "Dashboard";
-        return view('Dashboard.home',compact('Titulo'));
+        return view($View,compact('Titulo'));
         
     }
 

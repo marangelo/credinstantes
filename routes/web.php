@@ -79,3 +79,5 @@ Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('Chance
 
 Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');
 
+Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEstados');
+
