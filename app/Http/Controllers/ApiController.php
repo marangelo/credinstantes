@@ -12,42 +12,56 @@ class ApiController extends Controller{
     {  
 
         // php artisan run:CalcularEstadosCredito
-        $datos_a_creditos = [];
+        $Creditos_mora    = [];
+        $Creditos_venc    = [];
+        $Creditos_merg    = [];
         $idEstado         = 1; 
         $DsVenc           = 0;
         $batch_Credito    = new Credito;
         $batch_index      = 'id_creditos';
         //ENTIENDA ACTIVO COMO QUE EL CREDITO NO SE A REMOVIDO
-        $Creditos_Activos =  Credito::getCreditos();        
+        $Creditos_Activos =  Credito::getCreditosActivos();        
 
-            foreach ($Creditos_Activos as $key => $c) {
-                //VERIFICA SI EL ULTIMO ABONO APLCIADO EXCEDE A LA FECHA ACTUAL
-                $last_abono = ($c->abonos->isNotEmpty()) ? $c->abonos->first()->fecha_cuota : $c->fecha_apertura ;
-                $date_refe_abono = $c->refAbonos->first()->FechaPago;
+        foreach ($Creditos_Activos as $key => $c) {
+            //VERIFICA SI EL ULTIMO ABONO APLCIADO EXCEDE A LA FECHA ACTUAL           
+            $last_abono = ($c->abonos->isNotEmpty()) ? $c->abonos->first()->fecha_cuota : $c->fecha_apertura ;
+            $date_ref_abono = $c->refAbonos->first()->FechaPago;
 
-                //CALCULA SI LA CUENTA ESTA EN VECIMIENTO
-                $fechaDada      = Carbon::parse($last_abono);
-                $fechaActual    = Carbon::now();
-                $diferenciaDias = $fechaDada->diffInDays($fechaActual);
+            //VERIFICA QUE SI EL ULTIMO PAGO ES MAYOR DE 7 DIAS PARA PONERLO EN MORA
+            $fechaDada      = Carbon::parse($last_abono);
+            $fechaActual    = Carbon::now();
+            $diferenciaDias = $fechaDada->diffInDays($fechaActual);
 
-                //CALCULA SI LA CUENTA SE ENCUENTRA VENCINA
-                $dtEnds         = Carbon::parse($date_refe_abono);
-                $dtNow          = Carbon::now();
-                $DsVenc         = $dtNow->diffInDays($dtEnds,false);
+            //CALCULA SI LA CUENTA SE ENCUENTRA VENCINA
+            $dtEnds         = Carbon::parse($date_ref_abono);
+            $dtNow          = Carbon::now();
+            $DsVenc         = $dtNow->diffInDays($dtEnds,false);
 
-                $idEstado = ($diferenciaDias > 7 ) ? 2 : 1 ;
-                
-                //$idEstado = ($DsVenc < 0 && floatval($c->saldo) > 0) ? 3 : 1 ;
-
-                $datos_a_creditos[$key] = [
+            if ($DsVenc < 0 ) {
+                $Creditos_venc[$key] = [
                     'id_creditos'       => $c->id_creditos,
-                    'estado_credito'    => $idEstado
+                    //'estado_credito'    => ($DsVenc < 0 && floatval($c->saldo) > 0) ? 3 : 1
+                    'DsVenc'    => $DsVenc,
+                    'estado_credito'    => 3
                 ];
-            
+            }else {
+                if ($diferenciaDias > 7 ) {
+                    $Creditos_mora[$key] = [
+                        'id_creditos'       => $c->id_creditos,
+                        'diferenciaDias' => $DsVenc,
+                        'estado_credito'    => 2
+                    ];
+                }
             }
-        //NO HABIA NECESITAS DE UTILIZAR ESTA DEPENDENCIA, PERO QUEDA GUAPA EKISDE
-        \Batch::update($batch_Credito, $datos_a_creditos, $batch_index);
-        return response()->json($datos_a_creditos);
+        
+        }
+
+        $array_merge = array_merge($Creditos_mora, $Creditos_venc);
+
+        \Batch::update($batch_Credito, $Creditos_mora, $batch_index);        
+        \Batch::update($batch_Credito, $Creditos_venc, $batch_index);
+
+        return response()->json($array_merge);
 
     }
 }
