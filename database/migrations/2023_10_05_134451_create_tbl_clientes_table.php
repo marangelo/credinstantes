@@ -23,7 +23,6 @@ class CreateTblClientesTable extends Migration
             $table->string('telefono', 20);
             $table->integer('score')->default(100);
             $table->boolean('activo')->default(true);
-            $table->timestamps();
         });
     }
 

@@ -18,7 +18,6 @@ class CreateCatMunicipioTable extends Migration
             $table->integer('id_departamento')->nullable();
             $table->string('nombre_municipio', 10)->nullable();
             $table->boolean('activo')->default(1);
-            $table->timestamps();
         });
     }
 

@@ -18,7 +18,6 @@ class CreateCatDiassemanaTable extends Migration
             $table->string('dia_semana', 50);
             $table->integer('dia_semananum');
             $table->boolean('activo')->default(1);
-            $table->timestamps();
         });
 
     }

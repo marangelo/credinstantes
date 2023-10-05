@@ -33,7 +33,6 @@ class CreateTblCreditosTable extends Migration
             $table->integer('salud_credito')->nullable()->default(1);
             $table->integer('estado_credito')->nullable();
             $table->boolean('activo')->nullable();
-            $table->timestamps();
         });
     }
 
