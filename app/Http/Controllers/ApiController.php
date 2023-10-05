@@ -61,6 +61,8 @@ class ApiController extends Controller{
         \Batch::update($batch_Credito, $Creditos_mora, $batch_index);        
         \Batch::update($batch_Credito, $Creditos_venc, $batch_index);
 
+        \Log::channel('log_calc_Estados')->info("Se calculo los estados para el dia de  ".date('Y-m-d H:i:s'));
+
         return response()->json($array_merge);
 
     }
