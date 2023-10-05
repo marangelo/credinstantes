@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Seeders\CatDiassemanaSeeder;
+use App\Seeders\CatDepartamentoSeeder;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,6 +12,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        $this->call([
+            CatDepartaSeeder::class, 
+            CatDayWeekSeeder::class, 
+            CatMunicipioSeeder::class, 
+            RolSeeder::class,
+            EstadosTableSeeder::class,
+            UsersSeeder::class,
+        ]);
     }
 }
