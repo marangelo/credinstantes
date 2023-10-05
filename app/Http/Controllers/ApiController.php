@@ -41,14 +41,14 @@ class ApiController extends Controller{
                 $Creditos_venc[$key] = [
                     'id_creditos'       => $c->id_creditos,
                     //'estado_credito'    => ($DsVenc < 0 && floatval($c->saldo) > 0) ? 3 : 1
-                    'DsVenc'    => $DsVenc,
+                    //'DsVenc'    => $DsVenc,
                     'estado_credito'    => 3
                 ];
             }else {
                 if ($diferenciaDias > 7 ) {
                     $Creditos_mora[$key] = [
                         'id_creditos'       => $c->id_creditos,
-                        'diferenciaDias' => $DsVenc,
+                        //'diferenciaDias' => $DsVenc,
                         'estado_credito'    => 2
                     ];
                 }
