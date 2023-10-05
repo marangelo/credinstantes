@@ -20,7 +20,6 @@ class CreateTblCredinstanteTable extends Migration
             $table->string('cargo_responsable', 100)->nullable();
             $table->string('telefono', 100)->nullable();
             $table->string('nombre_sucursal', 100)->nullable();
-            $table->timestamps(); // Si deseas agregar campos created_at y updated_at
         });
     }
 

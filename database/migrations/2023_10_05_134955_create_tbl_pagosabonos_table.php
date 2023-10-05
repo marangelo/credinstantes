@@ -21,7 +21,6 @@ class CreateTblPagosabonosTable extends Migration
             $table->engine = 'InnoDB';
             $table->charset = 'latin1';
             $table->collation = 'latin1_swedish_ci';
-            $table->timestamps(0); // Si deseas habilitar las marcas de tiempo, de lo contrario, elimina esta línea.
         });
     }
 

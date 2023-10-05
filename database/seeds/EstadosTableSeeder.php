@@ -13,10 +13,10 @@ class EstadosTableSeeder extends Seeder
     public function run()
     {
         DB::table('tbl_estados')->insert([
-            ['nombre_estado' => 'Al Dia', 'created_at' => now(),'updated_at' => now()],
-            ['nombre_estado' => 'En Mora', 'created_at' => now(),'updated_at' => now()],
-            ['nombre_estado' => 'Vencido', 'created_at' => now(),'updated_at' => now()],
-            ['nombre_estado' => 'Inactivo', 'created_at' => now(),'updated_at' => now()],
+            ['nombre_estado' => 'Al Dia'],
+            ['nombre_estado' => 'En Mora'],
+            ['nombre_estado' => 'Vencido'],
+            ['nombre_estado' => 'Inactivo'],
         ]);
     }
 }

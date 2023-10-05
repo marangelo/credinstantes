@@ -17,7 +17,6 @@ class CreateCatDepartamentoTable extends Migration
             $table->increments('id_departamento');
             $table->string('nombre_departamento', 30)->charset('latin1')->collation('latin1_swedish_ci')->nullable();
             $table->integer('activo')->default(1);
-            $table->timestamps();
         });
 
     }
