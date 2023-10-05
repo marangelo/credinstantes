@@ -32,12 +32,15 @@ class CredinstanteController extends Controller {
 
     public function prtVoucher($Id){
         $Abono    = Abono::find($Id); 
+        \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago complete de: ". $Id);
         return view('Voucher.completo', compact('Abono'));
     }
 
     public function prtVoucherParcial($Id){
         $Abono    = Abono::find($Id); 
+        \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago Parcial de: ". $Id);
         return view('Voucher.parcial', compact('Abono'));
+        
     }
     
     public function getClientes()

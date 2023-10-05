@@ -15,7 +15,7 @@ class ScheduleController extends Controller
         $url     = config('app.url').'/api/CalcularEstados';
         $client = new Client(['verify' => false]);
         $client->get($url);
-        //\Log::channel('Schedule_calculo_comisiones')->info("Ejecucion de Tarea de Calculo de Comisiones ". $url);
+        \Log::channel('log_general')->info("Ejecucion de Tarea de Calculo de Comisiones ". $url);
 
         
     }

@@ -78,6 +78,6 @@ Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('Chance
 
 
 Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');
-
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEstados');
 

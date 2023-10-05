@@ -53,7 +53,21 @@ return [
             'level' => 'debug',
             'days' => 14,
         ],
-
+        'log_vouchers' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/Schedule_pedidos.log'),
+            'level' => 'debug',
+        ],
+        'log_general' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/Schedule_pedidos.log'),
+            'level' => 'debug',
+        ],
+        'log_calc_Estados' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/Schedule_pedidos.log'),
+            'level' => 'debug',
+        ],        
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
