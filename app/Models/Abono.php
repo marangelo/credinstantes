@@ -70,7 +70,11 @@ class Abono extends Model
         } else {
             $Cuotas_pendientes = $Credito->numero_cuotas - $Credito->abonosCount();
 
-            $Saldo_to_cancelar = $Credito->saldo + ($Credito->intereses_por_cuota * $Cuotas_pendientes);
+            // AQUI SE CALCULA SUMANDO EL SALDO PENDIENTE + (INTERES POR CUOTA + CUOTAS PENDIENTES)
+            //$Saldo_to_cancelar = $Credito->saldo + ($Credito->intereses_por_cuota * $Cuotas_pendientes);
+
+            // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO
+            $Saldo_to_cancelar = $Credito->saldo;
 
             $Abono = $Saldo_to_cancelar;
         }
