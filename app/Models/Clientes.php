@@ -27,10 +27,10 @@ class Clientes extends Model
     }
     public static function getInactivos()
     {
-        $e = 4;
+        $e = 1;
         
         return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
-            $query->where('estado_credito', $e);
+            $query->whereNotIn('estado_credito', [$e]);
         })->get();
     }
     
