@@ -28,7 +28,7 @@
 
         $("#lbl_visitar").text(currentDate)
 
-        $("#tbl_clientes").DataTable({
+        $("#tbl_clientes_visita").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "destroy": true,
@@ -73,8 +73,20 @@
                     "title": "SALDO",
                     "data": "saldo",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
-                },                  
+                }, 
+                { "title": "ESTADO",  "data": "Estado", "render": function (data, type, row) {
+                        if (data === "VENCIDO") {
+                            return '<span class="text-danger">' + data + '</span>'; 
+                        } else if (data === "EN MORA") {
+                            return '<span class="text-primary">' + data + '</span>'; 
+                        } else {
+                            return data; 
+                        }
+                    }
+                }        
             ],
+            
+           
         })
     }
 

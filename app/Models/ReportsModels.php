@@ -24,7 +24,8 @@ class ReportsModels extends Model {
                 "telefono"               => $v->Clientes->telefono,
                 "cuota"                  => $v->cuota,
                 "saldo"                  => $v->saldo,
-                "pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 
+                "pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 ,
+                "Estado"                 => strtoupper($v->Estado->nombre_estado)
             ];
         }
         return $array_vista;

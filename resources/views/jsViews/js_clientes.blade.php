@@ -400,7 +400,7 @@
             title: 'Que estado desea Aplicar',
             input: 'select',
             inputOptions: {
-                'Esatdos': {
+                'Estados': {
                     1: 'Activo',
                     2: 'Mora',
                     3: 'Vencido',
