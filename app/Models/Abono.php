@@ -275,13 +275,6 @@ class Abono extends Model
                     "estado_credito"=>4,
                     "fecha_culmina"=>$FechaAbono
                 ]);
-                
-
-
-                
-
-                
-                
 
 
                 return $response;
