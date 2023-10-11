@@ -177,7 +177,7 @@ class CredinstanteController extends Controller {
 
         $Tipo         = $request->input('Tipo');
 
-        $response = ($Tipo === 0) ? Abono::SaveNewAbono($request) : Abono::Cancelacion($request) ;
+        $response = ($Tipo === "0") ? Abono::SaveNewAbono($request) : Abono::Cancelacion($request) ;
         
         return response()->json($response);
     }
