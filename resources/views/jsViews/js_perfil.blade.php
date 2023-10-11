@@ -349,6 +349,7 @@
                         IdCred      : Id,
                         Total_      : Monto,
                         FechaAbono  : FechaAbono,
+                        Tipo        : 0,
                         _token      : "{{ csrf_token() }}" 
                     },
                     type: 'post',
