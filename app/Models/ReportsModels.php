@@ -69,12 +69,14 @@ class ReportsModels extends Model {
         $span = '';
         $Color = '';
         $isAdded =  false;
+        $IdCreditoVencido = 0 ;
         
-        $array_clientes = array();
+        $array_clientes = [];
         foreach ($Clientes as $key => $c) {
 
 
             if ($c->tieneCreditoVencido->isNotEmpty()) {
+                $IdCreditoVencido = $c->tieneCreditoVencido->first()->id_creditos;
                 switch ($c->tieneCreditoVencido->first()->estado_credito) {
                     case 1:
                         $Color = 'bg-success';
@@ -133,9 +135,12 @@ class ReportsModels extends Model {
 
             if ($isAdded) {
                 $array_clientes[] = [
-                    "nombre" => $c->nombre,
-                    "apellidos" => $c->apellidos,
-                    "Estado" => $span
+                    "IdCliente"     => $c->id_clientes,
+                    "nombre"        => $c->nombre,
+                    "apellidos"     => $c->apellidos,
+                    "Estado"        => $span,
+                    "IdCredito"     => $IdCreditoVencido,
+
                 ];
             }
             
