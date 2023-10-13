@@ -20,7 +20,7 @@
 
     function InitTable() {
 
-        $("#tbl_clientes").DataTable({
+        $("#tbl_clientes_morosos").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "destroy": true,
@@ -44,8 +44,10 @@
                 }
             },
             'columns': [
-                { "title": "NOMBRE",              "data": "nombre" },
-                { "title": "APELLIDOS",            "data": "apellidos" },
+                {"title": "NOMBRE","data": "nombre", "render": function(data, type, row, meta) {
+                    return `<a href="Perfil/`+ row.IdCliente +`" ><strong># `+ row.IdCliente +` </strong> : `+ row.nombre +`  : `+ row.apellidos +` </a> `
+                    
+                }},
                 { "title": "ESTADO",            "data": "Estado" },
             ],
         })

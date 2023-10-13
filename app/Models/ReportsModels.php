@@ -32,31 +32,36 @@ class ReportsModels extends Model {
     }
     public static function getAbonos(Request $request)
     {
-        $dtIni    = $request->input('dtIni');
-        $dtEnd    = $request->input('dtEnd');
+        $dtIni    = $request->input('dtIni').' 01:00:00';
+        $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $IdCln    = $request->input('IdCln');
-        
+
         
         if ($IdCln < 0) {
-            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->where('activo', 1)->get();
+            $Abonos = Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd]);
         } else {
-            $Abonos = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd]) ->where('activo', 1)->whereHas('credito', function ($query) use ($IdCln) {
-                            $query->where('id_clientes', $IdCln);
-                        })->get();
+            $Abonos = Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('id_clientes',$IdCln);
         }
+        $Abonos = $Abonos->Where('activo',1)->get();
         
         $array_abonos = array();
         foreach ($Abonos as $key => $a) {
+
+            $Ingreso_neto = $a->CAPITAL + $a->INTERES ;
+            
+            
             $array_abonos[$key] = [
                 "id_abonoscreditos" => $a->id_abonoscreditos,
                 "fecha_cuota"       => $a->fecha_cuota,
                 "Nombre"            => $a->credito->Clientes->nombre,
                 "apellido"          => $a->credito->Clientes->apellidos,
-                "cuota_cobrada"     => $a->cuota_cobrada,
-                "pago_capital"      => $a->pago_capital,
-                "pago_intereses"    => $a->pago_intereses
+                "cuota_cobrada"     => $Ingreso_neto,
+                "pago_capital"      => $a->CAPITAL,
+                "pago_intereses"    => $a->INTERES,
             ];
+                
         }
+
 
         return $array_abonos;
     }
@@ -69,12 +74,14 @@ class ReportsModels extends Model {
         $span = '';
         $Color = '';
         $isAdded =  false;
+        $IdCreditoVencido = 0 ;
         
-        $array_clientes = array();
+        $array_clientes = [];
         foreach ($Clientes as $key => $c) {
 
 
             if ($c->tieneCreditoVencido->isNotEmpty()) {
+                $IdCreditoVencido = $c->tieneCreditoVencido->first()->id_creditos;
                 switch ($c->tieneCreditoVencido->first()->estado_credito) {
                     case 1:
                         $Color = 'bg-success';
@@ -133,9 +140,12 @@ class ReportsModels extends Model {
 
             if ($isAdded) {
                 $array_clientes[] = [
-                    "nombre" => $c->nombre,
-                    "apellidos" => $c->apellidos,
-                    "Estado" => $span
+                    "IdCliente"     => $c->id_clientes,
+                    "nombre"        => $c->nombre,
+                    "apellidos"     => $c->apellidos,
+                    "Estado"        => $span,
+                    "IdCredito"     => $IdCreditoVencido,
+
                 ];
             }
             
@@ -152,12 +162,21 @@ class ReportsModels extends Model {
         $vData           = [];
 
         $dtNow  = date('Y-m-d');
-        $D1     = date('Y-m-01', strtotime($dtNow));
-        $D2     = date('Y-m-t', strtotime($dtNow));
+        $D1     = date('Y-m-01', strtotime($dtNow)). ' 01:00:00';
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';        
 
-        $Abonos     = Abono::whereBetween('fecha_cuota', [$D1, $D2])->where('activo', 1)->get();
+        $Abonos     = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])
+                            ->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])
+                            ->where('activo', 1)->get();
+        
         $Clientes   = Clientes::getClientes();
-        $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')->whereBetween('fecha_cuota', [$D1, $D2]) ->where('activo', 1)->groupByRaw('DAY(fecha_cuota)')->get();
+
+        $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')
+                        ->whereBetween('fecha_cuota_secc1', [$D1, $D2])
+                        ->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])
+                        ->where('activo', 1)
+                        ->groupByRaw('DAY(fecha_cuota)')
+                        ->get();
         
         $ttPagoCapital      = $Abonos->sum('pago_capital');
         $ttPagoIntereses    = $Abonos->sum('pago_intereses');

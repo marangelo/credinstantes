@@ -16,7 +16,7 @@
 
 
         $('#id_txt_buscar').on('keyup', function() {   
-            var vTableArticulos = $('#tbl_clientes').DataTable();     
+            var vTableArticulos = $('#tbl_ingresos').DataTable();     
             vTableArticulos.search(this.value).draw();
         });
 
@@ -54,7 +54,7 @@
 
     
 
-        $("#tbl_clientes").DataTable({
+        $("#tbl_ingresos").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "destroy": true,
@@ -142,8 +142,8 @@
             }
         })
 
-        $("#tbl_clientes_length").hide();
-        $("#tbl_clientes_filter").hide();
+        $("#tbl_ingresos_length").hide();
+        $("#tbl_ingresos_filter").hide();
     }
 
     

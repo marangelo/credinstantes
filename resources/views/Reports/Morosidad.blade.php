@@ -71,20 +71,8 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_clientes" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>-</th>
-                    <th>-</th>  
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
+                <table id="tbl_clientes_morosos" class="table table-bordered table-striped">
                   
-                  </tbody>
-                  <tfoot>
-                 
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

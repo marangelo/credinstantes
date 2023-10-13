@@ -36,7 +36,7 @@ class ReportsController extends Controller {
     }
     public function Morosidad()
     {           
-        $Clientes    = Clientes::getClientes();
+        $Clientes    = Clientes::getMorosos();
         $Titulo         = "Morosidad";
         return view('Reports.Morosidad',compact('Clientes','Titulo'));
         
