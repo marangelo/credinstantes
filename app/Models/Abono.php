@@ -90,9 +90,11 @@ class Abono extends Model
             $Cuotas_pend    =  $Saldo_to_cancelar / $Credito->cuota;
             $Taza_          =  $Credito->taza_interes / 100;
             $Abono_         =  $Credito->cuota;
-            $Interes_Abono  =  $Abono_ * $Taza_;
+            
+            //$Interes_Abono  =  $Abono_ * $Taza_;
+            //$Interes_Abono  = $Credito->intereses_por_cuota * $Cuotas_pend;
 
-            $Interes_       = $Interes_Abono * $Cuotas_pend ;
+            $Interes_       = $Credito->intereses_por_cuota * $Cuotas_pend ;
             $Capital_       = $Saldo_to_cancelar  -  $Interes_;
 
             $datos_credito = [                    
@@ -244,9 +246,11 @@ class Abono extends Model
                 $Cuotas_pend    =  $Total_ / $Info_Credito->cuota;
                 $Taza_          =  $Info_Credito->taza_interes / 100;
                 $Abono_         =  $Info_Credito->cuota;
-                $Interes_Abono  =  $Abono_ * $Taza_;
-
-                $Interes_       = $Interes_Abono * $Cuotas_pend ;
+                
+                // $Interes_Abono  =  $Abono_ * $Taza_;
+                // $Interes_       = $Interes_Abono * $Cuotas_pend ;
+                
+                $Interes_       = $Info_Credito->intereses_por_cuota * $Cuotas_pend ;
                 $Capital_       = $Total_  -  $Interes_;
 
 
