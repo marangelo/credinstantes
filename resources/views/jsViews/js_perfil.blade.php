@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function () {
-
+        $("#lbl_cancelacion").hide();
         $("#tbl_abonos_creditos").DataTable({
             "responsive": true, 
             "lengthChange": false, 
@@ -19,9 +19,14 @@
         $("#slTipoAbono").change(function() {
             
             var IdC_      = $("#lbl_credito").text();
+
             $("#txt_Total_abono").val(0.00);
 
             $("#id_lbl_cuota").text("Calculando....")
+
+            $("#lbl_cancel_capital").html("C$ 0.00");
+            $("#lbl_cancel_interes").html("C$ 0.00");
+
             setTimeout(function() {
                 $("#id_lbl_cuota").text(" Cuota a pagar ");
                 getIdCredi(IdC_)
@@ -175,14 +180,17 @@
         $("#btn_save_abono").click(function(){
 
             var Total_      = $("#txt_Total_abono").val();
-
             var IdCred      = $("#lbl_credito").text();
-
             var DateAbono   = $("#IddtApertura").val();
+
             const dtAbono   = moment(DateAbono, 'DD/MM/YYYY');
           
             Total_         = isValue(Total_,'N/D',true)
-            IdCred         = isValue(IdCred,0,true)
+            IdCred         = isValue(IdCred,0,true);
+
+            var opt  = $("#slTipoAbono option:selected").val(); 
+
+
 
             if(Total_ === 'N/D' ){
                 Swal.fire("Oops", "Datos no Completos", "error");
@@ -194,7 +202,8 @@
                     data: {
                         Total_      : Total_,
                         IdCred      : IdCred,
-                        FechaAbono    : dtAbono.format('YYYY-MM-DD'),
+                        FechaAbono  : dtAbono.format('YYYY-MM-DD'),
+                        Tipo        : opt,
                         _token  : "{{ csrf_token() }}" 
                     },
                     async: true,
@@ -340,6 +349,7 @@
                         IdCred      : Id,
                         Total_      : Monto,
                         FechaAbono  : FechaAbono,
+                        Tipo        : 0,
                         _token      : "{{ csrf_token() }}" 
                     },
                     type: 'post',
@@ -518,14 +528,32 @@
 
         var opt  = $("#slTipoAbono option:selected").val(); 
 
-        $.get( "../getSaldoAbono/" + IdCredito + "/" +opt , function( data ) {
+        $.get( "../getSaldoAbono/" + IdCredito + "/" + opt , function( data ) {
 
-            dtSaldo = numeral(isValue(data,0,true)).format('00.00')
+
+            dtSaldo = numeral(isValue(data.Saldo_to_cancelar,0,true)).format('00.00')
+            Interes_ = numeral(isValue(data.Interes_,0,true)).format('0,0.00')
+            Capital_ = numeral(isValue(data.Capital_,0,true)).format('0,0.00')
 
             if ((parseFloat(dtSaldo) > 0) ) {
+
+
                 $('#modal-lg').modal('show');                
                 $("#lbl_credito").html(IdCredito);
                 $("#txt_Total_abono").val(dtSaldo);
+
+
+                
+                if (opt === '0') {
+                    $("#lbl_cancelacion").hide();
+                } else {
+                    $("#lbl_cancelacion").show();
+
+                    $("#lbl_cancel_capital").html("C$ " + Capital_);
+                    $("#lbl_cancel_interes").html("C$ " + Interes_);
+                }
+
+
             }else{
 
                 Swal.fire({

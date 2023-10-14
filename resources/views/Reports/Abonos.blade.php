@@ -87,7 +87,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_clientes" class="table table-bordered table-striped">
+                <table id="tbl_ingresos" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>NOMBRE</th>

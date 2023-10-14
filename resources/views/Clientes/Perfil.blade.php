@@ -345,6 +345,22 @@
               </div>
             </div>
 
+            <div class="row" id="lbl_cancelacion">
+              <div class="col-sm-6 col-6">
+                <div class="description-block border-right">
+                  <h5 class="description-header text-success" id="lbl_cancel_capital">C$ 0.00</h5>
+                  <span class="description-text">CAPITAL</span>
+                </div>
+              </div>
+              
+              <div class="col-sm-6 col-6">
+                <div class="description-block">
+                  <h5 class="description-header text-warning" id="lbl_cancel_interes">C$ 0.00</h5>
+                  <span class="description-text">INTERESES</span>
+                </div>
+              </div>
+            </div>
+
           
           
         </div>

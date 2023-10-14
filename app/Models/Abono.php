@@ -64,27 +64,50 @@ class Abono extends Model
         
         $Credito = Credito::where('id_creditos',$IdCredito)->where('activo',1)->first();
 
+        $datos_credito = [];
+
 
         if ($Opt==0) {
+
             $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
+
+            $datos_credito = [                    
+                'Cuotas_pend'          => 0,
+                'Interes_'             => 0,
+                'Capital_'             => 0,
+                'Saldo_to_cancelar'    => $Abono,
+            ];
+
         } else {
-            $Cuotas_pendientes = $Credito->numero_cuotas - $Credito->abonosCount();
+            //$Cuotas_pendientes = $Credito->numero_cuotas - $Credito->abonosCount();
 
             // AQUI SE CALCULA SUMANDO EL SALDO PENDIENTE + (INTERES POR CUOTA + CUOTAS PENDIENTES)
-            //$Saldo_to_cancelar = $Credito->saldo + ($Credito->intereses_por_cuota * $Cuotas_pendientes);
+            //$Saldo_to_cancelar = $Credito->saldo + ($Cuotas_pendientes * $Credito->intereses_por_cuota );
 
             // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO
             $Saldo_to_cancelar = $Credito->saldo;
 
+            $Cuotas_pend    =  $Saldo_to_cancelar / $Credito->cuota;
+            $Taza_          =  $Credito->taza_interes / 100;
+            $Abono_         =  $Credito->cuota;
+            
+            //$Interes_Abono  =  $Abono_ * $Taza_;
+            //$Interes_Abono  = $Credito->intereses_por_cuota * $Cuotas_pend;
+
+            $Interes_       = $Credito->intereses_por_cuota * $Cuotas_pend ;
+            $Capital_       = $Saldo_to_cancelar  -  $Interes_;
+
+            $datos_credito = [                    
+                'Cuotas_pend'          => $Cuotas_pend,
+                'Interes_'             => $Interes_,
+                'Capital_'             => $Capital_,
+                'Saldo_to_cancelar'    => $Saldo_to_cancelar,
+            ];
+            
             $Abono = $Saldo_to_cancelar;
         }
-        
 
-        
-
-        
-
-        return $Abono ;
+        return $datos_credito ;
     }
     
 
@@ -192,6 +215,70 @@ class Abono extends Model
 
                 
                 
+
+
+                return $response;
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+        
+    }
+
+    public static function Cancelacion(Request $request)
+    {
+
+        if ($request->ajax()) {
+            try {
+
+                $IdCred         = $request->input('IdCred');
+                $FechaAbono     = $request->input('FechaAbono');
+                $CompletarPago  = false;
+
+                //OBTENEMOS LA INFORMACION DEL CREDITO
+                $Info_Credito   = Credito::find($IdCred);
+
+                $Total_         = $request->input('Total_');
+
+                
+                $Cuotas_pend    =  $Total_ / $Info_Credito->cuota;
+                $Taza_          =  $Info_Credito->taza_interes / 100;
+                $Abono_         =  $Info_Credito->cuota;
+                
+                // $Interes_Abono  =  $Abono_ * $Taza_;
+                // $Interes_       = $Interes_Abono * $Cuotas_pend ;
+                
+                $Interes_       = $Info_Credito->intereses_por_cuota * $Cuotas_pend ;
+                $Capital_       = $Total_  -  $Interes_;
+
+
+                $datos_credito = [                    
+                    'id_creditos'           => $IdCred,
+                    'registrado_por'        => Auth::id(),
+                    'fecha_cuota'           => $FechaAbono,
+                    'pago_capital'          => $Capital_,
+                    'pago_intereses'        => $Interes_,
+                    'cuota_credito'         => $Info_Credito->cuota,
+                    'cuota_cobrada'         => $Total_,
+                    'intereses_por_cuota'   => $Info_Credito->intereses_por_cuota,
+                    'abono_dia1'            => $Total_,
+                    'fecha_cuota_secc1'     => $FechaAbono,
+                    'completado'            => 1,
+                    'saldo_cuota'           => 0 ,
+                    'saldo_actual'          => 0,
+                    'activo'                => 1,
+                    'saldo_anterior'        =>$Info_Credito->saldo
+                ];
+
+                $response = Abono::insert($datos_credito);
+
+                Credito::where('id_creditos',  $IdCred)->update([
+                    "saldo" => 0,
+                    "estado_credito"=>4,
+                    "fecha_culmina"=>$FechaAbono
+                ]);
 
 
                 return $response;

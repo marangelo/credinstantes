@@ -59,10 +59,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_clientes" class="table table-bordered table-striped">
-                  <thead>
-                  
-                </table>
+                <table id="tbl_clientes_visita" class="table table-bordered table-striped"></table>
               </div>
               <!-- /.card-body -->
             </div>
