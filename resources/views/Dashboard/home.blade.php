@@ -104,6 +104,19 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-success text-lg">C$18,230.00</span>
+                    <span>Saldo de Cartera</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right" style="display:none">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 33.1%
+                    </span>
+                    <span class="text-muted">Desde el mes pasado</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
                 
                 <!-- /.d-flex -->
 

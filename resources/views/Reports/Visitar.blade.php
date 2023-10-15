@@ -35,8 +35,32 @@
                 <h3 class="card-title" id="lbl_periodo">Clientes a Visitar <span id="lbl_visitar" ></span>  </h3>
                 <div class="card-tools">
 
+                
+
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <select class="form-control select2" style="width: 100%;" id="id_select_cliente" name="IdCln">
+                          <option value="-1"  selected="selected">Todos</option>
+                        @foreach ($DiasW as $dw)
+                          <option value="{{$dw->id_diassemana}}"> {{strtoupper($dw->dia_semana) }}</option>
+                        @endforeach
+                      </select>
+                      
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <select class="form-control select2" style="width: 100%;" id="id_select_cliente" name="IdCln">
+                          <option value="-1"  selected="selected">Todos</option>
+                        @foreach ($Zonas as $z)
+                          <option value="{{$z->id_departamento}}"> {{strtoupper($z->nombre_departamento) }}</option>
+                        @endforeach
+                      </select>
+                      
+                    </div>
+                  </div>
+                  <div class="col-md-6 mt-1">
                     <form action="{{ route('exportVisita') }}" method="POST">@csrf
                       <div class="form-group">                      
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">

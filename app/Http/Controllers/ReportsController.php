@@ -22,9 +22,10 @@ class ReportsController extends Controller {
     }
     public function Visitar()
     {           
-        $DiasSemana  = DiasSemana::getDiasSemana();  
-        $Titulo         = "Visitar";
-        return view('Reports.Visitar', compact('DiasSemana','Titulo'));
+        $DiasW       = DiasSemana::getDiasSemana();
+        $Zonas       = Departamentos::getDepartamentos();  
+        $Titulo      = "Visitar";
+        return view('Reports.Visitar', compact('DiasW','Zonas','Titulo'));
         
     }
     public function Abonos()
