@@ -32,7 +32,7 @@ class ReportsModels extends Model {
     }
     public static function getAbonos(Request $request)
     {
-        $dtIni    = $request->input('dtIni').' 01:00:00';
+        $dtIni    = $request->input('dtIni').' 00:00:00';
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $IdCln    = $request->input('IdCln');
 
@@ -42,6 +42,7 @@ class ReportsModels extends Model {
         } else {
             $Abonos = Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('id_clientes',$IdCln);
         }
+
         $Abonos = $Abonos->Where('activo',1)->get();
         
         $array_abonos = array();
