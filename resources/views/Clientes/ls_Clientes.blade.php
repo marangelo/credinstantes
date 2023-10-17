@@ -50,6 +50,7 @@
                     <th>Telefono</th>
                     <th>Municipio</th>
                     <th>Departamento</th>
+                    <th>Zona</th>
                     <th>Direccion</th>
                     <th></th>
                   </tr>
@@ -95,6 +96,7 @@
                     <td>{{ strtoupper($c->telefono) }} </td>
                     <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
                     <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
+                    <td>{{ strtoupper($c->getZona->nombre_zona) }} </td>
                     <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
                     
                     <td><div class="card-tools text-center">  
@@ -180,7 +182,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Telefono:</label>
@@ -193,7 +195,8 @@
                       </div>
 
                     </div>
-                    <div class="col-sm-4">
+
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Cedula:</label>
@@ -206,7 +209,8 @@
                       </div>
                       
                     </div>
-                    <div class="col-sm-4">
+
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Municipio</label>
@@ -217,6 +221,19 @@
                         </select>
                       </div>
                         
+                    </div>
+
+                    <div class="col-sm-3">
+
+                      <div class="form-group">
+                        <label>Zonas</label>
+                        <select class="form-control" id="selZona">
+                          @foreach ($Zonas as $z)
+                            <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                      
                     </div>
                     
                   </div>
@@ -380,7 +397,7 @@
                     </div>  
                   </div>
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Telefono:</label>
@@ -393,7 +410,7 @@
                       </div>
 
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Cedula:</label>
@@ -406,7 +423,7 @@
                       </div>
                       
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Municipio</label>
@@ -417,7 +434,21 @@
                         </select>
                       </div>
                         
-                    </div>                    
+                    </div>
+                    <div class="col-sm-3">
+
+                      <div class="form-group">
+                        <label>Zonas</label>
+                        <select class="form-control" id="edtZonas">
+                          @foreach ($Zonas as $z)
+                            <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                        
+                    </div>
+                    
+                    
                   </div>
                   <div class="row">
                     <div class="col-sm-12">

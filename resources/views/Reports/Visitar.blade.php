@@ -40,7 +40,7 @@
                 <div class="row">
                   <div class="col-md-3">
                     <div class="form-group">
-                      <select class="form-control select2" style="width: 100%;" id="id_select_cliente" name="IdCln">
+                      <select class="form-control select2" style="width: 100%;" id="IdDiaW" name="IdDiaW">
                           <option value="-1"  selected="selected">Todos</option>
                         @foreach ($DiasW as $dw)
                           <option value="{{$dw->id_diassemana}}"> {{strtoupper($dw->dia_semana) }}</option>
@@ -51,11 +51,11 @@
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <select class="form-control select2" style="width: 100%;" id="id_select_cliente" name="IdCln">
+                      <select class="form-control select2" style="width: 100%;" id="IdZona" name="IdZona">
                           <option value="-1"  selected="selected">Todos</option>
-                        @foreach ($Zonas as $z)
-                          <option value="{{$z->id_departamento}}"> {{strtoupper($z->nombre_departamento) }}</option>
-                        @endforeach
+                          @foreach ($Zonas as $z)
+                            <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
+                          @endforeach
                       </select>
                       
                     </div>

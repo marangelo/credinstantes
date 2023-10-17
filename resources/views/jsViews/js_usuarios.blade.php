@@ -97,11 +97,13 @@
         $("#txtPassWord_two").val("password-hide");
         $("#txtComentario").val(usr.Comment);
         $("#sclPrivi").val(usr.id_rol).change();
+        $("#sclZona").val(usr.id_zona).change();
     }
 
     function Save_Form() {
 
         var Permiso     = $("#sclPrivi option:selected").val();  
+        var Zona        = $("#sclZona option:selected").val();  
         var FullName    = $("#txtFullName").val();   
         var UserName    = $("#txtUserName").val();   
         var Pass01      = $("#txtPassWord_one").val();
@@ -111,9 +113,10 @@
 
         const Formulario = {
             Permiso     : isValue(Permiso, 'N/D', true),
-            Nombre    : isValue(FullName, 'N/D', true),
-            Usuario    : isValue(UserName, 'N/D', true),
-            Contrasena      : isValue(Pass01, 'N/D', true),
+            Zona        : isValue(Zona, 0, true),
+            Nombre      : isValue(FullName, 'N/D', true),
+            Usuario     : isValue(UserName, 'N/D', true),
+            Contrasena  : isValue(Pass01, 'N/D', true),
             Estado      : isValue(Estado, 'N/D', true),
             Commit      : isValue(Commit, 'N/D', true),
             _token      : "{{ csrf_token() }}" 

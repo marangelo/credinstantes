@@ -28,6 +28,9 @@
 
         $("#lbl_visitar").text(currentDate)
 
+        var DiaW_  = $("#IdDiaW option:selected").val();  
+        var Zona_  = $("#IdZona option:selected").val();  
+
         $("#tbl_clientes_visita").DataTable({
             "responsive": true, 
             "lengthChange": false, 
@@ -50,15 +53,18 @@
                 "type": 'POST',
                 'dataSrc': '',
                 "data": {                
-                    Fecha_   : currentDate,
+                    Fecha_  : currentDate,
+                    DiaW_   : DiaW_,
+                    Zona_   : Zona_,
                     _token  : "{{ csrf_token() }}" 
                 }
             },
             'columns': [
-                { "title": "NOMBRE",              "data": "Nombre" },
-                { "title": "APELLIDO",            "data": "apellido" },
-                { "title": "DIRECCION",       "data": "direccion_domicilio" },
-                { "title": "TELEFONO",       "data": "telefono" },
+                { "title": "NOMBRE",            "data": "Nombre" },
+                { "title": "APELLIDO",          "data": "apellido" },
+                { "title": "DIRECCION",         "data": "direccion_domicilio" },
+                { "title": "ZONA",              "data": "zona" },
+                { "title": "TELEFONO",          "data": "telefono" },
                 {
                     "title": "CUOTA",
                     "data": "cuota",

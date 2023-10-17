@@ -89,6 +89,7 @@ class Credito extends Model
                 $score                  = 100;
                 $activo                 = 1;
                 $Estado                 = 1;
+                $Zona_                  = $request->input('Zona_');
 
                 $DiaSemana_         = $request->input('DiaSemana_');
                 $Monto_             = $request->input('Monto_');
@@ -114,6 +115,7 @@ class Credito extends Model
                     'direccion_domicilio'  => $direccion_domicilio,
                     'cedula'               => $cedula,
                     'telefono'             => $telefono,
+                    'id_zona'              => $Zona_,
                     'score'                => $score,
                     'activo'               => $activo,
                 ];

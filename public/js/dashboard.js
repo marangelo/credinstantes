@@ -49,6 +49,10 @@ $(function () {
       Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
       $("#lblClientes").text(Clientes)
 
+      var Cartera = dataset['SALDOS_CARTERA'];
+      Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
+      $("#lblSaldosCartera").text(Cartera)
+
       $.each(dataset.Data, function(i, item) {
         vData.push(item);
       })

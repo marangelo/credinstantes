@@ -101,6 +101,12 @@
                   <p>Dias de Semana</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('Zonas')}}" class="nav-link {{ (request()->is('Zonas')) ? 'active' : '' }}">
+                  <i class="far fa-calendar-plus nav-icon"></i>
+                  <p>Zonas</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item ">

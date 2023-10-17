@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Clientes;
 use App\Models\Municipios;
 use App\Models\Departamentos;
+use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
@@ -23,7 +24,7 @@ class ReportsController extends Controller {
     public function Visitar()
     {           
         $DiasW       = DiasSemana::getDiasSemana();
-        $Zonas       = Departamentos::getDepartamentos();  
+        $Zonas       = Zonas::getZonas();  
         $Titulo      = "Visitar";
         return view('Reports.Visitar', compact('DiasW','Zonas','Titulo'));
         

@@ -17,6 +17,10 @@ class Clientes extends Model
     {
         return $this->hasOne(Municipios::class, 'id_municipio','id_municipio');
     }
+    public function getZona()
+    {
+        return $this->hasOne(Zonas::class, 'id_zona','id_zona')->where('activo',1);
+    }
 
     public static function getClientes()
     {
@@ -66,6 +70,7 @@ class Clientes extends Model
                 $IdCl_          = $request->input('IdCl_');
 
                 $Municipio_     = $request->input('Municipio_');
+                $Zona_          = $request->input('Zona_');
                 $Nombre_        = $request->input('Nombre_');
                 $Apellido_      = $request->input('Apellido_');
                 $Dire_          = $request->input('Dire_');
@@ -78,6 +83,7 @@ class Clientes extends Model
                     "apellidos"             => $Apellido_,
                     "direccion_domicilio"   => $Dire_,
                     "cedula"                => $Cedula_,
+                    "id_zona"               => $Zona_,
                     "telefono"              => $Tele_,
                 ]);
 

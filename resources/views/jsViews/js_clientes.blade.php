@@ -30,6 +30,8 @@
         $("#btn_edit_credito").click(function(){
             
                 var Municipio_  = $("#edtMunicipio option:selected").val();  
+                var Zona_       = $("#edtZonas option:selected").val();  
+
                 var Nombre_      = $("#edtNombre").val();   
                 var Apellido_    = $("#edtApellido").val();   
                 var Cedula_      = $("#edtCedula").val();
@@ -53,6 +55,7 @@
                         data: {
                             IdCl_:IdCl_,
                             Municipio_   : Municipio_,
+                            Zona_        : Zona_,
                             Nombre_      : Nombre_,
                             Apellido_    : Apellido_ , 
                             Cedula_      : Cedula_,
@@ -97,12 +100,14 @@
 
             var DiaSemana_  = $("#slDiaVisita option:selected").val();  
             var Municipio_  = $("#selMunicipio option:selected").val();  
+            var Zona_        = $("#selZona option:selected").val();
 
             var Nombre_      = $("#txtNombre").val();   
             var Apellido_    = $("#txtApellido").val();   
             var Cedula_      = $("#txtCedula").val();
             var Tele_        = $("#txtTelefono").val();
             var Dire_        = $("#txtDireccion").val();
+           
 
             var Monto_     = $("#txtMonto").val();   
             var Plato_     = $("#txtPlazo").val();   
@@ -134,6 +139,7 @@
                 data: {
                     DiaSemana_   : DiaSemana_,
                     Municipio_   : Municipio_,
+                    Zona_        : Zona_,
                     Nombre_      : Nombre_,
                     Apellido_    : Apellido_ , 
                     Cedula_      : Cedula_,
@@ -327,18 +333,17 @@
         $("#edtTelefono").val(c.telefono);
         $("#edtCedula").val(c.cedula);
         $("#edtMunicipio").val(c.id_municipio).change();
+        $("#edtZonas").val(c.id_zona).change();       
 
         $("#edtDireccion").text(c.direccion_domicilio);
 
-        $("#edtIdClient").html(c.id_clientes)
-
-        
-        
-
         $('#mdl_edit_cliente').modal('show')
 
-       
+    
         Cliente_         = isValue(c.id_clientes,0,true);
+
+        $("#edtIdClient").text(Cliente_);
+
         $.ajax({
             url: "getAllCredit",
             type: 'post',

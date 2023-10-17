@@ -47,6 +47,12 @@ Route::get('rmMunicipio/{id}', 'CredinstanteController@rmMunicipio')->name('rmMu
 Route::post('SaveNewDepartamento', 'CredinstanteController@SaveNewDepartamento')->name('SaveNewDepartamento');
 Route::get('rmDepartamento/{id}', 'CredinstanteController@rmDepartamento')->name('rmDepartamento/{id}');
 
+
+Route::get('Zonas', 'CredinstanteController@getZona')->name('Zonas');
+Route::post('AddZona', 'CredinstanteController@addZona')->name('AddZona');
+Route::get('rmZona/{id}', 'CredinstanteController@rmZona')->name('rmZona/{id}');
+
+
 Route::post('AddDiaSemana', 'CredinstanteController@AddDiaSemana')->name('AddDiaSemana');
 Route::get('rmDiaSemana/{id}', 'CredinstanteController@rmDiaSemana')->name('rmDiaSemana/{id}');
 

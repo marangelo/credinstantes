@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Clientes;
 use App\Models\Municipios;
 use App\Models\Departamentos;
+use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
@@ -47,10 +48,11 @@ class CredinstanteController extends Controller {
     {   
         $Clientes    = Clientes::getClientes();  
         $Municipios  = Municipios::getMunicipios();  
-        $DiasSemana  = DiasSemana::getDiasSemana();  
+        $DiasSemana  = DiasSemana::getDiasSemana();
+        $Zonas       = Zonas::getZonas();  
         $Titulo      = "Clientes Activos";
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Titulo'));
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
         
     }
     public function getInactivos()
@@ -58,9 +60,10 @@ class CredinstanteController extends Controller {
         $Clientes    = Clientes::getInactivos();  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();  
+        $Zonas       = Zonas::getZonas();  
         $Titulo      = "Clientes Inactivos";
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Titulo'));
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
         
     }
 
@@ -92,6 +95,27 @@ class CredinstanteController extends Controller {
         return view('Clientes.ls_Departamentos', compact('Departamentos','Titulo'));
         
     }
+    public function getZona()
+    {   
+        $Zonas = Zonas::getZonas();  
+        $Titulo         = "Zonas";
+        
+        return view('Clientes.ls_zonas', compact('Zonas','Titulo'));
+        
+    }
+    public function addZona(Request $request)
+    {
+        $response = Zonas::addZona($request);
+        
+        return response()->json($response);
+    }
+
+    public function rmZona($id)
+    {
+        $response = Zonas::rmZona($id);
+        
+        return response()->json($response);
+    }
     public function getDiasSemna()
     {   
         $DiasSemana = DiasSemana::getDiasSemana();  
@@ -105,7 +129,8 @@ class CredinstanteController extends Controller {
         $Titulo         = "USUARIOS";
         $Usuarios       = Usuario::getUsuarios();
         $Roles          = Roles::getRoles();
-        return view('Usuario.lista',compact('Titulo','Usuarios','Roles'));
+        $Zonas          = Zonas::getZonas();
+        return view('Usuario.lista',compact('Titulo','Usuarios','Roles','Zonas'));
         
     }
 

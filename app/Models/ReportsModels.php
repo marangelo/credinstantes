@@ -10,10 +10,35 @@ class ReportsModels extends Model {
 
     public static function getVisitar(Request $request)
     {
-        $Date   = $request->input('Fecha_');
-        $Day    = date('N', strtotime($Date));
-        $Creditos =  Credito::where('id_diassemana',$Day)->where('activo', 1)->get();
-     
+        $Date   = $request->input('Fecha_').' 00:00:00';
+
+        $DiaW_   = $request->input('DiaW_');
+        $Zona_   = $request->input('Zona_');
+
+        //$Day    = date('N', strtotime($Date));
+
+        $Obj =  Credito::where('activo', 1);
+
+        // $Obj->orWhere(function($query) use ($Date) {
+        //     $query->whereHas('RefAbonos', function ($query) use ($Date) {
+        //         $query->where('FechaPago', $Date);
+        //     });
+        // });
+
+        // if ($DiaW_ > 0) {
+        //     $Obj->orWhere('id_diassemana',$DiaW_);
+        // }
+
+        // if ($Zona_ > 0) {
+        //     $Obj->orWhere(function($query) use ($Zona_) {
+        //         $query->whereHas('Clientes', function ($query) use ($Zona_) {
+        //             $query->where('id_zona', $Zona_);
+        //         });
+        //     });
+        // }
+
+        $Creditos = $Obj->get();
+
         $array_vista = array();
         foreach ($Creditos as $key => $v) {
             $array_vista[$key] = [
@@ -21,6 +46,7 @@ class ReportsModels extends Model {
                 "Nombre"                 => $v->Clientes->nombre,
                 "apellido"               => $v->Clientes->apellidos,
                 "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                "zona"                   => $v->Clientes->getZona->nombre_zona,
                 "telefono"               => $v->Clientes->telefono,
                 "cuota"                  => $v->cuota,
                 "saldo"                  => $v->saldo,
@@ -188,10 +214,14 @@ class ReportsModels extends Model {
             $vData[]    = $dia->total; 
         }
 
+        $Saldos_Cartera = Credito::where('activo',1)->sum('saldo');
+
+
         $array_dashboard = [
             "INGRESO"           => $ttCuotaCobrada,
             "CAPITAL"           => $ttPagoCapital,
             "INTERESES"         => $ttPagoIntereses,
+            "SALDOS_CARTERA"    => $Saldos_Cartera,
             "clientes_activos"  => $Clientes->count(),
             "label"             => $vLabel,
             "Data"              => $vData

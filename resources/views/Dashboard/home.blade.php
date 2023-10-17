@@ -106,7 +106,7 @@
               <div class="card-body">
                 <div class="d-flex">
                   <p class="d-flex flex-column">
-                    <span class="text-bold text-success text-lg">C$18,230.00</span>
+                    <span class="text-bold text-success text-lg">C$ <span id="lblSaldosCartera">0.00</span></span>
                     <span>Saldo de Cartera</span>
                   </p>
                   <p class="ml-auto d-flex flex-column text-right" style="display:none">
