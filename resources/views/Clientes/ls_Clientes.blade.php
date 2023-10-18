@@ -34,10 +34,12 @@
               <div class="card-header">
                 <h3 class="card-title">Listado de Clientes</h3>
                 <div class="card-tools">  
-                  @if (request()->is('Activos'))       
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
-                      Nuevo
-                  </button>
+                  @if (request()->is('Activos'))
+                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
+                              NUEVO
+                          </button>
+                      @endif
                   @endif
                 </div>
               </div>
@@ -51,71 +53,84 @@
                     <th>Municipio</th>
                     <th>Departamento</th>
                     <th>Zona</th>
-                    <th>Direccion</th>
-                    <th></th>
+                    <th>Direccion</th>                    
+                    @if (request()->is('Activos'))
+                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                        <th></th>
+                      @endif
+                    @endif
                   </tr>
                   </thead>
                   <tbody>
+
                   @foreach ($Clientes as $c)  
-                  <tr>
-                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
-                        @if ($c->tieneCreditoVencido->isNotEmpty())
-                            <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
-                                            @case(1)
-                                                bg-success
-                                                @break
-                                            @case(2)
-                                                bg-danger
-                                                @break
-                                            @case(3)
-                                                bg-warning
-                                                @break
-                                            @default
-                                                ''
-                                        @endswitch">{{ $c->tieneCreditoVencido->first()->Estado->nombre_estado }}</span>
-                        @else
-                          @if ($c->getCreditos->isNotEmpty())
-                              <span class="badge @switch($c->getCreditos->first()->estado_credito)
-                                            @case(1)
-                                                bg-success
-                                                @break
-                                            @case(2)
-                                                bg-danger
-                                                @break
-                                            @case(3)
-                                                bg-warning
-                                                @break
-                                            @default
-                                                ''
-                                        @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
-                          @else 
-                              <p>- </p>
+                    <tr>
+                      <td>
+                        <a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
+                          @if ($c->tieneCreditoVencido->isNotEmpty())
+                              <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
+                                              @case(1)
+                                                  bg-success
+                                                  @break
+                                              @case(2)
+                                                  bg-danger
+                                                  @break
+                                              @case(3)
+                                                  bg-warning
+                                                  @break
+                                              @default
+                                                  ''
+                                          @endswitch">{{ $c->tieneCreditoVencido->first()->Estado->nombre_estado }}</span>
+                          @else
+                            @if ($c->getCreditos->isNotEmpty())
+                                <span class="badge @switch($c->getCreditos->first()->estado_credito)
+                                              @case(1)
+                                                  bg-success
+                                                  @break
+                                              @case(2)
+                                                  bg-danger
+                                                  @break
+                                              @case(3)
+                                                  bg-warning
+                                                  @break
+                                              @default
+                                                  ''
+                                          @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
+                            @else 
+                                <p>- </p>
+                            @endif
+                          @endif
+                      </td>
+                      <td>{{ strtoupper($c->telefono) }} </td>
+                      <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
+                      <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
+                      <td>{{ strtoupper($c->getZona->nombre_zona) }} </td>
+                      <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
+                      <td>
+                        @if (request()->is('Activos'))
+                          @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                          
+                            <div class="card-tools text-center">  
+                                <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Editar
+                                </a>
+                                
+                                <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    Remover
+                                </a>
+                              </div>
+                          
                           @endif
                         @endif
-                    </td>
-                    <td>{{ strtoupper($c->telefono) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
-                    <td>{{ strtoupper($c->getZona->nombre_zona) }} </td>
-                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
-                    
-                    <td><div class="card-tools text-center">  
-                      @if( Session::get('rol') == '1')
-                          <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
-                              <i class="fas fa-pencil-alt">
-                              </i>
-                              Editar
-                          </a>
-                          
-                          <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
-                              <i class="fas fa-trash">
-                              </i>
-                              Remover
-                          </a>
-                          @endif
-                          </div>
                       </td>
-                  @endforeach
+                    </tr>
+                    @endforeach
+
+
                   </tbody>
                   
                 </table>

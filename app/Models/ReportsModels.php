@@ -19,28 +19,32 @@ class ReportsModels extends Model {
 
         $Obj =  Credito::where('activo', 1);
 
-        // $Obj->orWhere(function($query) use ($Date) {
+        // $Obj->Where(function($query) use ($Date) {
         //     $query->whereHas('RefAbonos', function ($query) use ($Date) {
         //         $query->where('FechaPago', $Date);
         //     });
         // });
 
-        // if ($DiaW_ > 0) {
-        //     $Obj->orWhere('id_diassemana',$DiaW_);
-        // }
+        if ($DiaW_ > 0) {
+            $Obj->Where('id_diassemana',$DiaW_);
+        }
 
-        // if ($Zona_ > 0) {
-        //     $Obj->orWhere(function($query) use ($Zona_) {
-        //         $query->whereHas('Clientes', function ($query) use ($Zona_) {
-        //             $query->where('id_zona', $Zona_);
-        //         });
-        //     });
-        // }
+        if ($Zona_ > 0) {
+            $Obj->Where(function($query) use ($Zona_) {
+                $query->whereHas('Clientes', function ($query) use ($Zona_) {
+                    $query->where('id_zona', $Zona_);
+                });
+            });
+        }
 
         $Creditos = $Obj->get();
 
+        
+
         $array_vista = array();
         foreach ($Creditos as $key => $v) {
+
+
             $array_vista[$key] = [
                 "id_pagoabono"           => $v->id_creditos,
                 "Nombre"                 => $v->Clientes->nombre,
@@ -50,7 +54,8 @@ class ReportsModels extends Model {
                 "telefono"               => $v->Clientes->telefono,
                 "cuota"                  => $v->cuota,
                 "saldo"                  => $v->saldo,
-                "pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 ,
+                //"pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 ,
+                "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
                 "Estado"                 => strtoupper($v->Estado->nombre_estado)
             ];
         }

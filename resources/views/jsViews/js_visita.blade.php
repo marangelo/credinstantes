@@ -36,6 +36,7 @@
             "lengthChange": false, 
             "destroy": true,
             "autoWidth": false,
+            "order": [[ 9, 'asc' ]],
             "language": {
             "zeroRecords": "NO HAY COINCIDENCIAS",
             "paginate": {
@@ -60,6 +61,7 @@
                 }
             },
             'columns': [
+                { "title": "#",            "data": "id_pagoabono" },
                 { "title": "NOMBRE",            "data": "Nombre" },
                 { "title": "APELLIDO",          "data": "apellido" },
                 { "title": "DIRECCION",         "data": "direccion_domicilio" },

@@ -70,6 +70,7 @@
                 </li>
               </ul>
           </li>
+          @if( Session::get('rol') == '1')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
@@ -82,7 +83,7 @@
             <ul class="nav nav-treeview">
               
              
-              @if( Session::get('rol') == '1')
+              
               <li class="nav-item">
                 <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
                   <i class="far fa-map nav-icon"></i>
@@ -109,6 +110,9 @@
               </li>
             </ul>
           </li>
+
+          @endif
+          @if( Session::get('rol') == '1')
           <li class="nav-item ">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -141,7 +145,9 @@
                 </li>
               </ul>
           </li>
-
+          @endif
+          
+          @if( Session::get('rol') == '1')
           <li class="nav-item">
               <a href="{{ route('Usuarios')}}" class="nav-link {{ (request()->is('Usuarios')) ? 'active' : '' }}">
                   <i class="fas fa-users nav-icon"></i>
@@ -149,6 +155,8 @@
               </a>
           </li>
           @endif
+
+         
 
           <li class="nav-item">
             <a href="{{route('logout')}}" class="nav-link">

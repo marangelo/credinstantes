@@ -24,10 +24,22 @@ class Clientes extends Model
 
     public static function getClientes()
     {
-        $e = 1;
-        return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
+        $Zona = Auth::User()->id_zona;
+        $Role = Auth::User()->id_rol;
+
+        $e=0;
+
+        
+        $obj = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
             $query->whereIn('estado_credito', [1,2]);
-        })->get();
+        });
+
+        if ($Role==2) {
+            $obj->where('id_zona',$Zona);
+        }
+
+        $Clientes = $obj->get();
+        return $Clientes;
     }
     public static function getInactivos()
     {
