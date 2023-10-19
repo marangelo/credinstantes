@@ -12,21 +12,16 @@ class ReportsModels extends Model {
     {
         $Date   = $request->input('Fecha_').' 00:00:00';
 
-        $DiaW_   = $request->input('DiaW_');
+        //$DiaW_   = $request->input('DiaW_');
         $Zona_   = $request->input('Zona_');
 
-        //$Day    = date('N', strtotime($Date));
+        $Day    = date('N', strtotime($Date));
 
         $Obj =  Credito::where('activo', 1);
 
-        // $Obj->Where(function($query) use ($Date) {
-        //     $query->whereHas('RefAbonos', function ($query) use ($Date) {
-        //         $query->where('FechaPago', $Date);
-        //     });
-        // });
-
-        if ($DiaW_ > 0) {
-            $Obj->Where('id_diassemana',$DiaW_);
+    
+        if ($Day > 0) {
+            $Obj->Where('id_diassemana',$Day);
         }
 
         if ($Zona_ > 0) {
@@ -47,14 +42,14 @@ class ReportsModels extends Model {
 
             $array_vista[$key] = [
                 "id_pagoabono"           => $v->id_creditos,
-                "Nombre"                 => $v->Clientes->nombre,
-                "apellido"               => $v->Clientes->apellidos,
+                "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
                 "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
                 "zona"                   => $v->Clientes->getZona->nombre_zona,
                 "telefono"               => $v->Clientes->telefono,
                 "cuota"                  => $v->cuota,
                 "saldo"                  => $v->saldo,
                 //"pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 ,
+                "today"                  => $v->AbonoToday->isNotEmpty() ? $v->AbonoToday->first()->tDay : 0,
                 "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
                 "Estado"                 => strtoupper($v->Estado->nombre_estado)
             ];

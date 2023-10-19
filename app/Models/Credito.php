@@ -29,6 +29,7 @@ class Credito extends Model
     {
         return $this->hasMany(RefAbonos::class, 'id_creditos', 'id_creditos')->orderBy('numero_pago', 'desc')->limit(1);
     }
+    
     public function AbonoLogs()
     {
         return $this->hasMany(PagosFechas::class, 'ID_CREDITO', 'id_creditos')
@@ -37,6 +38,16 @@ class Credito extends Model
         ->groupBy('ID_CREDITO') 
         ->limit(1);
     }
+    public function AbonoToday()
+    {
+        return $this->hasMany(PagosFechas::class, 'ID_CREDITO', 'id_creditos')
+        ->whereDate('FECHA_PAGO', '=', now()) 
+        ->selectRaw('COUNT(ID_CREDITO) as tDay') 
+        ->groupBy('ID_CREDITO') 
+        ->limit(1);
+    }
+
+
     
     public function abonosCount()
     {

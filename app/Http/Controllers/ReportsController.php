@@ -25,7 +25,7 @@ class ReportsController extends Controller {
     {           
         $DiasW       = DiasSemana::getDiasSemana();
         $Zonas       = Zonas::getZonas();  
-        $Titulo      = "Visitar";
+        $Titulo      = "CLIENTES A VISITAR";
         return view('Reports.Visitar', compact('DiasW','Zonas','Titulo'));
         
     }
