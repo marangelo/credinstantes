@@ -34,12 +34,12 @@
       <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box ">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-wallet"></i></span>
+          <div class="col-12 col-sm-6 col-md-2">
+            <div class="info-box bg-success">
+              
               <div class="info-box-content">
                 <span class="info-box-text">INGRESO NETO</span>
-                <span class="info-box-number"><span id="lblIngreso" ></span><small>NIO</small>
+                <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -47,13 +47,12 @@
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-cash-register"></i></i></span>
+          <div class="col-12 col-sm-6 col-md-2">
+            <div class="info-box mb-3 bg-success">
 
               <div class="info-box-content">
                 <span class="info-box-text">CAPITAL</span>
-                <span class="info-box-number"><span id="lblCapital"></span><small>NIO</small>
+                <span class="info-box-number"><small>C$ </small><span id="lblCapital"></span>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -66,25 +65,35 @@
           <div class="clearfix hidden-md-up"></div>
 
           <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-search-dollar"></i></span>
+            <div class="info-box mb-3 bg-warning">
 
               <div class="info-box-content">
                 <span class="info-box-text">RECUPERACION DEL MES</span>
-                <span class="info-box-number"><span id="lblInteres"></span><small>NIO</small></span>
+                <span class="info-box-number"><small>C$ </small><span id="lblInteres"></span></span>
               </div>
               <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+          <div class="col-12 col-sm-6 col-md-2">
+            <div class="info-box mb-3 bg-info">
 
               <div class="info-box-content">
                 <span class="info-box-text">CREDITOS ACTIVOS</span>
                 <span class="info-box-number"><span id="lblClientes"></span></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-3">
+            <div class="info-box mb-3 bg-success">
+
+              <div class="info-box-content">
+                <span class="info-box-text">SALDO DE CARTERA</span>
+                <span class="info-box-number"><small>C$ </small><span id="lblSaldosCartera"></span></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -104,22 +113,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div class="d-flex">
-                  <p class="d-flex flex-column">
-                    <span class="text-bold text-success text-lg">C$ <span id="lblSaldosCartera">0.00</span></span>
-                    <span>Saldo de Cartera</span>
-                  </p>
-                  <p class="ml-auto d-flex flex-column text-right" style="display:none">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 33.1%
-                    </span>
-                    <span class="text-muted">Desde el mes pasado</span>
-                  </p>
-                </div>
-                <!-- /.d-flex -->
-                
-                <!-- /.d-flex -->
-
+              
                 <div class="position-relative mb-4">
                   <canvas id="sales-chart" height="200"></canvas>
                 </div>
