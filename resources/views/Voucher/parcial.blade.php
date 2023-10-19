@@ -70,7 +70,7 @@
 
                         <tr>
                             <td class="col-md-9"><em>SALDO ANTERIOR:</em></h4></td>
-                            <td class="col-md-1 text-right">C$ {{ number_format($Abono->saldo_anterior,2)}}</td>
+                            <td class="col-md-1 text-right">C$ {{ number_format($Abono->saldo_anterior - $Abono->abono_dia1 ,2)}}</td>
                         </tr>
                         
                         <tr>
