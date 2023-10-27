@@ -22,7 +22,7 @@ class Clientes extends Model
     {
         $e = 1;
         return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
-            $query->whereIn('estado_credito', [1,2]);
+            $query->whereIn('estado_credito', [1,2,3]);
         })->get();
     }
     public static function getInactivos()

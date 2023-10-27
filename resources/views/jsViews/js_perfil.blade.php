@@ -297,8 +297,6 @@
 
                 {"title": "--------------","data": "cuota_cobrada", "render": function(data, type, row, meta) {
 
-                   
-
                     var isPagoParcial   = numeral(isValue(row.abono_dia2,0,true)).format('000.00')
 
                     var id_voucher      = numeral(isValue(row.id_abonoscreditos,0,true)).format('0')
