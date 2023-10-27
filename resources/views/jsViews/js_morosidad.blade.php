@@ -35,6 +35,23 @@
                     "previous": "Anterior"
                 },    
             },
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'excelHtml5', footer: true, customize: function(xlsx) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                     // Loop over the cells in column `C`
+                    // $('row c[r^="I"]', sheet).each( function () {
+                    //     // Get the value
+                    //     if ( $('is t', this).text() == 'AL DIA' ) {
+                    //         $(this).attr( 's', '20' );
+                    //     }
+                    // });
+                } },
+            ],
+            footer: true,
+            initComplete: function() {
+                $('.buttons-excel').html('Exportar  <i class="fa fa-file-excel" />')
+            },
             "ajax":{
                 "url": "getMorosidad",
                 "type": 'POST',
