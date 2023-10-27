@@ -16,7 +16,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0">INDICADORES</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -70,7 +70,7 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-search-dollar"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">RECUPERACION DEL MES</span>
+                <span class="info-box-text">UTILIDAD BRUTA</span>
                 <span class="info-box-number"><span id="lblInteres"></span><small>NIO</small></span>
               </div>
               <!-- /.info-box-content -->
