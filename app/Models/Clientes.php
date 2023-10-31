@@ -31,7 +31,7 @@ class Clientes extends Model
 
         
         $obj = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
-            $query->whereIn('estado_credito', [1,2]);
+            $query->whereIn('estado_credito', [1,2,3]);
         });
 
         if ($Role==2) {
