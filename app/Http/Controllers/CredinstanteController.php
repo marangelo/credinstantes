@@ -81,7 +81,7 @@ class CredinstanteController extends Controller {
     {   
         $Municipios = Municipios::getMunicipios(); 
         $Departamentos = Departamentos::getDepartamentos();  
-        $Titulo         = "Municipio";
+        $Titulo         = "DEPARTAMENTOS";
         
         
         return view('Clientes.ls_Municipios', compact('Municipios','Departamentos','Titulo'));

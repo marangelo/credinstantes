@@ -87,10 +87,10 @@
               <li class="nav-item">
                 <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
                   <i class="far fa-map nav-icon"></i>
-                  <p>Municipios</p>
+                  <p>Departamento</p>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" style="display:none">
                 <a href="{{ route('Departamento')}}" class="nav-link {{ (request()->is('Departamento')) ? 'active' : '' }} ">
                   <i class="far fa-map nav-icon"></i>
                   <p>Departamentos</p>
@@ -143,6 +143,31 @@
                     <p>Morosidad</p>
                   </a>
                 </li>
+              </ul>
+          </li>
+          @endif
+
+          @if( Session::get('rol') == '3')
+          <li class="nav-item ">
+              <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
+                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+            
+                <p>
+                  Reportes
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+            
+              <ul class="nav nav-treeview">
+             
+
+                <li class="nav-item">
+                  <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Ingresos</p>
+                  </a>
+                </li>
+                
               </ul>
           </li>
           @endif
