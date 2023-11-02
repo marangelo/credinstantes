@@ -163,7 +163,7 @@ class ReportsModels extends Model {
         $vData           = [];
 
         $dtNow  = date('Y-m-d');
-        $D1     = date('Y-m-01', strtotime($dtNow)). ' 01:00:00';
+        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';        
 
         $Abonos     = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])
