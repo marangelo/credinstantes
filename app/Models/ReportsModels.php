@@ -188,6 +188,7 @@ class ReportsModels extends Model {
                     "apellidos"     => $c->apellidos,
                     "Estado"        => $span,
                     "IdCredito"     => $IdCreditoVencido,
+                    "Zona"          => (isset($c->getZona->nombre_zona) && $c->getZona->nombre_zona) ? $c->getZona->nombre_zona : 'N/D'  ,
 
                 ];
             }

@@ -72,6 +72,7 @@
                     return `<a href="Perfil/`+ row.IdCliente +`" ><strong># `+ row.IdCliente +` </strong> : `+ row.nombre +`  : `+ row.apellidos +` </a> `
                     
                 }},
+                { "title": "ZONA",            "data": "Zona" },
                 { "title": "ESTADO",            "data": "Estado" },
             ],
         })
