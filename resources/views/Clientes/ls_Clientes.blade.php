@@ -53,7 +53,11 @@
                     <th>Departamento</th>
                     <th>Zona</th>
                     <th>Direccion</th>                    
-                    <th></th>
+                    @if (request()->is('Activos'))
+                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                        <th></th>
+                      @endif
+                    @endif
                   </tr>
                   </thead>
                   <tbody>
@@ -109,10 +113,10 @@
                         
                       </td>
                       <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
-                      <td>
+                      
                         @if (request()->is('Activos'))
                           @if (Session::get('rol') == '1' || Session::get('rol') == '3')
-                          
+                          <td>
                             <div class="card-tools text-center">  
                                 <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                                     <i class="fas fa-pencil-alt">
@@ -126,10 +130,10 @@
                                     Remover
                                 </a>
                               </div>
-                          
+                              </td>
                           @endif
                         @endif
-                      </td>
+                      
                     </tr>
                     @endforeach
 
