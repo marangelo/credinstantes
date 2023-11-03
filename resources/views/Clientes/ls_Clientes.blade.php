@@ -53,11 +53,7 @@
                     <th>Departamento</th>
                     <th>Zona</th>
                     <th>Direccion</th>                    
-                    @if (request()->is('Activos'))
-                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
-                        <th></th>
-                      @endif
-                    @endif
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
