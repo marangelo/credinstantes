@@ -32,7 +32,16 @@
               <div class="card-header">
                 <div class="user-block">
                   <img class="img-circle" src="{{asset('img/user.png')}}" alt="User Image">
-                  <span class="username"><a href="#">{{ strtoupper($perfil_cliente->getMunicipio->nombre_municipio) }} / {{ strtoupper($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) }}</a></span>
+                  <span class="username"><a href="#">
+                  @if(isset($perfil_cliente->getMunicipio->nombre_municipio) && $perfil_cliente->getMunicipio->nombre_municipio)
+                    {{ strtoupper($perfil_cliente->getMunicipio->nombre_municipio) }} 
+                  @endif 
+                  / 
+
+                  @if(isset($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) && $perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento)
+                    {{ strtoupper($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) }} 
+                  @endif 
+                </a></span>
                   <span class="description text-white"> {{ strtoupper($perfil_cliente->direccion_domicilio) }}</span>
                   <span class="description text-white ">Tel. {{ strtoupper($perfil_cliente->telefono) }} - Cedula. {{ strtoupper($perfil_cliente->cedula) }} </span>
                 </div>
