@@ -32,15 +32,17 @@ class ReportsController extends Controller {
     public function Abonos()
     {           
         $Clientes    = Clientes::getClientes();  
-        $Titulo         = "Ingresos Diarios";
-        return view('Reports.Abonos', compact('Clientes','Titulo'));
+        $Zonas       = Zonas::getZonas(); 
+        $Titulo      = "Ingresos Diarios";
+        return view('Reports.Abonos', compact('Clientes','Titulo','Zonas'));
         
     }
     public function Morosidad()
     {           
         $Clientes    = Clientes::getMorosos();
-        $Titulo         = "Morosidad";
-        return view('Reports.Morosidad',compact('Clientes','Titulo'));
+        $Zonas       = Zonas::getZonas(); 
+        $Titulo      = "Morosidad";
+        return view('Reports.Morosidad',compact('Clientes','Titulo','Zonas'));
         
     }
 

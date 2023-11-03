@@ -11,6 +11,11 @@
             format: 'DD/MM/YYYY'
         });
 
+        $('#id_txt_buscar').on('keyup', function() {   
+            var vTable = $('#tbl_clientes_morosos').DataTable();     
+            vTable.search(this.value).draw();
+        });
+
         
 
 
@@ -19,7 +24,8 @@
     })
 
     function InitTable() {
-
+        var slZna   = $("#id_select_zona option:selected").val();  
+        slZna       = isValue(slZna,-1,true) 
         $("#tbl_clientes_morosos").DataTable({
             "responsive": true, 
             "lengthChange": false, 
@@ -56,7 +62,8 @@
                 "url": "getMorosidad",
                 "type": 'POST',
                 'dataSrc': '',
-                "data": {               
+                "data": {        
+                    IdZna   : slZna,       
                     _token  : "{{ csrf_token() }}" 
                 }
             },
@@ -68,8 +75,8 @@
                 { "title": "ESTADO",            "data": "Estado" },
             ],
         })
-        $("#tbl_clientes_length").hide();
-        $("#tbl_clientes_filter").hide();
+        $("#tbl_clientes_morosos_length").hide();
+        $("#tbl_clientes_morosos_filter").hide();
     }
 
 

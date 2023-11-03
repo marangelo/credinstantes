@@ -59,19 +59,28 @@ class ReportsModels extends Model {
     public static function getAbonos(Request $request)
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
-        $dtEnd    = $request->input('dtEnd').' 23:59:59';
+        $dtEnd    = $request->input('dtEnd').' 00:00:00';
         $IdCln    = $request->input('IdCln');
+        $IdZna    = $request->input('IdZna');
 
-        
-        if ($IdCln < 0) {
-            $Abonos = Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd]);
-        } else {
-            $Abonos = Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('id_clientes',$IdCln);
+
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1);
+       
+
+    
+        if ($IdCln > 0) {
+            $Obj->Where('id_clientes',$IdCln);
+        }
+       
+        if ($IdZna > 0) {
+            $Obj->Where('id_zona',$IdZna);
         }
 
-        $Abonos = $Abonos->Where('activo',1)->get();
-        
+        $Abonos = $Obj->get();
+
+ 
         $array_abonos = array();
+        
         foreach ($Abonos as $key => $a) {
 
             $Ingreso_neto = $a->CAPITAL + $a->INTERES ;
@@ -94,9 +103,16 @@ class ReportsModels extends Model {
     }
     public static function getMorosidad(Request $request)
     {
-        
+        $IdZna    = $request->input('IdZna');
         
         $Clientes = Clientes::getClientes();
+
+        if ($IdZna > 0) {
+            $Clientes = Clientes::getClientes()->Where('id_zona',$IdZna);
+        }else{
+            $Clientes = Clientes::getClientes();
+        }
+
 
         $span = '';
         $Color = '';

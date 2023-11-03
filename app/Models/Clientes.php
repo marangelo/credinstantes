@@ -24,7 +24,7 @@ class Clientes extends Model
 
     public static function getClientes()
     {
-        $Zona = Auth::User()->id_zona;
+        // $Zona = Auth::User()->id_zona;
         $Role = Auth::User()->id_rol;
 
         $e=0;
@@ -34,9 +34,9 @@ class Clientes extends Model
             $query->whereIn('estado_credito', [1,2,3]);
         });
 
-        if ($Role==2) {
-            $obj->where('id_zona',$Zona);
-        }
+        // if ($Role==2) {
+        //     $obj->where('id_zona',$Zona);
+        // }
 
         $Clientes = $obj->get();
         return $Clientes;
