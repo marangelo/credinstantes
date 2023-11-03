@@ -101,8 +101,17 @@
                           @endif
                       </td>
                       <td>{{ strtoupper($c->telefono) }} </td>
-                      <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
-                      <td>{{ strtoupper($c->getZona->nombre_zona) }} </td>
+                      <td>
+                        @if(isset($c->getMunicipio->nombre_municipio) && $c->getMunicipio->nombre_municipio)
+                          {{ strtoupper($c->getMunicipio->nombre_municipio) }} 
+                        @endif 
+                      </td>
+                      <td>
+                        @if(isset($c->getZona->nombre_zona) && $c->getZona->nombre_zona)
+                          {{ strtoupper($c->getZona->nombre_zona) }} 
+                        @endif 
+                        
+                      </td>
                       <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
                       <td>
                         @if (request()->is('Activos'))
