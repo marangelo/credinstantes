@@ -14,6 +14,7 @@
           <div class="col-sm-6">
             <h1>Clientes</h1>
           </div>
+       
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
@@ -23,7 +24,7 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
+    <span id="id_rol_user"> {{Session::get('rol')}}</span>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">

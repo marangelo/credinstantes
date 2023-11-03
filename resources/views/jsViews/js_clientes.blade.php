@@ -7,6 +7,9 @@
             format: 'DD/MM/YYYY'
         });
 
+        var userRole = $("#id_rol_user").text();
+        
+
         $("#tbl_clientes").DataTable({
             "responsive": true, 
             "lengthChange": false, 
@@ -24,7 +27,8 @@
                 "emptyTable": "-",
                 "search": "BUSCAR"
             },
-            "buttons": ["copy", "excel", "print"]
+            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ]
+            
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
         $("#btn_edit_credito").click(function(){
