@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 
 class Usuario extends Model {
     protected $table = "users";
-
     
     public function RolName(){
         return $this->hasOne(Roles::class,'id','id_rol');

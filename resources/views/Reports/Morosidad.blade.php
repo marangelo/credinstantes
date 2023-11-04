@@ -17,7 +17,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">Abonos</li>
+              <li class="breadcrumb-item active">Morosidad</li>
             </ol>
           </div>
         </div>
@@ -46,7 +46,7 @@
                   </div>
                 
                   <div class="col-md-6">
-                    <label>CULMINA</label>
+                    <label>BUSCAR</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>

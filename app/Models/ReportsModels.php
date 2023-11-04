@@ -182,10 +182,21 @@ class ReportsModels extends Model {
             }
 
             if ($isAdded) {
+
+                $cuota = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->cuota : 0;
+                $saldo = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->saldo : 0;
+                $pendi = 0 ;
+
+
                 $array_clientes[] = [
                     "IdCliente"     => $c->id_clientes,
                     "nombre"        => $c->nombre,
                     "apellidos"     => $c->apellidos,
+                    "Direccion"     => $c->direccion_domicilio,
+                    "telefono"      => $c->telefono,
+                    "cuota"         => number_format($cuota,2),
+                    "saldo"         => number_format($saldo,2),
+                    "pendiente"     => number_format($pendi,2),
                     "Estado"        => $span,
                     "IdCredito"     => $IdCreditoVencido,
                     "Zona"          => (isset($c->getZona->nombre_zona) && $c->getZona->nombre_zona) ? $c->getZona->nombre_zona : 'N/D'  ,

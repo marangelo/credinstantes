@@ -67,12 +67,24 @@
                     _token  : "{{ csrf_token() }}" 
                 }
             },
+            "columnDefs": [
+                {"className": "dt-left", "targets": [0,1,2,3 ]},
+                {"className": "dt-center", "targets": [7 ]},
+                {"className": "dt-right", "targets": [4,5,6]},
+                {"width":"20%","targets":[1]},
+                {"width":"5%","targets":[]}
+            ],
             'columns': [
                 {"title": "NOMBRE","data": "nombre", "render": function(data, type, row, meta) {
                     return `<a href="Perfil/`+ row.IdCliente +`" ><strong># `+ row.IdCliente +` </strong> : `+ row.nombre +`  : `+ row.apellidos +` </a> `
                     
                 }},
+                { "title": "DIRECCION",            "data": "Direccion" },
                 { "title": "ZONA",            "data": "Zona" },
+                { "title": "TELEFONO",            "data": "telefono" },
+                { "title": "CUOTA",            "data": "cuota" },
+                { "title": "PENDIENTE",            "data": "pendiente" },
+                { "title": "SALDO",            "data": "saldo" },
                 { "title": "ESTADO",            "data": "Estado" },
             ],
         })
