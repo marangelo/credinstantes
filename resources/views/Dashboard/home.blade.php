@@ -93,7 +93,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">SALDO DE CARTERA</span>
-                <span class="info-box-number"><small>C$ </small><span id="lblSaldosCartera"></span></span>
+                <span class="info-box-number"><small>C$ </small><span id="lblSaldosCartera"> 0.00 </span></span>
               </div>
               <!-- /.info-box-content -->
             </div>
