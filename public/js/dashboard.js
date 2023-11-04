@@ -57,7 +57,7 @@ $.getJSON("getDashboard", function(dataset) {
     
     Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
     
-    $("#lblSaldosCartera").text(Cartera)
+    $("#id_saldos_cartera").text(Cartera)
 
     $.each(dataset.Data, function(i, item) {
         vData.push(item);
