@@ -20,49 +20,54 @@ $(function () {
     }
 }
 
-  var mode = 'index'
-  var intersect = true
+var mode = 'index'
+var intersect = true
 
-  var $salesChart = $('#sales-chart')
-  
+var $salesChart = $('#sales-chart')
 
-  var vLabel = []
-  var vData = []
 
-  $.getJSON("getDashboard", function(dataset) {
+var vLabel = []
+var vData = []
 
-      var Ingreso = dataset['INGRESO'];
-      Ingreso     = numeral(isValue(Ingreso,0,true)).format('0,00.00');
-      $("#lblIngreso").text(Ingreso)
+$.getJSON("getDashboard", function(dataset) {
 
-      
+    var Ingreso = dataset['INGRESO'];
 
-      var CAPITAL = dataset['CAPITAL'];
-      CAPITAL     = numeral(isValue(CAPITAL,0,true)).format('0,00.00');
-      $("#lblCapital").text(CAPITAL)
+    Ingreso     = numeral(isValue(Ingreso,0,true)).format('0,00.00');
 
-      var INTERESES = dataset['INTERESES'];
-      INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');
-      $("#lblInteres").text(INTERESES)
+    $("#lblIngreso").text(Ingreso)    
 
-      var Clientes = dataset['clientes_activos'];
-      Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
-      $("#lblClientes").text(Clientes)
+    var CAPITAL = dataset['CAPITAL'];
 
-      var Cartera = dataset['SALDOS_CARTERA'];
-      Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
-      
-      $("#lblSaldosCartera").text(Cartera)
+    CAPITAL     = numeral(isValue(CAPITAL,0,true)).format('0,00.00');
 
-      $.each(dataset.Data, function(i, item) {
+    $("#lblCapital").text(CAPITAL)
+
+    var INTERESES = dataset['INTERESES'];
+
+    INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');
+
+    $("#lblInteres").text(INTERESES)
+
+    var Clientes = dataset['clientes_activos'];
+    Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
+    $("#lblClientes").text(Clientes)
+
+    var Cartera = dataset['SALDOS_CARTERA'];
+    
+    Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
+    
+    $("#lblSaldosCartera").text(Cartera)
+
+    $.each(dataset.Data, function(i, item) {
         vData.push(item);
-      })
+    })
 
-      $.each(dataset.label, function(i, item) {
+    $.each(dataset.label, function(i, item) {
         vLabel.push(item);
-      })
+    })
 
-      var salesChart = new Chart($salesChart, {
+    var salesChart = new Chart($salesChart, {
         type: 'bar',
         data: {
         labels: vLabel,
