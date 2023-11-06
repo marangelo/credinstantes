@@ -39,12 +39,11 @@ class ReportsModels extends Model {
         $array_vista = array();
         foreach ($Creditos as $key => $v) {
 
-
             $array_vista[$key] = [
                 "id_pagoabono"           => $v->id_creditos,
                 "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
                 "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
-                "zona"                   => $v->Clientes->getZona->nombre_zona,
+                "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
                 "telefono"               => $v->Clientes->telefono,
                 "cuota"                  => $v->cuota,
                 "saldo"                  => $v->saldo,
@@ -185,9 +184,8 @@ class ReportsModels extends Model {
 
                 $cuota = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->cuota : 0;
                 $saldo = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->saldo : 0;
-                $pendi = 0 ;
-
-
+                $pendi = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->AbonoLogs->first()->SALDO_PENDIENTE : 0;
+                
                 $array_clientes[] = [
                     "IdCliente"     => $c->id_clientes,
                     "nombre"        => $c->nombre,
