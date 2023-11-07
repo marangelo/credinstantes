@@ -112,5 +112,27 @@ WHERE
     t0.abono_dia2 IS NOT NULL AND t0.activo = 1;
 
 
+--  reporte de visitas
+
+SELECT
+	t0.id_clientes as Nu,
+	t0.nombre AS NOMBRE,
+	t0.apellidos as APELLIDOS,
+	CASE
+		WHEN DAYNAME(t1.fecha_apertura) = 'Monday' THEN 'LUNES'
+		WHEN DAYNAME(t1.fecha_apertura) = 'Tuesday' THEN 'MARTES'
+		WHEN DAYNAME(t1.fecha_apertura) = 'Wednesday' THEN 'MIERCOLES'
+		WHEN DAYNAME(t1.fecha_apertura) = 'Thursday' THEN 'JUEVES'
+		WHEN DAYNAME(t1.fecha_apertura) = 'Friday' THEN 'VIERNES'
+		ELSE DAYNAME(t1.fecha_apertura)
+	END as DIA_APERTURA,
+	t2.dia_semana as DIA_VISITA
+FROM
+	tbl_clientes t0
+	INNER JOIN tbl_creditos t1 ON t0.id_clientes = t1.id_clientes
+	INNER JOIN cat_diassemana t2 on t2.id_diassemana = t1.id_diassemana
+WHERE t0.id_clientes in (39, 54, 55, 64);
+
+
 
 

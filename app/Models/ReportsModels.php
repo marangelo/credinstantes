@@ -12,34 +12,29 @@ class ReportsModels extends Model {
     {
         $Date   = $request->input('Fecha_').' 00:00:00';
 
+        $array_merge = [];
+
         //$DiaW_   = $request->input('DiaW_');
         $Zona_   = $request->input('Zona_');
 
         $Day    = date('N', strtotime($Date));
 
-        $Obj =  Credito::where('activo', 1);
-
-    
+        $Creditos_Activos =  Credito::where('activo', 1)->where('estado_credito', 1);
         if ($Day > 0) {
-            $Obj->Where('id_diassemana',$Day);
+            $Creditos_Activos->Where('id_diassemana',$Day);
         }
-
         if ($Zona_ > 0) {
-            $Obj->Where(function($query) use ($Zona_) {
+            $Creditos_Activos->Where(function($query) use ($Zona_) {
                 $query->whereHas('Clientes', function ($query) use ($Zona_) {
                     $query->where('id_zona', $Zona_);
                 });
             });
         }
+        $Creditos_ALDIA = $Creditos_Activos->get();
+        $array_creditos_aldia = array();
+        foreach ($Creditos_ALDIA as $key => $v) {
 
-        $Creditos = $Obj->get();
-
-        
-
-        $array_vista = array();
-        foreach ($Creditos as $key => $v) {
-
-            $array_vista[$key] = [
+            $array_creditos_aldia[$key] = [
                 "id_pagoabono"           => $v->id_creditos,
                 "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
                 "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
@@ -47,13 +42,38 @@ class ReportsModels extends Model {
                 "telefono"               => $v->Clientes->telefono,
                 "cuota"                  => $v->cuota,
                 "saldo"                  => $v->saldo,
-                //"pendiente"              => ($v->abonos->isNotEmpty()) ? $v->abonos->first()->saldo_cuota : 0 ,
-                "today"                  => $v->AbonoToday->isNotEmpty() ? $v->AbonoToday->first()->tDay : 0,
                 "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
                 "Estado"                 => strtoupper($v->Estado->nombre_estado)
             ];
         }
-        return $array_vista;
+
+        $Creditos_mora_vencidos =  Credito::where('activo', 1)->whereIn('estado_credito', [2,3]);
+        if ($Zona_ > 0) {
+            $Creditos_mora_vencidos->Where(function($query) use ($Zona_) {
+                $query->whereHas('Clientes', function ($query) use ($Zona_) {
+                    $query->where('id_zona', $Zona_);
+                });
+            });
+        }
+        $Creditos_Anexados = $Creditos_mora_vencidos->get();
+        $array_anexados = array();
+        foreach ($Creditos_Anexados as $key => $v) {
+
+            $array_anexados[$key] = [
+                "id_pagoabono"           => $v->id_creditos,
+                "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
+                "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
+                "telefono"               => $v->Clientes->telefono,
+                "cuota"                  => $v->cuota,
+                "saldo"                  => $v->saldo,
+                "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
+                "Estado"                 => strtoupper($v->Estado->nombre_estado)
+            ];
+        }
+
+        $array_merge = array_merge($array_creditos_aldia,$array_anexados);
+        return $array_merge;
     }
     public static function getAbonos(Request $request)
     {
