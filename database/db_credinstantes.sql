@@ -134,5 +134,26 @@ FROM
 WHERE t0.id_clientes in (39, 54, 55, 64);
 
 
+--CREDITOS_INACTIVOS
+SELECT
+    t0.id_clientes,
+    GROUP_CONCAT(t1.estado_credito) AS GROUP_CONCAT_CREDITOS,
+		GROUP_CONCAT(t1.id_creditos) AS GROUP_CONCAT_IDS
+FROM
+    tbl_clientes t0
+INNER JOIN tbl_creditos t1 ON t0.id_clientes = t1.id_clientes
+WHERE
+    t0.activo = 1 AND t1.activo = 1
+GROUP BY
+    t0.id_clientes,
+    t0.nombre,
+    t0.apellidos,
+    t0.activo
+HAVING
+    GROUP_CONCAT(t1.estado_credito) NOT LIKE '%1%'
+    AND GROUP_CONCAT(t1.estado_credito) NOT LIKE '%2%'
+    AND GROUP_CONCAT(t1.estado_credito) NOT LIKE '%3%';
+
+
 
 

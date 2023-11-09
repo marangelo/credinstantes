@@ -67,6 +67,7 @@
                     _token  : "{{ csrf_token() }}" 
                 }
             },
+            "order": [[7, "asc"]],
             "columnDefs": [
                 {"className": "dt-left", "targets": [0,1,2,3 ]},
                 {"className": "dt-center", "targets": [7 ]},

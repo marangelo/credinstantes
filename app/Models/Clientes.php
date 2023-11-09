@@ -44,10 +44,27 @@ class Clientes extends Model
     public static function getInactivos()
     {
         $e = 1;
+
+        //BUSCA LOS CREDITOS QUE TENGA SOLAMENTE CREDITOS INACTIVOS & NO TENGA ACTIVOS O VENCIDOS Y EN MORA
+        $Clientes_Inactivos = Clientes::select('tbl_clientes.id_clientes')
+        ->selectRaw('GROUP_CONCAT(tbl_creditos.estado_credito) as GROUP_CONCAT_CREDITOS')
+        ->join('tbl_creditos', 'tbl_clientes.id_clientes', '=', 'tbl_creditos.id_clientes')
+        ->where('tbl_clientes.activo', 1)
+        ->where('tbl_creditos.activo', 1)
+        ->groupBy('tbl_clientes.id_clientes', 'tbl_clientes.nombre', 'tbl_clientes.apellidos', 'tbl_clientes.activo')
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'")
+        ->get();
+
+        $clientesIds = $Clientes_Inactivos->pluck('id_clientes')->toArray();
+
+        $Clientes = Clientes::whereIn('id_clientes', $clientesIds)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
+            $query->whereIn('estado_credito', [4]);
+        })->get(); 
+
         
-        return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
-            $query->whereIn('estado_credito', [3,4]);
-        })->get();
+        return $Clientes;
     }
     public static function getMorosos()
     {
