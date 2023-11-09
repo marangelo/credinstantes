@@ -46,16 +46,17 @@ class Clientes extends Model
         $e = 1;
 
         //BUSCA LOS CREDITOS QUE TENGA SOLAMENTE CREDITOS INACTIVOS & NO TENGA ACTIVOS O VENCIDOS Y EN MORA
-        $Clientes_Inactivos = Clientes::select('tbl_clientes.id_clientes')
-        ->selectRaw('GROUP_CONCAT(tbl_creditos.estado_credito) as GROUP_CONCAT_CREDITOS')
-        ->join('tbl_creditos', 'tbl_clientes.id_clientes', '=', 'tbl_creditos.id_clientes')
-        ->where('tbl_clientes.activo', 1)
-        ->where('tbl_creditos.activo', 1)
-        ->groupBy('tbl_clientes.id_clientes', 'tbl_clientes.nombre', 'tbl_clientes.apellidos', 'tbl_clientes.activo')
-        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
-        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
-        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'")
+        $Clientes_Inactivos = Clientes::select('Tbl_Clientes.id_clientes')
+        ->selectRaw('GROUP_CONCAT(Tbl_Creditos.estado_credito) as GROUP_CONCAT_CREDITOS')
+        ->join('Tbl_Creditos', 'Tbl_Clientes.id_clientes', '=', 'Tbl_Creditos.id_clientes')
+        ->where('Tbl_Clientes.activo', 1)
+        ->where('Tbl_Creditos.activo', 1)
+        ->groupBy('Tbl_Clientes.id_clientes', 'Tbl_Clientes.nombre', 'Tbl_Clientes.apellidos', 'Tbl_Clientes.activo')
+        ->havingRaw("GROUP_CONCAT(Tbl_Creditos.estado_credito) NOT LIKE '%1%'")
+        ->havingRaw("GROUP_CONCAT(Tbl_Creditos.estado_credito) NOT LIKE '%2%'")
+        ->havingRaw("GROUP_CONCAT(Tbl_Creditos.estado_credito) NOT LIKE '%3%'")
         ->get();
+
 
         $clientesIds = $Clientes_Inactivos->pluck('id_clientes')->toArray();
 
