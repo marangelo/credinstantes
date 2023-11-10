@@ -238,6 +238,51 @@
 
     })
 
+    function initTable_historico(id,datos){
+        var tabla = $(id).DataTable({
+            "data": datos,
+            "destroy": true,
+            "info": false,
+            responsive: true,
+            "bPaginate": true,
+            "searching": false,
+            "order": [
+                [0, "asc"]
+            ],
+            "lengthMenu": [
+                [5, -1],
+                [5, "Todo"]
+            ],
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            },
+            'columns':  [ 
+                {"title": "#","data": "NUM_PAGO"},        
+                {"title": "FECHA PAGO","data": "FECHA_PAGO", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">`+ row.FECHA_PAGO  +`</span> `
+                }},
+                {"title": "FECHA ABONO","data": "FECHA_ABONO", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">`+ row.FECHA_ABONO  +`</span> `                    
+                }},
+                {"title": "SALDO PENDIENTE","data": "SALDO_PENDIENTE", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info text-success">C$  `+ numeral(row.SALDO_PENDIENTE).format('0,00.00')  +`</span> `
+                }},
+
+            ],
+        });
+        $("#tbl_pagos_realizados_length").hide();
+        
+    }
+
     function initTable_modal(id,datos){
         var tabla = $(id).DataTable({
             "data": datos,
@@ -572,7 +617,13 @@
         var IdCredito = $("#lbl_mdl_id_credito").text();
 
         $.get( "../getHistoricoAbono/" + IdCredito, function( data ) {
-            initTable_modal('#tbl_lista_abonos',data);
+
+
+     
+
+            initTable_modal('#tbl_lista_abonos',data[0].Abonos);
+            initTable_historico('#tbl_pagos_realizados',data[0].Pagos);
+            
 
         });
     }

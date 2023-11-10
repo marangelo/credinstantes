@@ -49,6 +49,25 @@ WHERE
     t1.activo = 1;
 
 
+    SELECT
+    t0.id_creditos AS ID_CREDITO,
+    t1.id_clientes AS ID_CLIENTE,
+		t2.id_zona as ID_ZONA,
+    t0.numero_pago AS NUM_PAGO,
+    t0.FechaPago AS FECHA_PAGO,   
+    ObtenerValorDinamico(t0.id_creditos, t0.FechaPago, 'FechaPago') AS FECHA_ABONO,
+    CASE
+    WHEN t1.saldo > 0 THEN ObtenerValorDinamico(t0.id_creditos, t0.FechaPago, 'SaldoCuota') 
+    ELSE t1.saldo
+    END AS SALDO_PENDIENTE
+FROM
+    Tbl_PagosAbonos t0
+    INNER JOIN Tbl_Creditos t1 ON t0.id_creditos = t1.id_creditos 
+		INNER JOIN tbl_clientes T2 ON t2.id_clientes = t1.id_clientes
+WHERE
+    t1.activo = 1;
+
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `ObtenerValorDinamico`(idCredito INT, fechaPago DATE, campo VARCHAR(255)) RETURNS varchar(255) CHARSET latin1
 BEGIN
     DECLARE valor VARCHAR(255);

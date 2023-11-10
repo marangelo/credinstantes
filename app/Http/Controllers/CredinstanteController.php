@@ -11,6 +11,7 @@ use App\Models\Abono;
 use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\Usuario;
+use App\Models\PagosFechas;
 use App\Models\Roles;
 use App\Models\DateRecord;
 use CodersFree\Date\Date;
@@ -209,9 +210,14 @@ class CredinstanteController extends Controller {
 
     public function getHistoricoAbono($IdCredito)
     {
-        $Abonos =  Abono::getHistorico($IdCredito);
+        //$Abonos =  
 
-        return response()->json($Abonos);
+        $dta[] = array(
+            'Abonos' => Abono::getHistorico($IdCredito),
+            'Pagos' => PagosFechas::getFechasPagos($IdCredito)
+        );
+
+        return response()->json($dta);
     }
 
     public function Remover(Request $request)

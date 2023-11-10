@@ -396,12 +396,22 @@
           </button>
         </div>
         <div class="modal-body">
-            <div class="row">
-                  <div class="col-12 table-responsive">   
-          <table id="tbl_lista_abonos"  class="table table-striped " style="width:100%"></table>
-         
+          <div class="row">
+              <h5 class="card-title mb-3">Pago Realizados</h5>
+              <div class="col-12 table-responsive">   
+                <table id="tbl_lista_abonos"  class="table table-striped " style="width:100%"></table>
+              </div>  
+             <div style="display:none">
+              <h5 class="card-title mb-3 mt-3">Fechas de pagos</h5>
+                <div class="col-12 table-responsive">   
+                  <table id="tbl_pagos_realizados"  class="table table-striped " style="width:100%"></table>
+                </div>
+             </div>   
+            </div>    
+          </div>
           
-          </div>    </div>    </div>
+        </div>
+          
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           <button type="button" class="btn btn-success" >Aplicar</button>
