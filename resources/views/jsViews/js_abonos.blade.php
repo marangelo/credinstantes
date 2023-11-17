@@ -127,12 +127,15 @@
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
+                
                 INTERES = api
                 .column( 3 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
+
+               
 
                 INGRESO         = numeral(isValue(INGRESO,0,true)).format('0,00.00')
                 CAPITAL         = numeral(isValue(CAPITAL,0,true)).format('0,00.00')

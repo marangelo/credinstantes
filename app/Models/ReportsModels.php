@@ -78,7 +78,7 @@ class ReportsModels extends Model {
     public static function getAbonos(Request $request)
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
-        $dtEnd    = $request->input('dtEnd').' 00:00:00';
+        $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $IdCln    = $request->input('IdCln');
         $IdZna    = $request->input('IdZna');
 
@@ -126,11 +126,7 @@ class ReportsModels extends Model {
         
         $Clientes = Clientes::getClientes();
 
-        if ($IdZna > 0) {
-            $Clientes = Clientes::getClientes()->Where('id_zona',$IdZna);
-        }else{
-            $Clientes = Clientes::getClientes();
-        }
+        $Clientes = ($IdZna > 0) ? $Clientes->Where('id_zona',$IdZna) : $Clientes ;
 
 
         $span = '';
@@ -142,9 +138,9 @@ class ReportsModels extends Model {
         foreach ($Clientes as $key => $c) {
 
 
-            if ($c->tieneCreditoVencido->isNotEmpty()) {
-                $IdCreditoVencido = $c->tieneCreditoVencido->first()->id_creditos;
-                switch ($c->tieneCreditoVencido->first()->estado_credito) {
+            if ($c->getCreditos->isNotEmpty()) {
+
+                switch ($c->getCreditos->first()->estado_credito) {
                     case 1:
                         $Color = 'bg-success';
                         $isAdded =  false;
@@ -166,38 +162,10 @@ class ReportsModels extends Model {
                         $Color = '';
                         break;
                 }
-                $span = '<span class="badge '.$Color.' "> '.$c->tieneCreditoVencido->first()->Estado->nombre_estado.'</span>';
-            } else {
-                if ($c->getCreditos->isNotEmpty()) {
-
-                    switch ($c->getCreditos->first()->estado_credito) {
-                        case 1:
-                            $Color = 'bg-success';
-                            $isAdded =  false;
-                            break;
-                        case 2:
-                            $Color = 'bg-danger';
-                            $isAdded =  true;
-                            break;
-                        case 3:
-                            $Color = 'bg-warning';
-                            $isAdded =  true;
-                            break;
-                        case 4:
-                            $Color = '';
-                            $isAdded =  false;
-                            break;
-                        
-                        default:
-                            $Color = '';
-                            break;
-                    }
-                    
-                    $span = '<span class="badge '.$Color.'"> '.$c->getCreditos->first()->Estado->nombre_estado.'</span>';
-                } else {
-                    $span = '-';
-                }
                 
+                $span = '<span class="badge '.$Color.'"> '.$c->getCreditos->first()->Estado->nombre_estado.'</span>';
+            } else {
+                $span = '-';
             }
 
             if ($isAdded) {
@@ -248,10 +216,12 @@ class ReportsModels extends Model {
 
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
-        $D2     = date('Y-m-t', strtotime($dtNow)). ' 00:00:00';        
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';        
+
+
 
         //$Abonos     = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])->where('activo', 1)->get();
-        $Abonos    =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
+        $Abonos =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
        
         $Clientes   = Clientes::getClientes();
 
@@ -262,10 +232,9 @@ class ReportsModels extends Model {
                         ->groupByRaw('DAY(fecha_cuota)')
                         ->get();
         
-        
         $ttPagoCapital      = $Abonos->sum('CAPITAL');
         $ttPagoIntereses    = $Abonos->sum('INTERES');
-        $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses ;
+        $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
 
         foreach ($Dias as $dia) {
             $vLabel[]   = 'D' . $dia->dy; 

@@ -41,10 +41,12 @@ class Clientes extends Model
         $e=0;
 
 
-        $clMora = Clientes::getClientesMora();
+        // $clMora = Clientes::getClientesMora();        
+        // $Clientes = Clientes::whereIn('id_clientes',$clMora)->get();
 
-        
-        $Clientes = Clientes::whereIn('id_clientes',$clMora)->get();
+        $Clientes = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
+            $query->whereIn('estado_credito', [1,2,3]);
+        })->get();
 
         // if ($Role==2) {
         //     $obj->where('id_zona',$Zona);
