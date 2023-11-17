@@ -24,6 +24,7 @@ class CredinstanteController extends Controller {
     public function getDashboard()
     {         
         $IsCalc = DateRecord::Check();
+   
 
         $View = ($IsCalc) ? 'Dashboard.update' : 'Dashboard.home' ;
 
@@ -47,13 +48,15 @@ class CredinstanteController extends Controller {
     
     public function getClientes()
     {   
+        $IsCalc      = DateRecord::Check();
         $Clientes    = Clientes::getClientes();  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Zonas       = Zonas::getZonas();  
         $Titulo      = "Clientes Activos";
+        $View        = ($IsCalc) ? 'Dashboard.update' : 'Clientes.ls_Clientes' ;    
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
         
     }
     public function getInactivos()

@@ -204,7 +204,19 @@ class ReportsModels extends Model {
 
                 $cuota = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->cuota : 0;
                 $saldo = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->saldo : 0;
-                $pendi = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->AbonoLogs->first()->SALDO_PENDIENTE : 0;
+                //$pendi = $c->getCreditos->isNotEmpty() ? $c->getCreditos->first()->AbonoLogs->first()->SALDO_PENDIENTE : 0;
+
+                if ($c->getCreditos->isNotEmpty()) {
+                    $pendi =  $saldo;
+                    if(isset($c->getCreditos->first()->AbonoLogs->first()->SALDO_PENDIENTE)) {
+                        $pendi =$c->getCreditos->first()->AbonoLogs->first()->SALDO_PENDIENTE;
+                   }
+                } else {
+                    $pendi = 0;
+                }
+                
+
+           
                 
                 $array_clientes[] = [
                     "IdCliente"     => $c->id_clientes,
