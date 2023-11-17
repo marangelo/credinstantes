@@ -250,10 +250,9 @@ class ReportsModels extends Model {
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 00:00:00';        
 
-        $Abonos     = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])
-                            ->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])
-                            ->where('activo', 1)->get();
-        
+        //$Abonos     = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])->where('activo', 1)->get();
+        $Abonos    =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
+       
         $Clientes   = Clientes::getClientes();
 
         $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')
@@ -263,9 +262,10 @@ class ReportsModels extends Model {
                         ->groupByRaw('DAY(fecha_cuota)')
                         ->get();
         
-        $ttPagoCapital      = $Abonos->sum('pago_capital');
-        $ttPagoIntereses    = $Abonos->sum('pago_intereses');
-        $ttCuotaCobrada     = $Abonos->sum('cuota_cobrada');
+        
+        $ttPagoCapital      = $Abonos->sum('CAPITAL');
+        $ttPagoIntereses    = $Abonos->sum('INTERES');
+        $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses ;
 
         foreach ($Dias as $dia) {
             $vLabel[]   = 'D' . $dia->dy; 

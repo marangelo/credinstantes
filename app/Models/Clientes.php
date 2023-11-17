@@ -21,6 +21,17 @@ class Clientes extends Model
     {
         return $this->hasOne(Zonas::class, 'id_zona','id_zona')->where('activo',1);
     }
+    public static function getClientesMora()
+    {
+        $resultados = Credito::select('id_clientes', DB::raw('GROUP_CONCAT(estado_credito) as estados'))
+            ->where('activo', 1)
+            ->whereNotIn('estado_credito', [1])
+            ->groupBy('id_clientes')
+            ->get()
+            ->toArray();
+
+        return $resultados;
+    }
 
     public static function getClientes()
     {
@@ -29,16 +40,17 @@ class Clientes extends Model
 
         $e=0;
 
+
+        $clMora = Clientes::getClientesMora();
+
         
-        $obj = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
-            $query->whereIn('estado_credito', [1,2,3]);
-        });
+        $Clientes = Clientes::whereIn('id_clientes',$clMora)->get();
 
         // if ($Role==2) {
         //     $obj->where('id_zona',$Zona);
         // }
 
-        $Clientes = $obj->get();
+    
         return $Clientes;
     }
     public static function getInactivos()

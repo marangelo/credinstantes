@@ -67,22 +67,7 @@
                     <tr>
                       <td>
                         <a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
-                          @if ($c->tieneCreditoVencido->isNotEmpty())
-                              <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
-                                              @case(1)
-                                                  bg-success
-                                                  @break
-                                              @case(2)
-                                                  bg-danger
-                                                  @break
-                                              @case(3)
-                                                  bg-warning
-                                                  @break
-                                              @default
-                                                  ''
-                                          @endswitch">{{ $c->tieneCreditoVencido->first()->Estado->nombre_estado }}</span>
-                          @else
-                            @if ($c->getCreditos->isNotEmpty())
+                        @if ($c->getCreditos->isNotEmpty())
                                 <span class="badge @switch($c->getCreditos->first()->estado_credito)
                                               @case(1)
                                                   bg-success
@@ -97,9 +82,8 @@
                                                   ''
                                           @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
                             @else 
-                                <p>- </p>
+                                <p> - </p>
                             @endif
-                          @endif
                       </td>
                       <td>{{ strtoupper($c->telefono) }} </td>
                       <td>
