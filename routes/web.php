@@ -82,6 +82,8 @@ Route::post('exportVisita', 'ReportsController@exportVisita')->name('exportVisit
 Route::post('getAllCredit', 'CredinstanteController@getAllCredit')->name('getAllCredit');
 Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('ChanceStatus');
 
+Route::get('MultiAbono', 'CredinstanteController@MultiAbonos')->name('MultiAbono');
+
 
 Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

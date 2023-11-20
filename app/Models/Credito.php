@@ -178,6 +178,9 @@ class Credito extends Model
 
                 $response = RefAbonos::insert($Fecha_abonos); 
 
+                //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
+                Clientes::CheckStatus($IdCredito);
+
 
                 return $response;
                 
@@ -248,6 +251,9 @@ class Credito extends Model
                 Credito::where('id_creditos',  $IdCredito)->update([
                     "fecha_ultimo_abono"    => $Fecha_abonos[$Cuotas_-1]['FechaPago']
                 ]);
+
+                 //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
+                Clientes::CheckStatus($IdCredito);
 
                 $response = RefAbonos::insert($Fecha_abonos); 
                 

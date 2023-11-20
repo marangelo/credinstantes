@@ -29,4 +29,28 @@ class PagosFechas extends Model {
         return $Array;
     }
 
+    public static function getSaldoPendiente($IdCredito)
+    {
+        $fechaActual = now(); // Obtener la fecha y hora actual
+
+        $sumaSaldoPendiente = PagosFechas::where('ID_CREDITO', $IdCredito)
+            ->whereDate('FECHA_PAGO', '<=', $fechaActual)
+            ->sum('SALDO_PENDIENTE');
+
+
+        return $sumaSaldoPendiente;
+    }
+
+    public static function getAbonosPendientes($IdCredito)
+    {
+        $fechaActual = now(); // Obtener la fecha y hora actual
+
+        $AbonosPendientes = PagosFechas::where('ID_CREDITO', $IdCredito)
+            ->where('SALDO_PENDIENTE', '>', 0)->get();
+
+
+        return $AbonosPendientes;
+    }
+
+
 }

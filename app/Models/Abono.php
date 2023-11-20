@@ -58,12 +58,80 @@ class Abono extends Model
 
         return $abonosArray;
     }
+    public static  function MultiAbonos(Request $request){
+        // if ($request->ajax()) {
+            try {
+
+                $Abono_a_capital = 0;
+                $intereses_total = 0;
+
+                //$IdCred          = $request->input('IdCred');
+                //$FechaAbono      = $request->input('FechaAbono');
+                //$Total_          = $request->input('Total_');
+                $IdCred          = 2;
+                $Total_          = 1000;
+                $Credito         = Credito::find($IdCred);
+
+                $Abonos          = PagosFechas::getAbonosPendientes($IdCred);
+
+                foreach ($Abonos as $key => $a) {
+
+                    if ($Total_ > 0) {
+                        
+                        $INTERES = $Credito->intereses_por_cuota;  
+                        $CAPITAL = $Credito->cuota - $INTERES; 
+
+                        $intereses_total = ($Total_ >= $INTERES) ? $INTERES :  $Total_ ;   
+
+                        $Abono_a_capital = ($Total_ >= $CAPITAL) ? $CAPITAL : $Total_ - $INTERES ;
+
+                        $Abono_a_capital = ( $Abono_a_capital > 0) ?  $Abono_a_capital : 0 ;
+                        $Total_ = ($Total_ > 0) ? $Total_ : 0;
+
+                        if ($Total_ <= $Credito->cuota) {
+                            
+                            $intereses_total = ($Total_ < $INTERES) ? $Total_ : $INTERES;
+                            $Abono_a_capital =  $Total_ - $intereses_total;
+                        }
+
+                        
+                        $pagos[] = [      
+                            'NUM_PAGO'      => $a->NUM_PAGO,
+                            'ID_CREDITO'    => $a->ID_CREDITO,   
+                            'Total_'        => $Total_,
+                            'cuota'         => $Credito->cuota ,
+                            'CAPITAL'       => $Abono_a_capital,
+                            'INTERES'       => $intereses_total,
+                            'PENDIENTE'     => $Credito->cuota - ($Abono_a_capital + $intereses_total)
+                        ];
+
+                        $Total_ = $Total_ - $INTERES ; 
+                        $Total_ = $Total_ - $CAPITAL ; 
+                    }
+                }
+    
+
+                return $pagos;
+                
+            
+                
+
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        // }
+
+        
+
+    }
     public static function getSaldoAbono($IdCredito,$Opt)
     {  
         $Abono = 0;
         
         $Credito = Credito::where('id_creditos',$IdCredito)->where('activo',1)->first();
 
+        
         $datos_credito = [];
 
 
@@ -212,10 +280,6 @@ class Abono extends Model
                     "estado_credito"=>$Estado,
                     "fecha_culmina"=>$LastDate
                 ]);
-
-                
-                
-
 
                 return $response;
                 
