@@ -21,7 +21,7 @@ class ApiController extends Controller{
         $batch_Credito    = new Credito;
         $batch_index      = 'id_creditos';
 
-        $Creditos_Estados = EstadosMonitor::all();           
+        $Creditos_Estados = EstadosMonitor::Where('SALDO_CREDITO', '>', 0)->Where('CLIENTE_ACTIVO', $idEstado)->get();            
 
         foreach ($Creditos_Estados as $key => $c) {
             if ($c->VENCIDO === 'S' ) {

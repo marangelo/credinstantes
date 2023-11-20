@@ -238,7 +238,7 @@ class Credito extends Model
                 
                 $IdCredito = Credito::insertGetId($datos_credito);
 
-                for ($i = 1; $i <= 10; $i++) {
+                for ($i = 1; $i <= $Cuotas_; $i++) {
                     $fecha->add(new DateInterval('P1W')); 
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
