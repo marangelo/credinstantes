@@ -341,7 +341,7 @@
             </div>
 
             <div class="form-group">
-              <label>Tipo de Abono</label>
+              <label>Tipo de Abono: <span id="id_mdl_saldo_pendiente">0.00</span></label>
               <div class="input-group date">
                 <div class="input-group-append" >
                     <div class="input-group-text"><i class="fa fa-dollar-sign"></i></div>
@@ -349,11 +349,27 @@
                 <select class="form-control" id="slTipoAbono">
                   <option value="0">ABONO</option>
                   <option value="1">CANCELACION</option>
+                  <option value="2">MULTIPLES</option>
                 </select>   
               </div>
             </div>
+            <div id="lbl_cancelacion">
 
-            <div class="row" id="lbl_cancelacion">
+            
+            @if (Session::get('rol') == '1')
+              <div class="form-group">
+                <label id="id_lbl_cuota">Descuento C$.:</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    </div>
+                    <input type="text" id="txt_descuento" class="form-control" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)'>
+                </div>
+              </div>
+            @endif
+
+            <div class="row" >
+              
               <div class="col-sm-6 col-6">
                 <div class="description-block border-right">
                   <h5 class="description-header text-success" id="lbl_cancel_capital">C$ 0.00</h5>
@@ -367,7 +383,10 @@
                   <span class="description-text">INTERESES</span>
                 </div>
               </div>
+              
             </div>
+            </div>
+           
 
           
           

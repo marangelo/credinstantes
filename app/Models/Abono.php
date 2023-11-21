@@ -59,20 +59,27 @@ class Abono extends Model
         return $abonosArray;
     }
     public static  function MultiAbonos(Request $request){
-        // if ($request->ajax()) {
+        if ($request->ajax()) {
             try {
 
                 $Abono_a_capital = 0;
                 $intereses_total = 0;
 
-                //$IdCred          = $request->input('IdCred');
+                $IdCred          = $request->input('IdCred');
                 //$FechaAbono      = $request->input('FechaAbono');
-                //$Total_          = $request->input('Total_');
-                $IdCred          = 2;
-                $Total_          = 1000;
+                $Total_          = $request->input('Total_');
+                
+                //$IdCred          = 1;
+                //$Total_          = 2000;
+                //$FechaAbono      = '2023-11-21 00:00:00';
+
                 $Credito         = Credito::find($IdCred);
+                $cuota_cobrada   = $Total_;
+                
 
                 $Abonos          = PagosFechas::getAbonosPendientes($IdCred);
+                
+                $Saldo_Credito   = $Credito->saldo;
 
                 foreach ($Abonos as $key => $a) {
 
@@ -80,7 +87,8 @@ class Abono extends Model
                         
                         $INTERES = $Credito->intereses_por_cuota;  
                         $CAPITAL = $Credito->cuota - $INTERES; 
-
+                        $FechaAbono      = $a->FECHA_PAGO;
+                        
                         $intereses_total = ($Total_ >= $INTERES) ? $INTERES :  $Total_ ;   
 
                         $Abono_a_capital = ($Total_ >= $CAPITAL) ? $CAPITAL : $Total_ - $INTERES ;
@@ -93,22 +101,44 @@ class Abono extends Model
                             $intereses_total = ($Total_ < $INTERES) ? $Total_ : $INTERES;
                             $Abono_a_capital =  $Total_ - $intereses_total;
                         }
+                        $Saldo_actual_credito = $Saldo_Credito - ( $Abono_a_capital + $intereses_total );
 
+                        $PENDIENTE = $Credito->cuota - ($Abono_a_capital + $intereses_total);
+                        $LastDate = ($Saldo_actual_credito <= 0) ? $FechaAbono: null ;
                         
-                        $pagos[] = [      
-                            'NUM_PAGO'      => $a->NUM_PAGO,
-                            'ID_CREDITO'    => $a->ID_CREDITO,   
-                            'Total_'        => $Total_,
-                            'cuota'         => $Credito->cuota ,
-                            'CAPITAL'       => $Abono_a_capital,
-                            'INTERES'       => $intereses_total,
-                            'PENDIENTE'     => $Credito->cuota - ($Abono_a_capital + $intereses_total)
+                        $pagos[] = [
+                            'id_creditos'           => $IdCred,
+                            'registrado_por'        => Auth::id(),
+                            'fecha_cuota'           => $FechaAbono,
+                            'pago_capital'          => $Abono_a_capital,
+                            'pago_intereses'        => $intereses_total,
+                            'cuota_credito'         => $Credito->cuota,
+                            'cuota_cobrada'         => $Total_,
+                            'intereses_por_cuota'   => $INTERES,
+                            'abono_dia1'            => $Total_,
+                            'fecha_cuota_secc1'     => $FechaAbono,
+                            'completado'            => (($PENDIENTE <= 0) ? 1 : 0),
+                            'saldo_cuota'           => (($PENDIENTE <= 0) ? 0 : $PENDIENTE)  ,
+                            'saldo_actual'          => $Saldo_actual_credito,
+                            'saldo_anterior'        => $Saldo_Credito,
+                            'activo'                => 1,
+                            
                         ];
 
+                        $Saldo_Credito = $Saldo_actual_credito;
+                    
                         $Total_ = $Total_ - $INTERES ; 
                         $Total_ = $Total_ - $CAPITAL ; 
                     }
                 }
+                Abono::insert($pagos);
+
+                Credito::where('id_creditos',  $IdCred)->update([
+                    //"fecha_ultimo_abono"    => date('Y-m-d H:i:s'),
+                    "saldo" => (($Saldo_actual_credito <= 0) ? 0 : $Saldo_actual_credito),
+                    "estado_credito"=>1,
+                    "fecha_culmina"=>$LastDate
+                ]);
     
 
                 return $pagos;
@@ -120,7 +150,7 @@ class Abono extends Model
                 $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
                 return response()->json($mensaje);
             }
-        // }
+        }
 
         
 
@@ -131,50 +161,69 @@ class Abono extends Model
         
         $Credito = Credito::where('id_creditos',$IdCredito)->where('activo',1)->first();
 
+        $SaldoPendiente = ($Credito->abonos->isNotEmpty()) ? number_format($Credito->abonos->first()->saldo_cuota,2) : 0 ;
+
         
         $datos_credito = [];
 
+        switch ($Opt) {
+            case 0:
+                
+                $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
 
-        if ($Opt==0) {
+                $datos_credito = [                    
+                    'Cuotas_pend'          => 0,
+                    'Interes_'             => 0,
+                    'Capital_'             => 0,
+                    'Saldo_to_cancelar'    => $Abono,
+                    'Saldo_Pendiente'      => $SaldoPendiente
+                ];
+                break;
+            case 1:
+                //$Cuotas_pendientes = $Credito->numero_cuotas - $Credito->abonosCount();
 
-            $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
+                // AQUI SE CALCULA SUMANDO EL SALDO PENDIENTE + (INTERES POR CUOTA + CUOTAS PENDIENTES)
+                //$Saldo_to_cancelar = $Credito->saldo + ($Cuotas_pendientes * $Credito->intereses_por_cuota );
 
-            $datos_credito = [                    
-                'Cuotas_pend'          => 0,
-                'Interes_'             => 0,
-                'Capital_'             => 0,
-                'Saldo_to_cancelar'    => $Abono,
-            ];
+                // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO
+                $Saldo_to_cancelar = $Credito->saldo;
 
-        } else {
-            //$Cuotas_pendientes = $Credito->numero_cuotas - $Credito->abonosCount();
+                $Cuotas_pend    =  $Saldo_to_cancelar / $Credito->cuota;
+                $Taza_          =  $Credito->taza_interes / 100;
+                $Abono_         =  $Credito->cuota;
+                
+                //$Interes_Abono  =  $Abono_ * $Taza_;
+                //$Interes_Abono  = $Credito->intereses_por_cuota * $Cuotas_pend;
 
-            // AQUI SE CALCULA SUMANDO EL SALDO PENDIENTE + (INTERES POR CUOTA + CUOTAS PENDIENTES)
-            //$Saldo_to_cancelar = $Credito->saldo + ($Cuotas_pendientes * $Credito->intereses_por_cuota );
+                $Interes_       = $Credito->intereses_por_cuota * $Cuotas_pend ;
+                $Capital_       = $Saldo_to_cancelar  -  $Interes_;
 
-            // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO
-            $Saldo_to_cancelar = $Credito->saldo;
+                $datos_credito = [                    
+                    'Cuotas_pend'          => $Cuotas_pend,
+                    'Interes_'             => $Interes_,
+                    'Capital_'             => $Capital_,
+                    'Saldo_to_cancelar'    => $Saldo_to_cancelar,
+                    'Saldo_Pendiente'      => $SaldoPendiente
+                ];
+                
+                $Abono = $Saldo_to_cancelar;
+                break;
+            case 2;
+                $Abono = ($Credito->saldo > $Credito->cuota) ? $Credito->cuota :$Credito->saldo;
 
-            $Cuotas_pend    =  $Saldo_to_cancelar / $Credito->cuota;
-            $Taza_          =  $Credito->taza_interes / 100;
-            $Abono_         =  $Credito->cuota;
+                $datos_credito = [                    
+                    'Cuotas_pend'          => 0,
+                    'Interes_'             => 0,
+                    'Capital_'             => 0,
+                    'Saldo_to_cancelar'    => $Abono,
+                    'Saldo_Pendiente'      => $SaldoPendiente
+                ];
+                break;
             
-            //$Interes_Abono  =  $Abono_ * $Taza_;
-            //$Interes_Abono  = $Credito->intereses_por_cuota * $Cuotas_pend;
-
-            $Interes_       = $Credito->intereses_por_cuota * $Cuotas_pend ;
-            $Capital_       = $Saldo_to_cancelar  -  $Interes_;
-
-            $datos_credito = [                    
-                'Cuotas_pend'          => $Cuotas_pend,
-                'Interes_'             => $Interes_,
-                'Capital_'             => $Capital_,
-                'Saldo_to_cancelar'    => $Saldo_to_cancelar,
-            ];
-            
-            $Abono = $Saldo_to_cancelar;
+            default:
+                # code...
+                break;
         }
-
         return $datos_credito ;
     }
     
@@ -299,6 +348,7 @@ class Abono extends Model
 
                 $IdCred         = $request->input('IdCred');
                 $FechaAbono     = $request->input('FechaAbono');
+                $Descuentos     = $request->input('FechaAbono');
                 $CompletarPago  = false;
 
                 //OBTENEMOS LA INFORMACION DEL CREDITO
@@ -315,7 +365,7 @@ class Abono extends Model
                 // $Interes_       = $Interes_Abono * $Cuotas_pend ;
                 
                 $Interes_       = $Info_Credito->intereses_por_cuota * $Cuotas_pend ;
-                $Capital_       = $Total_  -  $Interes_;
+                $Capital_       = $Total_  -  ( $Interes_ - Descuentos);
 
 
                 $datos_credito = [                    

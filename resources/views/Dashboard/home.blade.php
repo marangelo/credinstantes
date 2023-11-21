@@ -103,6 +103,33 @@
         </div>
         <!-- /.row -->
 
+        <div class="row">
+          <div class="col-6 col-sm-6 col-md-6">
+            <div class="info-box bg-warning " >              
+              <div class="info-box-content ">
+                <span class="info-box-text"> MORA ATRASADA </span>
+                <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasda" > 0.00</span>
+                </span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-6 col-sm-6 col-md-6">
+            <div class="info-box mb-3 bg-danger">
+
+              <div class="info-box-content">
+                <span class="info-box-text"> MORA VENCIDAD </span>
+                <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
+                </span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+        </div>
+
         
 
         <div class="row">
@@ -121,27 +148,25 @@
                 
               </div>
               <!-- ./card-body -->
-              <div class="card-footer" style = "display:none">
-                <div class="row">
-                  <div class="col-sm-3 col-6">
+              <div class="card-footer">
+                <div class="row" style="display:none">
+                  <div class="col-sm-6 col-6">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
-                      <h5 class="description-header">C$35,210.43</h5>
-                      <span class="description-text">TOTAL REVENUE</span>
+                      <h5 class="description-header text-warning">C$ 35,210.43</h5>
+                      <span class="description-text">MORA ATRASADA</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
-                  <div class="col-sm-3 col-6">
+                  <div class="col-sm-6 col-6">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>
-                      <h5 class="description-header">C$10,390.90</h5>
-                      <span class="description-text">TOTAL COST</span>
+                      <h5 class="description-header text-danger">C$10,390.90</h5>
+                      <span class="description-text">MORA VENCIDAD</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
-                  <div class="col-sm-3 col-6">
+                  <div class="col-sm-3 col-6" style="display:none">
                     <div class="description-block border-right">
                       <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
                       <h5 class="description-header">C$24,813.53</h5>
@@ -150,7 +175,7 @@
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
-                  <div class="col-sm-3 col-6">
+                  <div class="col-sm-3 col-6" style="display:none">
                     <div class="description-block">
                       <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>
                       <h5 class="description-header">1200</h5>

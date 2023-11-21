@@ -210,11 +210,25 @@ class CredinstanteController extends Controller {
     public function SaveNewAbono(Request $request)
     {
 
-        $Tipo         = $request->input('Tipo');
-        $response = ($Tipo === "0") ? Abono::SaveNewAbono($request) : Abono::Cancelacion($request) ;
+        $Tipo   = $request->input('Tipo');
+
+        switch ($Tipo) {
+            case '0':
+                $response = Abono::SaveNewAbono($request);
+                break;
+            case '1':
+                $response = Abono::Cancelacion($request);
+                break;
+            case '2':
+                $response = Abono::MultiAbonos($request);
+                break;
+            
+            default:
+                # code...
+                break;
+        }
         
-        //Clientes::CheckStatus($request->input('IdCred'));
-        //Abono::MultiAbonos($request) ;
+        Clientes::CheckStatus($request->input('IdCred'));
 
         return response()->json($response);
     }
