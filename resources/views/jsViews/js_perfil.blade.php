@@ -14,6 +14,8 @@
         $('#dtAbono').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+
+      
         
 
         $("#slTipoAbono").change(function() {
@@ -249,9 +251,6 @@
                 } else {
                     Swal.fire("Saldo pendiente en abono", "", "error"); 
                 }
-
-               
-
             }
 
         })
@@ -259,6 +258,7 @@
     
 
     })
+
 
     function initTable_historico(id,datos){
         var tabla = $(id).DataTable({

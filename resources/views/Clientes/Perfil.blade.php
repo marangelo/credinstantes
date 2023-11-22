@@ -341,7 +341,7 @@
             </div>
 
             <div class="form-group">
-              <label>Tipo de Abono: <span id="id_mdl_saldo_pendiente">0.00</span></label>
+              <label>Tipo de Abono: <span id="id_mdl_saldo_pendiente" style="display:none">0.00</span></label>
               <div class="input-group date">
                 <div class="input-group-append" >
                     <div class="input-group-text"><i class="fa fa-dollar-sign"></i></div>
@@ -415,20 +415,30 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
-              <h5 class="card-title mb-3">Pago Realizados</h5>
-              <div class="col-12 table-responsive">   
-                <table id="tbl_lista_abonos"  class="table table-striped " style="width:100%"></table>
-              </div>  
-             <div style="display:none">
-              <h5 class="card-title mb-3 mt-3">Fechas de pagos</h5>
+          <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">PAGOS REALIZADOS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill" href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile" aria-selected="false">HISTORICOS</a>
+            </li>
+
+          </ul>
+            <div class="tab-content" id="custom-content-below-tabContent">
+              <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                <h5 class="card-title mb-3"></h5>
                 <div class="col-12 table-responsive">   
-                  <table id="tbl_pagos_realizados"  class="table table-striped " style="width:100%"></table>
-                </div>
-             </div>   
-            </div>    
-          </div>
-          
+                  <table id="tbl_lista_abonos"  class="table table-striped " style="width:100%"></table>
+                </div>  
+              </div>
+              <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
+                  <div class="col-12 table-responsive">   
+                    <table id="tbl_pagos_realizados"  class="table table-striped " style="width:100%"></table>
+                  </div>
+              </div>
+             
+            </div>
+        
         </div>
           
         <div class="modal-footer justify-content-between">

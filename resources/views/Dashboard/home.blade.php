@@ -105,10 +105,10 @@
 
         <div class="row">
           <div class="col-6 col-sm-6 col-md-6">
-            <div class="info-box bg-warning " >              
+            <div class="info-box " style="background-color: #FF8000;">              
               <div class="info-box-content ">
-                <span class="info-box-text"> MORA ATRASADA </span>
-                <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasda" > 0.00</span>
+                <span class=""> MORA ATRASADA </span>
+                <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
                 </span>
               </div>
               <!-- /.info-box-content -->

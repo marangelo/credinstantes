@@ -59,6 +59,16 @@ $.getJSON("getDashboard", function(dataset) {
     
     $("#id_saldos_cartera").text(Cartera)
 
+
+    var MoraAtrasada = dataset['MORA_ATRASADA'];    
+    
+    MoraAtrasada     = numeral(isValue(MoraAtrasada,0,true)).format('0,00.00');    
+    $("#lblMoraAtrasada").text(MoraAtrasada)
+
+    var MoraVencida = dataset['MORA_VENCIDA'];    
+    MoraVencida     = numeral(isValue(MoraVencida,0,true)).format('0,00.00');    
+    $("#lblMoraVencida").text(MoraVencida)
+
     $.each(dataset.Data, function(i, item) {
         vData.push(item);
     })

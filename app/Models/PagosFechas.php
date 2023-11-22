@@ -51,6 +51,41 @@ class PagosFechas extends Model {
 
         return $AbonosPendientes;
     }
+    public static function getMoraAtrasada()
+    {
+        $fechaActual = now(); // Obtener la fecha y hora actual
+
+        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+                    ->where('SALDO_CREDITO','>',0)
+                    ->get()
+                    ->pluck('ID_CREDITO');
+
+        $MoraPendiente = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual)
+            // ->get()
+            // ->toArray();
+            ->sum('SALDO_PENDIENTE');
+
+
+        return $MoraPendiente;
+    }
+    public static function getMoraVencida()
+    {
+        $fechaActual = now(); // Obtener la fecha y hora actual
+
+        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+                    ->where('SALDO_CREDITO','>',0)
+                    ->where('DIAS_PARA_VENCER','<',0)
+                    ->get()
+                    ->pluck('ID_CREDITO');
+
+        $MoraVencida = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual)
+            //->get()
+            //->toArray();
+            ->sum('SALDO_PENDIENTE');
+
+
+        return $MoraVencida;
+    }
 
 
 }

@@ -220,20 +220,20 @@ class ReportsModels extends Model {
 
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
-        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';        
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
 
-
-
-        //$Abonos     = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])->where('activo', 1)->get();
         $Abonos =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
-       
+    
         $Clientes   = Clientes::getClientes();
 
-        $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')
-                        ->whereBetween('fecha_cuota_secc1', [$D1, $D2])
-                        ->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])
+        $MoraAtrasada = PagosFechas::getMoraAtrasada();
+        $MoraVencida  = PagosFechas::getMoraVencida();
+        
+
+        $Dias       = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES ) as total')
+                        ->whereBetween('FECHA_ABONO', [$D1, $D2])
                         ->where('activo', 1)
-                        ->groupByRaw('DAY(fecha_cuota)')
+                        ->groupByRaw('DAY(FECHA_ABONO)')
                         ->get();
         
         $ttPagoCapital      = $Abonos->sum('CAPITAL');
@@ -253,6 +253,8 @@ class ReportsModels extends Model {
             "CAPITAL"           => $ttPagoCapital,
             "INTERESES"         => $ttPagoIntereses,
             "SALDOS_CARTERA"    => $Saldos_Cartera,
+            "MORA_ATRASADA"     => $MoraAtrasada,
+            "MORA_VENCIDA"      => $MoraVencida,
             "clientes_activos"  => $Clientes->count(),
             "label"             => $vLabel,
             "Data"              => $vData

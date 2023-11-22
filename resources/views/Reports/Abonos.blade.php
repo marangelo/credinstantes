@@ -31,10 +31,14 @@
           <div class="col-12">
             <!-- /.card -->
             <div class="card">
-              <div class="card-header">
+              <div class="card-header" style="display:none">
+              
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
               <form action="{{ route('exportAbonos') }}" method="POST">
               @csrf
-              <div class="row">
+                <div class="row">
                   <div class="col-md-2">
                     <label>Buscar</label>
                     <div class="input-group">
@@ -96,9 +100,6 @@
                 </div>
                 
                 </form>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
                 <table id="tbl_ingresos" class="table table-bordered table-striped">
                   <thead>
                   <tr>
