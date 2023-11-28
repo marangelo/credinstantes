@@ -27,7 +27,7 @@ class ExportAbonos implements FromCollection
         if ($IdCln > 0) {
             $Obj->Where('id_clientes',$IdCln);
         }
-
+        
         $Abonos = $Obj->get();
 
         $array_abonos = [];

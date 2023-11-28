@@ -68,6 +68,10 @@ class Credito extends Model
     {
         return Credito::where('activo',1)->get();
     }
+    public static function Creditos()
+    {
+        return Credito::where('activo',1)->whereIn('estado_credito',[1,2,3])->get();
+    }
     public static function getCreditosActivos()
     {
         return Credito::where('activo',1)->whereNotIn('estado_credito',[2,3,4])->get();

@@ -62,13 +62,22 @@
                   </tr>
                   </thead>
                   <tbody>
-
+                 
                   @foreach ($Clientes as $c)  
+                  @php
+                            $Estados = $c->getCreditos->first(); 
+                        @endphp
+                       
+                  @if ($Estados->estado_credito !=4)
                     <tr>
                       <td>
+                        
+                       
+                        
+                     
                         <a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
                         @if ($c->getCreditos->isNotEmpty())
-                                <span class="badge @switch($c->getCreditos->first()->estado_credito)
+                                <span class="badge @switch($Estados->estado_credito)
                                               @case(1)
                                                   bg-success
                                                   @break
@@ -80,7 +89,7 @@
                                                   @break
                                               @default
                                                   ''
-                                          @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
+                                          @endswitch">{{ $Estados->Estado->nombre_estado }}</span>
                             @else 
                                 <p> - </p>
                             @endif
@@ -120,6 +129,7 @@
                         @endif
                       
                     </tr>
+                    @endif 
                     @endforeach
 
 

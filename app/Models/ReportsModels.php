@@ -223,8 +223,8 @@ class ReportsModels extends Model {
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
 
         $Abonos =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
-    
-        $Clientes   = Clientes::getClientes();
+       
+        $Clientes   = Credito::Creditos();
 
         $MoraAtrasada = PagosFechas::getMoraAtrasada();
         $MoraVencida  = PagosFechas::getMoraVencida();
