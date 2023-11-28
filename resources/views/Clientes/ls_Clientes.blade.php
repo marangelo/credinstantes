@@ -64,11 +64,11 @@
                   <tbody>
                  
                   @foreach ($Clientes as $c)  
-                  @php
+                   @php
                             $Estados = $c->getCreditos->first(); 
-                        @endphp
+                      @endphp
                        
-                  @if ($Estados->estado_credito !=4)
+                    @if ($Estados->estado_credito != 4 || request()->is('Inactivos'))
                     <tr>
                       <td>
                         
