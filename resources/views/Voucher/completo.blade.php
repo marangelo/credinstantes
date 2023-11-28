@@ -37,13 +37,21 @@
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td class="col-md-9"><em>FECHA:</em></h4></td>
+                    <tr>
+                        <td class="col-md-9"><em>FECHA ABONO:</em></h4></td>
                             <td class="col-md-1 text-right">{{ date('d-m-y',strtotime($Abono->fecha_cuota))}}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>FECHA IMPRESION:</em></h4></td>
+                            <td class="col-md-1 text-right">{{ date('d-m-y')}}</td>
                         </tr>
                         <tr>
                             <td class="col-md-9"><em>HORA:</em></h4></td>
                             <td class="col-md-1 text-right">{{ date('H:iA')}}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>COD:</em></h4></td>
+                            <td class="col-md-1 text-right">{{ sprintf('%04d', $Abono->credito->Clientes->id_clientes) }}</td>
                         </tr>
                         <tr>
                             <td class="col-md-9"><em>NOMBRE:</em></h4></td>
@@ -66,6 +74,10 @@
                         <tr>
                             <td class="col-md-9"><em>MONTO PAGADO:</em></h4></td>
                             <td class="col-md-1 text-right">C$ {{ number_format($Abono->abono_dia1,2)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>DISPENSA:</em></h4></td>
+                            <td class="col-md-1 text-right">C$ 0.00</td>
                         </tr>
 
                         <tr>

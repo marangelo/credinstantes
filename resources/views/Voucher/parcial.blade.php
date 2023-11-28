@@ -38,7 +38,11 @@
 
                     <tbody>
                         <tr>
-                            <td class="col-md-9"><em>FECHA:</em></h4></td>
+                            <td class="col-md-9"><em>FECHA ABONO:</em></h4></td>
+                            <td class="col-md-1 text-right">{{ date('d-m-y',strtotime($Abono->fecha_cuota))}}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>FECHA IMPRESION:</em></h4></td>
                             <td class="col-md-1 text-right">{{ date('d-m-y',strtotime($Abono->fecha_cuota))}}</td>
                         </tr>
                         <tr>
@@ -48,6 +52,10 @@
                         <tr>
                             <td class="col-md-9"><em>NOMBRE:</em></h4></td>
                             <td class="col-md-1 text-right">{{ $Abono->credito->Clientes->nombre}} {{ $Abono->credito->Clientes->apellidos}}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>COD:</em></h4></td>
+                            <td class="col-md-1 text-right">{{ sprintf('%04d', $Abono->credito->Clientes->id_clientes) }}</td>
                         </tr>
                         <tr>
                             <td class="col-md-9"><em>ESTADO:</em></h4></td>
@@ -67,7 +75,14 @@
                             <td class="col-md-9"><em>MONTO PAGADO:</em></h4></td>
                             <td class="col-md-1 text-right">C$ {{ number_format($Abono->abono_dia2,2)}}</td>
                         </tr>
-
+                        <tr>
+                            <td class="col-md-9"><em>DISPENSA:</em></h4></td>
+                            <td class="col-md-1 text-right">C$ 0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>SALDO ANTERIOR:</em></h4></td>
+                            <td class="col-md-1 text-right">C$ {{ number_format($Abono->saldo_anterior,2)}}</td>
+                        </tr>
                         <tr>
                             <td class="col-md-9"><em>SALDO ANTERIOR:</em></h4></td>
                             <td class="col-md-1 text-right">C$ {{ number_format($Abono->saldo_anterior - $Abono->abono_dia1 ,2)}}</td>
