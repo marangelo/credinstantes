@@ -14,6 +14,7 @@
           <div class="col-sm-6">
             <h1>Clientes</h1>
           </div>
+       
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
@@ -23,7 +24,7 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
+    <span id="id_rol_user"> {{Session::get('rol')}}</span>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -33,11 +34,14 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Listado de Clientes</h3>
-                <div class="card-tools">                  
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
-                    Nuevo
-                </button>
-                  
+                <div class="card-tools">  
+                  @if (request()->is('Activos'))
+                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
+                              NUEVO
+                          </button>
+                      @endif
+                  @endif
                 </div>
               </div>
               <!-- /.card-header -->
@@ -47,72 +51,88 @@
                   <tr>
                     <th>Nombre</th>
                     <th>Telefono</th>
-                    <th>Municipio</th>
                     <th>Departamento</th>
-                    <th>Direccion</th>
-                    <th></th>
+                    <th>Zona</th>
+                    <th>Direccion</th>                    
+                    @if (request()->is('Activos'))
+                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                        <th></th>
+                      @endif
+                    @endif
                   </tr>
                   </thead>
                   <tbody>
+                 
                   @foreach ($Clientes as $c)  
-                  <tr>
-                    <td><a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
-                        @if ($c->tieneCreditoVencido->isNotEmpty())
-                            <span class="badge @switch($c->tieneCreditoVencido->first()->estado_credito)
-                                            @case(1)
-                                                bg-success
-                                                @break
-                                            @case(2)
-                                                bg-danger
-                                                @break
-                                            @case(3)
-                                                bg-warning
-                                                @break
-                                            @default
-                                                ''
-                                        @endswitch">{{ $c->tieneCreditoVencido->first()->Estado->nombre_estado }}</span>
-                        @else
-                          @if ($c->getCreditos->isNotEmpty())
-                              <span class="badge @switch($c->getCreditos->first()->estado_credito)
-                                            @case(1)
-                                                bg-success
-                                                @break
-                                            @case(2)
-                                                bg-danger
-                                                @break
-                                            @case(3)
-                                                bg-warning
-                                                @break
-                                            @default
-                                                ''
-                                        @endswitch">{{ $c->getCreditos->first()->Estado->nombre_estado }}</span>
-                          @else
-                              <p>- </p>
+                   @php
+                            $Estados = $c->getCreditos->first(); 
+                      @endphp
+                       
+                    @if ($Estados->estado_credito != 4 || request()->is('Inactivos'))
+                    <tr>
+                      <td>
+                        
+                       
+                        
+                     
+                        <a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
+                        @if ($c->getCreditos->isNotEmpty())
+                                <span class="badge @switch($Estados->estado_credito)
+                                              @case(1)
+                                                  bg-success
+                                                  @break
+                                              @case(2)
+                                                  bg-danger
+                                                  @break
+                                              @case(3)
+                                                  bg-warning
+                                                  @break
+                                              @default
+                                                  ''
+                                          @endswitch">{{ $Estados->Estado->nombre_estado }}</span>
+                            @else 
+                                <p> - </p>
+                            @endif
+                      </td>
+                      <td>{{ strtoupper($c->telefono) }} </td>
+                      <td>
+                        @if(isset($c->getMunicipio->nombre_municipio) && $c->getMunicipio->nombre_municipio)
+                          {{ strtoupper($c->getMunicipio->nombre_municipio) }} 
+                        @endif 
+                      </td>
+                      <td>
+                        @if(isset($c->getZona->nombre_zona) && $c->getZona->nombre_zona)
+                          {{ strtoupper($c->getZona->nombre_zona) }} 
+                        @endif 
+                        
+                      </td>
+                      <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
+                      
+                        @if (request()->is('Activos'))
+                          @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                          <td>
+                            <div class="card-tools text-center">  
+                                <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Editar
+                                </a>
+                                
+                                <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    Remover
+                                </a>
+                              </div>
+                              </td>
                           @endif
                         @endif
-                    </td>
-                    <td>{{ strtoupper($c->telefono) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->nombre_municipio) }} </td>
-                    <td>{{ strtoupper($c->getMunicipio->getDepartamentos->nombre_departamento) }} </td>
-                    <td>{{ strtoupper($c->direccion_domicilio) }}  </td>   
-                    
-                    <td><div class="card-tools text-center">  
-                      @if( Session::get('rol') == '1')
-                          <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
-                              <i class="fas fa-pencil-alt">
-                              </i>
-                              Editar
-                          </a>
-                          
-                          <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
-                              <i class="fas fa-trash">
-                              </i>
-                              Remover
-                          </a>
-                          @endif
-                          </div>
-                      </td>
-                  @endforeach
+                      
+                    </tr>
+                    @endif 
+                    @endforeach
+
+
                   </tbody>
                   
                 </table>
@@ -179,7 +199,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Telefono:</label>
@@ -192,7 +212,8 @@
                       </div>
 
                     </div>
-                    <div class="col-sm-4">
+
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Cedula:</label>
@@ -205,10 +226,11 @@
                       </div>
                       
                     </div>
-                    <div class="col-sm-4">
+
+                    <div class="col-sm-3">
 
                       <div class="form-group">
-                        <label>Municipio</label>
+                        <label>Departamento</label>
                         <select class="form-control" id="selMunicipio">
                           @foreach ($Municipios as $m)
                             <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
@@ -216,6 +238,19 @@
                         </select>
                       </div>
                         
+                    </div>
+
+                    <div class="col-sm-3">
+
+                      <div class="form-group">
+                        <label>Zonas</label>
+                        <select class="form-control" id="selZona">
+                          @foreach ($Zonas as $z)
+                            <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                      
                     </div>
                     
                   </div>
@@ -379,7 +414,7 @@
                     </div>  
                   </div>
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Telefono:</label>
@@ -392,7 +427,7 @@
                       </div>
 
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Cedula:</label>
@@ -405,7 +440,7 @@
                       </div>
                       
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
 
                       <div class="form-group">
                         <label>Municipio</label>
@@ -416,7 +451,21 @@
                         </select>
                       </div>
                         
-                    </div>                    
+                    </div>
+                    <div class="col-sm-3">
+
+                      <div class="form-group">
+                        <label>Zonas</label>
+                        <select class="form-control" id="edtZonas">
+                          @foreach ($Zonas as $z)
+                            <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                        
+                    </div>
+                    
+                    
                   </div>
                   <div class="row">
                     <div class="col-sm-12">

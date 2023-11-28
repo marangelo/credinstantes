@@ -12,7 +12,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Municipios</h1>
+            <h1>Departamento</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -32,7 +32,7 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Listado de Municipios</h3>
+                <h3 class="card-title">Listado de Departamentos</h3>
                 <div class="card-tools">                  
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
                     Nuevo

@@ -26,7 +26,11 @@ class LoginController extends Controller
             break;
 
             case '2':
-                return 'Clientes';
+                return 'Activos';
+            break;
+
+            case '3':
+                return 'Activos';
             break;
 
             default:
@@ -78,6 +82,7 @@ class LoginController extends Controller
                     $request->session()->put('name_session', $user->nombre);
                     $request->session()->put('name_rol', $user->RolName->descripcion);
                     $request->session()->put('rol', $user->id_rol);
+                    $request->session()->put('Zona', $user->id_zona);
                 }
                 //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
                 

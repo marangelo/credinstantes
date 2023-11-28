@@ -22,7 +22,10 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::post('updatePassword', 'CredinstanteController@updatePassword')->name('updatePassword');;
 
 Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard');
-Route::get('Clientes', 'CredinstanteController@getClientes')->name('Clientes');
+
+Route::get('Activos', 'CredinstanteController@getClientes')->name('Activos');
+Route::get('Inactivos', 'CredinstanteController@getInactivos')->name('Inactivos');
+
 Route::get('Usuarios', 'CredinstanteController@getUsuarios')->name('Usuarios');
 
 Route::get('Municipios', 'CredinstanteController@getMunicipios')->name('Municipios');
@@ -43,6 +46,12 @@ Route::get('rmMunicipio/{id}', 'CredinstanteController@rmMunicipio')->name('rmMu
 
 Route::post('SaveNewDepartamento', 'CredinstanteController@SaveNewDepartamento')->name('SaveNewDepartamento');
 Route::get('rmDepartamento/{id}', 'CredinstanteController@rmDepartamento')->name('rmDepartamento/{id}');
+
+
+Route::get('Zonas', 'CredinstanteController@getZona')->name('Zonas');
+Route::post('AddZona', 'CredinstanteController@addZona')->name('AddZona');
+Route::get('rmZona/{id}', 'CredinstanteController@rmZona')->name('rmZona/{id}');
+
 
 Route::post('AddDiaSemana', 'CredinstanteController@AddDiaSemana')->name('AddDiaSemana');
 Route::get('rmDiaSemana/{id}', 'CredinstanteController@rmDiaSemana')->name('rmDiaSemana/{id}');
@@ -73,6 +82,10 @@ Route::post('exportVisita', 'ReportsController@exportVisita')->name('exportVisit
 Route::post('getAllCredit', 'CredinstanteController@getAllCredit')->name('getAllCredit');
 Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('ChanceStatus');
 
+Route::get('MultiAbono', 'CredinstanteController@MultiAbonos')->name('MultiAbono');
+
 
 Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEstados');
 

@@ -5,12 +5,15 @@ use Illuminate\Http\Request;
 use App\Models\Clientes;
 use App\Models\Municipios;
 use App\Models\Departamentos;
+use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\Usuario;
+use App\Models\PagosFechas;
 use App\Models\Roles;
+use App\Models\DateRecord;
 use CodersFree\Date\Date;
 
 class CredinstanteController extends Controller {
@@ -19,30 +22,52 @@ class CredinstanteController extends Controller {
         $this->middleware('auth');
     }
     public function getDashboard()
-    {          
+    {         
+        $IsCalc = DateRecord::Check();
+   
+
+        $View = ($IsCalc) ? 'Dashboard.update' : 'Dashboard.home' ;
+
         $Titulo = "Dashboard";
-        return view('Dashboard.home',compact('Titulo'));
+        return view($View,compact('Titulo'));
         
     }
 
     public function prtVoucher($Id){
         $Abono    = Abono::find($Id); 
+        \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago complete de: ". $Id);
         return view('Voucher.completo', compact('Abono'));
     }
 
     public function prtVoucherParcial($Id){
         $Abono    = Abono::find($Id); 
+        \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago Parcial de: ". $Id);
         return view('Voucher.parcial', compact('Abono'));
+        
     }
     
     public function getClientes()
     {   
+        $IsCalc      = DateRecord::Check();
         $Clientes    = Clientes::getClientes();  
         $Municipios  = Municipios::getMunicipios();  
-        $DiasSemana  = DiasSemana::getDiasSemana();  
-        $Titulo      = "Clientes";
+        $DiasSemana  = DiasSemana::getDiasSemana();
+        $Zonas       = Zonas::getZonas();  
+        $Titulo      = "Clientes Activos";
+        $View        = ($IsCalc) ? 'Dashboard.update' : 'Clientes.ls_Clientes' ;    
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Titulo'));
+        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        
+    }
+    public function getInactivos()
+    {   
+        $Clientes    = Clientes::getInactivos();  
+        $Municipios  = Municipios::getMunicipios();  
+        $DiasSemana  = DiasSemana::getDiasSemana();  
+        $Zonas       = Zonas::getZonas();  
+        $Titulo      = "Clientes Inactivos";
+        
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
         
     }
 
@@ -60,7 +85,7 @@ class CredinstanteController extends Controller {
     {   
         $Municipios = Municipios::getMunicipios(); 
         $Departamentos = Departamentos::getDepartamentos();  
-        $Titulo         = "Municipio";
+        $Titulo         = "DEPARTAMENTOS";
         
         
         return view('Clientes.ls_Municipios', compact('Municipios','Departamentos','Titulo'));
@@ -73,6 +98,27 @@ class CredinstanteController extends Controller {
         
         return view('Clientes.ls_Departamentos', compact('Departamentos','Titulo'));
         
+    }
+    public function getZona()
+    {   
+        $Zonas = Zonas::getZonas();  
+        $Titulo         = "Zonas";
+        
+        return view('Clientes.ls_zonas', compact('Zonas','Titulo'));
+        
+    }
+    public function addZona(Request $request)
+    {
+        $response = Zonas::addZona($request);
+        
+        return response()->json($response);
+    }
+
+    public function rmZona($id)
+    {
+        $response = Zonas::rmZona($id);
+        
+        return response()->json($response);
     }
     public function getDiasSemna()
     {   
@@ -87,7 +133,8 @@ class CredinstanteController extends Controller {
         $Titulo         = "USUARIOS";
         $Usuarios       = Usuario::getUsuarios();
         $Roles          = Roles::getRoles();
-        return view('Usuario.lista',compact('Titulo','Usuarios','Roles'));
+        $Zonas          = Zonas::getZonas();
+        return view('Usuario.lista',compact('Titulo','Usuarios','Roles','Zonas'));
         
     }
 
@@ -153,19 +200,48 @@ class CredinstanteController extends Controller {
         
         return response()->json($response);
     }
-
-    public function SaveNewAbono(Request $request)
+    public function MultiAbonos(Request $request)
     {
-        $response = Abono::SaveNewAbono($request);
-        
+
+        $response =Abono::MultiAbonos($request) ;
         return response()->json($response);
     }
 
+    public function SaveNewAbono(Request $request)
+    {
+
+        $Tipo   = $request->input('Tipo');
+
+        switch ($Tipo) {
+            case '0':
+                $response = Abono::SaveNewAbono($request);
+                break;
+            case '1':
+                $response = Abono::Cancelacion($request);
+                break;
+            case '2':
+                $response = Abono::MultiAbonos($request);
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        
+        Clientes::CheckStatus($request->input('IdCred'));
+
+        return response()->json($response);
+    }
     public function getHistoricoAbono($IdCredito)
     {
-        $Abonos =  Abono::getHistorico($IdCredito);
+        //$Abonos =  
 
-        return response()->json($Abonos);
+        $dta[] = array(
+            'Abonos' => Abono::getHistorico($IdCredito),
+            'Pagos' => PagosFechas::getFechasPagos($IdCredito)
+        );
+
+        return response()->json($dta);
     }
 
     public function Remover(Request $request)

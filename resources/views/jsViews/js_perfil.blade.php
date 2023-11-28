@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function () {
-
+        $("#lbl_cancelacion").hide();
         $("#tbl_abonos_creditos").DataTable({
             "responsive": true, 
             "lengthChange": false, 
@@ -14,18 +14,33 @@
         $('#dtAbono').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+
+      
         
 
         $("#slTipoAbono").change(function() {
             
             var IdC_      = $("#lbl_credito").text();
-            $("#txt_Total_abono").val(0.00);
+            
+            var OpSelected = this.value ;
 
-            $("#id_lbl_cuota").text("Calculando....")
-            setTimeout(function() {
-                $("#id_lbl_cuota").text(" Cuota a pagar ");
-                getIdCredi(IdC_)
-            }, 3000);
+            if (OpSelected === '0' || OpSelected === '1') {
+                $("#txt_Total_abono").val(0.00);
+
+                $("#id_lbl_cuota").text("Calculando....")
+
+                $("#lbl_cancel_capital").html("C$ 0.00");
+                $("#lbl_cancel_interes").html("C$ 0.00");
+
+                setTimeout(function() {
+                    $("#id_lbl_cuota").text(" Cuota a pagar ");
+                    getIdCredi(IdC_)
+                }, 3000);
+            } else {
+                $("#lbl_cancelacion").hide();
+            }
+
+           
             
         });
 
@@ -175,52 +190,67 @@
         $("#btn_save_abono").click(function(){
 
             var Total_      = $("#txt_Total_abono").val();
-
             var IdCred      = $("#lbl_credito").text();
-
             var DateAbono   = $("#IddtApertura").val();
+            var Descuento   = $("#txt_descuento").val();
+            var Desc        = isValue(Descuento,0,true);
+
             const dtAbono   = moment(DateAbono, 'DD/MM/YYYY');
+
+            var sldPendiene = $("#id_mdl_saldo_pendiente").html()
           
             Total_         = isValue(Total_,'N/D',true)
-            IdCred         = isValue(IdCred,0,true)
+            IdCred         = isValue(IdCred,0,true);
+            
+
+            var opt  = $("#slTipoAbono option:selected").val(); 
+
+
 
             if(Total_ === 'N/D' ){
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
 
-                $.ajax({
-                    url: "{{ route('SaveNewAbono')}}",
-                    type: 'post',
-                    data: {
-                        Total_      : Total_,
-                        IdCred      : IdCred,
-                        FechaAbono    : dtAbono.format('YYYY-MM-DD'),
-                        _token  : "{{ csrf_token() }}" 
-                    },
-                    async: true,
-                    success: function(response) {
-                        if(response){
-                            Swal.fire({
-                            title: 'Correcto',
-                            icon: 'success',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'OK'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }   
-                            })
+                if (sldPendiene === '0.00' || opt === '0' || opt === '1') {
+                   
+                    $.ajax({
+                        url: "{{ route('SaveNewAbono')}}",
+                        type: 'post',
+                        data: {
+                            Total_      : Total_,
+                            IdCred      : IdCred,
+                            FechaAbono  : dtAbono.format('YYYY-MM-DD'),
+                            Tipo        : opt,
+                            Desc        : Desc,
+                            _token  : "{{ csrf_token() }}" 
+                        },
+                        async: true,
+                        success: function(response) {
+                            if(response){
+                                Swal.fire({
+                                title: 'Correcto',
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }   
+                                })
+                            }
+                        },
+                        error: function(response) {
+                            Swal.fire("Oops", "No se ha podido guardar!", "error");
                         }
-                    },
-                    error: function(response) {
-                        Swal.fire("Oops", "No se ha podido guardar!", "error");
-                    }
-                }).done(function(data) {
-                    //location.reload();
-                });
-
+                    }).done(function(data) {
+                        //location.reload();
+                    });
+                    
+                } else {
+                    Swal.fire("Saldo pendiente en abono", "", "error"); 
+                }
             }
 
         })
@@ -228,6 +258,52 @@
     
 
     })
+
+
+    function initTable_historico(id,datos){
+        var tabla = $(id).DataTable({
+            "data": datos,
+            "destroy": true,
+            "info": false,
+            responsive: true,
+            "bPaginate": true,
+            "searching": false,
+            "order": [
+                [0, "asc"]
+            ],
+            "lengthMenu": [
+                [5, -1],
+                [5, "Todo"]
+            ],
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            },
+            'columns':  [ 
+                {"title": "#","data": "NUM_PAGO"},        
+                {"title": "FECHA PAGO","data": "FECHA_PAGO", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">`+ row.FECHA_PAGO  +`</span> `
+                }},
+                {"title": "FECHA ABONO","data": "FECHA_ABONO", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info ">`+ row.FECHA_ABONO  +`</span> `                    
+                }},
+                {"title": "SALDO PENDIENTE","data": "SALDO_PENDIENTE", "render": function(data, type, row, meta) {
+                    return `<span class="badge rounded-pill badge-soft-info text-success">C$  `+ numeral(row.SALDO_PENDIENTE).format('0,00.00')  +`</span> `
+                }},
+
+            ],
+        });
+        $("#tbl_pagos_realizados_length").hide();
+        
+    }
 
     function initTable_modal(id,datos){
         var tabla = $(id).DataTable({
@@ -288,9 +364,7 @@
 
                 {"title": "--------------","data": "cuota_cobrada", "render": function(data, type, row, meta) {
 
-                   
-
-                    var isPagoParcial   = numeral(isValue(row.abono_dia2,0,true)).format('0,00.00')
+                    var isPagoParcial   = numeral(isValue(row.abono_dia2,0,true)).format('000.00')
 
                     var id_voucher      = numeral(isValue(row.id_abonoscreditos,0,true)).format('0')
 
@@ -340,6 +414,7 @@
                         IdCred      : Id,
                         Total_      : Monto,
                         FechaAbono  : FechaAbono,
+                        Tipo        : 0,
                         _token      : "{{ csrf_token() }}" 
                     },
                     type: 'post',
@@ -516,16 +591,46 @@
 
     function getIdCredi(IdCredito){
 
+      
+
         var opt  = $("#slTipoAbono option:selected").val(); 
 
-        $.get( "../getSaldoAbono/" + IdCredito + "/" +opt , function( data ) {
+        $.get( "../getSaldoAbono/" + IdCredito + "/" + opt , function( data ) {
 
-            dtSaldo = numeral(isValue(data,0,true)).format('00.00')
+
+            dtSaldo = numeral(isValue(data.Saldo_to_cancelar,0,true)).format('00.00')
+            Interes_ = numeral(isValue(data.Interes_,0,true)).format('0,0.00')
+            Capital_ = numeral(isValue(data.Capital_,0,true)).format('0,0.00')
+            SaldoPe_ = numeral(isValue(data.Saldo_Pendiente,0,true)).format('0,0.00')
+
+            $("#id_mdl_saldo_pendiente").html(SaldoPe_);
 
             if ((parseFloat(dtSaldo) > 0) ) {
+
+
                 $('#modal-lg').modal('show');                
                 $("#lbl_credito").html(IdCredito);
                 $("#txt_Total_abono").val(dtSaldo);
+
+                switch (opt) {
+                    case '0':
+                        $("#lbl_cancelacion").hide();
+                        break;
+                    case '1':
+                        $("#lbl_cancelacion").show();
+
+                        $("#lbl_cancel_capital").html("C$ " + Capital_);
+                        $("#lbl_cancel_interes").html("C$ " + Interes_);
+                        break;
+                    case '2':
+                        $("#lbl_cancelacion").hide();
+                        break;
+                
+                    default:
+                        break;
+                }
+
+
             }else{
 
                 Swal.fire({
@@ -546,7 +651,13 @@
         var IdCredito = $("#lbl_mdl_id_credito").text();
 
         $.get( "../getHistoricoAbono/" + IdCredito, function( data ) {
-            initTable_modal('#tbl_lista_abonos',data);
+
+
+     
+
+            initTable_modal('#tbl_lista_abonos',data[0].Abonos);
+            initTable_historico('#tbl_pagos_realizados',data[0].Pagos);
+            
 
         });
     }

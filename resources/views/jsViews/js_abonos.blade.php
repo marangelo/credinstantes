@@ -16,7 +16,7 @@
 
 
         $('#id_txt_buscar').on('keyup', function() {   
-            var vTableArticulos = $('#tbl_clientes').DataTable();     
+            var vTableArticulos = $('#tbl_ingresos').DataTable();     
             vTableArticulos.search(this.value).draw();
         });
 
@@ -29,12 +29,14 @@
     function InitTable() {
 
         var slCli   = $("#id_select_cliente option:selected").val();  
+        var slZna   = $("#id_select_zona option:selected").val();  
         var dtEnd   = $("#dtEnd").val();
         var dtIni   = $("#dtIni").val(); 
 
 
 
         slCli      = isValue(slCli,-1,true) 
+        slZna      = isValue(slZna,-1,true) 
         dtEnd      = isValue(dtEnd,'N/D',true) 
         dtIni      = isValue(dtIni,'N/D',true) 
 
@@ -49,12 +51,11 @@
         
         $("#lbl_titulo_reporte").text(lbl_titulo_reporte)
 
-       
-        
+
 
     
 
-        $("#tbl_clientes").DataTable({
+        $("#tbl_ingresos").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "destroy": true,
@@ -80,6 +81,7 @@
                     dtIni   : dt_Ini_,
                     dtEnd   : dt_End_,
                     IdCln   : slCli,
+                    IdZna   : slZna,
                     _token  : "{{ csrf_token() }}" 
                 }
             },
@@ -125,12 +127,15 @@
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
+                
                 INTERES = api
                 .column( 3 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
+
+               
 
                 INGRESO         = numeral(isValue(INGRESO,0,true)).format('0,00.00')
                 CAPITAL         = numeral(isValue(CAPITAL,0,true)).format('0,00.00')
@@ -142,8 +147,8 @@
             }
         })
 
-        $("#tbl_clientes_length").hide();
-        $("#tbl_clientes_filter").hide();
+        $("#tbl_ingresos_length").hide();
+        $("#tbl_ingresos_filter").hide();
     }
 
     
