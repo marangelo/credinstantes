@@ -19,16 +19,16 @@ class ExportAbonos implements FromCollection
         $dtEnd = $this->request->input('nmEnd');
         $IdCln = $this->request->input('IdCln');
 
-        $dtIni = date("Y-m-d", strtotime(str_replace('/', '-', $dtIni)));
-        $dtEnd = date("Y-m-d", strtotime(str_replace('/', '-', $dtEnd)));
+       $dtIni = date("Y-m-d", strtotime(str_replace('/', '-', $dtIni))).' 00:00:00';;
+        $dtEnd = date("Y-m-d", strtotime(str_replace('/', '-', $dtEnd))).' 23:59:59';;
 
-        if ($IdCln < 0) {
-            $Abonos = Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd]);
-        } else {
-            $Abonos = Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('id_clientes',$IdCln);
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1);
+    
+        if ($IdCln > 0) {
+            $Obj->Where('id_clientes',$IdCln);
         }
-
-        $Abonos = $Abonos->Where('activo',1)->get();
+        
+        $Abonos = $Obj->get();
 
         $array_abonos = [];
 

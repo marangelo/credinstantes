@@ -223,7 +223,7 @@ class ReportsModels extends Model {
         //$Abonos     = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])->orWhereBetween('fecha_cuota_secc2', [$D2, $D2])->where('activo', 1)->get();
         $Abonos =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
        
-        $Clientes   = Clientes::getClientes();
+        $Clientes   = Credito::Creditos();
 
         $Dias       = Abono::selectRaw('DAY(fecha_cuota) as dy, SUM(cuota_cobrada) as total')
                         ->whereBetween('fecha_cuota_secc1', [$D1, $D2])
