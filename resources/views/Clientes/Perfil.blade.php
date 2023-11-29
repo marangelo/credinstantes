@@ -331,6 +331,18 @@
             </div> 
 
             <div class="form-group">
+              <label>Numero de Abono:</label>
+              <div class="input-group date">
+                <div class="input-group-append" >
+                    <div class="input-group-text"><i class="fa fa-dollar-sign"></i></div>
+                </div>
+                <select class="form-control" id="lista_pagos">
+                  
+                </select>   
+              </div>
+            </div>
+
+            <div class="form-group">
               <label id="id_lbl_cuota">Cuota a pagar</label>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -347,9 +359,9 @@
                     <div class="input-group-text"><i class="fa fa-dollar-sign"></i></div>
                 </div>
                 <select class="form-control" id="slTipoAbono">
-                  <option value="0">ABONO</option>
-                  <option value="1">CANCELACION</option>
+                  <option value="0">SIMPLE</option>
                   <option value="2">MULTIPLES</option>
+                  <option value="1">CANCELACION</option>
                 </select>   
               </div>
             </div>

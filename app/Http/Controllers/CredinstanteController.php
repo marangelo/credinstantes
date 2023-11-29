@@ -206,6 +206,14 @@ class CredinstanteController extends Controller {
         $response =Abono::MultiAbonos($request) ;
         return response()->json($response);
     }
+    public function Bluid(Request $request)
+    {
+
+        $response =Abono::Bluid($request) ;
+        return response()->json($response);
+    }
+
+   
 
     public function SaveNewAbono(Request $request)
     {

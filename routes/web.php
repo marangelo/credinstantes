@@ -83,6 +83,7 @@ Route::post('getAllCredit', 'CredinstanteController@getAllCredit')->name('getAll
 Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('ChanceStatus');
 
 Route::get('MultiAbono', 'CredinstanteController@MultiAbonos')->name('MultiAbono');
+Route::get('Bluid', 'CredinstanteController@Bluid')->name('Bluid');
 
 
 Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');

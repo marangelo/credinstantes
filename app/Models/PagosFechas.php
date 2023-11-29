@@ -29,6 +29,25 @@ class PagosFechas extends Model {
         return $Array;
     }
 
+    public static function Pagos($IdCredito)
+    {  
+        $Abonos = PagosFechas::where('ID_CREDITO',$IdCredito)->get();
+        
+        $Array = [];
+
+        foreach ($Abonos as $Key => $abono) {
+            //
+            $Array[$Key] = [
+                'NUM_PAGO' => $abono->NUM_PAGO,
+                'FECHA_PAGO' => \Date::parse($abono->FECHA_PAGO)->format('Y-m-d'),
+                'PENDIENTE' => ($abono->SALDO_PENDIENTE > 0) ? 1 : 0 ,
+            ];
+
+        }
+
+        return $Array;
+    }
+
     public static function getSaldoPendiente($IdCredito)
     {
         $fechaActual = now(); // Obtener la fecha y hora actual
