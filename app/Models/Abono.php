@@ -464,7 +464,6 @@ class Abono extends Model
               
             }
         }
-        dd($RefAbonos);
         return $Pagos;
     }
     public static function rmAbono(Request $request)
