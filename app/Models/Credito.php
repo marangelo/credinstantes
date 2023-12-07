@@ -13,7 +13,7 @@ class Credito extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Tbl_Creditos";    
+    protected $table = "tbl_creditos";    
     protected $primaryKey = 'id_creditos';
 
     public function Clientes()

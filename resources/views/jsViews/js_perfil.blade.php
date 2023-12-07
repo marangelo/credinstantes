@@ -457,7 +457,7 @@
 
     function rmItem(IdElem){
 
-        var vTable  = "Tbl_Creditos" ; 
+        var vTable  = "tbl_creditos" ; 
         var nmCamp  = "id_creditos" ; 
 
         Swal.fire({

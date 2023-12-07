@@ -10,7 +10,7 @@ class Abono extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Tbl_AbonosCreditos";
+    protected $table = "tbl_abonoscreditos";
     protected $primaryKey = 'id_abonoscreditos';
 
     public function credito()

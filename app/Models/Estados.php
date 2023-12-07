@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class Estados extends Model {
     public $timestamps = false;
-    protected $table = "Tbl_Estados";    
+    protected $table = "tbl_estados";    
     protected $primaryKey = 'id_estados';
 
 }
