@@ -99,7 +99,7 @@
                                     <td>{{ Date::parse($c->fecha_ultimo_abono)->format('D, M d, Y') }}</td>
                                     <td>{{ is_null($c->fecha_culmina) ? '-' : Date::parse($c->fecha_culmina)->format('D, M d, Y')   }}</td>
                                     <td>{{number_format($c->plazo,1)}}</td>
-                                    <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
+                                    <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,2)}} <small>%</small><span> </td>
                                     <td>{{number_format($c->total,2)}}</td>
                                     <td>{{number_format($c->saldo,2)}}</td>
                                     <td>{{number_format($c->abonosCount(), 0)}} / {{number_format($c->numero_cuotas, 0)}}</td>
