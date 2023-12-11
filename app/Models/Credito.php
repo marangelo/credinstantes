@@ -68,9 +68,14 @@ class Credito extends Model
     {
         return Credito::where('activo',1)->get();
     }
-    public static function Creditos()
+    public static function Creditos($Zona)
     {
-        return Credito::where('activo',1)->whereIn('estado_credito',[1,2,3])->get();
+        if ($Zona > -1) {
+            return EstadosMonitor::where('CREDITO_ACTIVO',1)->where('ID_ZONA',$Zona)->whereIn('ESTADO_CREDITO',[1,2,3])->get();
+        }else{
+            return EstadosMonitor::where('CREDITO_ACTIVO',1)->whereIn('ESTADO_CREDITO',[1,2,3])->get();
+        }
+        
     }
     public static function getCreditosActivos()
     {

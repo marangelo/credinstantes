@@ -21,7 +21,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">Dashboard</li>
+              <li class="breadcrumb-item active">INDICADORES</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -32,6 +32,26 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        <div class="card-header">
+          <h3 class="card-title" id="IdCardTitle"></h3>
+          <div class="card-tools">
+            <div class="input-group input-group-sm">
+              <select class="custom-select" style="width: auto;" id="IdFilterByZone" >
+                <option value="-1" selected="selected"> Todas </option>
+                @foreach ($Zonas as $z)
+                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                @endforeach
+                
+              </select>
+              <div class="input-group-append">
+                <div class="btn btn-primary" id="IdbtnFilter">
+                  <i class="fa fa-filter"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
         <!-- Info boxes -->
         <div class="row">
           <div class="col-12 col-sm-6 col-md-2">

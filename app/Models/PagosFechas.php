@@ -70,14 +70,23 @@ class PagosFechas extends Model {
 
         return $AbonosPendientes;
     }
-    public static function getMoraAtrasada()
+    public static function getMoraAtrasada($Zona)
     {
         $fechaActual = now(); // Obtener la fecha y hora actual
 
-        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+        
+        if ($Zona > -1) {
+            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
                     ->where('SALDO_CREDITO','>',0)
+                    ->where('ID_ZONA',$Zona)
                     ->get()
                     ->pluck('ID_CREDITO');
+        }else{
+            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+            ->where('SALDO_CREDITO','>',0)
+            ->get()
+            ->pluck('ID_CREDITO');
+        }
 
         $MoraPendiente = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual)
             // ->get()
@@ -87,15 +96,25 @@ class PagosFechas extends Model {
 
         return $MoraPendiente;
     }
-    public static function getMoraVencida()
+    public static function getMoraVencida($Zona)
     {
         $fechaActual = now(); // Obtener la fecha y hora actual
 
-        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
-                    ->where('SALDO_CREDITO','>',0)
-                    ->where('DIAS_PARA_VENCER','<',0)
-                    ->get()
-                    ->pluck('ID_CREDITO');
+       
+         if ($Zona > -1) {
+            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+            ->where('SALDO_CREDITO','>',0)
+            ->where('DIAS_PARA_VENCER','<',0)
+            ->where('ID_ZONA',$Zona)
+            ->get()
+            ->pluck('ID_CREDITO');
+        }else{
+            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+            ->where('SALDO_CREDITO','>',0)
+            ->where('DIAS_PARA_VENCER','<',0)
+            ->get()
+            ->pluck('ID_CREDITO');
+        }
 
         $MoraVencida = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual)
             //->get()

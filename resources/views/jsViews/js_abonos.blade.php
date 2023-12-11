@@ -14,16 +14,10 @@
             InitTable();
         })
 
-
         $('#id_txt_buscar').on('keyup', function() {   
             var vTableArticulos = $('#tbl_ingresos').DataTable();     
             vTableArticulos.search(this.value).draw();
         });
-
-      
-       
-        
-
     })
 
     function InitTable() {

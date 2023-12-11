@@ -212,7 +212,7 @@ class ReportsModels extends Model {
         return $array_clientes;
     }
 
-    public static function getDashboard(Request $request)
+    public static function getDashboard($Opt)
     {
         $array_dashboard = [];
         $vLabel          = [];
@@ -223,19 +223,33 @@ class ReportsModels extends Model {
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
 
         $Abonos =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
-       
-        $Clientes   = Credito::Creditos();
+        if ($Opt > -1) {
+            $Abonos->Where('id_zona',$Opt);
+        }
 
-        $MoraAtrasada = PagosFechas::getMoraAtrasada();
-        $MoraVencida  = PagosFechas::getMoraVencida();
-        
+        $MoraAtrasada = PagosFechas::getMoraAtrasada($Opt);
+        $MoraVencida  = PagosFechas::getMoraVencida($Opt);
 
-        $Dias       = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES ) as total')
+        if ($Opt > -1) {
+            $Dias       = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES ) as total')
                         ->whereBetween('FECHA_ABONO', [$D1, $D2])
                         ->where('activo', 1)
+                        ->where('id_zona', $Opt)
                         ->groupByRaw('DAY(FECHA_ABONO)')
                         ->get();
-        
+            $Saldos_Cartera = EstadosMonitor::where('CREDITO_ACTIVO',1)->where('ID_ZONA',$Opt)->sum('SALDO_CREDITO');
+        }else{
+            $Dias       = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES ) as total')
+            ->whereBetween('FECHA_ABONO', [$D1, $D2])
+            ->where('activo', 1)
+            ->groupByRaw('DAY(FECHA_ABONO)')
+            ->get();
+
+            $Saldos_Cartera = Credito::where('activo',1)->sum('saldo');
+        }
+
+        $Clientes   = Credito::Creditos($Opt);
+
         $ttPagoCapital      = $Abonos->sum('CAPITAL');
         $ttPagoIntereses    = $Abonos->sum('INTERES');
         $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
@@ -245,7 +259,7 @@ class ReportsModels extends Model {
             $vData[]    = $dia->total; 
         }
 
-        $Saldos_Cartera = Credito::where('activo',1)->sum('saldo');
+        
 
 
         $array_dashboard = [

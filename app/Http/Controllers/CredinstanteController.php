@@ -24,12 +24,13 @@ class CredinstanteController extends Controller {
     public function getDashboard()
     {         
         $IsCalc = DateRecord::Check();
+        $Zonas  = Zonas::getZonas();  
    
 
         $View = ($IsCalc) ? 'Dashboard.update' : 'Dashboard.home' ;
 
         $Titulo = "Dashboard";
-        return view($View,compact('Titulo'));
+        return view($View,compact('Titulo','Zonas'));
         
     }
 

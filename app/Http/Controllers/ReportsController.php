@@ -64,9 +64,9 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
-    public function getDashboard(Request $request)
+    public function getDashboard($Opt)
     {
-        $response = ReportsModels::getDashboard($request);
+        $response = ReportsModels::getDashboard($Opt);
         
         return response()->json($response);
     }
