@@ -481,7 +481,7 @@ class Abono extends Model
                     "saldo" => $Saldo_actual_credito
                 ]);
 
-                $deleted = DB::table("Tbl_AbonosCreditos")->where("id_abonoscreditos", $id)->update([
+                $deleted = DB::table("tbl_abonoscreditos")->where("id_abonoscreditos", $id)->update([
                     'activo' => 0
                 ]);
 
