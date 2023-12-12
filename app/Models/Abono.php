@@ -186,6 +186,9 @@ class Abono extends Model
 
                         $PENDIENTE = $Credito->cuota - ($Abono_a_capital + $intereses_total);
                         $LastDate = ($Saldo_actual_credito <= 0) ? $FechaAbono: null ;
+
+                        //VALIDA SI EL SALDO ES MAYOR QUE EL ABONO
+                        $Pago = ($Total_ >= $Credito->cuota) ? $Credito->cuota : $Total_ ;
                         
                         $pagos[] = [
                             'id_creditos'           => $IdCred,
@@ -194,9 +197,9 @@ class Abono extends Model
                             'pago_capital'          => $Abono_a_capital,
                             'pago_intereses'        => $intereses_total,
                             'cuota_credito'         => $Credito->cuota,
-                            'cuota_cobrada'         => $Total_,
+                            'cuota_cobrada'         => $Pago,
                             'intereses_por_cuota'   => $INTERES,
-                            'abono_dia1'            => $Total_,
+                            'abono_dia1'            => $Pago,
                             'fecha_cuota_secc1'     => $FechaAbono,
                             'completado'            => (($PENDIENTE <= 0) ? 1 : 0),
                             'saldo_cuota'           => (($PENDIENTE <= 0) ? 0 : $PENDIENTE)  ,

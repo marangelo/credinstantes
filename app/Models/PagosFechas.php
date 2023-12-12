@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PagosFechas extends Model {
     public $timestamps = false;
@@ -72,57 +73,41 @@ class PagosFechas extends Model {
     }
     public static function getMoraAtrasada($Zona)
     {
-        $fechaActual = now(); // Obtener la fecha y hora actual
+        $fechaActual = now(); 
 
-        
+        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+        ->where('SALDO_CREDITO','>',0)
+        ->where(DB::raw('BINARY MORA'), 'N')
+        ->where(DB::raw('BINARY VENCIDO'), 'N')
+        ->get()
+        ->pluck('ID_CREDITO');
+
+        $MoraPendiente = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+    
+
         if ($Zona > -1) {
-            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
-                    ->where('SALDO_CREDITO','>',0)
-                    ->where('ID_ZONA',$Zona)
-                    ->get()
-                    ->pluck('ID_CREDITO');
-        }else{
-            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
-            ->where('SALDO_CREDITO','>',0)
-            ->get()
-            ->pluck('ID_CREDITO');
+            $MoraPendiente->where('ID_ZONA',$Zona);
         }
 
-        $MoraPendiente = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual)
-            // ->get()
-            // ->toArray();
-            ->sum('SALDO_PENDIENTE');
-
-
-        return $MoraPendiente;
+        return $MoraPendiente->sum('SALDO_PENDIENTE');
     }
     public static function getMoraVencida($Zona)
     {
-        $fechaActual = now(); // Obtener la fecha y hora actual
+        $fechaActual = now(); 
 
-       
-         if ($Zona > -1) {
-            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
-            ->where('SALDO_CREDITO','>',0)
-            ->where('DIAS_PARA_VENCER','<',0)
-            ->where('ID_ZONA',$Zona)
-            ->get()
-            ->pluck('ID_CREDITO');
-        }else{
-            $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
-            ->where('SALDO_CREDITO','>',0)
-            ->where('DIAS_PARA_VENCER','<',0)
-            ->get()
-            ->pluck('ID_CREDITO');
+        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
+        ->where('SALDO_CREDITO','>',0)
+        ->where('DIAS_PARA_VENCER','<',0)
+        ->get()
+        ->pluck('ID_CREDITO');
+
+        $MoraVencida = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+
+        if ($Zona > -1) {
+            $MoraVencida->where('ID_ZONA',$Zona);
         }
 
-        $MoraVencida = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual)
-            //->get()
-            //->toArray();
-            ->sum('SALDO_PENDIENTE');
-
-
-        return $MoraVencida;
+        return $MoraVencida->sum('SALDO_PENDIENTE');
     }
 
 
