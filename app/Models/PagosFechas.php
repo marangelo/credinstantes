@@ -73,7 +73,7 @@ class PagosFechas extends Model {
     }
     public static function getMora($Zona, $tipoMora)
     {
-        $Creditos = credito::where('activo',1)->where('saldo','>',0);
+        $Creditos = Credito::where('activo',1)->where('saldo','>',0);
         $fechaActual = now(); 
 
         if ($tipoMora == 'atrasada') {
