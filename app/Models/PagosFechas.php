@@ -71,44 +71,28 @@ class PagosFechas extends Model {
 
         return $AbonosPendientes;
     }
-    public static function getMoraAtrasada($Zona)
+    public static function getMora($Zona, $tipoMora)
     {
+        $Creditos = credito::where('activo',1)->where('saldo','>',0);
         $fechaActual = now(); 
 
-        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
-        ->where('SALDO_CREDITO','>',0)
-        ->where(DB::raw('BINARY MORA'), 'N')
-        ->where(DB::raw('BINARY VENCIDO'), 'N')
-        ->get()
-        ->pluck('ID_CREDITO');
-
-        $MoraPendiente = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
-    
-
-        if ($Zona > -1) {
-            $MoraPendiente->where('ID_ZONA',$Zona);
+        if ($tipoMora == 'atrasada') {
+            $Creditos->where('estado_credito', 2);
+        } elseif ($tipoMora == 'vencida') {
+            $Creditos->where('estado_credito',3);
         }
 
-        return $MoraPendiente->sum('SALDO_PENDIENTE');
-    }
-    public static function getMoraVencida($Zona)
-    {
-        $fechaActual = now(); 
+        $Creditos = $Creditos->get()->pluck('id_creditos');
 
-        $Creditos = EstadosMonitor::where('CREDITO_ACTIVO',1)
-        ->where('SALDO_CREDITO','>',0)
-        ->where('DIAS_PARA_VENCER','<',0)
-        ->get()
-        ->pluck('ID_CREDITO');
-
-        $MoraVencida = PagosFechas::whereIn('ID_CREDITO',$Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
 
         if ($Zona > -1) {
-            $MoraVencida->where('ID_ZONA',$Zona);
+            $Mora->where('ID_ZONA', $Zona);
         }
 
-        return $MoraVencida->sum('SALDO_PENDIENTE');
+        return $Mora->sum('SALDO_PENDIENTE');
     }
+
 
 
 }

@@ -70,12 +70,11 @@ class Credito extends Model
     }
     public static function Creditos($Zona)
     {
-        if ($Zona > -1) {
-            return EstadosMonitor::where('CREDITO_ACTIVO',1)->where('ID_ZONA',$Zona)->whereIn('ESTADO_CREDITO',[1,2,3])->get();
-        }else{
-            return EstadosMonitor::where('CREDITO_ACTIVO',1)->whereIn('ESTADO_CREDITO',[1,2,3])->get();
-        }
-        
+        return EstadosMonitor::where('CREDITO_ACTIVO', 1)
+                ->whereIn('ESTADO_CREDITO', [1, 2, 3])
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('ID_ZONA', $Zona);
+                })->get();        
     }
     public static function getCreditosActivos()
     {

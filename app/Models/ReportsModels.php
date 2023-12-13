@@ -214,54 +214,42 @@ class ReportsModels extends Model {
 
     public static function getDashboard($Opt)
     {
-        $array_dashboard = [];
-        $vLabel          = [];
-        $vData           = [];
+        $array_dashboard    = [];
+        $vLabel             = [];
+        $vData              = [];
+        $ttPagoCapital      = 0;
+        $ttPagoIntereses    = 0;
 
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
 
-        $Abonos =  Pagos::whereBetween('FECHA_ABONO', [$D1, $D2])->Where('activo',1);
-        if ($Opt > -1) {
-            $Abonos->Where('id_zona',$Opt);
-        }
 
-        $MoraAtrasada = PagosFechas::getMoraAtrasada($Opt);
-        $MoraVencida  = PagosFechas::getMoraVencida($Opt);
+        $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada');
+        $MoraVencida  = PagosFechas::getMora($Opt,'vencida');
 
-        if ($Opt > -1) {
-            $Dias       = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES ) as total')
-                        ->whereBetween('FECHA_ABONO', [$D1, $D2])
-                        ->where('activo', 1)
-                        ->where('id_zona', $Opt)
-                        ->groupByRaw('DAY(FECHA_ABONO)')
-                        ->get();
-            $Saldos_Cartera = EstadosMonitor::where('CREDITO_ACTIVO',1)->where('ID_ZONA',$Opt)->sum('SALDO_CREDITO');
-        }else{
-            $Dias       = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES ) as total')
-            ->whereBetween('FECHA_ABONO', [$D1, $D2])
-            ->where('activo', 1)
-            ->groupByRaw('DAY(FECHA_ABONO)')
-            ->get();
+    
+        $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES) as total, SUM(CAPITAL) CAPITAL, SUM(INTERES) INTERES')
+                ->whereBetween('FECHA_ABONO', [$D1, $D2])
+                ->where('activo', 1)
+                ->when($Opt > -1, function ($query) use ($Opt) {
+                    $query->where('id_zona', $Opt);
+                })
+                ->groupByRaw('DAY(FECHA_ABONO)')
+                ->get();
 
-            $Saldos_Cartera = Credito::where('activo',1)->sum('saldo');
-        }
-
-        $Clientes   = Credito::Creditos($Opt);
-
-        $ttPagoCapital      = $Abonos->sum('CAPITAL');
-        $ttPagoIntereses    = $Abonos->sum('INTERES');
-        $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
+        
+        $Saldos_Cartera = Credito::where('activo',1)->sum('saldo');
+        $Clientes       = Credito::Creditos($Opt);
 
         foreach ($Dias as $dia) {
             $vLabel[]   = 'D' . $dia->dy; 
             $vData[]    = $dia->total; 
+            $ttPagoCapital      += $dia->CAPITAL; 
+            $ttPagoIntereses    += $dia->INTERES;
         }
-
+        $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
         
-
-
         $array_dashboard = [
             "INGRESO"           => $ttCuotaCobrada,
             "CAPITAL"           => $ttPagoCapital,
