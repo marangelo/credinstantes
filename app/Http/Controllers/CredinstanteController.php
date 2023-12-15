@@ -224,12 +224,14 @@ class CredinstanteController extends Controller {
         switch ($Tipo) {
             case '0':
                 $response = Abono::SaveNewAbono($request);
+                Clientes::CheckStatus($request->input('IdCred'));
                 break;
             case '1':
                 $response = Abono::Cancelacion($request);
                 break;
             case '2':
                 $response = Abono::MultiAbonos($request);
+                Clientes::CheckStatus($request->input('IdCred'));
                 break;
             
             default:
@@ -237,7 +239,7 @@ class CredinstanteController extends Controller {
                 break;
         }
         
-        Clientes::CheckStatus($request->input('IdCred'));
+        
 
         return response()->json($response);
     }

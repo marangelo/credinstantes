@@ -392,9 +392,6 @@ class Abono extends Model
                 $Total_         = $Total_ - $Descuentos;
                 $Capital_       = $Total_  - $Interes_ ;
 
-                
-
-
                 $datos_credito = [                    
                     'id_creditos'           => $IdCred,
                     'registrado_por'        => Auth::id(),
@@ -415,10 +412,6 @@ class Abono extends Model
                 ];
 
 
-                
-        
-            
-
                 $response = Abono::insert($datos_credito);
 
                 $Abonos_a_cancelar = RefAbonos::where('id_creditos',  $IdCred)->where('Pagado',  0)->get();
@@ -437,8 +430,8 @@ class Abono extends Model
 
                 Credito::where('id_creditos',  $IdCred)->update([
                     "saldo" => 0,
-                    "estado_credito"=>4,
-                    "fecha_culmina"=>$FechaAbono
+                    "estado_credito" => 4,
+                    "fecha_culmina"=> $FechaAbono
                 ]);
 
 
