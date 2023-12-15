@@ -239,7 +239,7 @@ class ReportsModels extends Model {
                 ->get();
 
         
-        $Saldos_Cartera = Credito::where('activo',1)->sum('saldo');
+        $Saldos_Cartera = Credito::Saldos_Cartera($Opt);
         $Clientes       = Credito::Creditos($Opt);
 
         foreach ($Dias as $dia) {

@@ -76,6 +76,13 @@ class Credito extends Model
                     $query->where('ID_ZONA', $Zona);
                 })->get();        
     }
+    public static function Saldos_Cartera($Zona)
+    {
+        return EstadosMonitor::where('CREDITO_ACTIVO', 1)
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('ID_ZONA', $Zona);
+                })->sum('SALDO_CREDITO');        
+    }
     public static function getCreditosActivos()
     {
         return Credito::where('activo',1)->whereNotIn('estado_credito',[2,3,4])->get();
