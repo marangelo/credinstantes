@@ -33,6 +33,10 @@ class RedirectIfAuthenticated
                 case '3':
                     return redirect('Activos');
                 break;
+
+                case '4':
+                    return redirect('Promotor');
+                break;
     
                 default:
                     return '/';

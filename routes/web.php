@@ -90,3 +90,6 @@ Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEstados');
 
+Route::get('Promotor', 'CredinstanteController@Promotor')->name('Promotor');
+
+
