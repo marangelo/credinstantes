@@ -136,24 +136,40 @@ class Clientes extends Model
         $position_array_cliente     = 0 ;
 
         foreach ($ClientesInactivos as $c) {
-            $ArrayClientesInactivos[$position_array_cliente] = [$c->id_clientes];
+            $ArrayClientesInactivos[$position_array_cliente] = [
+                'id_clientes'       => $c->id_clientes,
+                'Nombre'            => $c->nombre,
+                'Apellidos'         => $c->apellidos,
+                'Departamento'      => $c->getMunicipio->getDepartamentos->nombre_departamento,
+                'Zona'              => $c->getZona->nombre_zona,
+                'Direccion'         => $c->direccion_domicilio,
+                'Accion'            => 'INACTIVO',
+            ];
             $position_array_cliente++;
         }
+        
 
         foreach ($ClientePromotores as $c) {
-            $ArrayClientesDisponible[$position_array_cliente] = [$c->id_clientes];
+            $cl = Clientes::where('id_clientes',$c->id_clientes)->first();
+        
+
+            $ArrayClientesDisponible[$position_array_cliente] = [
+                'id_clientes'       => $c->id_clientes,
+                'Nombre'            => $cl->nombre,
+                'Apellidos'         => $cl->apellidos,
+                'Departamento'      => $cl->getMunicipio->getDepartamentos->nombre_departamento,
+                'Zona'              => $cl->getZona->nombre_zona,
+                'Direccion'         => $cl->direccion_domicilio,
+                'Accion'            => 'Menos de 3 Abonos',
+            ];
             $position_array_cliente++;
         }
 
         $array_merge = array_merge($ArrayClientesInactivos , $ArrayClientesDisponible);
-
-
-        $Clientes = Clientes::WhereIn('id_clientes',$array_merge)->get();
-
-
+        
         
 
-        return $Clientes;
+        return $array_merge;
     } 
 
     

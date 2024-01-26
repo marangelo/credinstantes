@@ -95,18 +95,21 @@
                             <th>DEPARTAMENTO</th>
                             <th>ZONA</th>
                             <th>DIRECCION</th>
-                            
+                            <th>Accion</th>
                         </tr>
                     </thead>
                     <tbody>
                     @foreach ($Clientes as $c)
                         <tr>
-                            <td> {{$c->id_clientes}}</td>
-                            <td> {{$c->nombre}} {{$c->apellidos}}</td>
-                            <td> {{$c->telefono}} </td>
-                            <td> {{$c->getMunicipio->getDepartamentos->nombre_departamento}} </td>
-                            <td> {{$c->getZona->nombre_zona}} </td>
-                            <td> {{$c->direccion_domicilio}} </td>
+                            <td> {{ $c ['id_clientes'] }} </td>
+                            <td>
+                              <a href="Perfil/{{ $c ['id_clientes'] }}" class=""><strong>#{{ $c ['id_clientes'] }} </strong> : {{ strtoupper($c ['Nombre']) }} : {{ strtoupper($c ['Apellidos']) }}</a> 
+                            </td>
+                            <td> {{ $c ['Apellidos'] }} </td>
+                            <td> {{ $c ['Departamento'] }} </td>
+                            <td> {{ $c ['Zona'] }} </td>
+                            <td> {{ $c ['Direccion'] }} </td>
+                            <td> {{ $c ['Accion'] }} </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -117,6 +120,7 @@
                         <th>DEPARTAMENTO</th>
                         <th>ZONA</th>
                         <th>DIRECCION</th>
+                        <th>Accion</th>
                     </tfoot>
                 </table>
                 </div>

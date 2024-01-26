@@ -38,6 +38,7 @@ class CredinstanteController extends Controller {
         $Titulo = "Promotor";
         
         $Clientes = Clientes::Clientes_promotor();
+        
         return view('Promotor.home',compact('Titulo','Clientes'));
 
         
