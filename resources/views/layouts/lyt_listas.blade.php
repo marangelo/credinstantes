@@ -42,7 +42,13 @@
 
 
   <!-- Main Sidebar Container -->
+  @if( Session::get('rol') == '4')
+  @include('layouts.lyt_promotor')
+  @else
   @include('layouts.lyt_aside')
+  @endif
+  
+
 
   
   @yield('content')
