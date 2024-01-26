@@ -39,10 +39,8 @@ class CredinstanteController extends Controller {
         
         $Clientes = Clientes::Clientes_promotor();
         
-        return view('Promotor.home',compact('Titulo','Clientes'));
+        return view('Promotor.Home',compact('Titulo','Clientes'));
 
-        
-        
     }
 
     public function prtVoucher($Id){
