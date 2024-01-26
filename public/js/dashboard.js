@@ -44,6 +44,9 @@ function CalcIndicadores(){
     var vData = []
 
     var Opt   = $("#IdFilterByZone option:selected").val(); 
+    
+    Opt      = isValue(Opt,-1,true)       
+    
     $("#IdCardTitle").text("Calculando . . . ") 
 
     $.getJSON("getDashboard/"+Opt, function(dataset) {

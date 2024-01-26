@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
+use Auth;
 
 class ReportsModels extends Model {
 
@@ -223,10 +224,15 @@ class ReportsModels extends Model {
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+        $role   = Auth::User()->id_rol;
 
 
         $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada');
         $MoraVencida  = PagosFechas::getMora($Opt,'vencida');
+
+        if ($role == 2) {
+            $Opt = Auth::User()->id_zona;
+        }
 
     
         $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES) as total, SUM(CAPITAL) CAPITAL, SUM(INTERES) INTERES')

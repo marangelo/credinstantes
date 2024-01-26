@@ -24,7 +24,7 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-    <span id="id_rol_user"> {{Session::get('rol')}}</span>
+    <span id="id_rol_user" class="invisible"> {{Session::get('rol')}}</span>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
