@@ -69,13 +69,24 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">INGRESO POR MES</h5>
+                <h5 class="card-title">Cliente para promotoria</h5>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-              
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="input-group">
+                            <input type="search" class="form-control form-control-lg" id="tbl_cliente_promotor_buscar" placeholder="Escriba cliente a buscar">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-lg btn-default">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="position-relative mb-4">
-                <table id="example2" class="table table-bordered table-hover">
+                <table id="tbl_cliente_promotor" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>NOMBRE</th>
@@ -86,13 +97,15 @@
                         </tr>
                     </thead>
                     <tbody>
+                    @foreach ($Clientes as $c)
                         <tr>
-                            <td> - </td>
-                            <td> - </td>
-                            <td> - </td>
-                            <td> - </td>
-                            <td> - </td>
+                            <td> {{$c->NOMBRE}} {{$c->APELLIDOS}}</td>
+                            <td> {{$c->TELEFONO}} </td>
+                            <td> {{$c->Municipio->getDepartamentos->nombre_departamento}} </td>
+                            <td> {{$c->Zona->nombre_zona}} </td>
+                            <td> {{$c->DIRECCION}} </td>
                         </tr>
+                    @endforeach
                     </tbody>
                     <tfoot>
                         <th>NOMBRE</th>
