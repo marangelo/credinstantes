@@ -14,7 +14,6 @@ use App\Models\Usuario;
 use App\Models\PagosFechas;
 use App\Models\Roles;
 use App\Models\DateRecord;
-use App\Models\ClientesPromotor;
 use CodersFree\Date\Date;
 
 class CredinstanteController extends Controller {
@@ -37,7 +36,8 @@ class CredinstanteController extends Controller {
     public function Promotor()
     {         
         $Titulo = "Promotor";
-        $Clientes = ClientesPromotor::Where('CLIENTE_ACTIVO',1)->Where('CREDITO_ACTIVO',1)->get();
+        
+        $Clientes = Clientes::Clientes_promotor();
         return view('Promotor.home',compact('Titulo','Clientes'));
 
         

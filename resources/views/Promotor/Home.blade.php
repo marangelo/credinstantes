@@ -89,25 +89,29 @@
                 <table id="tbl_cliente_promotor" class="table table-bordered table-hover">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>NOMBRE</th>
                             <th>TELEFONO</th>
                             <th>DEPARTAMENTO</th>
                             <th>ZONA</th>
                             <th>DIRECCION</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                     @foreach ($Clientes as $c)
                         <tr>
-                            <td> {{$c->NOMBRE}} {{$c->APELLIDOS}}</td>
-                            <td> {{$c->TELEFONO}} </td>
-                            <td> {{$c->Municipio->getDepartamentos->nombre_departamento}} </td>
-                            <td> {{$c->Zona->nombre_zona}} </td>
-                            <td> {{$c->DIRECCION}} </td>
+                            <td> {{$c->id_clientes}}</td>
+                            <td> {{$c->nombre}} {{$c->apellidos}}</td>
+                            <td> {{$c->telefono}} </td>
+                            <td> {{$c->getMunicipio->getDepartamentos->nombre_departamento}} </td>
+                            <td> {{$c->getZona->nombre_zona}} </td>
+                            <td> {{$c->direccion_domicilio}} </td>
                         </tr>
                     @endforeach
                     </tbody>
                     <tfoot>
+                        <th>#</th>
                         <th>NOMBRE</th>
                         <th>TELEFONO</th>
                         <th>DEPARTAMENTO</th>

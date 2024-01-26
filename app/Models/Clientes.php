@@ -77,6 +77,7 @@ class Clientes extends Model
     
         return $Clientes;
     }
+
     public static function getInactivos()
     {
         $e = 1;
@@ -123,6 +124,37 @@ class Clientes extends Model
                     ->where('activo', 1)
                     ->where('estado_credito', 1);
     }
+    public static function Clientes_promotor(){
+
+        $ClientesInactivos = Clientes::getInactivos();
+
+        $ClientePromotores = ClientePromotores::all();
+
+        $ArrayClientesInactivos     = [] ;
+        $ArrayClientesDisponible    = [] ;
+
+        $position_array_cliente     = 0 ;
+
+        foreach ($ClientesInactivos as $c) {
+            $ArrayClientesInactivos[$position_array_cliente] = [$c->id_clientes];
+            $position_array_cliente++;
+        }
+
+        foreach ($ClientePromotores as $c) {
+            $ArrayClientesDisponible[$position_array_cliente] = [$c->id_clientes];
+            $position_array_cliente++;
+        }
+
+        $array_merge = array_merge($ArrayClientesInactivos , $ArrayClientesDisponible);
+
+
+        $Clientes = Clientes::WhereIn('id_clientes',$array_merge)->get();
+
+
+        
+
+        return $Clientes;
+    } 
 
     
     public function tieneCreditoVencido()
