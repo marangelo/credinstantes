@@ -21,7 +21,7 @@ class Credinstante extends Model {
                 $tb         = $request->input('vTable');
                 $nmCamp     = $request->input('nmCamp');
 
-                if($tb==="Tbl_Clientes"){                    
+                if($tb==="tbl_clientes"){                    
                     $cliente = Clientes::find($id);
                     $cliente->getCreditos->each(function ($credito) {                    
                         $credito->getAbonos()->update([
@@ -33,7 +33,7 @@ class Credinstante extends Model {
                     ]);
                 }
 
-                if($tb==="Tbl_Creditos"){                    
+                if($tb==="tbl_creditos"){                    
                     $Credito = Credito::find($id);
                     $Credito->getAbonos()->update([
                         'activo' => 0

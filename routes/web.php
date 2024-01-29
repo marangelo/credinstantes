@@ -47,6 +47,12 @@ Route::get('rmMunicipio/{id}', 'CredinstanteController@rmMunicipio')->name('rmMu
 Route::post('SaveNewDepartamento', 'CredinstanteController@SaveNewDepartamento')->name('SaveNewDepartamento');
 Route::get('rmDepartamento/{id}', 'CredinstanteController@rmDepartamento')->name('rmDepartamento/{id}');
 
+
+Route::get('Zonas', 'CredinstanteController@getZona')->name('Zonas');
+Route::post('AddZona', 'CredinstanteController@addZona')->name('AddZona');
+Route::get('rmZona/{id}', 'CredinstanteController@rmZona')->name('rmZona/{id}');
+
+
 Route::post('AddDiaSemana', 'CredinstanteController@AddDiaSemana')->name('AddDiaSemana');
 Route::get('rmDiaSemana/{id}', 'CredinstanteController@rmDiaSemana')->name('rmDiaSemana/{id}');
 
@@ -68,7 +74,7 @@ Route::post('getVisitar', 'ReportsController@getVisitar')->name('getVisitar');
 Route::post('getAbonos', 'ReportsController@getAbonos')->name('getAbonos');
 Route::post('getMorosidad', 'ReportsController@getMorosidad')->name('getMorosidad');
 Route::get('getSaldoAbono/{ID}/{OP}', 'CredinstanteController@getSaldoAbono')->name('getSaldoAbono');
-Route::get('getDashboard', 'ReportsController@getDashboard')->name('getDashboard');
+Route::get('getDashboard/{ID}', 'ReportsController@getDashboard')->name('getDashboard');
 
 Route::post('creditCheck', 'CredinstanteController@creditCheck')->name('creditCheck');
 Route::post('exportAbonos', 'ReportsController@exportAbonos')->name('exportAbonos');
@@ -76,8 +82,15 @@ Route::post('exportVisita', 'ReportsController@exportVisita')->name('exportVisit
 Route::post('getAllCredit', 'CredinstanteController@getAllCredit')->name('getAllCredit');
 Route::post('ChanceStatus', 'CredinstanteController@ChanceStatus')->name('ChanceStatus');
 
+Route::get('MultiAbono', 'CredinstanteController@MultiAbonos')->name('MultiAbono');
+Route::get('Bluid', 'CredinstanteController@Bluid')->name('Bluid');
+
 
 Route::post('AddNewUser', 'CredinstanteController@AddNewUser')->name('AddNewUser');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEstados');
+
+Route::get('Promotor', 'CredinstanteController@Promotor')->name('Promotor');
+Route::get('getDashboardPromotor/{ID}', 'ReportsController@getDashboardPromotor')->name('getDashboardPromotor');
+
 

@@ -6,39 +6,38 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-
-class DiasSemana extends Model
+class Zonas extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "cat_diassemana";
+    protected $table = "cat_zona";
 
-    public static function getDiasSemana()
+    public static function getZonas()
     {
-        return DiasSemana::where('activo',1)->get();
+        return Zonas::where('activo',1)->get();
     }
-
-    public static function rmDiaSemana($id)
+    public static function rmZona($id)
     {
         try {
                 
-            $delete = DiasSemana::where('id_diassemana', $id )->delete();
+            $delete = Zonas::where('id_zona', $id )->delete();
             return  $delete;               
         } catch (Exception $e) {
             $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
             return response()->json($mensaje);
         }
     }
-    public static function AddDiaSemana(Request $request)
+    public static function addZona(Request $request)
     {
         if ($request->ajax()) {
             try {
-                $dia_semana           = $request->input('Nombre_');
+                $nombre_departamento    = $request->input('Nombre_');
+                $activo                 = 1;
 
-                $datos_a_insertar[0]['dia_semana']           = $dia_semana;
-                $datos_a_insertar[0]['dia_semananum']            = 1;
+                $datos_a_insertar[0]['nombre_zona']     = $nombre_departamento;
+                $datos_a_insertar[0]['activo']                  = $activo;
 
-                $response = DiasSemana::insert($datos_a_insertar); 
+                $response = Zonas::insert($datos_a_insertar); 
 
                 return $response;
                 

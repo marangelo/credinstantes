@@ -13,7 +13,7 @@ class Credito extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Tbl_Creditos";    
+    protected $table = "tbl_creditos";    
     protected $primaryKey = 'id_creditos';
 
     public function Clientes()
@@ -29,6 +29,25 @@ class Credito extends Model
     {
         return $this->hasMany(RefAbonos::class, 'id_creditos', 'id_creditos')->orderBy('numero_pago', 'desc')->limit(1);
     }
+    
+    public function AbonoLogs()
+    {
+        return $this->hasMany(PagosFechas::class, 'ID_CREDITO', 'id_creditos')
+        ->whereDate('FECHA_PAGO', '<=', now()) 
+        ->selectRaw('SUM(SALDO_PENDIENTE) as SALDO_PENDIENTE') 
+        ->groupBy('ID_CREDITO') 
+        ->limit(1);
+    }
+    public function AbonoToday()
+    {
+        return $this->hasMany(PagosFechas::class, 'ID_CREDITO', 'id_creditos')
+        ->whereDate('FECHA_PAGO', '=', now()) 
+        ->selectRaw('COUNT(ID_CREDITO) as tDay') 
+        ->groupBy('ID_CREDITO') 
+        ->limit(1);
+    }
+
+
     
     public function abonosCount()
     {
@@ -48,6 +67,21 @@ class Credito extends Model
     public static function getCreditos()
     {
         return Credito::where('activo',1)->get();
+    }
+    public static function Creditos($Zona)
+    {
+        return EstadosMonitor::where('CREDITO_ACTIVO', 1)
+                ->whereIn('ESTADO_CREDITO', [1, 2, 3])
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('ID_ZONA', $Zona);
+                })->get();        
+    }
+    public static function Saldos_Cartera($Zona)
+    {
+        return EstadosMonitor::where('CREDITO_ACTIVO', 1)
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('ID_ZONA', $Zona);
+                })->sum('SALDO_CREDITO');        
     }
     public static function getCreditosActivos()
     {
@@ -89,6 +123,7 @@ class Credito extends Model
                 $score                  = 100;
                 $activo                 = 1;
                 $Estado                 = 1;
+                $Zona_                  = $request->input('Zona_');
 
                 $DiaSemana_         = $request->input('DiaSemana_');
                 $Monto_             = $request->input('Monto_');
@@ -114,6 +149,7 @@ class Credito extends Model
                     'direccion_domicilio'  => $direccion_domicilio,
                     'cedula'               => $cedula,
                     'telefono'             => $telefono,
+                    'id_zona'              => $Zona_,
                     'score'                => $score,
                     'activo'               => $activo,
                 ];
@@ -157,6 +193,9 @@ class Credito extends Model
 
                 $response = RefAbonos::insert($Fecha_abonos); 
 
+                //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
+                //Clientes::CheckStatus($IdCredito);
+
 
                 return $response;
                 
@@ -192,29 +231,26 @@ class Credito extends Model
                 $Fecha_abonos = [];
 
                 $datos_credito = [
-                    'creado_por'          => Auth::id(),
-                    'fecha_apertura'      => $FechaOpen,
-                    'id_diassemana'       => $DiaSemana_,
-                    'id_clientes'         => $idInsertado,
-                    'monto_credito'       => $Monto_,
-                    'plazo'               => $Plato_,
-                    'taza_interes'        => $Interes_,
-                    'numero_cuotas'       => $Cuotas_,
-                    'total'               => $Total_,
-                    'cuota'               => $vlCuota,
-                    'interes'             => $vlInteres,
-                    'saldo'               => $Saldos_,
-                    'intereses_por_cuota'=>$InteresesPorCuota,
-                    'estado_credito'               => 1,
-                    'activo'               => 1,
+                    'creado_por'            => Auth::id(),
+                    'fecha_apertura'        => $FechaOpen,
+                    'id_diassemana'         => $DiaSemana_,
+                    'id_clientes'           => $idInsertado,
+                    'monto_credito'         => $Monto_,
+                    'plazo'                 => $Plato_,
+                    'taza_interes'          => $Interes_,
+                    'numero_cuotas'         => $Cuotas_,
+                    'total'                 => $Total_,
+                    'cuota'                 => $vlCuota,
+                    'interes'               => $vlInteres,
+                    'saldo'                 => $Saldos_,
+                    'intereses_por_cuota'   =>$InteresesPorCuota,
+                    'estado_credito'        => 1,
+                    'activo'                => 1,
                 ];
-
-
-
                 
                 $IdCredito = Credito::insertGetId($datos_credito);
 
-                for ($i = 1; $i <= 10; $i++) {
+                for ($i = 1; $i <= $Cuotas_; $i++) {
                     $fecha->add(new DateInterval('P1W')); 
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
@@ -229,6 +265,17 @@ class Credito extends Model
                 ]);
 
                 $response = RefAbonos::insert($Fecha_abonos); 
+
+                 //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
+                //Clientes::CheckStatus($IdCredito);
+
+                Reloan::insert([
+                    'loan_id'       => $IdCredito,
+                    'date_reloan'   => $FechaOpen, 
+                    'amount_reloan' => $Monto_,
+                    'user_created'  => Auth::id(),
+                    'id_clientes'   => $idInsertado
+                ]); 
                 
 
 

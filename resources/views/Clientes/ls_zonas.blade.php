@@ -1,7 +1,7 @@
 @extends('layouts.lyt_listas')
 
 @section('metodosjs')
-@include('jsViews.js_municipio')
+@include('jsViews.js_zona')
 @endsection
 
 @section('content')
@@ -12,12 +12,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Departamento</h1>
+            <h1>Zonas</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">Municipios</li>
+              <li class="breadcrumb-item active">Zonas</li>
             </ol>
           </div>
         </div>
@@ -32,10 +32,10 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Listado de Departamentos</h3>
+                <h3 class="card-title">Listado de zonas</h3>
                 <div class="card-tools">                  
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
-                    Nuevo
+                    Nueva Zona
                 </button>
                   
                 </div>
@@ -50,10 +50,10 @@
                   </tr>
                   </thead>
                   <tbody>
-                  @foreach ($Municipios as $m)  
-                  <tr>
-                    <td>{{ strtoupper($m->nombre_municipio) }} </td>
-                    <td class="text-center"><a href="#!" class="btn bg-danger btn-sm" onclick="rmMunicipio({{$m->id_municipio}})"><i class="fas fa-trash"></i></a> </td>
+                  @foreach ($Zonas as $z)  
+                  <tr>         
+                    <td>{{ strtoupper($z->nombre_zona) }} </td>
+                    <td class="text-center"><a href="#!" class="btn bg-danger btn-sm" onclick="rmDepartamento({{$z->id_zona}})"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   @endforeach
                   </tbody>
@@ -78,7 +78,7 @@
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Nuevo Municipio</h4>
+              <h4 class="modal-title">Nueva Zona</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -95,18 +95,7 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" id="txtNombre_Municipio" class="form-control" placeholder="Nombre ...">
-                      </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                      <div class="form-group">
-                        <label>Municipio</label>
-                        <select class="form-control" id="selDepartamento">
-                          @foreach ($Departamentos as $d)
-                            <option value="{{$m->id_departamento}}"> {{strtoupper($d->nombre_departamento)}}</option>
-                          @endforeach
-                        </select>
+                        <input type="text" id="txtNombre_Zona" class="form-control" placeholder="Enter ...">
                       </div>
                     </div>
                   </div>

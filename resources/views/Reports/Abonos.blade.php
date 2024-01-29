@@ -31,11 +31,15 @@
           <div class="col-12">
             <!-- /.card -->
             <div class="card">
-              <div class="card-header">
+              <div class="card-header" style="display:none">
+              
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
               <form action="{{ route('exportAbonos') }}" method="POST">
               @csrf
-              <div class="row">
-                  <div class="col-md-4">
+                <div class="row">
+                  <div class="col-md-2">
                     <label>Buscar</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
@@ -44,13 +48,25 @@
                       <input type="text" class="form-control" id="id_txt_buscar">
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <label>Clientes</label>
                     <div class="form-group">
                       <select class="form-control select2" style="width: 100%;" id="id_select_cliente" name="IdCln">
                           <option value="-1"  selected="selected">Todos</option>
                         @foreach ($Clientes as $c)
                           <option value="{{$c->id_clientes}}"> {{strtoupper($c->nombre) }}</option>
+                        @endforeach
+                      </select>
+                      
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label>Zonas</label>
+                    <div class="form-group">
+                      <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                          <option value="-1"  selected="selected">Todos</option>
+                        @foreach ($Zonas as $z)
+                          <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
                         @endforeach
                       </select>
                       
@@ -84,9 +100,6 @@
                 </div>
                 
                 </form>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
                 <table id="tbl_ingresos" class="table table-bordered table-striped">
                   <thead>
                   <tr>

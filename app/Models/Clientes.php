@@ -10,28 +10,99 @@ class Clientes extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Tbl_Clientes";
+    protected $table = "tbl_clientes";
     protected $primaryKey = 'id_clientes';
 
     public function getMunicipio()
     {
         return $this->hasOne(Municipios::class, 'id_municipio','id_municipio');
     }
+    public function getZona()
+    {
+        return $this->hasOne(Zonas::class, 'id_zona','id_zona')->where('activo',1);
+    }
+    public static function getClientesMora()
+    {
+        $resultados = Credito::select('id_clientes', DB::raw('GROUP_CONCAT(estado_credito) as estados'))
+            ->where('activo', 1)
+            ->whereNotIn('estado_credito', [1])
+            ->groupBy('id_clientes')
+            ->get()
+            ->toArray();
+
+        return $resultados;
+    }
+    public static function CheckStatus($IdCred){
+
+        $Estado             = 1;
+        $SumSaldoPendiente  = 0;
+
+        //EXTRAER INFORMACION DEL CREDITO
+        $Credito   = EstadosMonitor::where('ID_CREDITO',$IdCred)->first();
+
+        //VERIFICA QUE SI EL CREDITO ESTA VENCIDO
+        $Estado   = ($Credito->DIAS_PARA_VENCER > 0) ? $Estado : 3 ;
+
+        //VERIFICA QUE EL ESTADO DEL CREDITO NO ESTE EN MORA;
+        if ($Estado == 1) {
+            $SumSaldoPendiente  = PagosFechas::getSaldoPendiente($IdCred);        
+            $Estado   = ($SumSaldoPendiente > 0) ? 2 : $Estado ;
+        }        
+
+        Credito::where('id_creditos',  $IdCred)->update([
+            "estado_credito"=>$Estado
+        ]);
+
+    } 
 
     public static function getClientes()
     {
-        $e = 1;
-        return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
-            $query->whereIn('estado_credito', [1,2]);
+        // $Zona = Auth::User()->id_zona;
+        $Role = Auth::User()->id_rol;
+
+        $e=0;
+
+
+        // $clMora = Clientes::getClientesMora();        
+        // $Clientes = Clientes::whereIn('id_clientes',$clMora)->get();
+
+        $Clientes = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
+            $query->whereIn('estado_credito', [1,2,3]);
         })->get();
+
+        // if ($Role==2) {
+        //     $obj->where('id_zona',$Zona);
+        // }
+
+    
+        return $Clientes;
     }
+
     public static function getInactivos()
     {
         $e = 1;
+
+        //BUSCA LOS CREDITOS QUE TENGA SOLAMENTE CREDITOS INACTIVOS & NO TENGA ACTIVOS O VENCIDOS Y EN MORA
+        $Clientes_Inactivos = Clientes::select('tbl_clientes.id_clientes')
+        ->selectRaw('GROUP_CONCAT(tbl_creditos.estado_credito) as GROUP_CONCAT_CREDITOS')
+        ->join('tbl_creditos', 'tbl_clientes.id_clientes', '=', 'tbl_creditos.id_clientes')
+        ->where('tbl_creditos.activo', 1)
+        ->where('tbl_creditos.activo', 1)
+        ->groupBy('tbl_clientes.id_clientes', 'tbl_clientes.nombre', 'tbl_clientes.apellidos', 'tbl_clientes.activo')
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'")
+        ->get();
+
+
+        $clientesIds = $Clientes_Inactivos->pluck('id_clientes')->toArray();
+
+        $Clientes = Clientes::whereIn('id_clientes', $clientesIds)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
+            $query->whereIn('estado_credito', [4]);
+        })->get(); 
+
         
-        return Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
-            $query->whereIn('estado_credito', [3,4]);
-        })->get();
+        return $Clientes;
     }
     public static function getMorosos()
     {
@@ -53,6 +124,53 @@ class Clientes extends Model
                     ->where('activo', 1)
                     ->where('estado_credito', 1);
     }
+    public static function Clientes_promotor($Zona){
+
+        $ClientesInactivos = Clientes::getInactivos();
+
+        $ClientePromotores = ClientePromotores::all();
+
+        $ArrayClientesInactivos     = [] ;
+        $ArrayClientesDisponible    = [] ;
+
+        $position_array_cliente     = 0 ;
+
+        foreach ($ClientesInactivos as $c) {
+            $ArrayClientesInactivos[$position_array_cliente] = [
+                'id_clientes'       => $c->id_clientes,
+                'Nombre'            => $c->nombre,
+                'Apellidos'         => $c->apellidos,
+                'Departamento'      => $c->getMunicipio->getDepartamentos->nombre_departamento,
+                'Zona'              => $c->getZona->nombre_zona,
+                'Direccion'         => $c->direccion_domicilio,
+                'Accion'            => 'INACTIVO',
+            ];
+            $position_array_cliente++;
+        }
+        
+
+        foreach ($ClientePromotores as $c) {
+            $cl = Clientes::where('id_clientes',$c->id_clientes)->first();
+        
+
+            $ArrayClientesDisponible[$position_array_cliente] = [
+                'id_clientes'       => $c->id_clientes,
+                'Nombre'            => $cl->nombre,
+                'Apellidos'         => $cl->apellidos,
+                'Departamento'      => $cl->getMunicipio->getDepartamentos->nombre_departamento,
+                'Zona'              => $cl->getZona->nombre_zona,
+                'Direccion'         => $cl->direccion_domicilio,
+                'Accion'            => 'Menos de 3 Abonos',
+            ];
+            $position_array_cliente++;
+        }
+
+        $array_merge = array_merge($ArrayClientesInactivos , $ArrayClientesDisponible);
+        
+        
+
+        return $array_merge;
+    } 
 
     
     public function tieneCreditoVencido()
@@ -66,6 +184,7 @@ class Clientes extends Model
                 $IdCl_          = $request->input('IdCl_');
 
                 $Municipio_     = $request->input('Municipio_');
+                $Zona_          = $request->input('Zona_');
                 $Nombre_        = $request->input('Nombre_');
                 $Apellido_      = $request->input('Apellido_');
                 $Dire_          = $request->input('Dire_');
@@ -78,6 +197,7 @@ class Clientes extends Model
                     "apellidos"             => $Apellido_,
                     "direccion_domicilio"   => $Dire_,
                     "cedula"                => $Cedula_,
+                    "id_zona"               => $Zona_,
                     "telefono"              => $Tele_,
                 ]);
 

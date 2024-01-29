@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class RefAbonos extends Model {
     public $timestamps = false;
-    protected $table = "Tbl_PagosAbonos";    
+    protected $table = "tbl_pagosabonos";    
     protected $primaryKey = 'id_pagoabono';
 
     public function Creditos()

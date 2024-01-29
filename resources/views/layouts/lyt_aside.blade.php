@@ -22,7 +22,7 @@
   <!-- /.navbar -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('Dashboard')}}" class="brand-link">
+    <a href="#!" class="brand-link">
       <img src="{{ asset('img/Logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">CREDIN$TANTES</span>
     </a>
@@ -40,12 +40,12 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        @if( Session::get('rol') == '1')
+        @if( Session::get('rol') == '1' || Session::get('rol') == '2' )
           <li class="nav-item">
             <a href="{{ route('Dashboard')}}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Dashboard
+                INDICADORES
               </p>
             </a>
           </li>        
@@ -70,6 +70,7 @@
                 </li>
               </ul>
           </li>
+          @if( Session::get('rol') == '1')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
@@ -82,14 +83,14 @@
             <ul class="nav nav-treeview">
               
              
-              @if( Session::get('rol') == '1')
+              
               <li class="nav-item">
                 <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
                   <i class="far fa-map nav-icon"></i>
-                  <p>Municipios</p>
+                  <p>Departamento</p>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" style="display:none">
                 <a href="{{ route('Departamento')}}" class="nav-link {{ (request()->is('Departamento')) ? 'active' : '' }} ">
                   <i class="far fa-map nav-icon"></i>
                   <p>Departamentos</p>
@@ -101,8 +102,17 @@
                   <p>Dias de Semana</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('Zonas')}}" class="nav-link {{ (request()->is('Zonas')) ? 'active' : '' }}">
+                  <i class="far fa-calendar-plus nav-icon"></i>
+                  <p>Zonas</p>
+                </a>
+              </li>
             </ul>
           </li>
+
+          @endif
+          @if( Session::get('rol') == '1')
           <li class="nav-item ">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -135,7 +145,34 @@
                 </li>
               </ul>
           </li>
+          @endif
 
+          @if( Session::get('rol') == '3')
+          <li class="nav-item ">
+              <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
+                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+            
+                <p>
+                  Reportes
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+            
+              <ul class="nav nav-treeview">
+             
+
+                <li class="nav-item">
+                  <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Ingresos</p>
+                  </a>
+                </li>
+                
+              </ul>
+          </li>
+          @endif
+          
+          @if( Session::get('rol') == '1')
           <li class="nav-item">
               <a href="{{ route('Usuarios')}}" class="nav-link {{ (request()->is('Usuarios')) ? 'active' : '' }}">
                   <i class="fas fa-users nav-icon"></i>
@@ -143,6 +180,8 @@
               </a>
           </li>
           @endif
+
+         
 
           <li class="nav-item">
             <a href="{{route('logout')}}" class="nav-link">

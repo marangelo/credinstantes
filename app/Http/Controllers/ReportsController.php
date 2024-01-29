@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Clientes;
 use App\Models\Municipios;
 use App\Models\Departamentos;
+use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\Credito;
@@ -22,23 +23,26 @@ class ReportsController extends Controller {
     }
     public function Visitar()
     {           
-        $DiasSemana  = DiasSemana::getDiasSemana();  
-        $Titulo         = "Visitar";
-        return view('Reports.Visitar', compact('DiasSemana','Titulo'));
+        $DiasW       = DiasSemana::getDiasSemana();
+        $Zonas       = Zonas::getZonas();  
+        $Titulo      = "CLIENTES A VISITAR";
+        return view('Reports.Visitar', compact('DiasW','Zonas','Titulo'));
         
     }
     public function Abonos()
     {           
         $Clientes    = Clientes::getClientes();  
-        $Titulo         = "Ingresos Diarios";
-        return view('Reports.Abonos', compact('Clientes','Titulo'));
+        $Zonas       = Zonas::getZonas(); 
+        $Titulo      = "Ingresos Diarios";
+        return view('Reports.Abonos', compact('Clientes','Titulo','Zonas'));
         
     }
     public function Morosidad()
     {           
         $Clientes    = Clientes::getMorosos();
-        $Titulo         = "Morosidad";
-        return view('Reports.Morosidad',compact('Clientes','Titulo'));
+        $Zonas       = Zonas::getZonas(); 
+        $Titulo      = "Morosidad";
+        return view('Reports.Morosidad',compact('Clientes','Titulo','Zonas'));
         
     }
 
@@ -60,12 +64,19 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
-    public function getDashboard(Request $request)
+    public function getDashboard($Opt)
     {
-        $response = ReportsModels::getDashboard($request);
+        $response = ReportsModels::getDashboard($Opt);
         
         return response()->json($response);
     }
+    public function getDashboardPromotor($Opt)
+    {
+        $response = ReportsModels::getDashboardPromotor($Opt);
+        
+        return response()->json($response);
+    }
+
 
 
     public function exportAbonos(Request $request)

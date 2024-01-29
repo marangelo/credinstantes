@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class Usuario extends Model {
     protected $table = "users";
-
     
     public function RolName(){
-        return $this->hasOne('App\Models\Roles','id','id_rol');
+        return $this->hasOne(Roles::class,'id','id_rol');
+    }
+    public function Zona(){
+        return $this->hasOne(Zonas::class,'id_zona','id_zona');
     }
 
 
@@ -30,6 +32,7 @@ class Usuario extends Model {
                 $passwprd       = Hash::make($request->input('Contrasena'));
                 $Estado         = $request->input('Estado');
                 $id_rol         = $request->input('Permiso');
+                $id_zona        = $request->input('Zona');
 
                 $Comment        = $request->input('Commit');
 
@@ -40,6 +43,7 @@ class Usuario extends Model {
                     $obj->nombre        = $nombre;
                     $obj->password      = $passwprd;
                     $obj->id_rol        = $id_rol;
+                    $obj->id_zona       = $id_zona;
                     $obj->Comment       = $Comment;
                     $obj->activo        = 'S';                 
                     $response = $obj->save();
@@ -49,6 +53,7 @@ class Usuario extends Model {
                         "nombre" => $nombre,
                         "Comment" => $Comment,
                         "id_rol" => $id_rol,
+                        "id_zona" => $id_zona,
                     ]);
                 }
 

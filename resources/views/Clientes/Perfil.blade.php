@@ -5,7 +5,6 @@
 @section('content')
 <div class="wrapper">
   <!-- Main Sidebar Container -->
-  @include('layouts.lyt_aside')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -32,20 +31,30 @@
               <div class="card-header">
                 <div class="user-block">
                   <img class="img-circle" src="{{asset('img/user.png')}}" alt="User Image">
-                  <span class="username"><a href="#">{{ strtoupper($perfil_cliente->getMunicipio->nombre_municipio) }} / {{ strtoupper($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) }}</a></span>
+                  <span class="username"><a href="#">
+                  @if(isset($perfil_cliente->getMunicipio->nombre_municipio) && $perfil_cliente->getMunicipio->nombre_municipio)
+                    {{ strtoupper($perfil_cliente->getMunicipio->nombre_municipio) }} 
+                  @endif 
+                  / 
+
+                  @if(isset($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) && $perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento)
+                    {{ strtoupper($perfil_cliente->getMunicipio->getDepartamentos->nombre_departamento) }} 
+                  @endif 
+                </a></span>
                   <span class="description text-white"> {{ strtoupper($perfil_cliente->direccion_domicilio) }}</span>
                   <span class="description text-white ">Tel. {{ strtoupper($perfil_cliente->telefono) }} - Cedula. {{ strtoupper($perfil_cliente->cedula) }} </span>
                 </div>
                 <!-- /.user-block -->
                 <div class="card-tools">
-                  @if( Session::get('rol') == '1')                  
-                  <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
-                    Nuevo
-                  </button>
-                  @endif
+                  
+
+                    @if(in_array(Session::get('rol'), array(1, 3, 4)))
+                    <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
+                        Nuevo
+                      </button>
+                    @endif
+                  </div>
                 </div>
-      
-              </div>
               <!-- /.card-header -->
               <div class="card-body">
 
@@ -91,7 +100,7 @@
                                     <td>{{ Date::parse($c->fecha_ultimo_abono)->format('D, M d, Y') }}</td>
                                     <td>{{ is_null($c->fecha_culmina) ? '-' : Date::parse($c->fecha_culmina)->format('D, M d, Y')   }}</td>
                                     <td>{{number_format($c->plazo,1)}}</td>
-                                    <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,0)}} <small>%</small><span> </td>
+                                    <td>{{number_format($c->monto_credito,2)}}  <span class="text-success"><i class="fas fa-arrow-up text-sm"></i> {{number_format($c->taza_interes,2)}} <small>%</small><span> </td>
                                     <td>{{number_format($c->total,2)}}</td>
                                     <td>{{number_format($c->saldo,2)}}</td>
                                     <td>{{number_format($c->abonosCount(), 0)}} / {{number_format($c->numero_cuotas, 0)}}</td>
@@ -118,8 +127,11 @@
                                             <button type="button" class="btn btn-primary btn-block btn-sm" onclick="getModalHistorico({{$c->id_creditos}})"><i class="fas fa-history"></i> </button>
                                         </div>
                                         <div class="col-md-12">
-                                          <button type="button" class="btn btn-success btn-block btn-sm" onclick="getIdCredi({{$c->id_creditos}})"><i class="fas fa-money-bill-alt"></i> </button>
+                                          @if( Session::get('rol') != '4')
+                                            <button type="button" class="btn btn-success btn-block btn-sm" onclick="getIdCredi({{$c->id_creditos}})"><i class="fas fa-money-bill-alt"></i> </button>
+                                          @endif    
                                         </div>
+                                        
                                         <div class="col-md-12">
                                           @if( Session::get('rol') == '1')
                                             <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmItem({{$c->id_creditos}})"><i class="fas fa-trash"></i> </button>
@@ -323,6 +335,18 @@
             </div> 
 
             <div class="form-group">
+              <label>Numero de Abono:</label>
+              <div class="input-group date">
+                <div class="input-group-append" >
+                    <div class="input-group-text"><i class="fa fa-dollar-sign"></i></div>
+                </div>
+                <select class="form-control" id="lista_pagos">
+                  
+                </select>   
+              </div>
+            </div>
+
+            <div class="form-group">
               <label id="id_lbl_cuota">Cuota a pagar</label>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -333,19 +357,35 @@
             </div>
 
             <div class="form-group">
-              <label>Tipo de Abono</label>
+              <label>Tipo de Abono: <span id="id_mdl_saldo_pendiente" style="display:none">0.00</span></label>
               <div class="input-group date">
                 <div class="input-group-append" >
                     <div class="input-group-text"><i class="fa fa-dollar-sign"></i></div>
                 </div>
                 <select class="form-control" id="slTipoAbono">
-                  <option value="0">ABONO</option>
+                  <option value="0">SIMPLE</option>
+                  <option value="2">MULTIPLES</option>
                   <option value="1">CANCELACION</option>
                 </select>   
               </div>
             </div>
+            <div id="lbl_cancelacion">
 
-            <div class="row" id="lbl_cancelacion">
+            
+            @if (Session::get('rol') == '1')
+              <div class="form-group">
+                <label id="id_lbl_cuota">Descuento C$.:</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    </div>
+                    <input type="text" id="txt_descuento" class="form-control" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)'>
+                </div>
+              </div>
+            @endif
+
+            <div class="row" >
+              
               <div class="col-sm-6 col-6">
                 <div class="description-block border-right">
                   <h5 class="description-header text-success" id="lbl_cancel_capital">C$ 0.00</h5>
@@ -359,7 +399,10 @@
                   <span class="description-text">INTERESES</span>
                 </div>
               </div>
+              
             </div>
+            </div>
+           
 
           
           
@@ -388,12 +431,32 @@
           </button>
         </div>
         <div class="modal-body">
-            <div class="row">
+          <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">PAGOS REALIZADOS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill" href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile" aria-selected="false">HISTORICOS</a>
+            </li>
+
+          </ul>
+            <div class="tab-content" id="custom-content-below-tabContent">
+              <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                <h5 class="card-title mb-3"></h5>
+                <div class="col-12 table-responsive">   
+                  <table id="tbl_lista_abonos"  class="table table-striped " style="width:100%"></table>
+                </div>  
+              </div>
+              <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
                   <div class="col-12 table-responsive">   
-          <table id="tbl_lista_abonos"  class="table table-striped " style="width:100%"></table>
-         
+                    <table id="tbl_pagos_realizados"  class="table table-striped " style="width:100%"></table>
+                  </div>
+              </div>
+             
+            </div>
+        
+        </div>
           
-          </div>    </div>    </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           <button type="button" class="btn btn-success" >Aplicar</button>

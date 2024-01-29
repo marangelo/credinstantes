@@ -10,7 +10,7 @@ class Municipios extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Cat_Municipio";
+    protected $table = "cat_municipio";
 
     public function getDepartamentos()
     {

@@ -50,7 +50,8 @@
                     <th>Nombre Completo</th>
                     <th>Email</th>
                     <th>Permisos</th>
-                    <th>Creacion</th>
+                    <th>Zona</th>
+                    <th>Creación</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -61,6 +62,7 @@
                     <td>{{ strtoupper($u->nombre) }}</td>
                     <td>{{strtoupper($u->email) }}</td>
                     <td>{{strtoupper($u->RolName->descripcion) }}</td>
+                    <td>{{strtoupper($u->Zona->nombre_zona) }}</td>
                     <td>{{ Date::parse($u->created_at)->format('D, M d, Y') }}</td>
                     <th>
                     <div class="card-tools text-center">
@@ -81,8 +83,9 @@
                     <th>#</th>
                     <th>Nombre Completo</th>
                     <th>Email</th>
-                    <th>Rol</th>
-                    <th>Creacion</th>
+                    <th>Permisos</th>
+                    <th>Zona</th>
+                    <th>Creación</th>
                     <th></th>
                   </tr>
                   </tfoot>
@@ -144,7 +147,8 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-4">
+
+                    <div class="col-md-3">
 
                       <div class="form-group">
                         <label>Contraseña:</label>
@@ -157,7 +161,8 @@
                       </div>
 
                     </div>
-                    <div class="col-md-4">
+
+                    <div class="col-md-3">
 
                       <div class="form-group">
                         <label>Confirme contraseña:</label>
@@ -170,7 +175,8 @@
                       </div>
                       
                     </div>
-                    <div class="col-md-4">
+
+                    <div class="col-md-3">
 
                       <div class="form-group">
                         <label>Permiso:</label>
@@ -181,6 +187,25 @@
                           <select class="form-control" id="sclPrivi">
                             @foreach ($Roles as $r)
                               <option value="{{$r->id}}"> {{strtoupper($r->descripcion)}}</option>
+                            @endforeach                       
+                          </select>
+                        </div>
+                      </div>
+
+                    
+                    </div>
+
+                    <div class="col-md-3">
+
+                      <div class="form-group">
+                        <label>Zona:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user-shield"></i></i></span>
+                          </div>
+                          <select class="form-control" id="sclZona">
+                            @foreach ($Zonas as $z)
+                              <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
                             @endforeach                       
                           </select>
                         </div>
