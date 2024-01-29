@@ -231,25 +231,22 @@ class Credito extends Model
                 $Fecha_abonos = [];
 
                 $datos_credito = [
-                    'creado_por'          => Auth::id(),
-                    'fecha_apertura'      => $FechaOpen,
-                    'id_diassemana'       => $DiaSemana_,
-                    'id_clientes'         => $idInsertado,
-                    'monto_credito'       => $Monto_,
-                    'plazo'               => $Plato_,
-                    'taza_interes'        => $Interes_,
-                    'numero_cuotas'       => $Cuotas_,
-                    'total'               => $Total_,
-                    'cuota'               => $vlCuota,
-                    'interes'             => $vlInteres,
-                    'saldo'               => $Saldos_,
-                    'intereses_por_cuota'=>$InteresesPorCuota,
-                    'estado_credito'               => 1,
-                    'activo'               => 1,
+                    'creado_por'            => Auth::id(),
+                    'fecha_apertura'        => $FechaOpen,
+                    'id_diassemana'         => $DiaSemana_,
+                    'id_clientes'           => $idInsertado,
+                    'monto_credito'         => $Monto_,
+                    'plazo'                 => $Plato_,
+                    'taza_interes'          => $Interes_,
+                    'numero_cuotas'         => $Cuotas_,
+                    'total'                 => $Total_,
+                    'cuota'                 => $vlCuota,
+                    'interes'               => $vlInteres,
+                    'saldo'                 => $Saldos_,
+                    'intereses_por_cuota'   =>$InteresesPorCuota,
+                    'estado_credito'        => 1,
+                    'activo'                => 1,
                 ];
-
-
-
                 
                 $IdCredito = Credito::insertGetId($datos_credito);
 
@@ -267,10 +264,18 @@ class Credito extends Model
                     "fecha_ultimo_abono"    => $Fecha_abonos[$Cuotas_-1]['FechaPago']
                 ]);
 
+                $response = RefAbonos::insert($Fecha_abonos); 
+
                  //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
                 //Clientes::CheckStatus($IdCredito);
 
-                $response = RefAbonos::insert($Fecha_abonos); 
+                Reloan::insert([
+                    'loan_id'       => $IdCredito,
+                    'date_reloan'   => $FechaOpen, 
+                    'amount_reloan' => $Monto_,
+                    'user_created'  => Auth::id(),
+                    'id_clientes'   => $idInsertado
+                ]); 
                 
 
 

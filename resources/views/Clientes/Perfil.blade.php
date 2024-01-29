@@ -46,8 +46,10 @@
                 </div>
                 <!-- /.user-block -->
                 <div class="card-tools">
-                    @if (Session::get('rol') == '1' || Session::get('rol') == '3')
-                      <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
+                  
+
+                    @if(in_array(Session::get('rol'), array(1, 3, 4)))
+                    <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
                         Nuevo
                       </button>
                     @endif

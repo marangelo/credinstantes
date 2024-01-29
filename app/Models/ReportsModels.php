@@ -271,7 +271,7 @@ class ReportsModels extends Model {
         return $array_dashboard;
     }
 
-    public static function getDashboardPromotor($Opt)
+    public static function getDashboardPromotor($Zona_)
     {
         $array_dashboard    = [];
         $vLabel             = [];
@@ -283,11 +283,48 @@ class ReportsModels extends Model {
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
         $role   = Auth::User()->id_rol;
+        $Prom   = Auth::id();
+
+
+        
+
+        $Creditos   = Credito::where('creado_por',$Prom);
+        $Represtamo = Reloan::where('user_created',$Prom);
+        
+        //$Creditos_mora_vencidos =  Credito::where('activo', 1)->whereIn('estado_credito', [2,3]);
+
+        if ($Zona_ > 0) {
+            
+            $Creditos->Where(function($query) use ($Zona_) {
+                $query->whereHas('Clientes', function ($query) use ($Zona_) {
+                    $query->where('id_zona', $Zona_);
+                });
+            });
+
+            $Represtamo->Where(function($query) use ($Zona_) {
+                $query->whereHas('Clientes', function ($query) use ($Zona_) {
+                    $query->where('id_zona', $Zona_);
+                });
+            });
+        }
+        
+        
+        $Clientes_Nuevo     = $Creditos->count();
+        $Reloan_count       = $Represtamo->count();
+
+        $Clientes_Nuevo     = $Clientes_Nuevo - $Reloan_count;
+        $Clientes_Nuevo     = ($Clientes_Nuevo < 0 ) ? 0 : $Clientes_Nuevo ;
+
+        
+        $RePrestamo         = $Represtamo->sum('amount_reloan');
+
+        $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') + $RePrestamo;
+        
         
         $array_dashboard = [
-            "CLIENTES_NUEVO"        => $Opt,
-            "RE_PRESTAMOS"          => 2.00,
-            "SALDOS_COLOCADOS"      => 3.00,
+            "CLIENTES_NUEVO"        => $Clientes_Nuevo,
+            "RE_PRESTAMOS"          => $Reloan_count,
+            "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
             "LISTA_CLIENTES"        => Clientes::Clientes_promotor()
         ];
 

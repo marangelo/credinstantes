@@ -312,10 +312,11 @@ class CredinstanteController extends Controller {
     public function Promotor()
     {         
         $Titulo = "Promotor";
-        
+        $Municipios  = Municipios::getMunicipios();  
+        $DiasSemana  = DiasSemana::getDiasSemana();
         $Zonas  = Zonas::getZonas();  
         
-        return view('Promotor.Home',compact('Titulo','Zonas'));
+        return view('Promotor.Home',compact('Titulo','Zonas','DiasSemana','Municipios'));
 
     }
     
