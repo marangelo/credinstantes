@@ -32,14 +32,32 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        
+      <div class="card-header">
+          <h3 class="card-title" id="IdCardTitle"></h3>
+          <div class="card-tools">
+            <div class="input-group input-group-sm">
+              <select class="custom-select" style="width: auto;" id="IdFilterByZone" >
+                <option value="-1" selected="selected"> Todas </option>
+                @foreach ($Zonas as $z)
+                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                @endforeach
+                
+              </select>
+              <div class="input-group-append">
+                <div class="btn btn-primary" id="IdbtnFilter">
+                  <i class="fa fa-filter"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row">
             <div class="col-12 col-sm-6 col-md-4">
               <div class="info-box mb-3 bg-info">
 
                 <div class="info-box-content">
                   <span class="info-box-text">CLIENTES NUEVOS</span>
-                  <span class="info-box-number"><span id="lblClientes"></span>0.00</span>
+                  <span class="info-box-number"><span id="lblClientesNuevos"></span></span>
                 </div>
               </div>
             </div>
@@ -48,8 +66,7 @@
               <div class="info-box " style="background-color: #FF8000;">              
                 <div class="info-box-content ">
                   <span class=""> PRESTAMOS</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
-                  </span>
+                  <span class="info-box-number"><span id="lblRePrestamo" > 0.00</span></span>
                 </div>
               </div>
             </div>
@@ -57,8 +74,7 @@
               <div class="info-box mb-3 bg-danger">
                 <div class="info-box-content">
                   <span class="info-box-text"> SALDOS COLOCADOS</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
-                  </span>
+                  <span class="info-box-number"><small>C$ </small><span id="lblSaldosColocados"> 0.00</span></span>
                 </div>
               </div>
             </div>

@@ -70,6 +70,13 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
+    public function getDashboardPromotor($Opt)
+    {
+        $response = ReportsModels::getDashboardPromotor($Opt);
+        
+        return response()->json($response);
+    }
+
 
 
     public function exportAbonos(Request $request)

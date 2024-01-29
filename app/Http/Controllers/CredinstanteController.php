@@ -33,15 +33,6 @@ class CredinstanteController extends Controller {
         return view($View,compact('Titulo','Zonas'));
         
     }
-    public function Promotor()
-    {         
-        $Titulo = "Promotor";
-        
-        $Clientes = Clientes::Clientes_promotor();
-        
-        return view('Promotor.Home',compact('Titulo','Clientes'));
-
-    }
 
     public function prtVoucher($Id){
         $Abono    = Abono::find($Id); 
@@ -316,6 +307,17 @@ class CredinstanteController extends Controller {
         $response = Usuario::SaveUsuario($request);
         
         return response()->json($response);
+    }
+
+    public function Promotor()
+    {         
+        $Titulo = "Promotor";
+        
+        $Clientes = Clientes::Clientes_promotor();
+        $Zonas  = Zonas::getZonas();  
+        
+        return view('Promotor.Home',compact('Titulo','Clientes','Zonas'));
+
     }
     
 

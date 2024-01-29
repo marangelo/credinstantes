@@ -270,5 +270,27 @@ class ReportsModels extends Model {
 
         return $array_dashboard;
     }
+
+    public static function getDashboardPromotor($Opt)
+    {
+        $array_dashboard    = [];
+        $vLabel             = [];
+        $vData              = [];
+        $ttPagoCapital      = 0;
+        $ttPagoIntereses    = 0;
+
+        $dtNow  = date('Y-m-d');
+        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+        $role   = Auth::User()->id_rol;
+        
+        $array_dashboard = [
+            "CLIENTES_NUEVO"        => 1,
+            "RE_PRESTAMOS"          => 2.00,
+            "SALDOS_COLOCADOS"      => 3.00,
+        ];
+
+        return $array_dashboard;
+    }
     
 }

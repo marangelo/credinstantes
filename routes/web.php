@@ -91,5 +91,6 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEstados');
 
 Route::get('Promotor', 'CredinstanteController@Promotor')->name('Promotor');
+Route::get('getDashboardPromotor/{ID}', 'ReportsController@getDashboardPromotor')->name('getDashboardPromotor');
 
 
