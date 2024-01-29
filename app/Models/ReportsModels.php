@@ -285,9 +285,10 @@ class ReportsModels extends Model {
         $role   = Auth::User()->id_rol;
         
         $array_dashboard = [
-            "CLIENTES_NUEVO"        => 1,
+            "CLIENTES_NUEVO"        => $Opt,
             "RE_PRESTAMOS"          => 2.00,
             "SALDOS_COLOCADOS"      => 3.00,
+            "LISTA_CLIENTES"        => Clientes::Clientes_promotor()
         ];
 
         return $array_dashboard;

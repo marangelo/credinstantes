@@ -101,44 +101,9 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="position-relative mb-4">
-                <table id="tbl_cliente_promotor" class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>NOMBRE</th>
-                            <th>TELEFONO</th>
-                            <th>DEPARTAMENTO</th>
-                            <th>ZONA</th>
-                            <th>DIRECCION</th>
-                            <th>Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach ($Clientes as $c)
-                        <tr>
-                            <td> {{ $c ['id_clientes'] }} </td>
-                            <td>
-                              <a href="Perfil/{{ $c ['id_clientes'] }}" class=""><strong>#{{ $c ['id_clientes'] }} </strong> : {{ strtoupper($c ['Nombre']) }} : {{ strtoupper($c ['Apellidos']) }}</a> 
-                            </td>
-                            <td> {{ $c ['Apellidos'] }} </td>
-                            <td> {{ $c ['Departamento'] }} </td>
-                            <td> {{ $c ['Zona'] }} </td>
-                            <td> {{ $c ['Direccion'] }} </td>
-                            <td> {{ $c ['Accion'] }} </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                    <tfoot>
-                        <th>#</th>
-                        <th>NOMBRE</th>
-                        <th>TELEFONO</th>
-                        <th>DEPARTAMENTO</th>
-                        <th>ZONA</th>
-                        <th>DIRECCION</th>
-                        <th>Accion</th>
-                    </tfoot>
-                </table>
+                  <table id="tbl_cliente_promotor" class="table table-bordered table-hover"> </table>
                 </div>
 
                 
