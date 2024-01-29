@@ -136,13 +136,12 @@ class Clientes extends Model
         $position_array_cliente     = 0 ;
 
         foreach ($ClientesInactivos as $c) {
-            
             $ArrayClientesInactivos[$position_array_cliente] = [
                 'id_clientes'       => $c->id_clientes,
                 'Nombre'            => $c->nombre,
                 'Apellidos'         => $c->apellidos,
                 'Departamento'      => $c->getMunicipio->getDepartamentos->nombre_departamento,
-                'Zona'              => $c->getZona,
+                'Zona'              => $c->getZona->nombre_zona,
                 'Direccion'         => $c->direccion_domicilio,
                 'Accion'            => 'INACTIVO',
             ];
