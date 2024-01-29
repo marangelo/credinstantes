@@ -271,7 +271,7 @@ class ReportsModels extends Model {
         return $array_dashboard;
     }
 
-    public static function getDashboardPromotor($Zona_)
+    public static function getDashboardPromotor($Zona)
     {
         $array_dashboard    = [];
         $vLabel             = [];
@@ -286,24 +286,21 @@ class ReportsModels extends Model {
         $Prom   = Auth::id();
 
 
+        $Creditos   = Credito::where('creado_por',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
+        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
         
 
-        $Creditos   = Credito::where('creado_por',$Prom);
-        $Represtamo = Reloan::where('user_created',$Prom);
-        
-        //$Creditos_mora_vencidos =  Credito::where('activo', 1)->whereIn('estado_credito', [2,3]);
-
-        if ($Zona_ > 0) {
+        if ($Zona > 0) {
             
-            $Creditos->Where(function($query) use ($Zona_) {
-                $query->whereHas('Clientes', function ($query) use ($Zona_) {
-                    $query->where('id_zona', $Zona_);
+            $Creditos->Where(function($query) use ($Zona) {
+                $query->whereHas('Clientes', function ($query) use ($Zona) {
+                    $query->where('id_zona', $Zona);
                 });
             });
 
-            $Represtamo->Where(function($query) use ($Zona_) {
-                $query->whereHas('Clientes', function ($query) use ($Zona_) {
-                    $query->where('id_zona', $Zona_);
+            $Represtamo->Where(function($query) use ($Zona) {
+                $query->whereHas('Clientes', function ($query) use ($Zona) {
+                    $query->where('id_zona', $Zona);
                 });
             });
         }
@@ -325,7 +322,7 @@ class ReportsModels extends Model {
             "CLIENTES_NUEVO"        => $Clientes_Nuevo,
             "RE_PRESTAMOS"          => $Reloan_count,
             "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
-            "LISTA_CLIENTES"        => Clientes::Clientes_promotor()
+            "LISTA_CLIENTES"        => Clientes::Clientes_promotor($Zona)
         ];
 
         return $array_dashboard;

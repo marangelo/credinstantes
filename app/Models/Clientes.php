@@ -124,7 +124,7 @@ class Clientes extends Model
                     ->where('activo', 1)
                     ->where('estado_credito', 1);
     }
-    public static function Clientes_promotor(){
+    public static function Clientes_promotor($Zona){
 
         $ClientesInactivos = Clientes::getInactivos();
 
@@ -136,12 +136,13 @@ class Clientes extends Model
         $position_array_cliente     = 0 ;
 
         foreach ($ClientesInactivos as $c) {
+            
             $ArrayClientesInactivos[$position_array_cliente] = [
                 'id_clientes'       => $c->id_clientes,
                 'Nombre'            => $c->nombre,
                 'Apellidos'         => $c->apellidos,
                 'Departamento'      => $c->getMunicipio->getDepartamentos->nombre_departamento,
-                'Zona'              => $c->getZona->nombre_zona,
+                'Zona'              => $c->getZona,
                 'Direccion'         => $c->direccion_domicilio,
                 'Accion'            => 'INACTIVO',
             ];
