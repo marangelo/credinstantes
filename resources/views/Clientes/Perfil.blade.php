@@ -174,7 +174,7 @@
             <div class="modal-body">
               <form class="form-horizontal">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label>Fecha Apertura</label>
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
@@ -185,12 +185,22 @@
                         </div>
                     </div> 
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label>Dia de Visita</label>
                       <select class="form-control" id="slDiaVisita">
                         @foreach ($DiasSemana as $d)
                           <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                        @endforeach
+                      </select>                        
+                    </div> 
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Promotor</label>
+                      <select class="form-control" id="slPromotor">
+                        @foreach ($Promo as $p)
+                          <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
                         @endforeach
                       </select>                        
                     </div> 

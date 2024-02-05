@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
 use Auth;
+use CodersFree\Date\Date;
 
 class ReportsModels extends Model {
 
@@ -286,7 +287,7 @@ class ReportsModels extends Model {
         $Prom   = Auth::id();
 
 
-        $Creditos   = Credito::where('creado_por',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
+        $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
         $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
         
 
@@ -330,41 +331,46 @@ class ReportsModels extends Model {
 
     public static function getClientesDesembolsados()
     {
-        $array_dashboard    = [];
-        $vLabel             = [];
-        $vData              = [];
-        $ttPagoCapital      = 0;
-        $ttPagoIntereses    = 0;
-
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
         $role   = Auth::User()->id_rol;
         $Prom   = Auth::id();
 
+        $ArrayClientesNuevos     = [] ;
+        $ArrayReprestamo         = [] ;
+        $Loadarray               = [] ;
+        $position_array          = 0 ;
 
-        $Creditos   = Credito::where('creado_por',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
-        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
-        
-        
-        
-        // $Clientes_Nuevo     = $Creditos->count();
-        // $Reloan_count       = $Represtamo->count();
+        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2])->get();
+        foreach ($Represtamo as $rc) {
+            
+            $ArrayReprestamo[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->date_reloan)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->amount_reloan,2),
+                'Origen'            => 'RePrestamo',
+            ];
+            $Loadarray[$position_array] = $rc->loan_id;
+            $position_array++;
+        }
 
-        // $Clientes_Nuevo     = $Clientes_Nuevo - $Reloan_count;
-        // $Clientes_Nuevo     = ($Clientes_Nuevo < 0 ) ? 0 : $Clientes_Nuevo ;
+        $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->get();
+        foreach ($Creditos as $c) {
+            $ArrayClientesNuevos[$position_array] = [
+                'id_clientes'       => $c->id_clientes,
+                'Nombre'            => $c->Clientes->nombre . " " . $c->Clientes->apellidos,
+                'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($c->monto_credito,2),
+                'Origen'            => 'Nuevo',
+            ];
+            $position_array++;
+        }
 
-        
-        // $RePrestamo         = $Represtamo->sum('amount_reloan');
+        $array_merge = array_merge($ArrayClientesNuevos , $ArrayReprestamo);
 
-        // $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') + $RePrestamo;
-        
-        
-        $array_dashboard = [
-            "LISTA_CLIENTES"        => Clientes::all()
-        ];
-
-        return $array_dashboard;
+        return $array_merge;
     }
     
 }

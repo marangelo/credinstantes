@@ -183,7 +183,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label>Promotor</label>
-                        <select class="form-control" id="slDiaVisita">
+                        <select class="form-control" id="slPromotor">
                           @foreach ($Promo as $p)
                             <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
                           @endforeach

@@ -104,7 +104,8 @@
 
             var DiaSemana_  = $("#slDiaVisita option:selected").val();  
             var Municipio_  = $("#selMunicipio option:selected").val();  
-            var Zona_        = $("#selZona option:selected").val();
+            var Zona_       = $("#selZona option:selected").val();
+            var Promotor    = $("#slPromotor option:selected").val();
 
             var Nombre_      = $("#txtNombre").val();   
             var Apellido_    = $("#txtApellido").val();   
@@ -124,6 +125,7 @@
             var InteresesPorCuota  = $("#txtInteresesPorCuota").val();
             var Saldos_    = $("#txtSaldos").val();
 
+            Promotor        = isValue(Promotor,0,true)
         
             DiaSemana_      = isValue(DiaSemana_,'N/D',true)
             Municipio_      = isValue(Municipio_,'N/D',true)            
@@ -144,6 +146,7 @@
                     DiaSemana_   : DiaSemana_,
                     Municipio_   : Municipio_,
                     Zona_        : Zona_,
+                    Promotor_    : Promotor,
                     Nombre_      : Nombre_,
                     Apellido_    : Apellido_ , 
                     Cedula_      : Cedula_,

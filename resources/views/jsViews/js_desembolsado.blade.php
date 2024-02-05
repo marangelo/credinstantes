@@ -24,7 +24,7 @@
 
         $.getJSON("getClientesDesembolsados/", function(dataset) {
 
-            TableClientes(dataset['LISTA_CLIENTES']);
+            TableClientes(dataset);
         
         })
     }
@@ -52,14 +52,10 @@
                 "search": "BUSCAR"
             },
             'columns': [
-                {"title": "#","data"  : "id_clientes"},
-                {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {
-                    return `<a href="Perfil/`+row.id_clientes+`"><strong>#`+row.id_clientes+` </strong> : `+ row.Nombre +` `+row.Apellidos+` </a> ` 
-                }},                               
-                {"title": "DEPARTAMENTO","data" : "Departamento"},
-                {"title": "ZONA","data"         : "Zona"},
-                {"title": "DIRECCION","data"    : "Direccion"},
-                {"title": "ACCION","data"       : "Accion"},
+                {"title": "NOMBRE","data"   : "Nombre"},                
+                {"title": "FECHA","data"    : "Fecha"},
+                {"title": "MONTO","data"    : "Monto"},
+                {"title": "ORIGEN","data"   : "Origen"},
             ],
             "columnDefs": [{"className": "", "targets": [ ]},],
         });  
