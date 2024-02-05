@@ -32,6 +32,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        @if( Session::get('rol') == '1' )
         <div class="card-header">
           <h3 class="card-title" id="IdCardTitle"></h3>
           <div class="card-tools">
@@ -51,6 +52,8 @@
             </div>
           </div>
         </div>
+        @endif
+
           @if( Session::get('rol') == '1' )
           <div class="row">
             <div class="col-12 col-sm-6 col-md-2">

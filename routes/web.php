@@ -64,6 +64,7 @@ Route::post('AddCredito', 'CredinstanteController@AddCredito')->name('AddCredito
 //RUTAS PARA REMOVER
 Route::post('rmElem', 'CredinstanteController@Remover')->name('rmElem');
 Route::post('rmAbono', 'CredinstanteController@rmAbono')->name('rmAbono');
+Route::post('LockUser', 'CredinstanteController@LockUser')->name('LockUser');
 
 //RUTAS DE REPORTES
 Route::get('Visitar', 'ReportsController@Visitar')->name('Visitar');

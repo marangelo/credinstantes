@@ -36,6 +36,7 @@ class CredinstanteController extends Controller {
 
     public function prtVoucher($Id){
         $Abono    = Abono::find($Id); 
+    
         \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago complete de: ". $Id);
         return view('Voucher.completo', compact('Abono'));
     }
@@ -258,6 +259,12 @@ class CredinstanteController extends Controller {
     public function Remover(Request $request)
     {
         $response = Credinstante::Remover($request);
+        
+        return response()->json($response);
+    }
+    public function LockUser(Request $request)
+    {
+        $response = Credinstante::LockUser($request);
         
         return response()->json($response);
     }

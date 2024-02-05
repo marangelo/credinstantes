@@ -53,5 +53,27 @@ class Credinstante extends Model {
             }
         }
     }
+    public static function LockUser(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $id     = $request->input('IdUser');
+
+                $User   = Usuario::find($id);
+                            
+                $response =   Usuario::where('id',  $id)->update([
+                    "Lock" => ($User->Lock > 0) ? 0: 1 ,
+                ]);
+
+                return response()->json($response);
+
+
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+    }
 
 }

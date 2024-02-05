@@ -70,7 +70,7 @@ class LoginController extends Controller
 
 
         $user = $request->email;
-        $queryResult = DB::table('users')->where('email', $user)->where('activo', 'S')->pluck('id');
+        $queryResult = DB::table('users')->where('email', $user)->where('activo', 'S')->where('Lock', 1)->pluck('id');
         if (!$queryResult->isEmpty()) {
             if ($this->attemptLogin($request)) {
 
