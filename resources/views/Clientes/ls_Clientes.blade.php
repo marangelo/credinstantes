@@ -158,9 +158,8 @@
             
               <!-- /.card-header -->
               <div class="card-body">                  
-                  <div class="row">
-                    
-                    <div class="col-sm-2">
+                  <div class="row">                    
+                    <div class="col-sm-4">
                       <div class="form-group">
                           <label>Fecha Inicio</label>
                           <div class="input-group date" id="reservationdate" data-target-input="nearest">
@@ -171,7 +170,7 @@
                           </div>
                       </div>                      
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Dia de Visita</label>
                         <select class="form-control" id="slDiaVisita">
@@ -182,13 +181,23 @@
                       </div>                      
                     </div>
                     <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Promotor</label>
+                        <select class="form-control" id="slDiaVisita">
+                          @foreach ($Promo as $p)
+                            <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
+                          @endforeach
+                        </select>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ...">
                       </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Apellido</label>

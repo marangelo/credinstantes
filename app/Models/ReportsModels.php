@@ -327,5 +327,44 @@ class ReportsModels extends Model {
 
         return $array_dashboard;
     }
+
+    public static function getClientesDesembolsados()
+    {
+        $array_dashboard    = [];
+        $vLabel             = [];
+        $vData              = [];
+        $ttPagoCapital      = 0;
+        $ttPagoIntereses    = 0;
+
+        $dtNow  = date('Y-m-d');
+        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+        $role   = Auth::User()->id_rol;
+        $Prom   = Auth::id();
+
+
+        $Creditos   = Credito::where('creado_por',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
+        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
+        
+        
+        
+        // $Clientes_Nuevo     = $Creditos->count();
+        // $Reloan_count       = $Represtamo->count();
+
+        // $Clientes_Nuevo     = $Clientes_Nuevo - $Reloan_count;
+        // $Clientes_Nuevo     = ($Clientes_Nuevo < 0 ) ? 0 : $Clientes_Nuevo ;
+
+        
+        // $RePrestamo         = $Represtamo->sum('amount_reloan');
+
+        // $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') + $RePrestamo;
+        
+        
+        $array_dashboard = [
+            "LISTA_CLIENTES"        => Clientes::all()
+        ];
+
+        return $array_dashboard;
+    }
     
 }

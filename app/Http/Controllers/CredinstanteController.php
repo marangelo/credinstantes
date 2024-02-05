@@ -55,10 +55,11 @@ class CredinstanteController extends Controller {
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('id_rol',4)->get(); 
         $Titulo      = "Clientes Activos";
         $View        = ($IsCalc) ? 'Dashboard.update' : 'Clientes.ls_Clientes' ;    
         
-        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
     public function getInactivos()
@@ -319,13 +320,22 @@ class CredinstanteController extends Controller {
     public function Promotor()
     {         
         $Titulo = "Promotor";
-        $Municipios  = Municipios::getMunicipios();  
-        $DiasSemana  = DiasSemana::getDiasSemana();
+        
         $Zonas  = Zonas::getZonas();  
         
-        return view('Promotor.Home',compact('Titulo','Zonas','DiasSemana','Municipios'));
+        return view('Promotor.Home',compact('Titulo','Zonas'));
 
     }
+    public function Desembolsados()
+    {         
+        $Titulo = "DESEMBOLSADO";
+    
+        
+        return view('Promotor.Desembolsado',compact('Titulo'));
+
+    }
+
+    
     
 
 

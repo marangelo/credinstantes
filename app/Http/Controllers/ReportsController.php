@@ -77,6 +77,12 @@ class ReportsController extends Controller {
         return response()->json($response);
     }
 
+    public function getClientesDesembolsados()
+    {
+        $response = ReportsModels::getClientesDesembolsados();
+        
+        return response()->json($response);
+    }
 
 
     public function exportAbonos(Request $request)

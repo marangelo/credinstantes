@@ -93,5 +93,7 @@ Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEs
 
 Route::get('Promotor', 'CredinstanteController@Promotor')->name('Promotor');
 Route::get('getDashboardPromotor/{ID}', 'ReportsController@getDashboardPromotor')->name('getDashboardPromotor');
+Route::get('Desembolsados', 'CredinstanteController@Desembolsados')->name('Desembolsados');
+Route::get('getClientesDesembolsados', 'ReportsController@getClientesDesembolsados')->name('getClientesDesembolsados');
 
 
