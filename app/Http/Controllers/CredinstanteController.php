@@ -68,9 +68,10 @@ class CredinstanteController extends Controller {
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();  
         $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('id_rol',4)->get(); 
         $Titulo      = "Clientes Inactivos";
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
 
