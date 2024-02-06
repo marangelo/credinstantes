@@ -48,7 +48,7 @@
                 <div class="card-tools">
                   
 
-                    @if(in_array(Session::get('rol'), array(1, 3, 4)))
+                    @if(in_array(Session::get('rol'), array(1, 3)))
                     <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
                         Nuevo
                       </button>
