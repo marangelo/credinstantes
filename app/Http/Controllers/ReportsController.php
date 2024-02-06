@@ -76,6 +76,12 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
+    public function getMetricasPromotor($Opt)
+    {
+        $response = ReportsModels::getMetricasPromotor($Opt);
+        
+        return response()->json($response);
+    }
 
     public function getClientesDesembolsados()
     {

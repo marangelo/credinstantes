@@ -331,13 +331,18 @@ class CredinstanteController extends Controller {
     public function Desembolsados()
     {         
         $Titulo = "DESEMBOLSADO";
-    
-        
         return view('Promotor.Desembolsado',compact('Titulo'));
 
     }
 
-    
+    public function MetricasPromotor()
+    {         
+        $Titulo = "Promotor";
+        $Promo       = Usuario::where('id_rol',4)->get();  
+        
+        return view('Promotor.Metricas',compact('Titulo','Promo'));
+
+    }
     
 
 

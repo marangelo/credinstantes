@@ -328,6 +328,57 @@ class ReportsModels extends Model {
 
         return $array_dashboard;
     }
+    public static function getMetricasPromotor($Prom)
+    {
+        $dtNow  = date('Y-m-d');
+        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+        
+        $array_dashboard         = [];
+        $ArrayClientesNuevos     = [] ;
+        $ArrayReprestamo         = [] ;
+        $Loadarray               = [] ;
+        $position_array          = 0 ;
+
+        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2])->get();
+        foreach ($Represtamo as $rc) {
+            
+            $ArrayReprestamo[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->date_reloan)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->amount_reloan,2),
+                'Origen'            => 'RePrestamo',
+            ];
+            $Loadarray[$position_array] = $rc->loan_id;
+            $position_array++;
+        }
+
+        $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->get();
+        foreach ($Creditos as $c) {
+            $ArrayClientesNuevos[$position_array] = [
+                'id_clientes'       => $c->id_clientes,
+                'Nombre'            => $c->Clientes->nombre . " " . $c->Clientes->apellidos,
+                'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($c->monto_credito,2),
+                'Origen'            => 'Nuevo',
+            ];
+            $position_array++;
+        }
+
+        $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
+
+        $array_dashboard = [
+            "CLIENTES_NUEVO"        => $Creditos->count(),
+            "RE_PRESTAMOS"          => $Represtamo->count(),
+            "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
+            "LISTA_CLIENTES"        =>array_merge($ArrayClientesNuevos , $ArrayReprestamo)
+        ];
+
+        
+
+        return $array_dashboard;
+    }
 
     public static function getClientesDesembolsados()
     {

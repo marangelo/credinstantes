@@ -48,6 +48,9 @@
                 <div class="btn btn-primary" id="IdbtnFilter">
                   <i class="fa fa-filter"></i>
                 </div>
+                <div class="ml-1 btn btn-primary" id="BtnExportExcel">
+                  <i class="fa fa-file-excel"></i>
+                </div>
               </div>
             </div>
           </div>

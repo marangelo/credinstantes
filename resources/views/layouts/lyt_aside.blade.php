@@ -125,6 +125,12 @@
             
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                    <a href="{{route('MetricasPromotor')}}" class="nav-link {{ (request()->is('MetricasPromotor')) ? 'active' : '' }}" >
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Promotores</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
                         <i class="far fa-circle nav-icon"></i>
                         <p>Visitar</p>
