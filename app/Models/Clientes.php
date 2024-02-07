@@ -59,23 +59,21 @@ class Clientes extends Model
     {
         // $Zona = Auth::User()->id_zona;
         $Role = Auth::User()->id_rol;
+        
+        $IdZona = Auth::User()->id_zona;
 
-        $e=0;
-
-
-        // $clMora = Clientes::getClientesMora();        
-        // $Clientes = Clientes::whereIn('id_clientes',$clMora)->get();
-
+        $e = 0;
+        
         $Clientes = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
             $query->whereIn('estado_credito', [1,2,3]);
-        })->get();
+        });
 
-        // if ($Role==2) {
-        //     $obj->where('id_zona',$Zona);
-        // }
+        if ($Role==2) {
+            $Clientes->where('id_zona',$IdZona);
+        }
 
     
-        return $Clientes;
+        return $Clientes->get();
     }
 
     public static function getInactivos()
