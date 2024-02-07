@@ -126,14 +126,27 @@ class Clientes extends Model
 
         $ClientesInactivos = Clientes::getInactivos();
 
-        $ClientePromotores = ClientePromotores::all();
+        $ClientePromotores = ClientePromotores::where('id_zona',$Zona)->get();
 
         $ArrayClientesInactivos     = [] ;
         $ArrayClientesDisponible    = [] ;
+        $ArrayInactivos             = [] ;
 
         $position_array_cliente     = 0 ;
 
+
+        
+        if ($Zona > 0) {
+            foreach ($ClientesInactivos as $k => $v){
+                if ($v->id_zona == $Zona) {
+                    $ArrayInactivos [$k] = $v->id_clientes;
+                }
+            }
+            $ClientesInactivos = Clientes::whereIn('id_clientes', $ArrayInactivos)->get();
+        }
+
         foreach ($ClientesInactivos as $c) {
+        
             $ArrayClientesInactivos[$position_array_cliente] = [
                 'id_clientes'       => $c->id_clientes,
                 'Nombre'            => $c->nombre,
@@ -143,13 +156,13 @@ class Clientes extends Model
                 'Direccion'         => $c->direccion_domicilio,
                 'Accion'            => 'INACTIVO',
             ];
+            
             $position_array_cliente++;
         }
         
 
         foreach ($ClientePromotores as $c) {
             $cl = Clientes::where('id_clientes',$c->id_clientes)->first();
-        
 
             $ArrayClientesDisponible[$position_array_cliente] = [
                 'id_clientes'       => $c->id_clientes,
