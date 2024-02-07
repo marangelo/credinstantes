@@ -413,7 +413,7 @@ class ReportsModels extends Model {
                 'id_clientes'       => $c->id_clientes,
                 'Nombre'            => $c->Clientes->nombre . " " . $c->Clientes->apellidos,
                 'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
-                'Monto'             => "C$ ".number_format($c->monto_credito,2),
+                'Monto'             => "C$ ".number_format($c->saldo,2),
                 'Origen'            => 'Nuevo',
             ];
             $position_array++;
