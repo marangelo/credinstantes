@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exports\ExportAbonos;
 use App\Exports\ExportVisitar;
+use App\Exports\ExportPromotorMetricas;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\Clientes;
@@ -98,6 +99,11 @@ class ReportsController extends Controller {
     public function exportVisita(Request $request)
     {
         return Excel::download(new ExportVisitar($request), 'Visita.xlsx');
+    }
+
+    public function ExportMetricasPromotor()
+    {
+        return Excel::download(new ExportPromotorMetricas, 'Promotor.xlsx');
     }
 
 }

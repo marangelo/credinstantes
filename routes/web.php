@@ -97,5 +97,6 @@ Route::get('Desembolsados', 'CredinstanteController@Desembolsados')->name('Desem
 Route::get('getClientesDesembolsados', 'ReportsController@getClientesDesembolsados')->name('getClientesDesembolsados');
 Route::get('MetricasPromotor', 'CredinstanteController@MetricasPromotor')->name('MetricasPromotor');
 Route::get('getMetricasPromotor/{ID}', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
+Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')->name('ExportMetricasPromotor');
 
 
