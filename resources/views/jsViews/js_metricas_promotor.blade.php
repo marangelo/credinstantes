@@ -52,6 +52,9 @@
         
         })
     }
+    $('.button_export_excel').click(() => {
+        $('#tbl_cliente_promotor').DataTable().buttons(0,0).trigger()
+    })
     function TableClientes(LISTA_CLIENTES) {
         $('#tbl_cliente_promotor').DataTable({
             "data": LISTA_CLIENTES,
@@ -75,6 +78,7 @@
                 "emptyTable": "-",
                 "search": "BUSCAR"
             },
+            buttons: [{extend: 'excelHtml5'}],
             'columns': [
                 {"title": "NOMBRE","data"   : "Nombre"},                
                 {"title": "FECHA","data"    : "Fecha"},

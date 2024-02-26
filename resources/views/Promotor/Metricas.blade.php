@@ -92,6 +92,9 @@
                                 <button type="submit" class="btn btn-lg btn-default">
                                     <i class="fa fa-search"></i>
                                 </button>
+                                <button type="submit" class="btn btn-lg btn-default button_export_excel">
+                                    <i class="fa fa-file-excel"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
