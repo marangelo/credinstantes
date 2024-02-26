@@ -126,7 +126,7 @@ class Clientes extends Model
 
         $ClientesInactivos = Clientes::getInactivos();
 
-        $ClientePromotores = ClientePromotores::where('id_zona',$Zona)->get();
+        $ClientePromotores = ClientePromotores::get();
 
         $ArrayClientesInactivos     = [] ;
         $ArrayClientesDisponible    = [] ;
@@ -143,6 +143,7 @@ class Clientes extends Model
                 }
             }
             $ClientesInactivos = Clientes::whereIn('id_clientes', $ArrayInactivos)->get();
+            $ClientePromotores = ClientePromotores::where('id_zona',$Zona)->get();
         }
 
         foreach ($ClientesInactivos as $c) {

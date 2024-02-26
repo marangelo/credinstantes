@@ -55,7 +55,7 @@ class CredinstanteController extends Controller {
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Zonas       = Zonas::getZonas();  
-        $Promo       = Usuario::where('id_rol',4)->get(); 
+        $Promo       = Usuario::where('activo','S')->get(); 
         $Titulo      = "Clientes Activos";
         $View        = ($IsCalc) ? 'Dashboard.update' : 'Clientes.ls_Clientes' ;    
         

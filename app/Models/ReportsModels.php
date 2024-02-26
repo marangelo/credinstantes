@@ -286,11 +286,15 @@ class ReportsModels extends Model {
         $role   = Auth::User()->id_rol;
         $Prom   = Auth::id();
 
+        
+
+        
+
 
         $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
         $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
         
-
+ 
         if ($Zona > 0) {
             
             $Creditos->Where(function($query) use ($Zona) {
