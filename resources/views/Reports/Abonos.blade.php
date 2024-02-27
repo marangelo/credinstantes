@@ -36,7 +36,6 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-              <form action="{{ route('exportAbonos') }}" method="POST">
               @csrf
                 <div class="row">
                   <div class="col-md-2">
@@ -81,7 +80,8 @@
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
                           
-                          <button type="submit" class="btn btn-success"><i class="fa fa-file-excel"></i></button>
+                          <button type="submit" class="btn btn-success button_export_excel"><i class="fa fa-file-excel"></i></button>
+                          
                       </div>
                     </div>
                   </div>
@@ -94,12 +94,13 @@
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
                           <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>
+
+                          
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                </form>
                 <table id="tbl_ingresos" class="table table-bordered table-striped">
                   <thead>
                   <tr>

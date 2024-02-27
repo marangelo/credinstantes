@@ -68,6 +68,12 @@
                         <p>Inactivos</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('RecuperacionCobro')}}" class="nav-link {{ (request()->is('RecuperacionCobro')) ? 'active' : '' }} ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Recuperacion</p>
+                    </a>
+                </li>
               </ul>
           </li>
           @if( Session::get('rol') == '1')

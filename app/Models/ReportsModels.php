@@ -126,6 +126,24 @@ class ReportsModels extends Model {
 
         return $array_abonos;
     }
+
+    public static function CalcRecuperacion(Request $request)
+    {
+        $dtIni    = $request->input('dtIni').' 00:00:00';
+        $dtEnd    = $request->input('dtEnd').' 23:59:59';
+        $Cobra    = Auth::id();
+
+
+        $Obj = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->where('activo', 1)->where('registrado_por', $Cobra);
+
+        $pago_capital = $Obj->sum( 'pago_capital' );
+
+        $pago_intereses = $Obj->sum( 'pago_intereses' );
+
+        $Total_Recuperado = $pago_capital + $pago_intereses;
+
+        return $Total_Recuperado;
+    }
     public static function getMorosidad(Request $request)
     {
         $IdZna    = $request->input('IdZna');

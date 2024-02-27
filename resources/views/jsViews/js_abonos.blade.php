@@ -19,7 +19,9 @@
             vTableArticulos.search(this.value).draw();
         });
     })
-
+    $('.button_export_excel').click(() => {
+            $('#tbl_ingresos').DataTable().buttons(0,0).trigger()
+        })
     function InitTable() {
 
         var slCli   = $("#id_select_cliente option:selected").val();  
@@ -47,7 +49,7 @@
 
 
 
-    
+        
 
         $("#tbl_ingresos").DataTable({
             "responsive": true, 
@@ -63,6 +65,7 @@
                 "next": "Siguiente",
                 "previous": "Anterior"
             },
+            
             "lengthMenu": "MOSTRAR _MENU_",
             "emptyTable": "-",
             "search": "BUSCAR"
@@ -79,6 +82,7 @@
                     _token  : "{{ csrf_token() }}" 
                 }
             },
+            buttons: [{extend: 'excelHtml5'}],
             'columns': [
                 
                 {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {

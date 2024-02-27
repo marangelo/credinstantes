@@ -64,8 +64,7 @@
                 
                 <div class="info-box-content ">
                   <span class="info-box-text">INGRESO NETO</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span>
-                  </span>
+                  <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span></span>
                 </div>
                 <!-- /.info-box-content -->
               </div>

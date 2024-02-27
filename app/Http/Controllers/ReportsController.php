@@ -22,6 +22,10 @@ class ReportsController extends Controller {
     {
         $this->middleware('auth');
     }
+    public function RecuperacionCobro(){
+        $Titulo      = "Recuperacion";
+        return view('Reports.Recuperacion',compact('Titulo'));
+    }
     public function Visitar()
     {           
         $DiasW       = DiasSemana::getDiasSemana();
@@ -56,6 +60,12 @@ class ReportsController extends Controller {
     public function getAbonos(Request $request)
     {
         $response = ReportsModels::getAbonos($request);
+        
+        return response()->json($response);
+    }
+    public function CalcRecuperacion(Request $request)
+    {
+        $response = ReportsModels::CalcRecuperacion($request);
         
         return response()->json($response);
     }
