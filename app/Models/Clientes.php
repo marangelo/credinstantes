@@ -246,12 +246,10 @@ class Clientes extends Model
                     //VERIFICA EL ESTADO DE SALUD DEL CLIENTE EN CASO QUE TENGA CREDITO VENCIDOS O EN MORA
                     $isCreditoVencido = ($tieneCreditoVencido > 0 ) ? true : false ;
 
-                    if($isCreditoVencido===false){
-                        
+                    if($isCreditoVencido===false){                        
                          // COMPRUEBA EL PORCENTAJE DE PAGOS QUE TIENEN SU PRIMER ABONO
                         //$Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100 : 0 ;
                         $cumplimiento_porcentaje = (($credito_cuotas - $credito_abonos) / $credito_cuotas) * 100;
-
                         $creditCheck = ($cumplimiento_porcentaje >= 50 && $credito_cuotas >= 6000)  ? true : false ;
                     }else{
                         $creditCheck = false;

@@ -141,7 +141,7 @@
               <div class="info-box mb-3 bg-danger">
 
                 <div class="info-box-content">
-                  <span class="info-box-text"> MORA VENCIDAD </span>
+                  <span class="info-box-text"> MORA VENCIDA </span>
                   <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
                   </span>
                 </div>
@@ -187,7 +187,7 @@
               <div class="info-box mb-3 bg-danger">
 
                 <div class="info-box-content">
-                  <span class="info-box-text"> MORA VENCIDAD </span>
+                  <span class="info-box-text"> MORA VENCIDA </span>
                   <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
                   </span>
                 </div>
@@ -228,7 +228,7 @@
                   <div class="col-sm-6 col-6">
                     <div class="description-block border-right">
                       <h5 class="description-header text-danger">C$10,390.90</h5>
-                      <span class="description-text">MORA VENCIDAD</span>
+                      <span class="description-text">MORA VENCIDA</span>
                     </div>
                     <!-- /.description-block -->
                   </div>

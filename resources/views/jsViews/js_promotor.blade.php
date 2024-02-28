@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        CalcIndicadores();
+        CalcIndicadores(1);
         $('[data-mask]').inputmask();
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY'
@@ -14,12 +14,12 @@
         
 
         $("#IdFilterByZone").change(function() {    
-            CalcIndicadores();
+            CalcIndicadores(0);
         });
         
     });
 
-    function CalcIndicadores(){
+    function CalcIndicadores(Change){
     
         var vLabel = []
         var vData = []
@@ -31,20 +31,24 @@
         //$("#IdCardTitle").text("Calculando . . . ") 
 
         $.getJSON("getDashboardPromotor/"+Opt, function(dataset) {
-        
-            var CLIENTES_NUEVO = dataset['CLIENTES_NUEVO'];
 
-            CLIENTES_NUEVO     = numeral(isValue(CLIENTES_NUEVO,0,true)).format('0.00');
-        
-            $("#lblClientesNuevos").text(CLIENTES_NUEVO);
+            if (Change > 0) {
 
-            var RE_PRESTAMOS = dataset['RE_PRESTAMOS'];
-            RE_PRESTAMOS     = numeral(isValue(RE_PRESTAMOS,0,true)).format('0.00');
-            $("#lblRePrestamo").text(RE_PRESTAMOS);
-        
-            var SALDOS_COLOCADOS = dataset['SALDOS_COLOCADOS'];
-            SALDOS_COLOCADOS     = numeral(isValue(SALDOS_COLOCADOS,0,true)).format('0,00.00');
-            $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
+                var CLIENTES_NUEVO = dataset['CLIENTES_NUEVO'];
+
+                CLIENTES_NUEVO     = numeral(isValue(CLIENTES_NUEVO,0,true)).format('0.00');
+
+                $("#lblClientesNuevos").text(CLIENTES_NUEVO);
+
+                var RE_PRESTAMOS = dataset['RE_PRESTAMOS'];
+                RE_PRESTAMOS     = numeral(isValue(RE_PRESTAMOS,0,true)).format('0.00');
+                $("#lblRePrestamo").text(RE_PRESTAMOS);
+
+                var SALDOS_COLOCADOS = dataset['SALDOS_COLOCADOS'];
+                SALDOS_COLOCADOS     = numeral(isValue(SALDOS_COLOCADOS,0,true)).format('0,00.00');
+                $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
+                
+            }
 
             TableClientes(dataset['LISTA_CLIENTES']);
         

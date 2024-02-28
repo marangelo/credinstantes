@@ -304,11 +304,6 @@ class ReportsModels extends Model {
         $role   = Auth::User()->id_rol;
         $Prom   = Auth::id();
 
-        
-
-        
-
-
         $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
         $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
         
@@ -338,7 +333,7 @@ class ReportsModels extends Model {
         
         $RePrestamo         = $Represtamo->sum('amount_reloan');
 
-        $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') + $RePrestamo;
+        $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') ;
         
         
         $array_dashboard = [
@@ -362,7 +357,13 @@ class ReportsModels extends Model {
         $Loadarray               = [] ;
         $position_array          = 0 ;
 
-        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2])->get();
+        
+        if ($Prom > 0) {
+            $Represtamo = Reloan::whereBetween('date_reloan', [$D1, $D2])->where('user_created',$Prom)->get();
+        }else{
+            $Represtamo = Reloan::whereBetween('date_reloan', [$D1, $D2])->get();
+        }
+        
         foreach ($Represtamo as $rc) {
             
             $ArrayReprestamo[$position_array] = [
@@ -376,7 +377,13 @@ class ReportsModels extends Model {
             $position_array++;
         }
 
-        $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->get();
+
+        if ($Prom > 0) {
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->where('asignado',$Prom)->get();
+        }else{
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->get();
+        }
+        
         foreach ($Creditos as $c) {
             $ArrayClientesNuevos[$position_array] = [
                 'id_clientes'       => $c->id_clientes,
@@ -435,7 +442,7 @@ class ReportsModels extends Model {
                 'id_clientes'       => $c->id_clientes,
                 'Nombre'            => $c->Clientes->nombre . " " . $c->Clientes->apellidos,
                 'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
-                'Monto'             => "C$ ".number_format($c->saldo,2),
+                'Monto'             => "C$ ".number_format($c->monto_credito,2),
                 'Origen'            => 'Nuevo',
             ];
             $position_array++;
