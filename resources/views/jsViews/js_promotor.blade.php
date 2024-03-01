@@ -64,6 +64,7 @@
             "lengthChange": false,
             "searching": true,
             "ordering": true,
+            "order": [[2, 'desc']],
             "info": true,
             "autoWidth": false,
             "responsive": true,
@@ -83,11 +84,12 @@
                 {"title": "#","data"  : "id_clientes"},
                 {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {
                     return `<a href="Perfil/`+row.id_clientes+`"><strong>#`+row.id_clientes+` </strong> : `+ row.Nombre +` `+row.Apellidos+` </a> ` 
-                }},                               
+                }}, 
+                {"title": "ACCION","data"       : "Accion"},                              
                 {"title": "DEPARTAMENTO","data" : "Departamento"},
                 {"title": "ZONA","data"         : "Zona"},
                 {"title": "DIRECCION","data"    : "Direccion"},
-                {"title": "ACCION","data"       : "Accion"},
+               
             ],
             "columnDefs": [{"className": "", "targets": [ ]},],
         });  
