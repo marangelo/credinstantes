@@ -133,12 +133,10 @@ class ReportsModels extends Model {
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $Cobra    = Auth::id();
 
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->where('registrado_por', $Cobra);
+        $pago_capital = $Obj->sum( 'CAPITAL' );
+        $pago_intereses = $Obj->sum( 'INTERES' );
 
-        $Obj = Abono::whereBetween('fecha_cuota', [$dtIni, $dtEnd])->where('activo', 1)->where('registrado_por', $Cobra);
-
-        $pago_capital = $Obj->sum( 'pago_capital' );
-
-        $pago_intereses = $Obj->sum( 'pago_intereses' );
 
         $Total_Recuperado = $pago_capital + $pago_intereses;
 
