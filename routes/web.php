@@ -23,8 +23,8 @@ Route::post('updatePassword', 'CredinstanteController@updatePassword')->name('up
 
 Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard');
 
-Route::get('Activos', 'CredinstanteController@getClientes')->name('Activos');
-Route::get('Inactivos', 'CredinstanteController@getInactivos')->name('Inactivos');
+Route::get('Activos/{id}', 'CredinstanteController@getClientes')->name('Activos/{id}');
+Route::get('Inactivos/{id}', 'CredinstanteController@getInactivos')->name('Inactivos/{id}');
 
 Route::get('Usuarios', 'CredinstanteController@getUsuarios')->name('Usuarios');
 

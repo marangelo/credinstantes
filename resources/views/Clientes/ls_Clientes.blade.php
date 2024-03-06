@@ -36,7 +36,7 @@
                 <label>Zonas</label>
                   <div class="form-group">
                     <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                        <option value="-1"  selected="selected">Todos</option>
+                        <option value="0"  selected="selected">Todos</option>
                       @foreach ($Zonas as $z)
                         <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
                       @endforeach
@@ -54,7 +54,7 @@
               <div class="card-header">
                 <h3 class="card-title">Listado de Clientes</h3>
                 <div class="card-tools">  
-                  @if (request()->is('Activos'))
+                  @if (request()->is('Activos/*'))
                       @if (Session::get('rol') == '1' || Session::get('rol') == '3')
                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
                               NUEVO
@@ -65,7 +65,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                              <table id="tbl_clientes" class="table table-bordered table-striped">
+                  <table id="tbl_clientes" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Nombre</th>
@@ -87,7 +87,7 @@
                       $Estados = $c->getCreditos->first(); 
                       @endphp
                        
-                    @if ($Estados->estado_credito != 4 || request()->is('Inactivos'))
+                    @if ($Estados->estado_credito != 4 || request()->is('Inactivos/*'))
                     <tr>
                       <td>
                         
@@ -125,7 +125,7 @@
                       </td>
                       <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
                       
-                        @if (request()->is('Activos'))
+                        @if (request()->is('Activos/*'))
                           @if (Session::get('rol') == '1' || Session::get('rol') == '3')
                           <td>
                             <div class="card-tools text-center">  

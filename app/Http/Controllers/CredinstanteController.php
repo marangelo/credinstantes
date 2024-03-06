@@ -62,7 +62,7 @@ class CredinstanteController extends Controller {
         return response()->json($Clientes);
     }
     
-    public function getClientes()
+    public function getClientes($id)
     {   
         $IsCalc      = DateRecord::Check();
         $Clientes    = Clientes::getClientes();  
@@ -76,7 +76,7 @@ class CredinstanteController extends Controller {
         return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
-    public function getInactivos()
+    public function getInactivos($id)
     {   
         $Clientes    = Clientes::getInactivos();  
         $Municipios  = Municipios::getMunicipios();  

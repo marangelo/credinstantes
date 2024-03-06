@@ -57,13 +57,13 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('Activos')}}" class="nav-link {{ (request()->is('Activos')) ? 'active' : '' }} ">
+                    <a href="../Activos/0" class="nav-link {{ (request()->is('Activos/*')) ? 'active' : '' }} ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Activos</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('Inactivos')}}" class="nav-link {{ (request()->is('Inactivos')) ? 'active' : '' }} ">
+                    <a href="../Inactivos/0" class="nav-link {{ (request()->is('Inactivos/*')) ? 'active' : '' }} ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Inactivos</p>
                     </a>

@@ -8,7 +8,11 @@
         });
 
         var userRole = $("#id_rol_user").text();
-       
+        $('#id_select_zona').change(function() {
+            var selectedValue = this.value;
+            var currentPath = window.location.pathname; 
+            window.location.href = currentPath.slice(0, -1) + selectedValue;
+        });
 
         $("#tbl_clientes").DataTable({
             "responsive": true, 
