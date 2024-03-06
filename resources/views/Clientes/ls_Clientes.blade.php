@@ -30,6 +30,25 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
+            <div class="row">
+   
+              <div class="col-md-12">
+                <label>Zonas</label>
+                  <div class="form-group">
+                    <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                        <option value="-1"  selected="selected">Todos</option>
+                      @foreach ($Zonas as $z)
+                        <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
+                      @endforeach
+                    </select>
+                    
+                  </div>
+              </div>
+              
+            </div>
+            
+
+            
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
@@ -46,7 +65,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_clientes" class="table table-bordered table-striped">
+                              <table id="tbl_clientes" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Nombre</th>
@@ -65,7 +84,7 @@
                  
                   @foreach ($Clientes as $c)  
                    @php
-                            $Estados = $c->getCreditos->first(); 
+                      $Estados = $c->getCreditos->first(); 
                       @endphp
                        
                     @if ($Estados->estado_credito != 4 || request()->is('Inactivos'))
@@ -115,12 +134,13 @@
                                     </i>
                                     Editar
                                 </a>
-                                
+                                @if (Session::get('rol') == '1')  
                                 <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
                                     <i class="fas fa-trash">
                                     </i>
                                     Remover
                                 </a>
+                                 @endif
                               </div>
                               </td>
                           @endif

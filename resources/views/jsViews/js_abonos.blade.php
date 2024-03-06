@@ -94,6 +94,7 @@
                     "data": "cuota_cobrada",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 }, 
+                @if (Session::get('rol') == '1')  
                 {
                     "title": "CAPITAL",
                     "data": "pago_capital",
@@ -104,6 +105,7 @@
                     "data": "pago_intereses",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },                  
+                @endif
             ],
             "fnDrawCallback": function ( row, data, start, end, display ) {
                 var api = this.api(), data;
@@ -119,6 +121,11 @@
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
+                INGRESO         = numeral(isValue(INGRESO,0,true)).format('0,00.00')
+                $('#id_lbl_ingreso').html(INGRESO);
+
+
+                @if (Session::get('rol') == '1')  
                 CAPITAL = api
                 .column( 2 )
                 .data()
@@ -133,15 +140,14 @@
                     return intVal(a) + intVal(b);
                 }, 0 );
 
-               
-
-                INGRESO         = numeral(isValue(INGRESO,0,true)).format('0,00.00')
+            
                 CAPITAL         = numeral(isValue(CAPITAL,0,true)).format('0,00.00')
                 INTERES         = numeral(isValue(INTERES,0,true)).format('0,00.00')
-
-                $('#id_lbl_ingreso').html(INGRESO);
                 $('#id_lbl_capital').html(CAPITAL);
                 $('#id_lbl_interes').html(INTERES);
+                @endif
+                
+            
             }
         })
 

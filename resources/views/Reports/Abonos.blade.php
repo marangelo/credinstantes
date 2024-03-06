@@ -106,8 +106,10 @@
                   <tr>
                     <th>NOMBRE</th>
                     <th>CUOTA COBRADA</th>
+                    @if (Session::get('rol') == '1')  
                     <th>PAGO A CAPITAL</th>
                     <th>PAGO A INTERES</th>
+                    @endif
                   </tr>
                   </thead>
                   <tbody>
@@ -117,12 +119,17 @@
               </div>
               <div class="card-footer">
                 <div class="row">
+                  @if (Session::get('rol') == '1')  
                   <div class="col-sm-4 col-md-4">
+                  @else 
+                  <div class="col-sm-12 col-md-12">
+                  @endif
                     <div class="description-block border-right">
                       <h5 class="description-header text-primary" >C$ <span id="id_lbl_ingreso"></span></h5>
                       <span class="description-text">TOTAL INGRESO BRUTO</span>
                     </div>
                   </div>
+                  @if (Session::get('rol') == '1')  
                   <div class="col-sm-4 col-md-4">
                     <div class="description-block border-right">
                       <h5 class="description-header text-success" >C$ <span id="id_lbl_capital" ></span></h5>
@@ -132,10 +139,10 @@
                   <div class="col-sm-4 col-md-4">
                     <div class="description-block">
                       <h5 class="description-header text-warning">C$ <span id="id_lbl_interes"></span></h5>
-                      <span class="description-text">ITERESES O (UTILIDAD DEL DIA)</span>
+                      <span class="description-text">INTERESES O (UTILIDAD DEL DIA)</span>
                     </div>
-                    <!-- /.description-block -->
                   </div>
+                  @endif
                 </div>
                 <!-- /.row -->
               </div>

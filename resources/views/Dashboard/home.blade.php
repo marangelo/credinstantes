@@ -48,9 +48,8 @@
                 <div class="btn btn-primary" id="IdbtnFilter">
                   <i class="fa fa-filter"></i>
                 </div>
-                <div class="ml-1 btn btn-primary" id="BtnExportExcel">
-                  <i class="fa fa-file-excel"></i>
-                </div>
+                <table id="tbl_metrias_home" class="table table-bordered table-striped"></table>
+             
               </div>
             </div>
           </div>
@@ -197,7 +196,7 @@
             </div>
           </div>
           @endif
-        
+  
 
         <div class="row">
           <div class="col-md-12">

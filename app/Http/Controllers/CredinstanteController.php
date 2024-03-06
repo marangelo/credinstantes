@@ -47,6 +47,20 @@ class CredinstanteController extends Controller {
         return view('Voucher.parcial', compact('Abono'));
         
     }
+
+    public function InfoCliente($id)
+    {           
+        $perfil_cliente = Clientes::find($id);      
+        return response()->json($perfil_cliente);
+        
+    }
+
+    public function ListaClientes(Request $request)
+    {
+        $Clientes = Clientes::ListaClientes($request);
+        
+        return response()->json($Clientes);
+    }
     
     public function getClientes()
     {   
@@ -74,6 +88,7 @@ class CredinstanteController extends Controller {
         return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
+
 
     public function getPerfil($id)
     {   

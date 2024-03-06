@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use Auth;
+use Session; 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +55,7 @@ class Clientes extends Model
         ]);
 
     } 
+
 
     public static function getClientes()
     {

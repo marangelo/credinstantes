@@ -8,7 +8,7 @@
         });
 
         var userRole = $("#id_rol_user").text();
-        
+       
 
         $("#tbl_clientes").DataTable({
             "responsive": true, 
@@ -334,21 +334,17 @@
             "3" : "bg-warning",
             "4" : ""
         }
+
         $("#edtNombre").val(c.nombre);
         $("#edtApellido").val(c.apellidos);
-
         $("#edtTelefono").val(c.telefono);
         $("#edtCedula").val(c.cedula);
         $("#edtMunicipio").val(c.id_municipio).change();
-        $("#edtZonas").val(c.id_zona).change();       
-
+        $("#edtZonas").val(c.id_zona).change();    
         $("#edtDireccion").text(c.direccion_domicilio);
 
-        $('#mdl_edit_cliente').modal('show')
-
-    
-        Cliente_         = isValue(c.id_clientes,0,true);
-
+        $('#mdl_edit_cliente').modal('show');
+        Cliente_         = isValue(c,0,true);
         $("#edtIdClient").text(Cliente_);
 
         $.ajax({
@@ -360,8 +356,6 @@
             },
             async: true,
             success: function(response) {
-
-
                 response.forEach((response) => {
                     var span = `<span class="badge `+ Colors[response.estado_credito]+`  ">`+  (Estados[response.estado_credito])?? 'N/A' +`</span>`
                     dta_table.push({ 
@@ -382,6 +376,7 @@
                     {"title": "SALDO","data": "saldo"},
                     {"title": "TOTAL","data": "total"},
                     {"title": "ESTADO","data": "estado_credito"},
+                    
                     {"title": "","data": "estado_credito", "render": function(data, type, row, meta) {                        
                         return`<button type="button" class="btn btn-block bg-gradient-primary" onClick="ChanceStatus(`+ row.id_creditos +`)">CAMBIAR</button>`;
                     }}
@@ -404,6 +399,7 @@
             //location.reload();
         });
     }
+
 
     
 
@@ -464,7 +460,7 @@
     }
 
     function table_render(Table,datos,Header,columnDefs,Filter){
-
+        var userRole = $("#id_rol_user").text();
         TableExcel = $(Table).DataTable({
             "data": datos,
             "destroy": true,
@@ -472,7 +468,7 @@
             responsive: true,
             "bPaginate": true,
             "order": [
-                [0, "DESC"]
+                [0, "asc"]
             ],
             "lengthMenu": [
                 [7, -1],
@@ -492,12 +488,13 @@
             },
             'columns': Header,
             "columnDefs": columnDefs,
+            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ],
             rowCallback: function( row, data, index ) {
                 if ( data.Index == 'N/D' ) {
                     $(row).addClass('table-danger');
                 } 
             }
-        });
+        }).buttons().container().appendTo(Table+'_wrapper .col-md-6:eq(0)');
         if(!Filter){
             $(Table+"_length").hide();
             $(Table+"_filter").hide();
