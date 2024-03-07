@@ -84,7 +84,7 @@
                       <td>
                         
 
-                        <a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
+                        <a href="../Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
                         @if ($c->getCreditos->isNotEmpty())
                                 <span class="badge @switch($Estados->estado_credito)
                                               @case(1)

@@ -36,7 +36,7 @@ class ReportsController extends Controller {
     }
     public function Abonos()
     {           
-        $Clientes    = Clientes::getClientes();  
+        $Clientes    = Clientes::getClientes(0);  
         $Zonas       = Zonas::getZonas(); 
         $Titulo      = "Ingresos Diarios";
         return view('Reports.Abonos', compact('Clientes','Titulo','Zonas'));

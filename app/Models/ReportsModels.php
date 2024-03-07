@@ -146,7 +146,7 @@ class ReportsModels extends Model {
     {
         $IdZna    = $request->input('IdZna');
         
-        $Clientes = Clientes::getClientes();
+        $Clientes = Clientes::getClientes(0);
 
         $Clientes = ($IdZna > 0) ? $Clientes->Where('id_zona',$IdZna) : $Clientes ;
 
