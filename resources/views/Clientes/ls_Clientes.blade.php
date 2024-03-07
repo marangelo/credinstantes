@@ -30,23 +30,15 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="row">
-   
-              <div class="col-md-12">
-                <label>Zonas</label>
-                  <div class="form-group">
-                    <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                        <option value="0"  selected="selected">Todos</option>
-                      @foreach ($Zonas as $z)
-                        <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
-                      @endforeach
-                    </select>
-                    
-                  </div>
-              </div>
-              
+            <label>Zonas</label>
+            <div class="form-group">
+              <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                  <option value="0"  selected="selected">Todos</option>
+                  @foreach ($Zonas as $z)
+                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
+                  @endforeach
+              </select>
             </div>
-            
 
             
             <!-- /.card -->
