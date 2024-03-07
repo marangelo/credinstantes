@@ -57,7 +57,7 @@ class Clientes extends Model
     } 
 
 
-    public static function getClientes()
+    public static function getClientes($Id)
     {
         // $Zona = Auth::User()->id_zona;
         $Role = Auth::User()->id_rol;
@@ -72,13 +72,18 @@ class Clientes extends Model
 
         if ($Role==2) {
             $Clientes->where('id_zona',$IdZona);
+        }else{
+            if ($Id > 0) {
+                $Clientes->where('id_zona',$Id);
+            } 
+            
         }
 
     
         return $Clientes->get();
     }
 
-    public static function getInactivos()
+    public static function getInactivos($id)
     {
         $e = 1;
 
@@ -91,9 +96,12 @@ class Clientes extends Model
         ->groupBy('tbl_clientes.id_clientes', 'tbl_clientes.nombre', 'tbl_clientes.apellidos', 'tbl_clientes.activo')
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
-        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'")
-        ->get();
-
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'");
+    
+        if ($id > 0) {
+            $Clientes_Inactivos->where('tbl_clientes.id_zona', $id);
+        }
+    
 
         $clientesIds = $Clientes_Inactivos->pluck('id_clientes')->toArray();
 

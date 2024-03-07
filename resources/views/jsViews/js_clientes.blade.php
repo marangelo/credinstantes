@@ -1,5 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
+        var currentPath = window.location.pathname; 
+        $("#id_select_zona").val(currentPath.slice(-1)).change();
 
         $('[data-mask]').inputmask()
     
@@ -9,8 +11,7 @@
 
         var userRole = $("#id_rol_user").text();
         $('#id_select_zona').change(function() {
-            var selectedValue = this.value;
-            var currentPath = window.location.pathname; 
+            var selectedValue = this.value;           
             window.location.href = currentPath.slice(0, -1) + selectedValue;
         });
 
