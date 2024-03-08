@@ -26,11 +26,11 @@ class LoginController extends Controller
             break;
 
             case '2':
-                return 'Activos';
+                return 'Activos/0';
             break;
 
             case '3':
-                return 'Activos';
+                return 'Activos/0';
             break;
 
             default:
