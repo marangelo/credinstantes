@@ -59,7 +59,7 @@
                     Swal.fire("Oops", "Datos no Completos", "error");
                 }else{
                     $.ajax({
-                        url: "editClient",
+                        url: "../editClient",
                         type: 'post',
                         data: {
                             IdCl_:IdCl_,
@@ -145,7 +145,7 @@
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
                 $.ajax({
-                url: "SaveNewCredito",
+                url: "../SaveNewCredito",
                 type: 'post',
                 data: {
                     DiaSemana_   : DiaSemana_,
@@ -280,7 +280,7 @@
             showLoaderOnConfirm: true,
             preConfirm: () => {
                 $.ajax({
-                    url: "rmElem",
+                    url: "../rmElem",
                     data: {
                         IdElem  : IdElem,
                         vTable  : vTable,
@@ -349,11 +349,11 @@
         $("#edtDireccion").text(c.direccion_domicilio);
 
         $('#mdl_edit_cliente').modal('show');
-        Cliente_         = isValue(c,0,true);
+        Cliente_         = isValue(c.id_clientes,0,true);
         $("#edtIdClient").text(Cliente_);
 
         $.ajax({
-            url: "getAllCredit",
+            url: "../getAllCredit",
             type: 'post',
             data: {
                 Cliente_   : Cliente_,
@@ -428,7 +428,7 @@
                 Credi_         = isValue(Credito,0,true)
 
                 $.ajax({
-                    url: "ChanceStatus",
+                    url: "../ChanceStatus",
                     type: 'post',
                     data: {
                         Credi_      : Credi_,
