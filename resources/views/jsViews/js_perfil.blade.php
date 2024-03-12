@@ -602,13 +602,16 @@
 
     function getIdCredi(IdCredito){
 
-      
+    
 
-        var opt  = $("#slTipoAbono option:selected").val(); 
-        var lstPagos = $("#lista_pagos");
-      
+        var opt         = $("#slTipoAbono option:selected").val(); 
+        var IdAbono     = $("#lista_pagos option:selected").val();
 
-        $.get( "../getSaldoAbono/" + IdCredito + "/" + opt , function( data ) {
+        var lstPagos    = $("#lista_pagos");
+       
+    
+
+        $.get( "../getSaldoAbono/" + IdCredito + "/" + opt  , function( data ) {
             
 
             let ListaPagos = data.Plan_pago;
@@ -630,10 +633,14 @@
                 lstPagos.append(option);
             });
 
+            
+        
             dtSaldo = numeral(isValue(data.Saldo_to_cancelar,0,true)).format('00.00')
             Interes_ = numeral(isValue(data.Interes_,0,true)).format('0,0.00')
             Capital_ = numeral(isValue(data.Capital_,0,true)).format('0,0.00')
             SaldoPe_ = numeral(isValue(data.Saldo_Pendiente,0,true)).format('0,0.00')
+
+            txtSaldo = (parseFloat(data.Saldo_Pendiente) > 0)? data.Saldo_Pendiente : dtSaldo
 
             $("#id_mdl_saldo_pendiente").html(SaldoPe_);
 
@@ -642,7 +649,10 @@
 
                 $('#modal-lg').modal('show');                
                 $("#lbl_credito").html(IdCredito);
-                $("#txt_Total_abono").val(dtSaldo);
+
+                
+                
+                $("#txt_Total_abono").val(txtSaldo);
 
                 switch (opt) {
                     case '0':

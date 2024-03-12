@@ -88,28 +88,22 @@ class ReportsModels extends Model {
         $IdCln    = $request->input('IdCln');
         $IdZna    = $request->input('IdZna');
 
-
         $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1);
-       
-
     
         if ($IdCln > 0) {
             $Obj->Where('id_clientes',$IdCln);
         }
-       
         if ($IdZna > 0) {
             $Obj->Where('id_zona',$IdZna);
         }
 
         $Abonos = $Obj->get();
 
- 
         $array_abonos = array();
         
         foreach ($Abonos as $key => $a) {
 
-            $Ingreso_neto = $a->CAPITAL + $a->INTERES ;
-            
+            $Ingreso_neto = $a->CAPITAL + $a->INTERES ;            
             
             $array_abonos[$key] = [
                 "id_abonoscreditos" => $a->id_abonoscreditos,

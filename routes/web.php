@@ -57,6 +57,7 @@ Route::post('AddDiaSemana', 'CredinstanteController@AddDiaSemana')->name('AddDia
 Route::get('rmDiaSemana/{id}', 'CredinstanteController@rmDiaSemana')->name('rmDiaSemana/{id}');
 
 Route::post('SaveNewAbono', 'CredinstanteController@SaveNewAbono')->name('SaveNewAbono');
+Route::post('NewPagos', 'CredinstanteController@NewPagos')->name('NewPagos');
 Route::get('getHistoricoAbono/{ID}', 'CredinstanteController@getHistoricoAbono')->name('getHistoricoAbono');
 
 Route::post('AddCredito', 'CredinstanteController@AddCredito')->name('AddCredito');
