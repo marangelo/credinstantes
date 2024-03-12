@@ -7,7 +7,9 @@
 
         Init()
 
-       
+        $("#btn-buscar-abonos").click(function(){
+            Init();
+        })
 
     })
 
@@ -23,8 +25,10 @@
         const dt_End = moment(dtEnd, 'DD/MM/YYYY');
 
         var lbl_titulo_reporte = 'Del ' + dt_Ini.format('ddd, MMM DD, YYYY') + ' Al ' + dt_End.format('ddd, MMM DD, YYYY');
+
         dt_Ini_ = dt_Ini.format('YYYY-MM-DD');
         dt_End_ = dt_End.format('YYYY-MM-DD');
+        
         $("#lbl_titulo_reporte").text(lbl_titulo_reporte)
 
 
