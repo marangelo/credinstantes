@@ -57,17 +57,25 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('Activos')}}" class="nav-link {{ (request()->is('Activos')) ? 'active' : '' }} ">
+                    <a href="../Activos/0" class="nav-link {{ (request()->is('Activos/*')) ? 'active' : '' }} ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Activos</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('Inactivos')}}" class="nav-link {{ (request()->is('Inactivos')) ? 'active' : '' }} ">
+                    <a href="../Inactivos/0" class="nav-link {{ (request()->is('Inactivos/*')) ? 'active' : '' }} ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Inactivos</p>
                     </a>
                 </li>
+                @if( Session::get('rol') == '2')
+                <li class="nav-item">
+                    <a href="{{ route('RecuperacionCobro')}}" class="nav-link {{ (request()->is('RecuperacionCobro')) ? 'active' : '' }} ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Recuperacion</p>
+                    </a>
+                </li>
+                @endif
               </ul>
           </li>
           @if( Session::get('rol') == '1')
@@ -124,6 +132,12 @@
               </a>
             
               <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('MetricasPromotor')}}" class="nav-link {{ (request()->is('MetricasPromotor')) ? 'active' : '' }}" >
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Promotores</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
                         <i class="far fa-circle nav-icon"></i>

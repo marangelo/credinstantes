@@ -31,7 +31,7 @@ class RedirectIfAuthenticated
                 break;
     
                 case '3':
-                    return redirect('Activos');
+                    return redirect('Activos/0');
                 break;
 
                 case '4':

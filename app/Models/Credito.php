@@ -116,6 +116,7 @@ class Credito extends Model
             try {
                 $id_municipio           = $request->input('Municipio_');
                 $nombre                 = $request->input('Nombre_');
+                $Promotor               = $request->input('Promotor_');
                 $apellidos              = $request->input('Apellido_');
                 $direccion_domicilio    = $request->input('Dire_');
                 $cedula                 = $request->input('Cedula_');
@@ -157,6 +158,7 @@ class Credito extends Model
 
                 $datos_credito = [
                     'creado_por'          => Auth::id(),
+                    'asignado'            => $Promotor,
                     'fecha_apertura'      => date('Y-m-d',strtotime($FechaOpen)),
                     'id_diassemana'       => $DiaSemana_,
                     'id_clientes'         => $idInsertado,
@@ -215,6 +217,7 @@ class Credito extends Model
                 $idInsertado        = $request->input('IdClientes');
 
                 $DiaSemana_         = $request->input('DiaSemana_');
+                $Promotor_          = $request->input('Promotor_');
                 $Monto_             = $request->input('Monto_');
                 $Plato_             = $request->input('Plato_');
                 $Interes_           = $request->input('Interes_');
@@ -232,6 +235,7 @@ class Credito extends Model
 
                 $datos_credito = [
                     'creado_por'            => Auth::id(),
+                    'asignado'              => $Promotor_,
                     'fecha_apertura'        => $FechaOpen,
                     'id_diassemana'         => $DiaSemana_,
                     'id_clientes'           => $idInsertado,
@@ -273,7 +277,7 @@ class Credito extends Model
                     'loan_id'       => $IdCredito,
                     'date_reloan'   => $FechaOpen, 
                     'amount_reloan' => $Monto_,
-                    'user_created'  => Auth::id(),
+                    'user_created'  => $Promotor_,
                     'id_clientes'   => $idInsertado
                 ]); 
                 

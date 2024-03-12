@@ -1,12 +1,12 @@
 @extends('layouts.lyt_listas')
 @section('metodosjs')
-@include('jsViews.js_promotor')
+@include('jsViews.js_metricas_promotor')
 @endsection
 @section('content')
 <div class="wrapper">
 
   <!-- Main Sidebar Container -->
-  @include('layouts.lyt_promotor')
+  @include('layouts.lyt_aside')
  
 
   <!-- Content Wrapper. Contains page content -->
@@ -39,8 +39,8 @@
             <div class="input-group input-group-sm">
               <select class="custom-select" style="width: auto;" id="IdFilterByZone" >
                 <option value="-1" selected="selected"> Todas </option>
-                @foreach ($Zonas as $z)
-                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                @foreach ($Promo as $p)
+                  <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
                 @endforeach
                 
               </select>
@@ -91,6 +91,9 @@
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-lg btn-default">
                                     <i class="fa fa-search"></i>
+                                </button>
+                                <button type="submit" class="btn btn-lg btn-default button_export_excel">
+                                    <i class="fa fa-file-excel"></i>
                                 </button>
                             </div>
                         </div>

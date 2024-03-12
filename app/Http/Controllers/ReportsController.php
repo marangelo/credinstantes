@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exports\ExportAbonos;
 use App\Exports\ExportVisitar;
+use App\Exports\ExportPromotorMetricas;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\Clientes;
@@ -21,6 +22,10 @@ class ReportsController extends Controller {
     {
         $this->middleware('auth');
     }
+    public function RecuperacionCobro(){
+        $Titulo      = "Recuperacion";
+        return view('Reports.Recuperacion',compact('Titulo'));
+    }
     public function Visitar()
     {           
         $DiasW       = DiasSemana::getDiasSemana();
@@ -31,7 +36,7 @@ class ReportsController extends Controller {
     }
     public function Abonos()
     {           
-        $Clientes    = Clientes::getClientes();  
+        $Clientes    = Clientes::getClientes(0);  
         $Zonas       = Zonas::getZonas(); 
         $Titulo      = "Ingresos Diarios";
         return view('Reports.Abonos', compact('Clientes','Titulo','Zonas'));
@@ -58,6 +63,12 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
+    public function CalcRecuperacion(Request $request)
+    {
+        $response = ReportsModels::CalcRecuperacion($request);
+        
+        return response()->json($response);
+    }
     public function getMorosidad(Request $request)
     {
         $response = ReportsModels::getMorosidad($request);
@@ -76,7 +87,19 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
+    public function getMetricasPromotor($Opt)
+    {
+        $response = ReportsModels::getMetricasPromotor($Opt);
+        
+        return response()->json($response);
+    }
 
+    public function getClientesDesembolsados()
+    {
+        $response = ReportsModels::getClientesDesembolsados();
+        
+        return response()->json($response);
+    }
 
 
     public function exportAbonos(Request $request)
@@ -86,6 +109,11 @@ class ReportsController extends Controller {
     public function exportVisita(Request $request)
     {
         return Excel::download(new ExportVisitar($request), 'Visita.xlsx');
+    }
+
+    public function ExportMetricasPromotor()
+    {
+        return Excel::download(new ExportPromotorMetricas, 'Promotor.xlsx');
     }
 
 }

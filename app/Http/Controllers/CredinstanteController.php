@@ -36,6 +36,7 @@ class CredinstanteController extends Controller {
 
     public function prtVoucher($Id){
         $Abono    = Abono::find($Id); 
+    
         \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago complete de: ". $Id);
         return view('Voucher.completo', compact('Abono'));
     }
@@ -46,40 +47,58 @@ class CredinstanteController extends Controller {
         return view('Voucher.parcial', compact('Abono'));
         
     }
+
+    public function InfoCliente($id)
+    {           
+        $perfil_cliente = Clientes::find($id);      
+        return response()->json($perfil_cliente);
+        
+    }
+
+    public function ListaClientes(Request $request)
+    {
+        $Clientes = Clientes::ListaClientes($request);
+        
+        return response()->json($Clientes);
+    }
     
-    public function getClientes()
+    public function getClientes($Id)
     {   
         $IsCalc      = DateRecord::Check();
-        $Clientes    = Clientes::getClientes();  
+        $Clientes    = Clientes::getClientes($Id);  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('activo','S')->get(); 
         $Titulo      = "Clientes Activos";
         $View        = ($IsCalc) ? 'Dashboard.update' : 'Clientes.ls_Clientes' ;    
         
-        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
-    public function getInactivos()
+    public function getInactivos($id)
     {   
-        $Clientes    = Clientes::getInactivos();  
+        $Clientes    = Clientes::getInactivos($id);  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();  
         $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('id_rol',4)->get(); 
         $Titulo      = "Clientes Inactivos";
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
+
 
     public function getPerfil($id)
     {   
         
         $perfil_cliente = Clientes::find($id);  
         $DiasSemana     = DiasSemana::getDiasSemana();
+        $Promo       = Usuario::where('id_rol',4)->get(); 
         $Titulo         = "Perfil del Clientes";
     
-        return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana','Titulo'));
+        return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana','Titulo','Promo'));
         
     }
     public function getMunicipios()
@@ -261,6 +280,12 @@ class CredinstanteController extends Controller {
         
         return response()->json($response);
     }
+    public function LockUser(Request $request)
+    {
+        $response = Credinstante::LockUser($request);
+        
+        return response()->json($response);
+    }
     public function rmAbono(Request $request)
     {
         $response = Abono::rmAbono($request);
@@ -312,11 +337,25 @@ class CredinstanteController extends Controller {
     public function Promotor()
     {         
         $Titulo = "Promotor";
-        $Municipios  = Municipios::getMunicipios();  
-        $DiasSemana  = DiasSemana::getDiasSemana();
+        
         $Zonas  = Zonas::getZonas();  
         
-        return view('Promotor.Home',compact('Titulo','Zonas','DiasSemana','Municipios'));
+        return view('Promotor.Home',compact('Titulo','Zonas'));
+
+    }
+    public function Desembolsados()
+    {         
+        $Titulo = "DESEMBOLSADO";
+        return view('Promotor.Desembolsado',compact('Titulo'));
+
+    }
+
+    public function MetricasPromotor()
+    {         
+        $Titulo = "Promotor";
+        $Promo       = Usuario::where('id_rol',4)->get();  
+        
+        return view('Promotor.Metricas',compact('Titulo','Promo'));
 
     }
     

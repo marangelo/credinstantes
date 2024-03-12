@@ -208,8 +208,6 @@ class Abono extends Model
                             'activo'                => 1,
                             'NumPago'               => $NumPago,
                             'Descuento'             => 0,
-                            
-                            
                         ];
 
                         $Saldo_Credito = $Saldo_actual_credito;

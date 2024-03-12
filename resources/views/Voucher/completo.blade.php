@@ -97,6 +97,10 @@
                             <td class="col-md-9"><em>USUARIO:</em></h4></td>
                             <td class="col-md-1 text-right">{{Session::get('name_session')}}</td>
                         </tr>
+                        <tr>
+                            <td class="col-md-9"><em></em></h4></td>
+                            <td class="col-md-1 text-right">{{Auth::User()->Phone}}</td>
+                        </tr>
                     </tbody>
                 </table>
                </td>

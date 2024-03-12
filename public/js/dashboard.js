@@ -42,7 +42,7 @@ function CalcIndicadores(){
     
     var vLabel = []
     var vData = []
-
+   
     var Opt   = $("#IdFilterByZone option:selected").val(); 
     
     Opt      = isValue(Opt,-1,true)       
@@ -51,15 +51,30 @@ function CalcIndicadores(){
 
     $.getJSON("getDashboard/"+Opt, function(dataset) {
 
+        var data =  [
+            {
+            "INGRESO_NETO": "",
+            "CAPITAL": "",
+            "UTILIDAD_BRUTA": "",
+            "CREDITOS_ACTIVOS" : "",
+            "SALDO_CARTERA": "",
+            "MORA_ATRASADA" : "",
+            "MORA_VENCIDA" : ""
+            }
+            ];
+    
+
         var Ingreso = dataset['INGRESO'];
     
         Ingreso     = numeral(isValue(Ingreso,0,true)).format('0,00.00');
     
         $("#lblIngreso").text(Ingreso)    
+        data[0]['INGRESO_NETO'] = Ingreso;
     
         var CAPITAL = dataset['CAPITAL'];
     
         CAPITAL     = numeral(isValue(CAPITAL,0,true)).format('0,00.00');
+        data[0]['CAPITAL'] = CAPITAL;
     
         $("#lblCapital").text(CAPITAL)
     
@@ -68,28 +83,35 @@ function CalcIndicadores(){
         INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');
     
         $("#lblInteres").text(INTERESES)
+
+        data[0]['UTILIDAD_BRUTA'] = INTERESES;
     
         var Clientes = dataset['clientes_activos'];
         Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
         $("#lblClientes").text(Clientes)
+        data[0]['CREDITOS_ACTIVOS'] = Clientes;
     
         var Cartera = dataset['SALDOS_CARTERA'];
         
         Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
         
         $("#id_saldos_cartera").text(Cartera)
+        data[0]['SALDO_CARTERA'] = Cartera;
     
     
         var MoraAtrasada = dataset['MORA_ATRASADA'];    
         
         MoraAtrasada     = numeral(isValue(MoraAtrasada,0,true)).format('0,00.00');    
         $("#lblMoraAtrasada").text(MoraAtrasada)
+        data[0]['MORA_ATRASADA'] = MoraAtrasada;
     
         var MoraVencida = dataset['MORA_VENCIDA'];    
         MoraVencida     = numeral(isValue(MoraVencida,0,true)).format('0,00.00');    
         $("#lblMoraVencida").text(MoraVencida)
+        data[0]['MORA_VENCIDA'] = MoraVencida;
     
         $.each(dataset.Data, function(i, item) {
+           
             vData.push(item);
         })
     
@@ -156,8 +178,69 @@ function CalcIndicadores(){
             }
             }
         })
+
+    
+
+        tbMetricas(data)
     
     })
+
+ 
+    $("#id_button_export_excel").on("click", function() {
+        $(".buttons-excel").trigger("click");
+    });
+    function tbMetricas(ARRAY_METRICAS) {
+        if ( $.fn.DataTable.isDataTable('#tbl_metrias_home') ) {
+
+            var dataTable = $('#tbl_metrias_home').DataTable();
+
+            dataTable.clear().destroy();
+
+            $("tbl_metrias_home").empty();
+            console.log("destroy")
+
+
+
+        }
+        $('#tbl_metrias_home').DataTable({
+            "data": ARRAY_METRICAS,
+            "paging": false,
+            "destroy": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            },
+            "dom": 'lBfrtip',
+            buttons: [{extend: 'excelHtml5'}],
+            'columns': [
+                {"title": "INGRESO NETO","data"   : "INGRESO_NETO"},                
+                {"title": "CAPITAL","data"    : "CAPITAL"},
+                {"title": "UTILIDAD BRUTA","data"    : "UTILIDAD_BRUTA"},
+                {"title": "CREDITOS ACTIVOS","data"   : "CREDITOS_ACTIVOS"},
+                {"title": "SALDO DE CARTERA","data"   : "SALDO_CARTERA"},
+                {"title": "MORA ATRASADA","data"   : "MORA_ATRASADA"},
+                {"title": "MORA VENCIDA","data"   : "MORA_VENCIDA"},
+            ],
+        });  
+        $("#tbl_metrias_home_length").hide();
+        $("#tbl_metrias_home_filter").hide();
+        
+        $("#tbl_metrias_home").hide();
+    }
 }
 
 

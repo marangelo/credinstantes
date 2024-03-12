@@ -23,8 +23,8 @@ Route::post('updatePassword', 'CredinstanteController@updatePassword')->name('up
 
 Route::get('Dashboard', 'CredinstanteController@getDashboard')->name('Dashboard');
 
-Route::get('Activos', 'CredinstanteController@getClientes')->name('Activos');
-Route::get('Inactivos', 'CredinstanteController@getInactivos')->name('Inactivos');
+Route::get('Activos/{id}', 'CredinstanteController@getClientes')->name('Activos/{id}');
+Route::get('Inactivos/{id}', 'CredinstanteController@getInactivos')->name('Inactivos/{id}');
 
 Route::get('Usuarios', 'CredinstanteController@getUsuarios')->name('Usuarios');
 
@@ -64,6 +64,7 @@ Route::post('AddCredito', 'CredinstanteController@AddCredito')->name('AddCredito
 //RUTAS PARA REMOVER
 Route::post('rmElem', 'CredinstanteController@Remover')->name('rmElem');
 Route::post('rmAbono', 'CredinstanteController@rmAbono')->name('rmAbono');
+Route::post('LockUser', 'CredinstanteController@LockUser')->name('LockUser');
 
 //RUTAS DE REPORTES
 Route::get('Visitar', 'ReportsController@Visitar')->name('Visitar');
@@ -92,5 +93,12 @@ Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEs
 
 Route::get('Promotor', 'CredinstanteController@Promotor')->name('Promotor');
 Route::get('getDashboardPromotor/{ID}', 'ReportsController@getDashboardPromotor')->name('getDashboardPromotor');
+Route::get('Desembolsados', 'CredinstanteController@Desembolsados')->name('Desembolsados');
+Route::get('getClientesDesembolsados', 'ReportsController@getClientesDesembolsados')->name('getClientesDesembolsados');
+Route::get('MetricasPromotor', 'CredinstanteController@MetricasPromotor')->name('MetricasPromotor');
+Route::get('getMetricasPromotor/{ID}', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
+Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')->name('ExportMetricasPromotor');
 
+Route::get('RecuperacionCobro', 'ReportsController@RecuperacionCobro')->name('RecuperacionCobro');
+Route::post('CalcRecuperacion', 'ReportsController@CalcRecuperacion')->name('CalcRecuperacion');
 

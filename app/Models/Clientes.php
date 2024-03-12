@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use Auth;
+use Session; 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -55,30 +56,34 @@ class Clientes extends Model
 
     } 
 
-    public static function getClientes()
+
+    public static function getClientes($Id)
     {
         // $Zona = Auth::User()->id_zona;
         $Role = Auth::User()->id_rol;
+        
+        $IdZona = Auth::User()->id_zona;
 
-        $e=0;
-
-
-        // $clMora = Clientes::getClientesMora();        
-        // $Clientes = Clientes::whereIn('id_clientes',$clMora)->get();
-
+        $e = 0;
+        
         $Clientes = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
             $query->whereIn('estado_credito', [1,2,3]);
-        })->get();
+        });
 
-        // if ($Role==2) {
-        //     $obj->where('id_zona',$Zona);
-        // }
+        if ($Role==2) {
+            $Clientes->where('id_zona',$IdZona);
+        }else{
+            if ($Id > 0) {
+                $Clientes->where('id_zona',$Id);
+            } 
+            
+        }
 
     
-        return $Clientes;
+        return $Clientes->get();
     }
 
-    public static function getInactivos()
+    public static function getInactivos($id)
     {
         $e = 1;
 
@@ -91,9 +96,12 @@ class Clientes extends Model
         ->groupBy('tbl_clientes.id_clientes', 'tbl_clientes.nombre', 'tbl_clientes.apellidos', 'tbl_clientes.activo')
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
-        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'")
-        ->get();
-
+        ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'");
+    
+        if ($id > 0) {
+            $Clientes_Inactivos->where('tbl_clientes.id_zona', $id);
+        }
+    
 
         $clientesIds = $Clientes_Inactivos->pluck('id_clientes')->toArray();
 
@@ -128,14 +136,28 @@ class Clientes extends Model
 
         $ClientesInactivos = Clientes::getInactivos();
 
-        $ClientePromotores = ClientePromotores::all();
+        $ClientePromotores = ClientePromotores::get();
 
         $ArrayClientesInactivos     = [] ;
         $ArrayClientesDisponible    = [] ;
+        $ArrayInactivos             = [] ;
 
         $position_array_cliente     = 0 ;
 
+
+        
+        if ($Zona > 0) {
+            foreach ($ClientesInactivos as $k => $v){
+                if ($v->id_zona == $Zona) {
+                    $ArrayInactivos [$k] = $v->id_clientes;
+                }
+            }
+            $ClientesInactivos = Clientes::whereIn('id_clientes', $ArrayInactivos)->get();
+            $ClientePromotores = ClientePromotores::where('id_zona',$Zona)->get();
+        }
+
         foreach ($ClientesInactivos as $c) {
+        
             $ArrayClientesInactivos[$position_array_cliente] = [
                 'id_clientes'       => $c->id_clientes,
                 'Nombre'            => $c->nombre,
@@ -145,13 +167,13 @@ class Clientes extends Model
                 'Direccion'         => $c->direccion_domicilio,
                 'Accion'            => 'INACTIVO',
             ];
+            
             $position_array_cliente++;
         }
         
 
         foreach ($ClientePromotores as $c) {
             $cl = Clientes::where('id_clientes',$c->id_clientes)->first();
-        
 
             $ArrayClientesDisponible[$position_array_cliente] = [
                 'id_clientes'       => $c->id_clientes,
@@ -234,12 +256,10 @@ class Clientes extends Model
                     //VERIFICA EL ESTADO DE SALUD DEL CLIENTE EN CASO QUE TENGA CREDITO VENCIDOS O EN MORA
                     $isCreditoVencido = ($tieneCreditoVencido > 0 ) ? true : false ;
 
-                    if($isCreditoVencido===false){
-                        
+                    if($isCreditoVencido===false){                        
                          // COMPRUEBA EL PORCENTAJE DE PAGOS QUE TIENEN SU PRIMER ABONO
                         //$Cumplimiento = ($credito_abonos > 0) ? ($credito_abonos / $credito_cuotas) * 100 : 0 ;
                         $cumplimiento_porcentaje = (($credito_cuotas - $credito_abonos) / $credito_cuotas) * 100;
-
                         $creditCheck = ($cumplimiento_porcentaje >= 50 && $credito_cuotas >= 6000)  ? true : false ;
                     }else{
                         $creditCheck = false;

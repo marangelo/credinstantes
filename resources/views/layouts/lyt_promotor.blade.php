@@ -41,13 +41,15 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-              <a href="{{route('Promotor')}}" class="nav-link active">
-              <i class="fas fa-user nav-icon"></i>
-                  <p>Clientes</p>
-              </a>
-              
+            <a href="{{route('Promotor')}}" class="nav-link active">
+              <i class="fas fa-user nav-icon"></i><p>Clientes</p>
+            </a>
           </li>
-          
+          <li class="nav-item">
+            <a href="{{route('Desembolsados')}}" class="nav-link">
+              <i class="fas fa-user nav-icon"></i><p>Desembolsado</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="{{route('logout')}}" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>

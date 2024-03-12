@@ -55,6 +55,8 @@
             const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
 
             var DiaSemana_  = $("#slDiaVisita option:selected").val(); 
+            var Promotor  = $("#slPromotor option:selected").val(); 
+            
 
             var Monto_      = $("#txtMonto").val();   
             var Plato_      = $("#txtPlazo").val();   
@@ -83,6 +85,7 @@
                     type: 'post',
                     data: {
                         DiaSemana_   : DiaSemana_,
+                        Promotor_    : Promotor,
                         IdClientes   : IdClientes,
                         Monto_       : Monto_,  
                         Plato_       : Plato_,  

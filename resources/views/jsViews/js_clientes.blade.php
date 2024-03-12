@@ -1,5 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
+        var currentPath = window.location.pathname; 
+        $("#id_select_zona").val(currentPath.slice(-1)).change();
 
         $('[data-mask]').inputmask()
     
@@ -8,7 +10,10 @@
         });
 
         var userRole = $("#id_rol_user").text();
-        
+        $('#id_select_zona').change(function() {
+            var selectedValue = this.value;           
+            window.location.href = currentPath.slice(0, -1) + selectedValue;
+        });
 
         $("#tbl_clientes").DataTable({
             "responsive": true, 
@@ -54,7 +59,7 @@
                     Swal.fire("Oops", "Datos no Completos", "error");
                 }else{
                     $.ajax({
-                        url: "editClient",
+                        url: "../editClient",
                         type: 'post',
                         data: {
                             IdCl_:IdCl_,
@@ -104,7 +109,8 @@
 
             var DiaSemana_  = $("#slDiaVisita option:selected").val();  
             var Municipio_  = $("#selMunicipio option:selected").val();  
-            var Zona_        = $("#selZona option:selected").val();
+            var Zona_       = $("#selZona option:selected").val();
+            var Promotor    = $("#slPromotor option:selected").val();
 
             var Nombre_      = $("#txtNombre").val();   
             var Apellido_    = $("#txtApellido").val();   
@@ -124,6 +130,7 @@
             var InteresesPorCuota  = $("#txtInteresesPorCuota").val();
             var Saldos_    = $("#txtSaldos").val();
 
+            Promotor        = isValue(Promotor,0,true)
         
             DiaSemana_      = isValue(DiaSemana_,'N/D',true)
             Municipio_      = isValue(Municipio_,'N/D',true)            
@@ -138,12 +145,13 @@
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
                 $.ajax({
-                url: "SaveNewCredito",
+                url: "../SaveNewCredito",
                 type: 'post',
                 data: {
                     DiaSemana_   : DiaSemana_,
                     Municipio_   : Municipio_,
                     Zona_        : Zona_,
+                    Promotor_    : Promotor,
                     Nombre_      : Nombre_,
                     Apellido_    : Apellido_ , 
                     Cedula_      : Cedula_,
@@ -272,7 +280,7 @@
             showLoaderOnConfirm: true,
             preConfirm: () => {
                 $.ajax({
-                    url: "rmElem",
+                    url: "../rmElem",
                     data: {
                         IdElem  : IdElem,
                         vTable  : vTable,
@@ -331,25 +339,21 @@
             "3" : "bg-warning",
             "4" : ""
         }
+
         $("#edtNombre").val(c.nombre);
         $("#edtApellido").val(c.apellidos);
-
         $("#edtTelefono").val(c.telefono);
         $("#edtCedula").val(c.cedula);
         $("#edtMunicipio").val(c.id_municipio).change();
-        $("#edtZonas").val(c.id_zona).change();       
-
+        $("#edtZonas").val(c.id_zona).change();    
         $("#edtDireccion").text(c.direccion_domicilio);
 
-        $('#mdl_edit_cliente').modal('show')
-
-    
+        $('#mdl_edit_cliente').modal('show');
         Cliente_         = isValue(c.id_clientes,0,true);
-
         $("#edtIdClient").text(Cliente_);
 
         $.ajax({
-            url: "getAllCredit",
+            url: "../getAllCredit",
             type: 'post',
             data: {
                 Cliente_   : Cliente_,
@@ -357,8 +361,6 @@
             },
             async: true,
             success: function(response) {
-
-
                 response.forEach((response) => {
                     var span = `<span class="badge `+ Colors[response.estado_credito]+`  ">`+  (Estados[response.estado_credito])?? 'N/A' +`</span>`
                     dta_table.push({ 
@@ -379,6 +381,7 @@
                     {"title": "SALDO","data": "saldo"},
                     {"title": "TOTAL","data": "total"},
                     {"title": "ESTADO","data": "estado_credito"},
+                    
                     {"title": "","data": "estado_credito", "render": function(data, type, row, meta) {                        
                         return`<button type="button" class="btn btn-block bg-gradient-primary" onClick="ChanceStatus(`+ row.id_creditos +`)">CAMBIAR</button>`;
                     }}
@@ -402,6 +405,7 @@
         });
     }
 
+
     
 
     function ChanceStatus(Credito) {
@@ -424,7 +428,7 @@
                 Credi_         = isValue(Credito,0,true)
 
                 $.ajax({
-                    url: "ChanceStatus",
+                    url: "../ChanceStatus",
                     type: 'post',
                     data: {
                         Credi_      : Credi_,
@@ -461,7 +465,7 @@
     }
 
     function table_render(Table,datos,Header,columnDefs,Filter){
-
+        var userRole = $("#id_rol_user").text();
         TableExcel = $(Table).DataTable({
             "data": datos,
             "destroy": true,
@@ -469,7 +473,7 @@
             responsive: true,
             "bPaginate": true,
             "order": [
-                [0, "DESC"]
+                [0, "asc"]
             ],
             "lengthMenu": [
                 [7, -1],
@@ -489,12 +493,13 @@
             },
             'columns': Header,
             "columnDefs": columnDefs,
+            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ],
             rowCallback: function( row, data, index ) {
                 if ( data.Index == 'N/D' ) {
                     $(row).addClass('table-danger');
                 } 
             }
-        });
+        }).buttons().container().appendTo(Table+'_wrapper .col-md-6:eq(0)');
         if(!Filter){
             $(Table+"_length").hide();
             $(Table+"_filter").hide();

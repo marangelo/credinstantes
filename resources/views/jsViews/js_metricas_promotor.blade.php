@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        CalcIndicadores(1);
+        CalcIndicadores();
         $('[data-mask]').inputmask();
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY'
@@ -14,12 +14,12 @@
         
 
         $("#IdFilterByZone").change(function() {    
-            CalcIndicadores(0);
+            CalcIndicadores();
         });
         
     });
 
-    function CalcIndicadores(Change){
+    function CalcIndicadores(){
     
         var vLabel = []
         var vData = []
@@ -30,25 +30,21 @@
         
         //$("#IdCardTitle").text("Calculando . . . ") 
 
-        $.getJSON("getDashboardPromotor/"+Opt, function(dataset) {
+        $.getJSON("getMetricasPromotor/"+Opt, function(dataset) {
+        
+            var CLIENTES_NUEVO = dataset['CLIENTES_NUEVO'];
 
-            if (Change > 0) {
+            CLIENTES_NUEVO     = numeral(isValue(CLIENTES_NUEVO,0,true)).format('0.00');
+        
+            $("#lblClientesNuevos").text(CLIENTES_NUEVO);
 
-                var CLIENTES_NUEVO = dataset['CLIENTES_NUEVO'];
-
-                CLIENTES_NUEVO     = numeral(isValue(CLIENTES_NUEVO,0,true)).format('0.00');
-
-                $("#lblClientesNuevos").text(CLIENTES_NUEVO);
-
-                var RE_PRESTAMOS = dataset['RE_PRESTAMOS'];
-                RE_PRESTAMOS     = numeral(isValue(RE_PRESTAMOS,0,true)).format('0.00');
-                $("#lblRePrestamo").text(RE_PRESTAMOS);
-
-                var SALDOS_COLOCADOS = dataset['SALDOS_COLOCADOS'];
-                SALDOS_COLOCADOS     = numeral(isValue(SALDOS_COLOCADOS,0,true)).format('0,00.00');
-                $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
-                
-            }
+            var RE_PRESTAMOS = dataset['RE_PRESTAMOS'];
+            RE_PRESTAMOS     = numeral(isValue(RE_PRESTAMOS,0,true)).format('0.00');
+            $("#lblRePrestamo").text(RE_PRESTAMOS);
+        
+            var SALDOS_COLOCADOS = dataset['SALDOS_COLOCADOS'];
+            SALDOS_COLOCADOS     = numeral(isValue(SALDOS_COLOCADOS,0,true)).format('0,00.00');
+            $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
 
             TableClientes(dataset['LISTA_CLIENTES']);
         
@@ -56,6 +52,9 @@
         
         })
     }
+    $('.button_export_excel').click(() => {
+        $('#tbl_cliente_promotor').DataTable().buttons(0,0).trigger()
+    })
     function TableClientes(LISTA_CLIENTES) {
         $('#tbl_cliente_promotor').DataTable({
             "data": LISTA_CLIENTES,
@@ -64,7 +63,6 @@
             "lengthChange": false,
             "searching": true,
             "ordering": true,
-            "order": [[2, 'desc']],
             "info": true,
             "autoWidth": false,
             "responsive": true,
@@ -80,16 +78,12 @@
                 "emptyTable": "-",
                 "search": "BUSCAR"
             },
+            buttons: [{extend: 'excelHtml5'}],
             'columns': [
-                {"title": "#","data"  : "id_clientes"},
-                {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {
-                    return `<a href="Perfil/`+row.id_clientes+`"><strong>#`+row.id_clientes+` </strong> : `+ row.Nombre +` `+row.Apellidos+` </a> ` 
-                }}, 
-                {"title": "ACCION","data"       : "Accion"},                              
-                {"title": "DEPARTAMENTO","data" : "Departamento"},
-                {"title": "ZONA","data"         : "Zona"},
-                {"title": "DIRECCION","data"    : "Direccion"},
-               
+                {"title": "NOMBRE","data"   : "Nombre"},                
+                {"title": "FECHA","data"    : "Fecha"},
+                {"title": "MONTO","data"    : "Monto"},
+                {"title": "ORIGEN","data"   : "Origen"},
             ],
             "columnDefs": [{"className": "", "targets": [ ]},],
         });  

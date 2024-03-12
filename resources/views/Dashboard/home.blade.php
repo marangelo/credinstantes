@@ -32,6 +32,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        @if( Session::get('rol') == '1' )
         <div class="card-header">
           <h3 class="card-title" id="IdCardTitle"></h3>
           <div class="card-tools">
@@ -47,10 +48,14 @@
                 <div class="btn btn-primary" id="IdbtnFilter">
                   <i class="fa fa-filter"></i>
                 </div>
+                <table id="tbl_metrias_home" class="table table-bordered table-striped"></table>
+             
               </div>
             </div>
           </div>
         </div>
+        @endif
+
           @if( Session::get('rol') == '1' )
           <div class="row">
             <div class="col-12 col-sm-6 col-md-2">
@@ -58,8 +63,7 @@
                 
                 <div class="info-box-content ">
                   <span class="info-box-text">INGRESO NETO</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span>
-                  </span>
+                  <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span></span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -136,7 +140,7 @@
               <div class="info-box mb-3 bg-danger">
 
                 <div class="info-box-content">
-                  <span class="info-box-text"> MORA VENCIDAD </span>
+                  <span class="info-box-text"> MORA VENCIDA </span>
                   <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
                   </span>
                 </div>
@@ -182,7 +186,7 @@
               <div class="info-box mb-3 bg-danger">
 
                 <div class="info-box-content">
-                  <span class="info-box-text"> MORA VENCIDAD </span>
+                  <span class="info-box-text"> MORA VENCIDA </span>
                   <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
                   </span>
                 </div>
@@ -192,7 +196,7 @@
             </div>
           </div>
           @endif
-        
+  
 
         <div class="row">
           <div class="col-md-12">
@@ -223,7 +227,7 @@
                   <div class="col-sm-6 col-6">
                     <div class="description-block border-right">
                       <h5 class="description-header text-danger">C$10,390.90</h5>
-                      <span class="description-text">MORA VENCIDAD</span>
+                      <span class="description-text">MORA VENCIDA</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
