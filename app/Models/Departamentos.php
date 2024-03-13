@@ -10,7 +10,7 @@ class Departamentos extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Cat_Departamento";
+    protected $table = "cat_departamento";
 
     public static function getDepartamentos()
     {

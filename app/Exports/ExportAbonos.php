@@ -34,16 +34,18 @@ class ExportAbonos implements FromCollection
 
         foreach ($Abonos as $key => $a) {
 
-            $Ingreso_neto = $a->CAPITAL + $a->INTERES ;
+            $CAPITAL  = (strtotime($a->FECHA_ABONO) >= strtotime("2024-03-13")) ? $a->CAPITAL : $a->CAPITAL_OLD;
+
+            $Ingreso_neto = $CAPITAL + $a->INTERES ;
             
             
             $array_abonos[$key] = [
                 "id_abonoscreditos" => $a->id_abonoscreditos,
-                "fecha_cuota"       => $a->fecha_cuota,
+                "fecha_cuota"       => $a->FECHA_ABONO,
                 "Nombre"            => $a->credito->Clientes->nombre,
                 "apellido"          => $a->credito->Clientes->apellidos,
                 "cuota_cobrada"     => $Ingreso_neto,
-                "pago_capital"      => $a->CAPITAL,
+                "pago_capital"      => $CAPITAL,
                 "pago_intereses"    => $a->INTERES,
             ];
                 

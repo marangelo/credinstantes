@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 15, 2023 at 10:45 PM
+-- Generation Time: Dec 01, 2023 at 05:16 PM
 -- Server version: 5.7.36
 -- PHP Version: 7.4.26
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_credinstantes`
 --
-CREATE DATABASE IF NOT EXISTS `db_credinstantes` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `db_credinstantes`;
 
 DELIMITER $$
 --
@@ -303,47 +301,20 @@ CREATE TABLE IF NOT EXISTS `tbl_abonoscreditos` (
   `saldo_actual` decimal(19,4) DEFAULT NULL,
   `activo` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id_abonoscreditos`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_abonoscreditos`
 --
 
 INSERT INTO `tbl_abonoscreditos` (`id_abonoscreditos`, `id_creditos`, `registrado_por`, `fecha_cuota`, `NumPago`, `Descuento`, `pago_capital`, `pago_intereses`, `cuota_credito`, `cuota_cobrada`, `intereses_por_cuota`, `abono_dia1`, `abono_dia2`, `fecha_cuota_secc1`, `fecha_cuota_secc2`, `fecha_programada`, `completado`, `saldo_cuota`, `saldo_anterior`, `saldo_actual`, `activo`) VALUES
-(1, 1, 7, '2023-12-15 00:00:00', 1, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '17760.0000', '16280.0000', b'1'),
-(2, 2, 7, '2023-12-15 00:00:00', 1, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '17760.0000', '16280.0000', b'1'),
-(3, 2, 7, '2023-12-15 00:00:00', 2, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '16280.0000', '14800.0000', b'1'),
-(4, 4, 7, '2023-12-15 00:00:00', 1, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '17760.0000', '16280.0000', b'1'),
-(5, 1, 7, '2023-12-15 00:00:00', 2, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '16280.0000', '14800.0000', b'1'),
-(6, 1, 7, '2023-12-15 00:00:00', 3, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '14800.0000', '13320.0000', b'1'),
-(7, 1, 7, '2023-12-15 00:00:00', 4, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '13320.0000', '11840.0000', b'1'),
-(8, 1, 7, '2023-12-15 00:00:00', 5, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '11840.0000', '10360.0000', b'1'),
-(9, 1, 7, '2023-12-15 00:00:00', 6, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '10360.0000', '8880.0000', b'1'),
-(10, 1, 7, '2023-12-15 00:00:00', 7, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '8880.0000', '7400.0000', b'1'),
-(11, 1, 7, '2023-12-15 00:00:00', 8, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '7400.0000', '5920.0000', b'1'),
-(12, 1, 7, '2023-12-15 00:00:00', 9, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '5920.0000', '4440.0000', b'1'),
-(13, 1, 7, '2023-12-15 00:00:00', 10, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '4440.0000', '2960.0000', b'1'),
-(14, 1, 7, '2023-12-15 00:00:00', 0, '960.0000', '2000.0000', '0.0000', '1480.0000', '2000.0000', '480.0000', '2000.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '2960.0000', '0.0000', b'1'),
-(15, 2, 7, '2023-12-15 00:00:00', 3, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '14800.0000', '13320.0000', b'1'),
-(16, 2, 7, '2023-12-15 00:00:00', 4, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '13320.0000', '11840.0000', b'1'),
-(17, 2, 7, '2023-12-15 00:00:00', 5, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '11840.0000', '10360.0000', b'1'),
-(18, 2, 7, '2023-12-15 00:00:00', 6, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '10360.0000', '8880.0000', b'1'),
-(19, 2, 7, '2023-12-15 00:00:00', 7, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '8880.0000', '7400.0000', b'1'),
-(20, 2, 7, '2023-12-15 00:00:00', 8, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '7400.0000', '5920.0000', b'1'),
-(21, 2, 7, '2023-12-15 00:00:00', 9, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '5920.0000', '4440.0000', b'1'),
-(22, 2, 7, '2023-12-15 00:00:00', 10, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '4440.0000', '2960.0000', b'1'),
-(23, 2, 7, '2023-12-15 00:00:00', 0, '960.0000', '2000.0000', '0.0000', '1480.0000', '2000.0000', '480.0000', '2000.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '2960.0000', '0.0000', b'1'),
-(24, 3, 7, '2023-12-15 00:00:00', 1, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '17760.0000', '16280.0000', b'1'),
-(25, 3, 7, '2023-12-15 00:00:00', 2, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '16280.0000', '14800.0000', b'1'),
-(26, 3, 7, '2023-12-15 00:00:00', 3, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '14800.0000', '13320.0000', b'1'),
-(27, 3, 7, '2023-12-15 00:00:00', 4, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '13320.0000', '11840.0000', b'1'),
-(28, 3, 7, '2023-12-15 00:00:00', 5, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '11840.0000', '10360.0000', b'1'),
-(29, 3, 7, '2023-12-15 00:00:00', 6, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '10360.0000', '8880.0000', b'1'),
-(30, 3, 7, '2023-12-15 00:00:00', 7, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '8880.0000', '7400.0000', b'1'),
-(31, 3, 7, '2023-12-15 00:00:00', 8, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '7400.0000', '5920.0000', b'1'),
-(32, 3, 7, '2023-12-15 00:00:00', 9, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '5920.0000', '4440.0000', b'1'),
-(33, 3, 7, '2023-12-15 00:00:00', 10, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '4440.0000', '2960.0000', b'1'),
-(34, 3, 7, '2023-12-15 00:00:00', 0, '960.0000', '2000.0000', '0.0000', '1480.0000', '2000.0000', '480.0000', '2000.0000', NULL, '2023-12-15 00:00:00', NULL, NULL, b'1', '0.0000', '2960.0000', '0.0000', b'1');
+(1, 1, 7, '2023-12-01 00:00:00', 1, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-01 00:00:00', NULL, NULL, b'1', '0.0000', '17760.0000', '16280.0000', b'1'),
+(2, 1, 7, '2023-12-01 00:00:00', 2, '0.0000', '1000.0000', '480.0000', '1480.0000', '7400.0000', '480.0000', '7400.0000', NULL, '2023-12-01 00:00:00', NULL, NULL, b'1', '0.0000', '16280.0000', '14800.0000', b'1'),
+(3, 1, 7, '2023-12-01 00:00:00', 3, '0.0000', '1000.0000', '480.0000', '1480.0000', '5920.0000', '480.0000', '5920.0000', NULL, '2023-12-01 00:00:00', NULL, NULL, b'1', '0.0000', '14800.0000', '13320.0000', b'1'),
+(4, 1, 7, '2023-12-01 00:00:00', 4, '0.0000', '1000.0000', '480.0000', '1480.0000', '4440.0000', '480.0000', '4440.0000', NULL, '2023-12-01 00:00:00', NULL, NULL, b'1', '0.0000', '13320.0000', '11840.0000', b'1'),
+(5, 1, 7, '2023-12-01 00:00:00', 5, '0.0000', '1000.0000', '480.0000', '1480.0000', '2960.0000', '480.0000', '2960.0000', NULL, '2023-12-01 00:00:00', NULL, NULL, b'1', '0.0000', '11840.0000', '10360.0000', b'1'),
+(6, 1, 7, '2023-12-01 00:00:00', 6, '0.0000', '1000.0000', '480.0000', '1480.0000', '1480.0000', '480.0000', '1480.0000', NULL, '2023-12-01 00:00:00', NULL, NULL, b'1', '0.0000', '10360.0000', '8880.0000', b'1'),
+(7, 1, 7, '2023-12-29 00:00:00', 0, '880.0000', '6000.0000', '2000.0000', '1480.0000', '8000.0000', '480.0000', '8000.0000', NULL, '2023-12-29 00:00:00', NULL, NULL, b'1', '0.0000', '8880.0000', '0.0000', b'1');
 
 -- --------------------------------------------------------
 
@@ -364,19 +335,14 @@ CREATE TABLE IF NOT EXISTS `tbl_clientes` (
   `score` int(11) NOT NULL DEFAULT '100',
   `activo` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id_clientes`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_clientes`
 --
 
 INSERT INTO `tbl_clientes` (`id_clientes`, `id_municipio`, `id_zona`, `nombre`, `apellidos`, `direccion_domicilio`, `cedula`, `telefono`, `score`, `activo`) VALUES
-(1, 4, 1, 'NOMBRE', 'APELLIDO', 'DASDASDASDAS', '999-999999-9999A', '+505-0000-0000', 100, b'1'),
-(2, 4, 2, 'NOMBRE', 'APELLIDO', 'DASDASDASDAS', '999-999999-9999A', '+505-0000-0000', 100, b'1'),
-(3, 4, 3, 'NOMBRE', 'APELLIDO', 'DASDASDASDAS', '999-999999-9999A', '+505-0000-0000', 100, b'1'),
-(4, 4, 2, 'NOMBRE', 'APELLIDO', 'DASDASDASDAS', '999-999999-9999A', '+505-0000-0000', 100, b'1'),
-(5, 4, 4, 'NOMBRE', 'APELLIDO', 'DASDASDASDAS', '999-999999-9999A', '+505-0000-0000', 100, b'1'),
-(6, 4, 13, 'NOMBRE', 'APELLIDO', 'DASDASDASDAS', '999-999999-9999A', '+505-0000-0000', 100, b'1');
+(1, 4, 1, 'NOMBRE', 'APELLIDO', 'N/D', '000-000000-0000A', '+505-0000-0000', 100, b'1');
 
 -- --------------------------------------------------------
 
@@ -423,19 +389,14 @@ CREATE TABLE IF NOT EXISTS `tbl_creditos` (
   `estado_credito` int(10) DEFAULT NULL,
   `activo` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id_creditos`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_creditos`
 --
 
 INSERT INTO `tbl_creditos` (`id_creditos`, `creado_por`, `id_diassemana`, `id_clientes`, `fecha_apertura`, `fecha_ultimo_abono`, `fecha_culmina`, `monto_credito`, `plazo`, `taza_interes`, `numero_cuotas`, `total`, `cuota`, `saldo`, `interes`, `intereses_por_cuota`, `salud_credito`, `estado_credito`, `activo`) VALUES
-(1, 7, 1, 1, '2023-11-03 00:00:00', '2024-01-26 00:00:00', '2023-12-15 00:00:00', '12000.0000', '3.00', '16.00', '12.00', '17760.00000000', '1480.0000000000000', '0.0000', '5760.00000000', '480.0000000000000', 1, 4, b'1'),
-(2, 7, 1, 2, '2023-11-03 00:00:00', '2024-01-26 00:00:00', '2023-12-15 00:00:00', '12000.0000', '3.00', '16.00', '12.00', '17760.00000000', '1480.0000000000000', '0.0000', '5760.00000000', '480.0000000000000', 1, 4, b'1'),
-(3, 7, 1, 3, '2023-11-03 00:00:00', '2024-01-26 00:00:00', '2023-12-15 00:00:00', '12000.0000', '3.00', '16.00', '12.00', '17760.00000000', '1480.0000000000000', '0.0000', '5760.00000000', '480.0000000000000', 1, 4, b'1'),
-(4, 7, 1, 4, '2023-11-03 00:00:00', '2024-01-26 00:00:00', NULL, '12000.0000', '3.00', '16.00', '12.00', '17760.00000000', '1480.0000000000000', '16280.0000', '5760.00000000', '480.0000000000000', 1, 2, b'1'),
-(5, 7, 1, 5, '2023-11-03 00:00:00', '2024-01-26 00:00:00', NULL, '12000.0000', '3.00', '16.00', '12.00', '17760.00000000', '1480.0000000000000', '17760.0000', '5760.00000000', '480.0000000000000', 1, 1, b'1'),
-(6, 7, 1, 6, '2023-11-03 00:00:00', '2024-01-26 00:00:00', NULL, '12000.0000', '3.00', '16.00', '12.00', '17760.00000000', '1480.0000000000000', '17760.0000', '5760.00000000', '480.0000000000000', 1, 1, b'1');
+(1, 7, 1, 1, '2023-12-01 00:00:00', '2024-02-23 00:00:00', '2023-12-29 00:00:00', '12000.0000', '3.00', '16.00', '12.00', '17760.00000000', '1480.0000000000000', '0.0000', '5760.00000000', '480.0000000000000', 1, 1, b'1');
 
 -- --------------------------------------------------------
 
@@ -472,7 +433,7 @@ CREATE TABLE IF NOT EXISTS `tbl_logs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_log`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_logs`
@@ -535,20 +496,8 @@ INSERT INTO `tbl_logs` (`id_log`, `created_at`, `updated_at`) VALUES
 (65, '2023-11-27 13:07:51', '2023-11-27 13:07:51'),
 (66, '2023-11-28 14:22:59', '2023-11-28 14:22:59'),
 (67, '2023-11-29 14:38:50', '2023-11-29 14:38:50'),
-(68, '2023-11-30 14:27:18', '2023-11-30 14:27:18'),
-(69, '2023-12-01 15:17:34', '2023-12-01 15:17:34'),
-(70, '2023-12-02 15:26:18', '2023-12-02 15:26:18'),
-(71, '2023-12-03 22:11:33', '2023-12-03 22:11:33'),
-(72, '2023-12-04 14:20:01', '2023-12-04 14:20:01'),
-(73, '2023-12-05 15:28:00', '2023-12-05 15:28:00'),
-(74, '2023-12-06 15:17:13', '2023-12-06 15:17:13'),
-(75, '2023-12-07 14:50:33', '2023-12-07 14:50:33'),
-(76, '2023-12-08 15:54:48', '2023-12-08 15:54:48'),
-(77, '2023-12-10 22:24:18', '2023-12-10 22:24:18'),
-(78, '2023-12-11 15:11:46', '2023-12-11 15:11:46'),
-(79, '2023-12-12 15:15:06', '2023-12-12 15:15:06'),
-(80, '2023-12-13 13:49:41', '2023-12-13 13:49:41'),
-(81, '2023-12-15 14:19:24', '2023-12-15 14:19:24');
+(68, '2023-11-30 14:36:28', '2023-11-30 14:36:28'),
+(69, '2023-12-01 14:03:04', '2023-12-01 14:03:04');
 
 -- --------------------------------------------------------
 
@@ -564,85 +513,25 @@ CREATE TABLE IF NOT EXISTS `tbl_pagosabonos` (
   `FechaPago` datetime DEFAULT NULL,
   `Pagado` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_pagoabono`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_pagosabonos`
 --
 
 INSERT INTO `tbl_pagosabonos` (`id_pagoabono`, `id_creditos`, `numero_pago`, `FechaPago`, `Pagado`) VALUES
-(1, 1, 1, '2023-11-10 00:00:00', 1),
-(2, 1, 2, '2023-11-17 00:00:00', 1),
-(3, 1, 3, '2023-11-24 00:00:00', 1),
-(4, 1, 4, '2023-12-01 00:00:00', 1),
-(5, 1, 5, '2023-12-08 00:00:00', 1),
-(6, 1, 6, '2023-12-15 00:00:00', 1),
-(7, 1, 7, '2023-12-22 00:00:00', 1),
-(8, 1, 8, '2023-12-29 00:00:00', 1),
-(9, 1, 9, '2024-01-05 00:00:00', 1),
-(10, 1, 10, '2024-01-12 00:00:00', 1),
-(11, 1, 11, '2024-01-19 00:00:00', 1),
-(12, 1, 12, '2024-01-26 00:00:00', 1),
-(13, 2, 1, '2023-11-10 00:00:00', 1),
-(14, 2, 2, '2023-11-17 00:00:00', 1),
-(15, 2, 3, '2023-11-24 00:00:00', 1),
-(16, 2, 4, '2023-12-01 00:00:00', 1),
-(17, 2, 5, '2023-12-08 00:00:00', 1),
-(18, 2, 6, '2023-12-15 00:00:00', 1),
-(19, 2, 7, '2023-12-22 00:00:00', 1),
-(20, 2, 8, '2023-12-29 00:00:00', 1),
-(21, 2, 9, '2024-01-05 00:00:00', 1),
-(22, 2, 10, '2024-01-12 00:00:00', 1),
-(23, 2, 11, '2024-01-19 00:00:00', 1),
-(24, 2, 12, '2024-01-26 00:00:00', 1),
-(25, 3, 1, '2023-11-10 00:00:00', 1),
-(26, 3, 2, '2023-11-17 00:00:00', 1),
-(27, 3, 3, '2023-11-24 00:00:00', 1),
-(28, 3, 4, '2023-12-01 00:00:00', 1),
-(29, 3, 5, '2023-12-08 00:00:00', 1),
-(30, 3, 6, '2023-12-15 00:00:00', 1),
-(31, 3, 7, '2023-12-22 00:00:00', 1),
-(32, 3, 8, '2023-12-29 00:00:00', 1),
-(33, 3, 9, '2024-01-05 00:00:00', 1),
-(34, 3, 10, '2024-01-12 00:00:00', 1),
-(35, 3, 11, '2024-01-19 00:00:00', 1),
-(36, 3, 12, '2024-01-26 00:00:00', 1),
-(37, 4, 1, '2023-11-10 00:00:00', 1),
-(38, 4, 2, '2023-11-17 00:00:00', 0),
-(39, 4, 3, '2023-11-24 00:00:00', 0),
-(40, 4, 4, '2023-12-01 00:00:00', 0),
-(41, 4, 5, '2023-12-08 00:00:00', 0),
-(42, 4, 6, '2023-12-15 00:00:00', 0),
-(43, 4, 7, '2023-12-22 00:00:00', 0),
-(44, 4, 8, '2023-12-29 00:00:00', 0),
-(45, 4, 9, '2024-01-05 00:00:00', 0),
-(46, 4, 10, '2024-01-12 00:00:00', 0),
-(47, 4, 11, '2024-01-19 00:00:00', 0),
-(48, 4, 12, '2024-01-26 00:00:00', 0),
-(49, 5, 1, '2023-11-10 00:00:00', 0),
-(50, 5, 2, '2023-11-17 00:00:00', 0),
-(51, 5, 3, '2023-11-24 00:00:00', 0),
-(52, 5, 4, '2023-12-01 00:00:00', 0),
-(53, 5, 5, '2023-12-08 00:00:00', 0),
-(54, 5, 6, '2023-12-15 00:00:00', 0),
-(55, 5, 7, '2023-12-22 00:00:00', 0),
-(56, 5, 8, '2023-12-29 00:00:00', 0),
-(57, 5, 9, '2024-01-05 00:00:00', 0),
-(58, 5, 10, '2024-01-12 00:00:00', 0),
-(59, 5, 11, '2024-01-19 00:00:00', 0),
-(60, 5, 12, '2024-01-26 00:00:00', 0),
-(61, 6, 1, '2023-11-10 00:00:00', 0),
-(62, 6, 2, '2023-11-17 00:00:00', 0),
-(63, 6, 3, '2023-11-24 00:00:00', 0),
-(64, 6, 4, '2023-12-01 00:00:00', 0),
-(65, 6, 5, '2023-12-08 00:00:00', 0),
-(66, 6, 6, '2023-12-15 00:00:00', 0),
-(67, 6, 7, '2023-12-22 00:00:00', 0),
-(68, 6, 8, '2023-12-29 00:00:00', 0),
-(69, 6, 9, '2024-01-05 00:00:00', 0),
-(70, 6, 10, '2024-01-12 00:00:00', 0),
-(71, 6, 11, '2024-01-19 00:00:00', 0),
-(72, 6, 12, '2024-01-26 00:00:00', 0);
+(1, 1, 1, '2023-12-08 00:00:00', 1),
+(2, 1, 2, '2023-12-15 00:00:00', 1),
+(3, 1, 3, '2023-12-22 00:00:00', 1),
+(4, 1, 4, '2023-12-29 00:00:00', 1),
+(5, 1, 5, '2024-01-05 00:00:00', 1),
+(6, 1, 6, '2024-01-12 00:00:00', 1),
+(7, 1, 7, '2024-01-19 00:00:00', 1),
+(8, 1, 8, '2024-01-26 00:00:00', 1),
+(9, 1, 9, '2024-02-02 00:00:00', 1),
+(10, 1, 10, '2024-02-09 00:00:00', 1),
+(11, 1, 11, '2024-02-16 00:00:00', 1),
+(12, 1, 12, '2024-02-23 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -700,11 +589,11 @@ CREATE TABLE IF NOT EXISTS `view_fecha_pagos` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `view_fecha_pagos_old`
+-- Stand-in structure for view `view_fecha_pagos_bk`
 -- (See below for the actual view)
 --
-DROP VIEW IF EXISTS `view_fecha_pagos_old`;
-CREATE TABLE IF NOT EXISTS `view_fecha_pagos_old` (
+DROP VIEW IF EXISTS `view_fecha_pagos_bk`;
+CREATE TABLE IF NOT EXISTS `view_fecha_pagos_bk` (
 `ID_PAGO` varchar(255)
 ,`ID_CREDITO` int(11)
 ,`ID_CLIENTE` int(11)
@@ -743,8 +632,6 @@ DROP VIEW IF EXISTS `view_status_cliente`;
 CREATE TABLE IF NOT EXISTS `view_status_cliente` (
 `ID` int(11)
 ,`ID_CREDITO` int(11)
-,`ID_ZONA` int(11)
-,`ESTADO_CREDITO` int(10)
 ,`NOMBRE` varchar(150)
 ,`APELLIDOS` varchar(150)
 ,`DIRECCIN` varchar(250)
@@ -774,12 +661,12 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_fecha_pagos_old`
+-- Structure for view `view_fecha_pagos_bk`
 --
-DROP TABLE IF EXISTS `view_fecha_pagos_old`;
+DROP TABLE IF EXISTS `view_fecha_pagos_bk`;
 
-DROP VIEW IF EXISTS `view_fecha_pagos_old`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_fecha_pagos_old`  AS SELECT `ObtenerValorDinamico_bk`(`t0`.`id_creditos`,`t0`.`FechaPago`,'ID_PAGO') AS `ID_PAGO`, `t0`.`id_creditos` AS `ID_CREDITO`, `t1`.`id_clientes` AS `ID_CLIENTE`, `t2`.`id_zona` AS `ID_ZONA`, `t0`.`numero_pago` AS `NUM_PAGO`, `t0`.`FechaPago` AS `FECHA_PAGO`, `ObtenerValorDinamico_bk`(`t0`.`id_creditos`,`t0`.`FechaPago`,'FechaPago') AS `FECHA_ABONO`, coalesce(`ObtenerValorDinamico_bk`(`t0`.`id_creditos`,`t0`.`FechaPago`,'SaldoCuota'),`t1`.`cuota`) AS `SALDO_PENDIENTE` FROM ((`tbl_pagosabonos` `t0` join `tbl_creditos` `t1` on((`t0`.`id_creditos` = `t1`.`id_creditos`))) join `tbl_clientes` `t2` on((`t2`.`id_clientes` = `t1`.`id_clientes`))) WHERE (`t1`.`activo` = 1) ;
+DROP VIEW IF EXISTS `view_fecha_pagos_bk`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_fecha_pagos_bk`  AS SELECT `ObtenerValorDinamico_bk`(`t0`.`id_creditos`,`t0`.`FechaPago`,'ID_PAGO') AS `ID_PAGO`, `t0`.`id_creditos` AS `ID_CREDITO`, `t1`.`id_clientes` AS `ID_CLIENTE`, `t2`.`id_zona` AS `ID_ZONA`, `t0`.`numero_pago` AS `NUM_PAGO`, `t0`.`FechaPago` AS `FECHA_PAGO`, `ObtenerValorDinamico_bk`(`t0`.`id_creditos`,`t0`.`FechaPago`,'FechaPago') AS `FECHA_ABONO`, coalesce(`ObtenerValorDinamico_bk`(`t0`.`id_creditos`,`t0`.`FechaPago`,'SaldoCuota'),`t1`.`cuota`) AS `SALDO_PENDIENTE` FROM ((`tbl_pagosabonos` `t0` join `tbl_creditos` `t1` on((`t0`.`id_creditos` = `t1`.`id_creditos`))) join `tbl_clientes` `t2` on((`t2`.`id_clientes` = `t1`.`id_clientes`))) WHERE (`t1`.`activo` = 1) ;
 
 -- --------------------------------------------------------
 
@@ -789,7 +676,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `view_logs_pagos`;
 
 DROP VIEW IF EXISTS `view_logs_pagos`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_logs_pagos`  AS SELECT `t0`.`id_abonoscreditos` AS `id_abonoscreditos`, `t0`.`id_creditos` AS `id_creditos`, `t1`.`id_clientes` AS `id_clientes`, `t2`.`id_zona` AS `id_zona`, (case when (`t0`.`NumPago` = 0) then `t0`.`pago_capital` else (`t0`.`abono_dia1` - `t0`.`intereses_por_cuota`) end) AS `CAPITAL`, `t0`.`pago_intereses` AS `INTERES`, `t0`.`fecha_cuota_secc1` AS `FECHA_ABONO`, `t0`.`activo` AS `activo` FROM ((`tbl_abonoscreditos` `t0` join `tbl_creditos` `t1` on((`t0`.`id_creditos` = `t1`.`id_creditos`))) join `tbl_clientes` `t2` on((`t2`.`id_clientes` = `t1`.`id_clientes`))) WHERE (`t0`.`activo` = 1) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_logs_pagos`  AS SELECT `t0`.`id_abonoscreditos` AS `id_abonoscreditos`, `t0`.`id_creditos` AS `id_creditos`, `t1`.`id_clientes` AS `id_clientes`, `t2`.`id_zona` AS `id_zona`, (`t0`.`abono_dia1` - `t0`.`intereses_por_cuota`) AS `CAPITAL`, `t0`.`pago_intereses` AS `INTERES`, `t0`.`fecha_cuota_secc1` AS `FECHA_ABONO`, `t0`.`activo` AS `activo` FROM ((`tbl_abonoscreditos` `t0` join `tbl_creditos` `t1` on((`t0`.`id_creditos` = `t1`.`id_creditos`))) join `tbl_clientes` `t2` on((`t2`.`id_clientes` = `t1`.`id_clientes`))) WHERE (`t0`.`activo` = 1) ;
 
 -- --------------------------------------------------------
 
@@ -799,7 +686,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `view_status_cliente`;
 
 DROP VIEW IF EXISTS `view_status_cliente`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_status_cliente`  AS SELECT `c`.`id_clientes` AS `ID`, `cr`.`id_creditos` AS `ID_CREDITO`, `c`.`id_zona` AS `ID_ZONA`, `cr`.`estado_credito` AS `ESTADO_CREDITO`, `c`.`nombre` AS `NOMBRE`, `c`.`apellidos` AS `APELLIDOS`, `c`.`direccion_domicilio` AS `DIRECCIN`, `c`.`cedula` AS `CEDULA`, `c`.`telefono` AS `TELEFONO`, max(coalesce(`ac`.`fecha_cuota`,`cr`.`fecha_apertura`)) AS `ULTIMA_FECHA_ABONO`, `cr`.`saldo` AS `SALDO_CREDITO`, `cr`.`id_diassemana` AS `DIA_VISITA`, (to_days(now()) - to_days(max(coalesce(`ac`.`fecha_cuota`,`cr`.`fecha_apertura`)))) AS `DIAS_EN_MORA`, (to_days(`cr`.`fecha_ultimo_abono`) - to_days(now())) AS `DIAS_PARA_VENCER`, (case when ((to_days(`cr`.`fecha_ultimo_abono`) - to_days(now())) > 0) then 'N' else 'S' end) AS `VENCIDO`, (case when (ifnull((select sum(`t0`.`SALDO_PENDIENTE`) AS `tt` from `view_fecha_pagos` `t0` where ((`t0`.`ID_CREDITO` = `cr`.`id_creditos`) and (`t0`.`FECHA_PAGO` <= (now() - interval 1 day))) group by `t0`.`ID_CREDITO`),0) > 0) then 'S' else 'N' end) AS `MORA`, `c`.`activo` AS `CLIENTE_ACTIVO`, `cr`.`activo` AS `CREDITO_ACTIVO` FROM (((`tbl_clientes` `c` left join `tbl_creditos` `cr` on((`c`.`id_clientes` = `cr`.`id_clientes`))) left join `tbl_abonoscreditos` `ac` on((`cr`.`id_creditos` = `ac`.`id_creditos`))) left join `tbl_pagosabonos` `pa` on(((`cr`.`id_creditos` = `pa`.`id_creditos`) and (`ac`.`id_abonoscreditos` = `pa`.`numero_pago`)))) WHERE (`c`.`activo` = 1) GROUP BY `c`.`id_clientes`, `cr`.`fecha_ultimo_abono`, `cr`.`saldo`, `cr`.`id_diassemana`, `cr`.`activo`, `cr`.`id_creditos` ORDER BY `c`.`id_clientes` ASC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_status_cliente`  AS SELECT `c`.`id_clientes` AS `ID`, `cr`.`id_creditos` AS `ID_CREDITO`, `c`.`nombre` AS `NOMBRE`, `c`.`apellidos` AS `APELLIDOS`, `c`.`direccion_domicilio` AS `DIRECCIN`, `c`.`cedula` AS `CEDULA`, `c`.`telefono` AS `TELEFONO`, max(coalesce(`ac`.`fecha_cuota`,`cr`.`fecha_apertura`)) AS `ULTIMA_FECHA_ABONO`, `cr`.`saldo` AS `SALDO_CREDITO`, `cr`.`id_diassemana` AS `DIA_VISITA`, (to_days(now()) - to_days(max(coalesce(`ac`.`fecha_cuota`,`cr`.`fecha_apertura`)))) AS `DIAS_EN_MORA`, (to_days(`cr`.`fecha_ultimo_abono`) - to_days(now())) AS `DIAS_PARA_VENCER`, (case when ((to_days(`cr`.`fecha_ultimo_abono`) - to_days(now())) > 0) then 'N' else 'S' end) AS `VENCIDO`, (case when (ifnull((select sum(`t0`.`SALDO_PENDIENTE`) AS `tt` from `view_fecha_pagos` `t0` where ((`t0`.`ID_CREDITO` = `cr`.`id_creditos`) and (`t0`.`FECHA_PAGO` <= (now() - interval 1 day))) group by `t0`.`ID_CREDITO`),0) > 0) then 'S' else 'N' end) AS `MORA`, `c`.`activo` AS `CLIENTE_ACTIVO`, `cr`.`activo` AS `CREDITO_ACTIVO` FROM (((`tbl_clientes` `c` left join `tbl_creditos` `cr` on((`c`.`id_clientes` = `cr`.`id_clientes`))) left join `tbl_abonoscreditos` `ac` on((`cr`.`id_creditos` = `ac`.`id_creditos`))) left join `tbl_pagosabonos` `pa` on(((`cr`.`id_creditos` = `pa`.`id_creditos`) and (`ac`.`id_abonoscreditos` = `pa`.`numero_pago`)))) WHERE (`c`.`activo` = 1) GROUP BY `c`.`id_clientes`, `cr`.`fecha_ultimo_abono`, `cr`.`saldo`, `cr`.`id_diassemana`, `cr`.`activo`, `cr`.`id_creditos` ORDER BY `c`.`id_clientes` ASC ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

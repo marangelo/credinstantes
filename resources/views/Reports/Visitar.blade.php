@@ -41,7 +41,7 @@
                   <div class="col-md-3" style="display:none">
                     <div class="form-group">
                       <select class="form-control select2" style="width: 100%;" id="IdDiaW" name="IdDiaW">
-                          <option value="-1"  selected="selected">Todos</option>
+                          <option value="-1"  >Todos</option>
                         @foreach ($DiasW as $dw)
                           <option value="{{$dw->id_diassemana}}"> {{strtoupper($dw->dia_semana) }}</option>
                         @endforeach

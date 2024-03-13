@@ -1,4 +1,6 @@
 <script type="text/javascript">
+    $('[data-mask]').inputmask()
+    
     $("#tbl_usrs").DataTable({
             "responsive": true, 
         "lengthChange": false, 
@@ -23,6 +25,7 @@
         // Limpiar los campos de entrada
         $("#txtFullName").val("");
         $("#txtUserName").val("");
+        $("#txtPhone").val("");
         $("#txtPassWord_one").val("");
         $("#txtPassWord_two").val("");
         $("#txtComentario").val("");
@@ -92,6 +95,7 @@
         $('#modal_xl_add_user').modal('show');  
         $("#txtFullName").val(usr.nombre);
         $("#txtUserName").val(usr.email);
+        $("#txtPhone").val(usr.Phone);
         $("#id_estado").html(usr.id);
         $("#txtPassWord_one").val("password-hide");
         $("#txtPassWord_two").val("password-hide");
@@ -105,7 +109,8 @@
         var Permiso     = $("#sclPrivi option:selected").val();  
         var Zona        = $("#sclZona option:selected").val();  
         var FullName    = $("#txtFullName").val();   
-        var UserName    = $("#txtUserName").val();   
+        var UserName    = $("#txtUserName").val();  
+        var Phone       = $("#txtPhone").val();   
         var Pass01      = $("#txtPassWord_one").val();
         var Pass02      = $("#txtPassWord_two").val();
         var Commit      = $("#txtComentario").val();
@@ -113,6 +118,7 @@
 
         const Formulario = {
             Permiso     : isValue(Permiso, 'N/D', true),
+            Phone       : isValue(Phone, 'N/D', true),
             Zona        : isValue(Zona, 0, true),
             Nombre      : isValue(FullName, 'N/D', true),
             Usuario     : isValue(UserName, 'N/D', true),
@@ -128,19 +134,16 @@
 
         if (claveEncontrada) {
             Swal.fire({
-            title: '<strong>REQUERIDO: <u>' + claveEncontrada + '</u></strong>',
-            icon: 'error',
-            showCloseButton: true,
-            showCancelButton: false,
-            focusConfirm: false,
-          
+                title: '<strong>REQUERIDO: <u>' + claveEncontrada + '</u></strong>',
+                icon: 'error',
+                showCloseButton: true,
+                showCancelButton: false,
+                focusConfirm: false,
             })
         } else {
             if (Pass01 !== Pass02) {
                 Swal.fire("Oops", "Contraseña no Coincide!", "error");
             } else if ( Pass01 && Pass02) {
-
-
                 $.ajax({
                     url: "AddNewUser",
                     type: 'post',
@@ -175,7 +178,59 @@
         
     }
 
+    function Lock(IdUser){
+
+ 
+
+        Swal.fire({
+            title: '¿Estas Seguro de Inactivar Al usuario  ?',
+            text: "¡Se Inactivara al Usuario temporalmente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            target: document.getElementById('mdlMatPrima'),
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: "LockUser",
+                    data: {
+                        IdUser  : IdUser,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    type: 'post',
+                    async: true,
+                    success: function(response) {
+                        if(response){
+                            Swal.fire({
+                                title: 'Inactivado Correctamente ' ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                    }
+                                })
+                            }
+                        },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                    }).done(function(data) {
+                        //CargarDatos(nMes,annio);
+                    });
+                },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
+    }
+
     $("#btn_save_user").click(function(){
         Save_Form();        
     });
+
 </script>

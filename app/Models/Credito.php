@@ -13,7 +13,7 @@ class Credito extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Tbl_Creditos";    
+    protected $table = "tbl_creditos";    
     protected $primaryKey = 'id_creditos';
 
     public function Clientes()
@@ -68,9 +68,20 @@ class Credito extends Model
     {
         return Credito::where('activo',1)->get();
     }
-    public static function Creditos()
+    public static function Creditos($Zona)
     {
-        return Credito::where('activo',1)->whereIn('estado_credito',[1,2,3])->get();
+        return CreditosHistory::where('CREDITO_ACTIVO', 1)
+                ->whereIn('ESTADO_CREDITO', [1, 2, 3])
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('ID_ZONA', $Zona);
+                })->get();        
+    }
+    public static function Saldos_Cartera($Zona)
+    {
+        return CreditosHistory::where('CREDITO_ACTIVO', 1)
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('ID_ZONA', $Zona);
+                })->sum('SALDO_CREDITO');        
     }
     public static function getCreditosActivos()
     {
@@ -105,6 +116,7 @@ class Credito extends Model
             try {
                 $id_municipio           = $request->input('Municipio_');
                 $nombre                 = $request->input('Nombre_');
+                $Promotor               = $request->input('Promotor_');
                 $apellidos              = $request->input('Apellido_');
                 $direccion_domicilio    = $request->input('Dire_');
                 $cedula                 = $request->input('Cedula_');
@@ -146,6 +158,7 @@ class Credito extends Model
 
                 $datos_credito = [
                     'creado_por'          => Auth::id(),
+                    'asignado'            => $Promotor,
                     'fecha_apertura'      => date('Y-m-d',strtotime($FechaOpen)),
                     'id_diassemana'       => $DiaSemana_,
                     'id_clientes'         => $idInsertado,
@@ -204,6 +217,7 @@ class Credito extends Model
                 $idInsertado        = $request->input('IdClientes');
 
                 $DiaSemana_         = $request->input('DiaSemana_');
+                $Promotor_          = $request->input('Promotor_');
                 $Monto_             = $request->input('Monto_');
                 $Plato_             = $request->input('Plato_');
                 $Interes_           = $request->input('Interes_');
@@ -220,25 +234,23 @@ class Credito extends Model
                 $Fecha_abonos = [];
 
                 $datos_credito = [
-                    'creado_por'          => Auth::id(),
-                    'fecha_apertura'      => $FechaOpen,
-                    'id_diassemana'       => $DiaSemana_,
-                    'id_clientes'         => $idInsertado,
-                    'monto_credito'       => $Monto_,
-                    'plazo'               => $Plato_,
-                    'taza_interes'        => $Interes_,
-                    'numero_cuotas'       => $Cuotas_,
-                    'total'               => $Total_,
-                    'cuota'               => $vlCuota,
-                    'interes'             => $vlInteres,
-                    'saldo'               => $Saldos_,
-                    'intereses_por_cuota'=>$InteresesPorCuota,
-                    'estado_credito'               => 1,
-                    'activo'               => 1,
+                    'creado_por'            => Auth::id(),
+                    'asignado'              => $Promotor_,
+                    'fecha_apertura'        => $FechaOpen,
+                    'id_diassemana'         => $DiaSemana_,
+                    'id_clientes'           => $idInsertado,
+                    'monto_credito'         => $Monto_,
+                    'plazo'                 => $Plato_,
+                    'taza_interes'          => $Interes_,
+                    'numero_cuotas'         => $Cuotas_,
+                    'total'                 => $Total_,
+                    'cuota'                 => $vlCuota,
+                    'interes'               => $vlInteres,
+                    'saldo'                 => $Saldos_,
+                    'intereses_por_cuota'   =>$InteresesPorCuota,
+                    'estado_credito'        => 1,
+                    'activo'                => 1,
                 ];
-
-
-
                 
                 $IdCredito = Credito::insertGetId($datos_credito);
 
@@ -256,10 +268,18 @@ class Credito extends Model
                     "fecha_ultimo_abono"    => $Fecha_abonos[$Cuotas_-1]['FechaPago']
                 ]);
 
+                $response = RefAbonos::insert($Fecha_abonos); 
+
                  //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
                 //Clientes::CheckStatus($IdCredito);
 
-                $response = RefAbonos::insert($Fecha_abonos); 
+                Reloan::insert([
+                    'loan_id'       => $IdCredito,
+                    'date_reloan'   => $FechaOpen, 
+                    'amount_reloan' => $Monto_,
+                    'user_created'  => $Promotor_,
+                    'id_clientes'   => $idInsertado
+                ]); 
                 
 
 

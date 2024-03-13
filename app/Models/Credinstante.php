@@ -21,7 +21,7 @@ class Credinstante extends Model {
                 $tb         = $request->input('vTable');
                 $nmCamp     = $request->input('nmCamp');
 
-                if($tb==="Tbl_Clientes"){                    
+                if($tb==="tbl_clientes"){                    
                     $cliente = Clientes::find($id);
                     $cliente->getCreditos->each(function ($credito) {                    
                         $credito->getAbonos()->update([
@@ -33,7 +33,7 @@ class Credinstante extends Model {
                     ]);
                 }
 
-                if($tb==="Tbl_Creditos"){                    
+                if($tb==="tbl_creditos"){                    
                     $Credito = Credito::find($id);
                     $Credito->getAbonos()->update([
                         'activo' => 0
@@ -45,6 +45,28 @@ class Credinstante extends Model {
                 ]);
 
                 return response()->json($deleted);
+
+
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+    }
+    public static function LockUser(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $id     = $request->input('IdUser');
+
+                $User   = Usuario::find($id);
+                            
+                $response =   Usuario::where('id',  $id)->update([
+                    "Lock" => ($User->Lock > 0) ? 0: 1 ,
+                ]);
+
+                return response()->json($response);
 
 
             } catch (Exception $e) {

@@ -24,18 +24,29 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-    <span id="id_rol_user"> {{Session::get('rol')}}</span>
+    <span id="id_rol_user" class="invisible"> {{Session::get('rol')}}</span>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
+            <label>Zonas</label>
+            <div class="form-group">
+              <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                  <option value="0"  selected="selected">Todos</option>
+                  @foreach ($Zonas as $z)
+                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
+                  @endforeach
+              </select>
+            </div>
+
+            
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Listado de Clientes</h3>
                 <div class="card-tools">  
-                  @if (request()->is('Activos'))
+                  @if (request()->is('Activos/*'))
                       @if (Session::get('rol') == '1' || Session::get('rol') == '3')
                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
                               NUEVO
@@ -46,7 +57,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_clientes" class="table table-bordered table-striped">
+                  <table id="tbl_clientes" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Nombre</th>
@@ -54,7 +65,7 @@
                     <th>Departamento</th>
                     <th>Zona</th>
                     <th>Direccion</th>                    
-                    @if (request()->is('Activos'))
+                    @if (request()->is('Activos/*'))
                       @if (Session::get('rol') == '1' || Session::get('rol') == '3')
                         <th></th>
                       @endif
@@ -65,17 +76,15 @@
                  
                   @foreach ($Clientes as $c)  
                    @php
-                            $Estados = $c->getCreditos->first(); 
+                      $Estados = $c->getCreditos->first(); 
                       @endphp
                        
-                    @if ($Estados->estado_credito != 4 || request()->is('Inactivos'))
+                    @if ($Estados->estado_credito != 4 || request()->is('Inactivos/*'))
                     <tr>
                       <td>
                         
-                       
-                        
-                     
-                        <a href="Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
+
+                        <a href="../Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
                         @if ($c->getCreditos->isNotEmpty())
                                 <span class="badge @switch($Estados->estado_credito)
                                               @case(1)
@@ -108,7 +117,7 @@
                       </td>
                       <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
                       
-                        @if (request()->is('Activos'))
+                        @if (request()->is('Activos/*'))
                           @if (Session::get('rol') == '1' || Session::get('rol') == '3')
                           <td>
                             <div class="card-tools text-center">  
@@ -117,12 +126,13 @@
                                     </i>
                                     Editar
                                 </a>
-                                
+                                @if (Session::get('rol') == '1')  
                                 <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
                                     <i class="fas fa-trash">
                                     </i>
                                     Remover
                                 </a>
+                                 @endif
                               </div>
                               </td>
                           @endif
@@ -160,9 +170,8 @@
             
               <!-- /.card-header -->
               <div class="card-body">                  
-                  <div class="row">
-                    
-                    <div class="col-sm-2">
+                  <div class="row">                    
+                    <div class="col-sm-4">
                       <div class="form-group">
                           <label>Fecha Inicio</label>
                           <div class="input-group date" id="reservationdate" data-target-input="nearest">
@@ -173,7 +182,7 @@
                           </div>
                       </div>                      
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                       <div class="form-group">
                         <label>Dia de Visita</label>
                         <select class="form-control" id="slDiaVisita">
@@ -184,13 +193,23 @@
                       </div>                      
                     </div>
                     <div class="col-sm-4">
+                      <div class="form-group">
+                        <label>Promotor</label>
+                        <select class="form-control" id="slPromotor">
+                          @foreach ($Promo as $p)
+                            <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
+                          @endforeach
+                        </select>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ...">
                       </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Apellido</label>

@@ -1,12 +1,20 @@
 $(function () {
-  'use strict'
+'use strict'
 
-  var ticksStyle = {
-      fontColor: '#495057',
-      fontStyle: 'bold'
-  }
+var ticksStyle = {
+    fontColor: '#495057',
+    fontStyle: 'bold'
+}
 
-  function isValue(value, def, is_return) {
+var mode = 'index'
+var intersect = true
+
+var $salesChart = $('#sales-chart')
+
+
+
+
+function isValue(value, def, is_return) {
     if ( $.type(value) == 'null'
         || $.type(value) == 'undefined'
         || $.trim(value) == '(en blanco)'
@@ -19,123 +27,223 @@ $(function () {
         return ($.type(is_return) == 'boolean' && is_return === true ? value : true);
     }
 }
-
-var mode = 'index'
-var intersect = true
-
-var $salesChart = $('#sales-chart')
+CalcIndicadores()
 
 
-var vLabel = []
-var vData = []
+$("#IdbtnFilter").click(function () {
+    CalcIndicadores()
+});
 
-$.getJSON("getDashboard", function(dataset) {
+$("#IdFilterByZone").change(function() {    
+    CalcIndicadores()
+});
 
-    var Ingreso = dataset['INGRESO'];
-
-    Ingreso     = numeral(isValue(Ingreso,0,true)).format('0,00.00');
-
-    $("#lblIngreso").text(Ingreso)    
-
-    var CAPITAL = dataset['CAPITAL'];
-
-    CAPITAL     = numeral(isValue(CAPITAL,0,true)).format('0,00.00');
-
-    $("#lblCapital").text(CAPITAL)
-
-    var INTERESES = dataset['INTERESES'];
-
-    INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');
-
-    $("#lblInteres").text(INTERESES)
-
-    var Clientes = dataset['clientes_activos'];
-    Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
-    $("#lblClientes").text(Clientes)
-
-    var Cartera = dataset['SALDOS_CARTERA'];
+function CalcIndicadores(){
     
-    Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
+    var vLabel = []
+    var vData = []
+   
+    var Opt   = $("#IdFilterByZone option:selected").val(); 
     
-    $("#id_saldos_cartera").text(Cartera)
-
-
-    var MoraAtrasada = dataset['MORA_ATRASADA'];    
+    Opt      = isValue(Opt,-1,true)       
     
-    MoraAtrasada     = numeral(isValue(MoraAtrasada,0,true)).format('0,00.00');    
-    $("#lblMoraAtrasada").text(MoraAtrasada)
+    $("#IdCardTitle").text("Calculando . . . ") 
 
-    var MoraVencida = dataset['MORA_VENCIDA'];    
-    MoraVencida     = numeral(isValue(MoraVencida,0,true)).format('0,00.00');    
-    $("#lblMoraVencida").text(MoraVencida)
+    $.getJSON("getDashboard/"+Opt, function(dataset) {
 
-    $.each(dataset.Data, function(i, item) {
-        vData.push(item);
-    })
+        var data =  [
+            {
+            "INGRESO_NETO": "",
+            "CAPITAL": "",
+            "UTILIDAD_BRUTA": "",
+            "CREDITOS_ACTIVOS" : "",
+            "SALDO_CARTERA": "",
+            "MORA_ATRASADA" : "",
+            "MORA_VENCIDA" : ""
+            }
+            ];
+    
 
-    $.each(dataset.label, function(i, item) {
-        vLabel.push(item);
-    })
+        var Ingreso = dataset['INGRESO'];
+    
+        Ingreso     = numeral(isValue(Ingreso,0,true)).format('0,00.00');
+    
+        $("#lblIngreso").text(Ingreso)    
+        data[0]['INGRESO_NETO'] = Ingreso;
+    
+        var CAPITAL = dataset['CAPITAL'];
+    
+        CAPITAL     = numeral(isValue(CAPITAL,0,true)).format('0,00.00');
+        data[0]['CAPITAL'] = CAPITAL;
+    
+        $("#lblCapital").text(CAPITAL)
+    
+        var INTERESES = dataset['INTERESES'];
+    
+        INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');
+    
+        $("#lblInteres").text(INTERESES)
 
-    var salesChart = new Chart($salesChart, {
-        type: 'bar',
-        data: {
-        labels: vLabel,
-        datasets: [{
-                backgroundColor: '#007bff',
-                borderColor: '#007bff',
-                data: vData
-                },
-            ]
-        },
-        options: {
-        maintainAspectRatio: false,
-        tooltips: {
-            mode: mode,
-            intersect: intersect
-        },
-        hover: {
-            mode: mode,
-            intersect: intersect
-        },
-        legend: {
-            display: false
-        },
-        scales: {
-            yAxes: [{
-            // display: false,
-            gridLines: {
-                display: true,
-                lineWidth: '4px',
-                color: 'rgba(0, 0, 0, .2)',
-                zeroLineColor: 'transparent'
+        data[0]['UTILIDAD_BRUTA'] = INTERESES;
+    
+        var Clientes = dataset['clientes_activos'];
+        Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
+        $("#lblClientes").text(Clientes)
+        data[0]['CREDITOS_ACTIVOS'] = Clientes;
+    
+        var Cartera = dataset['SALDOS_CARTERA'];
+        
+        Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
+        
+        $("#id_saldos_cartera").text(Cartera)
+        data[0]['SALDO_CARTERA'] = Cartera;
+    
+    
+        var MoraAtrasada = dataset['MORA_ATRASADA'];    
+        
+        MoraAtrasada     = numeral(isValue(MoraAtrasada,0,true)).format('0,00.00');    
+        $("#lblMoraAtrasada").text(MoraAtrasada)
+        data[0]['MORA_ATRASADA'] = MoraAtrasada;
+    
+        var MoraVencida = dataset['MORA_VENCIDA'];    
+        MoraVencida     = numeral(isValue(MoraVencida,0,true)).format('0,00.00');    
+        $("#lblMoraVencida").text(MoraVencida)
+        data[0]['MORA_VENCIDA'] = MoraVencida;
+    
+        $.each(dataset.Data, function(i, item) {
+           
+            vData.push(item);
+        })
+    
+        $.each(dataset.label, function(i, item) {
+            vLabel.push(item);
+        })
+
+        $("#IdCardTitle").text(" ")
+    
+        var salesChart = new Chart($salesChart, {
+            type: 'bar',
+            data: {
+            labels: vLabel,
+            datasets: [{
+                    backgroundColor: '#007bff',
+                    borderColor: '#007bff',
+                    data: vData
+                    },
+                ]
             },
-            ticks: $.extend({
-                beginAtZero: true,
-  
-                // Include a dollar sign in the ticks
-                callback: function (value) {
-                if (value >= 1000) {
-                    value /= 1000
-                    value += 'k'
-                }
-  
-                return 'C$' + value
-                }
-            }, ticksStyle)
-            }],
-            xAxes: [{
-            display: true,
-            gridLines: {
+            options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                mode: mode,
+                intersect: intersect
+            },
+            hover: {
+                mode: mode,
+                intersect: intersect
+            },
+            legend: {
                 display: false
             },
-            ticks: ticksStyle
-            }]
-        }
-        }
+            scales: {
+                yAxes: [{
+                // display: false,
+                gridLines: {
+                    display: true,
+                    lineWidth: '4px',
+                    color: 'rgba(0, 0, 0, .2)',
+                    zeroLineColor: 'transparent'
+                },
+                ticks: $.extend({
+                    beginAtZero: true,
+      
+                    // Include a dollar sign in the ticks
+                    callback: function (value) {
+                    if (value >= 1000) {
+                        value /= 1000
+                        value += 'k'
+                    }
+      
+                    return 'C$' + value
+                    }
+                }, ticksStyle)
+                }],
+                xAxes: [{
+                display: true,
+                gridLines: {
+                    display: false
+                },
+                ticks: ticksStyle
+                }]
+            }
+            }
+        })
+
+    
+
+        tbMetricas(data)
+    
     })
 
-  })
+ 
+    $("#id_button_export_excel").on("click", function() {
+        $(".buttons-excel").trigger("click");
+    });
+    function tbMetricas(ARRAY_METRICAS) {
+        if ( $.fn.DataTable.isDataTable('#tbl_metrias_home') ) {
+
+            var dataTable = $('#tbl_metrias_home').DataTable();
+
+            dataTable.clear().destroy();
+
+            $("tbl_metrias_home").empty();
+            console.log("destroy")
+
+
+
+        }
+        $('#tbl_metrias_home').DataTable({
+            "data": ARRAY_METRICAS,
+            "paging": false,
+            "destroy": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            },
+            "dom": 'lBfrtip',
+            buttons: [{extend: 'excelHtml5'}],
+            'columns': [
+                {"title": "INGRESO NETO","data"   : "INGRESO_NETO"},                
+                {"title": "CAPITAL","data"    : "CAPITAL"},
+                {"title": "UTILIDAD BRUTA","data"    : "UTILIDAD_BRUTA"},
+                {"title": "CREDITOS ACTIVOS","data"   : "CREDITOS_ACTIVOS"},
+                {"title": "SALDO DE CARTERA","data"   : "SALDO_CARTERA"},
+                {"title": "MORA ATRASADA","data"   : "MORA_ATRASADA"},
+                {"title": "MORA VENCIDA","data"   : "MORA_VENCIDA"},
+            ],
+        });  
+        $("#tbl_metrias_home_length").hide();
+        $("#tbl_metrias_home_filter").hide();
+        
+        $("#tbl_metrias_home").hide();
+    }
+}
+
+
 
 
 

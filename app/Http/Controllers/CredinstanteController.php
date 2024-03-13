@@ -24,17 +24,19 @@ class CredinstanteController extends Controller {
     public function getDashboard()
     {         
         $IsCalc = DateRecord::Check();
+        $Zonas  = Zonas::getZonas();  
    
 
         $View = ($IsCalc) ? 'Dashboard.update' : 'Dashboard.home' ;
 
         $Titulo = "Dashboard";
-        return view($View,compact('Titulo'));
+        return view($View,compact('Titulo','Zonas'));
         
     }
 
     public function prtVoucher($Id){
         $Abono    = Abono::find($Id); 
+    
         \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago complete de: ". $Id);
         return view('Voucher.completo', compact('Abono'));
     }
@@ -45,40 +47,58 @@ class CredinstanteController extends Controller {
         return view('Voucher.parcial', compact('Abono'));
         
     }
+
+    public function InfoCliente($id)
+    {           
+        $perfil_cliente = Clientes::find($id);      
+        return response()->json($perfil_cliente);
+        
+    }
+
+    public function ListaClientes(Request $request)
+    {
+        $Clientes = Clientes::ListaClientes($request);
+        
+        return response()->json($Clientes);
+    }
     
-    public function getClientes()
+    public function getClientes($Id)
     {   
         $IsCalc      = DateRecord::Check();
-        $Clientes    = Clientes::getClientes();  
+        $Clientes    = Clientes::getClientes($Id);  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('activo','S')->get(); 
         $Titulo      = "Clientes Activos";
         $View        = ($IsCalc) ? 'Dashboard.update' : 'Clientes.ls_Clientes' ;    
         
-        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        return view( $View, compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
-    public function getInactivos()
+    public function getInactivos($id)
     {   
-        $Clientes    = Clientes::getInactivos();  
+        $Clientes    = Clientes::getInactivos($id);  
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();  
         $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('id_rol',4)->get(); 
         $Titulo      = "Clientes Inactivos";
         
-        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo'));
+        return view('Clientes.ls_Clientes', compact('Clientes','Municipios','DiasSemana','Zonas','Titulo','Promo'));
         
     }
+
 
     public function getPerfil($id)
     {   
         
         $perfil_cliente = Clientes::find($id);  
         $DiasSemana     = DiasSemana::getDiasSemana();
+        $Promo       = Usuario::where('id_rol',4)->get(); 
         $Titulo         = "Perfil del Clientes";
     
-        return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana','Titulo'));
+        return view('Clientes.Perfil', compact('perfil_cliente','DiasSemana','Titulo','Promo'));
         
     }
     public function getMunicipios()
@@ -206,6 +226,14 @@ class CredinstanteController extends Controller {
         $response =Abono::MultiAbonos($request) ;
         return response()->json($response);
     }
+    public function Bluid(Request $request)
+    {
+
+        $response =Abono::Bluid($request) ;
+        return response()->json($response);
+    }
+
+   
 
     public function SaveNewAbono(Request $request)
     {
@@ -214,13 +242,20 @@ class CredinstanteController extends Controller {
 
         switch ($Tipo) {
             case '0':
-                $response = Abono::SaveNewAbono($request);
+                // $response = Abono::SaveNewAbono($request);
+                // Clientes::CheckStatus($request->input('IdCred'));
+
+                $response = Abono::NewPagos($request);
+                Clientes::CheckStatus($request->input('IdCred'));
+
+
                 break;
             case '1':
                 $response = Abono::Cancelacion($request);
                 break;
             case '2':
                 $response = Abono::MultiAbonos($request);
+                Clientes::CheckStatus($request->input('IdCred'));
                 break;
             
             default:
@@ -228,7 +263,7 @@ class CredinstanteController extends Controller {
                 break;
         }
         
-        Clientes::CheckStatus($request->input('IdCred'));
+        
 
         return response()->json($response);
     }
@@ -247,6 +282,12 @@ class CredinstanteController extends Controller {
     public function Remover(Request $request)
     {
         $response = Credinstante::Remover($request);
+        
+        return response()->json($response);
+    }
+    public function LockUser(Request $request)
+    {
+        $response = Credinstante::LockUser($request);
         
         return response()->json($response);
     }
@@ -296,6 +337,31 @@ class CredinstanteController extends Controller {
         $response = Usuario::SaveUsuario($request);
         
         return response()->json($response);
+    }
+
+    public function Promotor()
+    {         
+        $Titulo = "Promotor";
+        
+        $Zonas  = Zonas::getZonas();  
+        
+        return view('Promotor.Home',compact('Titulo','Zonas'));
+
+    }
+    public function Desembolsados()
+    {         
+        $Titulo = "DESEMBOLSADO";
+        return view('Promotor.Desembolsado',compact('Titulo'));
+
+    }
+
+    public function MetricasPromotor()
+    {         
+        $Titulo = "Promotor";
+        $Promo       = Usuario::where('id_rol',4)->get();  
+        
+        return view('Promotor.Metricas',compact('Titulo','Promo'));
+
     }
     
 

@@ -23,15 +23,19 @@ class RedirectIfAuthenticated
 
             switch ($role) {
                 case '1':
-                    return redirect(RouteServiceProvider::HOME);;;
+                    return redirect(RouteServiceProvider::HOME);
                 break;
     
                 case '2':
-                    return redirect('Activos');
+                    return redirect(RouteServiceProvider::HOME);
                 break;
     
                 case '3':
-                    return redirect('Activos');
+                    return redirect('Activos/0');
+                break;
+
+                case '4':
+                    return redirect('Promotor');
                 break;
     
                 default:

@@ -12,6 +12,9 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
 
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
   <!-- daterange picker -->
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
 
@@ -42,7 +45,13 @@
 
 
   <!-- Main Sidebar Container -->
+  @if( Session::get('rol') == '4')
+  @include('layouts.lyt_promotor')
+  @else
   @include('layouts.lyt_aside')
+  @endif
+  
+
 
   
   @yield('content')

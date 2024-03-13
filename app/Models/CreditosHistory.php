@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
 
-class Estados extends Model {
+class CreditosHistory extends Model {
     public $timestamps = false;
-    protected $table = "tbl_estados";    
-    protected $primaryKey = 'id_estados';
+    protected $table = "view_creditos_history";    
 
 }

@@ -55,6 +55,8 @@
             const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
 
             var DiaSemana_  = $("#slDiaVisita option:selected").val(); 
+            var Promotor  = $("#slPromotor option:selected").val(); 
+            
 
             var Monto_      = $("#txtMonto").val();   
             var Plato_      = $("#txtPlazo").val();   
@@ -83,6 +85,7 @@
                     type: 'post',
                     data: {
                         DiaSemana_   : DiaSemana_,
+                        Promotor_    : Promotor,
                         IdClientes   : IdClientes,
                         Monto_       : Monto_,  
                         Plato_       : Plato_,  
@@ -192,19 +195,26 @@
             var Total_      = $("#txt_Total_abono").val();
             var IdCred      = $("#lbl_credito").text();
             var DateAbono   = $("#IddtApertura").val();
+            // var DateAbono   = $("#lista_pagos option:selected").text(); 
+            // var parts       = DateAbono.split(" | ");
+            // DateAbono = moment(parts[1]).format("YYYY-MM-DD");
+
+            var NumPago     = $("#lista_pagos option:selected").val(); 
             var Descuento   = $("#txt_descuento").val();
             var Desc        = isValue(Descuento,0,true);
 
             const dtAbono   = moment(DateAbono, 'DD/MM/YYYY');
 
             var sldPendiene = $("#id_mdl_saldo_pendiente").html()
-          
+        
             Total_         = isValue(Total_,'N/D',true)
             IdCred         = isValue(IdCred,0,true);
+            Descuento      = isValue(Desc,0,true);
             
 
             var opt  = $("#slTipoAbono option:selected").val(); 
 
+  
 
 
             if(Total_ === 'N/D' ){
@@ -222,6 +232,7 @@
                             FechaAbono  : dtAbono.format('YYYY-MM-DD'),
                             Tipo        : opt,
                             Desc        : Desc,
+                            NumPago     : NumPago,
                             _token  : "{{ csrf_token() }}" 
                         },
                         async: true,
@@ -449,7 +460,7 @@
 
     function rmItem(IdElem){
 
-        var vTable  = "Tbl_Creditos" ; 
+        var vTable  = "tbl_creditos" ; 
         var nmCamp  = "id_creditos" ; 
 
         Swal.fire({
@@ -591,17 +602,45 @@
 
     function getIdCredi(IdCredito){
 
-      
+    
 
-        var opt  = $("#slTipoAbono option:selected").val(); 
+        var opt         = $("#slTipoAbono option:selected").val(); 
+        var IdAbono     = $("#lista_pagos option:selected").val();
 
-        $.get( "../getSaldoAbono/" + IdCredito + "/" + opt , function( data ) {
+        var lstPagos    = $("#lista_pagos");
+       
+    
 
+        $.get( "../getSaldoAbono/" + IdCredito + "/" + opt  , function( data ) {
+            
 
+            let ListaPagos = data.Plan_pago;
+            lstPagos.empty();
+            $.each( ListaPagos, function(key, val) {
+                //let optValue = numeral(val.NUM_PAGO).format('00') + " | " + val.FECHA_PAGO;
+                let optValue = numeral(val.NUM_PAGO).format('00') + " | " + val.FECHA_PAGO;
+
+                if (val.PENDIENTE === 0) {
+                    optValue += ' (Pagado)';
+                }
+
+                let option = new Option(optValue, val.NUM_PAGO);
+
+                if (val.PENDIENTE === 0) {
+                    $(option).prop('disabled', true);
+                }
+
+                lstPagos.append(option);
+            });
+
+            
+        
             dtSaldo = numeral(isValue(data.Saldo_to_cancelar,0,true)).format('00.00')
             Interes_ = numeral(isValue(data.Interes_,0,true)).format('0,0.00')
             Capital_ = numeral(isValue(data.Capital_,0,true)).format('0,0.00')
             SaldoPe_ = numeral(isValue(data.Saldo_Pendiente,0,true)).format('0,0.00')
+
+            txtSaldo = (parseFloat(data.Saldo_Pendiente) > 0)? data.Saldo_Pendiente : dtSaldo
 
             $("#id_mdl_saldo_pendiente").html(SaldoPe_);
 
@@ -610,7 +649,10 @@
 
                 $('#modal-lg').modal('show');                
                 $("#lbl_credito").html(IdCredito);
-                $("#txt_Total_abono").val(dtSaldo);
+
+                
+                
+                $("#txt_Total_abono").val(txtSaldo);
 
                 switch (opt) {
                     case '0':
