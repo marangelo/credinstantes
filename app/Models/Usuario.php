@@ -29,6 +29,7 @@ class Usuario extends Model {
 
                 $usuario        = $request->input('Usuario');
                 $nombre         = $request->input('Nombre');
+                $Phone          = $request->input('Phone');
                 $passwprd       = Hash::make($request->input('Contrasena'));
                 $Estado         = $request->input('Estado');
                 $id_rol         = $request->input('Permiso');
@@ -41,6 +42,7 @@ class Usuario extends Model {
                     $obj = new Usuario();   
                     $obj->email      = $usuario;                
                     $obj->nombre        = $nombre;
+                    $obj->Phone         = $Phone;
                     $obj->password      = $passwprd;
                     $obj->id_rol        = $id_rol;
                     $obj->id_zona       = $id_zona;
@@ -50,6 +52,7 @@ class Usuario extends Model {
                 } else {
                     $response =   Usuario::where('id',  $Estado)->update([
                         "email" => $usuario,
+                        "Phone" => $Phone,
                         "nombre" => $nombre,
                         "Comment" => $Comment,
                         "id_rol" => $id_rol,

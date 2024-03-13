@@ -26,11 +26,11 @@ class LoginController extends Controller
             break;
 
             case '2':
-                return 'Activos';
+                return 'Activos/0';
             break;
 
             case '3':
-                return 'Activos';
+                return 'Activos/0';
             break;
 
             default:
@@ -70,7 +70,7 @@ class LoginController extends Controller
 
 
         $user = $request->email;
-        $queryResult = DB::table('users')->where('email', $user)->where('activo', 'S')->pluck('id');
+        $queryResult = DB::table('users')->where('email', $user)->where('activo', 'S')->where('Lock', 1)->pluck('id');
         if (!$queryResult->isEmpty()) {
             if ($this->attemptLogin($request)) {
 

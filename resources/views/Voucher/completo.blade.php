@@ -77,7 +77,7 @@
                         </tr>
                         <tr>
                             <td class="col-md-9"><em>DISPENSA:</em></h4></td>
-                            <td class="col-md-1 text-right">C$ 0.00</td>
+                            <td class="col-md-1 text-right">C$ {{ number_format($Abono->Descuento,2)}}</td>
                         </tr>
 
                         <tr>
@@ -87,7 +87,7 @@
                         
                         <tr>
                             <td class="col-md-9"><em>SALDO ACTUAL:</em></h4></td>
-                            <td class="col-md-1 text-right">C$ {{ number_format($Abono->saldo_anterior - $Abono->abono_dia1,2)}}</td>
+                            <td class="col-md-1 text-right">C$ {{ number_format($Abono->saldo_anterior - $Abono->abono_dia1 - $Abono->Descuento ,2)}}</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -96,6 +96,10 @@
                         <tr>
                             <td class="col-md-9"><em>USUARIO:</em></h4></td>
                             <td class="col-md-1 text-right">{{Session::get('name_session')}}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em></em></h4></td>
+                            <td class="col-md-1 text-right">{{Auth::User()->Phone}}</td>
                         </tr>
                     </tbody>
                 </table>

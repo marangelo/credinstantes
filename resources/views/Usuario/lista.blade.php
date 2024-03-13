@@ -73,6 +73,14 @@
                       <button type="button" class="btn btn-tool" onclick="Remove_form({{ $u->id }})">
                         <i class="fas fa-trash text-danger"></i>
                       </button>
+
+                      <button type="button" class="btn btn-tool" onclick="Lock({{ $u->id }})">                        
+                        @if($u->Lock > 0)
+                        <i class="fas fa-lock-open text-success"></i>
+                        @else
+                        <i class="fas fa-lock text-danger"></i>
+                        @endif
+                      </button>
                     </div>
                     </th>
                   </tr>
@@ -117,7 +125,7 @@
               <!-- /.card-header -->
               <div class="card-body">                  
                   <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-4">
 
                       <div class="form-group">
                         <label>Nombre Completo:</label>
@@ -140,6 +148,20 @@
                             <span class="input-group-text"><i class="fas fa-at"></i></span>
                           </div>
                           <input type="text" id="txtUserName" class="form-control" placeholder="demo@demo.com">
+                        </div>
+                      </div>
+                      
+                      
+                    </div>
+                    <div class="col-md-4">
+                      
+                      <div class="form-group">
+                        <label>Telefono:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input type="text" id="txtPhone" class="form-control" placeholder="" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
                         </div>
                       </div>
                       

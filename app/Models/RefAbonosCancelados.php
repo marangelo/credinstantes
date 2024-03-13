@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
 
-class Estados extends Model {
+class RefAbonosCancelados extends Model {
     public $timestamps = false;
-    protected $table = "tbl_estados";    
-    protected $primaryKey = 'id_estados';
+    protected $table = "tbl_abonos_cancelados";    
+    protected $primaryKey = 'ID_CREDITO';
 
 }

@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="icon" type="image/x-icon" href="{{asset('img/favicon.ico')}}">
-  <title>CREDIN$TANTES | {{$Titulo}}</title>
+  <title>CREDI DEMO | {{$Titulo}}</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
   <!-- daterange picker -->
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
@@ -42,7 +45,13 @@
 
 
   <!-- Main Sidebar Container -->
+  @if( Session::get('rol') == '4')
+  @include('layouts.lyt_promotor')
+  @else
   @include('layouts.lyt_aside')
+  @endif
+  
+
 
   
   @yield('content')

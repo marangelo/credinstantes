@@ -14,13 +14,14 @@ class ApiController extends Controller{
 
         // php artisan run:CalcularEstadosCredito
         $Creditos         = [];
-        $Estado           = 1 ;
+        
         $batch_Credito    = new Credito;
         $batch_index      = 'id_creditos';
 
         $Creditos_Estados = EstadosMonitor::Where('SALDO_CREDITO', '>', 0)->Where('CLIENTE_ACTIVO', 1)->get();            
 
         foreach ($Creditos_Estados as $key => $c) {
+            $Estado = 1 ;
             $Estado = ($c->MORA == 'S') ? 2 : $Estado ;
             $Estado = ($c->VENCIDO == 'S') ? 3 : $Estado ;
             $Creditos[$key] = [

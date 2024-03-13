@@ -11,7 +11,7 @@ class DiasSemana extends Model
 {
     #protected $connection = 'sqlsrv';
     public $timestamps = false;
-    protected $table = "Cat_DiasSemana";
+    protected $table = "cat_diassemana";
 
     public static function getDiasSemana()
     {

@@ -36,7 +36,6 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-              <form action="{{ route('exportAbonos') }}" method="POST">
               @csrf
                 <div class="row">
                   <div class="col-md-2">
@@ -81,7 +80,8 @@
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
                           
-                          <button type="submit" class="btn btn-success"><i class="fa fa-file-excel"></i></button>
+                          <button type="submit" class="btn btn-success button_export_excel"><i class="fa fa-file-excel"></i></button>
+                          
                       </div>
                     </div>
                   </div>
@@ -94,19 +94,22 @@
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
                           <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>
+
+                          
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                </form>
                 <table id="tbl_ingresos" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>NOMBRE</th>
                     <th>CUOTA COBRADA</th>
+                    @if (Session::get('rol') == '1')  
                     <th>PAGO A CAPITAL</th>
                     <th>PAGO A INTERES</th>
+                    @endif
                   </tr>
                   </thead>
                   <tbody>
@@ -116,12 +119,17 @@
               </div>
               <div class="card-footer">
                 <div class="row">
+                  @if (Session::get('rol') == '1')  
                   <div class="col-sm-4 col-md-4">
+                  @else 
+                  <div class="col-sm-12 col-md-12">
+                  @endif
                     <div class="description-block border-right">
                       <h5 class="description-header text-primary" >C$ <span id="id_lbl_ingreso"></span></h5>
                       <span class="description-text">TOTAL INGRESO BRUTO</span>
                     </div>
                   </div>
+                  @if (Session::get('rol') == '1')  
                   <div class="col-sm-4 col-md-4">
                     <div class="description-block border-right">
                       <h5 class="description-header text-success" >C$ <span id="id_lbl_capital" ></span></h5>
@@ -131,10 +139,10 @@
                   <div class="col-sm-4 col-md-4">
                     <div class="description-block">
                       <h5 class="description-header text-warning">C$ <span id="id_lbl_interes"></span></h5>
-                      <span class="description-text">ITERESES O (UTILIDAD DEL DIA)</span>
+                      <span class="description-text">INTERESES O (UTILIDAD DEL DIA)</span>
                     </div>
-                    <!-- /.description-block -->
                   </div>
+                  @endif
                 </div>
                 <!-- /.row -->
               </div>

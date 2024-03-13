@@ -22,7 +22,7 @@
   <!-- /.navbar -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('Dashboard')}}" class="brand-link">
+    <a href="#!" class="brand-link">
       <img src="{{ asset('img/Logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">CREDIN$TANTES</span>
     </a>
@@ -40,7 +40,7 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        @if( Session::get('rol') == '1')
+        @if( Session::get('rol') == '1' || Session::get('rol') == '2' )
           <li class="nav-item">
             <a href="{{ route('Dashboard')}}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -57,17 +57,25 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('Activos')}}" class="nav-link {{ (request()->is('Activos')) ? 'active' : '' }} ">
+                    <a href="../Activos/0" class="nav-link {{ (request()->is('Activos/*')) ? 'active' : '' }} ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Activos</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('Inactivos')}}" class="nav-link {{ (request()->is('Inactivos')) ? 'active' : '' }} ">
+                    <a href="../Inactivos/0" class="nav-link {{ (request()->is('Inactivos/*')) ? 'active' : '' }} ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Inactivos</p>
                     </a>
                 </li>
+                @if( Session::get('rol') == '2')
+                <li class="nav-item">
+                    <a href="{{ route('RecuperacionCobro')}}" class="nav-link {{ (request()->is('RecuperacionCobro')) ? 'active' : '' }} ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Recuperacion</p>
+                    </a>
+                </li>
+                @endif
               </ul>
           </li>
           @if( Session::get('rol') == '1')
@@ -124,6 +132,12 @@
               </a>
             
               <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('MetricasPromotor')}}" class="nav-link {{ (request()->is('MetricasPromotor')) ? 'active' : '' }}" >
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Promotores</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
                         <i class="far fa-circle nav-icon"></i>
