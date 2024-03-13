@@ -11,7 +11,6 @@ use Mavinoo\Batch\Batch;
 class ApiController extends Controller{
     public function CalcularEstados()
     {  
-
         // php artisan run:CalcularEstadosCredito
         $Creditos         = [];
         
@@ -30,8 +29,6 @@ class ApiController extends Controller{
             ];
 
         }
-
-      
 
         \Batch::update($batch_Credito, $Creditos, $batch_index);
 
