@@ -109,9 +109,9 @@ class ReportsModels extends Model {
             
             $array_abonos[$key] = [
                 "id_abonoscreditos" => $a->id_abonoscreditos,
-                "fecha_cuota"       => $a->fecha_cuota,
-                "Nombre"            => $a->credito->Clientes->nombre,
-                "apellido"          => $a->credito->Clientes->apellidos,
+                "fecha_cuota"       => $a->FECHA_ABONO,
+                "Nombre"            => strtoupper($a->credito->Clientes->nombre),
+                "apellido"          => strtoupper($a->credito->Clientes->apellidos),
                 "cuota_cobrada"     => $Ingreso_neto,
                 "pago_capital"      => $CAPITAL,
                 "pago_intereses"    => $a->INTERES,
