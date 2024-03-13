@@ -103,7 +103,7 @@ class ReportsModels extends Model {
         
         foreach ($Abonos as $key => $a) {
 
-            $CAPITAL  = (strtotime($a->FECHA_ABONO) > strtotime("2024-03-13")) ? $a->CAPITAL : $a->CAPITAL_OLD;
+            $CAPITAL  = (strtotime($a->FECHA_ABONO) >= strtotime("2024-03-13")) ? $a->CAPITAL : $a->CAPITAL_OLD;
 
             $Ingreso_neto = $CAPITAL + $a->INTERES ;            
             
@@ -251,8 +251,8 @@ class ReportsModels extends Model {
             $Opt = Auth::User()->id_zona;
         }
     
-        $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM((CASE WHEN FECHA_ABONO > "2024-03-13" THEN CAPITAL ELSE CAPITAL_OLD END) + INTERES) as total, 
-                                    SUM((CASE WHEN FECHA_ABONO > "2024-03-13" THEN CAPITAL ELSE CAPITAL_OLD END)) CAPITAL, SUM(INTERES) INTERES')
+        $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM((CASE WHEN FECHA_ABONO >= "2024-03-13" THEN CAPITAL ELSE CAPITAL_OLD END) + INTERES) as total, 
+                                    SUM((CASE WHEN FECHA_ABONO >= "2024-03-13" THEN CAPITAL ELSE CAPITAL_OLD END)) CAPITAL, SUM(INTERES) INTERES')
                 ->whereBetween('FECHA_ABONO', [$D1, $D2])
                 ->where('activo', 1)
                 ->when($Opt > -1, function ($query) use ($Opt) {
