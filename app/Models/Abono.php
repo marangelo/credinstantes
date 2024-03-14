@@ -58,7 +58,6 @@ class Abono extends Model
 
         return $abonosArray;
     }
-   
     public static function getSaldoAbono($IdCredito,$Opt)
     {  
         $Abono = 0;
@@ -137,7 +136,8 @@ class Abono extends Model
     
         return $datos_credito ;
     }
-    public static  function MultiAbonos(Request $request){
+    public static  function MultiAbonos(Request $request)
+    {
         if ($request->ajax()) {
             try {
 
@@ -244,9 +244,6 @@ class Abono extends Model
                 return response()->json($mensaje);
             }
         }
-
-        
-
     }
     public static function NewPagos(Request $request){
 

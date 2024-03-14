@@ -246,7 +246,7 @@ class CredinstanteController extends Controller {
                 // Clientes::CheckStatus($request->input('IdCred'));
 
                 $response = Abono::NewPagos($request);
-                Clientes::CheckStatus($request->input('IdCred'));
+                //Clientes::CheckStatus($request->input('IdCred'));
 
 
                 break;
