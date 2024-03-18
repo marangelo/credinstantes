@@ -108,8 +108,14 @@ class ReportsModels extends Model {
         
         foreach ($Abonos as $key => $a) {
 
+<<<<<<< Updated upstream
             $Ingreso_neto = $a->CAPITAL + $a->INTERES ;
             
+=======
+            $CAPITAL  = (strtotime($a->FECHA_ABONO) <= strtotime("2024-03-16")) ? $a->CAPITAL : $a->CAPITAL_OLD;
+
+            $Ingreso_neto = $CAPITAL + $a->INTERES ;            
+>>>>>>> Stashed changes
             
             $array_abonos[$key] = [
                 "id_abonoscreditos" => $a->id_abonoscreditos,
@@ -133,11 +139,21 @@ class ReportsModels extends Model {
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $Cobra    = Auth::id();
 
+<<<<<<< Updated upstream
         $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->where('registrado_por', $Cobra);
         $pago_capital = $Obj->sum( 'CAPITAL' );
         $pago_intereses = $Obj->sum( 'INTERES' );
 
 
+=======
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->where('registrado_por', $Cobra);        
+        $pago_intereses = $Obj->sum( 'INTERES' );       
+        
+        foreach ($Obj->get() as $k => $p) {
+            $pago_capital  += (strtotime($p->FECHA_ABONO) <= strtotime("2024-03-16")) ? $p->CAPITAL : $p->CAPITAL_OLD;
+        }
+        
+>>>>>>> Stashed changes
         $Total_Recuperado = $pago_capital + $pago_intereses;
 
         return $Total_Recuperado;
@@ -252,7 +268,12 @@ class ReportsModels extends Model {
         }
 
     
+<<<<<<< Updated upstream
         $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM(CAPITAL + INTERES) as total, SUM(CAPITAL) CAPITAL, SUM(INTERES) INTERES')
+=======
+        $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL_OLD END) + INTERES) as total, 
+                                    SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL_OLD END)) CAPITAL, SUM(INTERES) INTERES')
+>>>>>>> Stashed changes
                 ->whereBetween('FECHA_ABONO', [$D1, $D2])
                 ->where('activo', 1)
                 ->when($Opt > -1, function ($query) use ($Opt) {
