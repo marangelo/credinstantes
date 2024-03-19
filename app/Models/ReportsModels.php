@@ -88,22 +88,17 @@ class ReportsModels extends Model {
         $IdCln    = $request->input('IdCln');
         $IdZna    = $request->input('IdZna');
 
-
         $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1);
-       
-
     
         if ($IdCln > 0) {
             $Obj->Where('id_clientes',$IdCln);
         }
-       
         if ($IdZna > 0) {
             $Obj->Where('id_zona',$IdZna);
         }
 
         $Abonos = $Obj->get();
 
- 
         $array_abonos = array();
         
         foreach ($Abonos as $key => $a) {
@@ -114,11 +109,11 @@ class ReportsModels extends Model {
             
             $array_abonos[$key] = [
                 "id_abonoscreditos" => $a->id_abonoscreditos,
-                "fecha_cuota"       => $a->fecha_cuota,
-                "Nombre"            => $a->credito->Clientes->nombre,
-                "apellido"          => $a->credito->Clientes->apellidos,
+                "fecha_cuota"       => $a->FECHA_ABONO,
+                "Nombre"            => strtoupper($a->credito->Clientes->nombre),
+                "apellido"          => strtoupper($a->credito->Clientes->apellidos),
                 "cuota_cobrada"     => $Ingreso_neto,
-                "pago_capital"      => $a->CAPITAL,
+                "pago_capital"      => $CAPITAL,
                 "pago_intereses"    => $a->INTERES,
             ];
                 
@@ -133,6 +128,8 @@ class ReportsModels extends Model {
         $dtIni    = $request->input('dtIni').' 00:00:00';
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $Cobra    = Auth::id();
+        $pago_capital = 0 ;
+        
 
         $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->where('registrado_por', $Cobra);        
         $pago_intereses = $Obj->sum( 'INTERES' );       
@@ -253,7 +250,6 @@ class ReportsModels extends Model {
         if ($role == 2) {
             $Opt = Auth::User()->id_zona;
         }
-
     
         $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL_OLD END) + INTERES) as total, 
                                     SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL_OLD END)) CAPITAL, SUM(INTERES) INTERES')
@@ -268,6 +264,8 @@ class ReportsModels extends Model {
         
         $Saldos_Cartera = Credito::Saldos_Cartera($Opt);
         $Clientes       = Credito::Creditos($Opt);
+
+
 
         foreach ($Dias as $dia) {
             $vLabel[]   = 'D' . $dia->dy; 

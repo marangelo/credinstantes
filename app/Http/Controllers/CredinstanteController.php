@@ -92,7 +92,6 @@ class CredinstanteController extends Controller {
 
     public function getPerfil($id)
     {   
-        
         $perfil_cliente = Clientes::find($id);  
         $DiasSemana     = DiasSemana::getDiasSemana();
         $Promo       = Usuario::where('id_rol',4)->get(); 
@@ -242,8 +241,13 @@ class CredinstanteController extends Controller {
 
         switch ($Tipo) {
             case '0':
-                $response = Abono::SaveNewAbono($request);
+                // $response = Abono::SaveNewAbono($request);
+                // Clientes::CheckStatus($request->input('IdCred'));
+
+                $response = Abono::NewPagos($request);
                 Clientes::CheckStatus($request->input('IdCred'));
+
+
                 break;
             case '1':
                 $response = Abono::Cancelacion($request);

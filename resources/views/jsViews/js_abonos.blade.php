@@ -87,7 +87,7 @@
                 
                 {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {
                     
-                    return row.Nombre + ' ' + row.apellido;
+                    return '[ ' + row.id_abonoscreditos + ' ] - ' +row.Nombre + ' ' + row.apellido ;
                 }},
                 {
                     "title": "INGRESO NETO",

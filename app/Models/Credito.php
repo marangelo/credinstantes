@@ -70,7 +70,7 @@ class Credito extends Model
     }
     public static function Creditos($Zona)
     {
-        return EstadosMonitor::where('CREDITO_ACTIVO', 1)
+        return CreditosHistory::where('CREDITO_ACTIVO', 1)
                 ->whereIn('ESTADO_CREDITO', [1, 2, 3])
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
@@ -78,7 +78,7 @@ class Credito extends Model
     }
     public static function Saldos_Cartera($Zona)
     {
-        return EstadosMonitor::where('CREDITO_ACTIVO', 1)
+        return CreditosHistory::where('CREDITO_ACTIVO', 1)
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
                 })->sum('SALDO_CREDITO');        

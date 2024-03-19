@@ -39,16 +39,17 @@ class Clientes extends Model
         $SumSaldoPendiente  = 0;
 
         //EXTRAER INFORMACION DEL CREDITO
-        $Credito   = EstadosMonitor::where('ID_CREDITO',$IdCred)->first();
+        $Credito   = CreditosHistory::where('ID_CREDITO',$IdCred)->first();
 
         //VERIFICA QUE SI EL CREDITO ESTA VENCIDO
-        $Estado   = ($Credito->DIAS_PARA_VENCER > 0) ? $Estado : 3 ;
+        $Estado   = ($Credito->DIAS_PARA_VENCER < 0) ? 3 : $Estado ;
 
         //VERIFICA QUE EL ESTADO DEL CREDITO NO ESTE EN MORA;
         if ($Estado == 1) {
             $SumSaldoPendiente  = PagosFechas::getSaldoPendiente($IdCred);        
             $Estado   = ($SumSaldoPendiente > 0) ? 2 : $Estado ;
-        }        
+        }    
+            
 
         Credito::where('id_creditos',  $IdCred)->update([
             "estado_credito"=>$Estado
