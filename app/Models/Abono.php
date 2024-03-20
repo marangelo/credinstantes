@@ -89,17 +89,16 @@ class Abono extends Model
                 // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO                
                 $Saldo_to_cancelar = $Credito->saldo;
 
-                $InteresPagado = Abono::selectRaw('SUM(pago_intereses) as interesPagado')
-                                ->where('id_creditos', $IdCredito)
-                                ->groupBy('NumPago')
-                                ->orderByDesc('NumPago')
-                                ->first();
+                $LstAbono = Abono::selectRaw('NumPago')->where('id_creditos', $IdCredito)->groupBy('NumPago')->orderByDesc('NumPago')->first();                
+                $IntePago  = Abono::where('id_creditos',$IdCredito)->where('NumPago',$LstAbono->NumPago)->sum('pago_intereses');
+                $IntePend  = $Credito->intereses_por_cuota - $IntePago ;
+                $IntResta = ($IntePend <= 0) ? 0 : $IntePend ;                
 
                 $Cuotas_pend    = RefAbonos::WHERE('id_creditos',$IdCredito)->where('Pagado',0)->count();
                 $Taza_          =  $Credito->taza_interes / 100;
                 $Abono_         =  $Credito->cuota;
                 
-                $Interes_       = ($Credito->intereses_por_cuota - $InteresPagado->interesPagado) * $Cuotas_pend ;
+                $Interes_       = (($Credito->intereses_por_cuota) * $Cuotas_pend) + $IntResta;
                 $Capital_       = $Saldo_to_cancelar  -  $Interes_;
 
                 $datos_credito = [                    
@@ -454,11 +453,9 @@ class Abono extends Model
                 //OBTENEMOS LA INFORMACION DEL CREDITO
                 $InteresPagado  = Abono::where('id_creditos',$IdCred)->where('NumPago',$NumPago)->sum('pago_intereses');
                 $Info_Credito   = Credito::where('id_creditos',$IdCred)->where('activo',1)->first();
-                //$Cuotas_pend    =  $Total_ / $Info_Credito->cuota;
                 $Cuotas_pend    = RefAbonos::WHERE('id_creditos',$IdCred)->where('Pagado',0)->count();
                 
-                $Abono_         =  $Info_Credito->cuota;
-                // $Interes_       = ($Info_Credito->intereses_por_cuota * $Cuotas_pend) - $Descuentos ;
+                
                 $Interes_       = ((($Info_Credito->intereses_por_cuota * $Cuotas_pend) - $InteresPagado ) ) - $Descuentos ;  
                 $Total_         = $Total_ - $Descuentos;
                 $Capital_       = $Total_  - $Interes_ ;
