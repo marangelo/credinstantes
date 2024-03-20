@@ -85,22 +85,21 @@ class Abono extends Model
                 
                 break;
             case 1:
-                //$Cuotas_pendientes = $Credito->numero_cuotas - $Credito->abonosCount();
 
-                // AQUI SE CALCULA SUMANDO EL SALDO PENDIENTE + (INTERES POR CUOTA + CUOTAS PENDIENTES)
-                //$Saldo_to_cancelar = $Credito->saldo + ($Cuotas_pendientes * $Credito->intereses_por_cuota );
-
-                // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO
+                // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO                
                 $Saldo_to_cancelar = $Credito->saldo;
 
-                $Cuotas_pend    =  $Saldo_to_cancelar / $Credito->cuota;
+                $InteresPagado = Abono::selectRaw('SUM(pago_intereses) as interesPagado')
+                                ->where('id_creditos', $IdCredito)
+                                ->groupBy('NumPago')
+                                ->orderByDesc('NumPago')
+                                ->first();
+
+                $Cuotas_pend    = RefAbonos::WHERE('id_creditos',$IdCredito)->where('Pagado',0)->count();
                 $Taza_          =  $Credito->taza_interes / 100;
                 $Abono_         =  $Credito->cuota;
                 
-                //$Interes_Abono  =  $Abono_ * $Taza_;
-                //$Interes_Abono  = $Credito->intereses_por_cuota * $Cuotas_pend;
-
-                $Interes_       = $Credito->intereses_por_cuota * $Cuotas_pend ;
+                $Interes_       = ($Credito->intereses_por_cuota - $InteresPagado->interesPagado) * $Cuotas_pend ;
                 $Capital_       = $Saldo_to_cancelar  -  $Interes_;
 
                 $datos_credito = [                    
@@ -449,19 +448,18 @@ class Abono extends Model
                 $FechaAbono     = $request->input('FechaAbono');
                 $Descuentos     = $request->input('Desc');
                 $CompletarPago  = false;
+                $Total_         = $request->input('Total_');
+                $NumPago        = $request->input('NumPago');
 
                 //OBTENEMOS LA INFORMACION DEL CREDITO
-                $Info_Credito   = Credito::find($IdCred);
-
-                $Total_         = $request->input('Total_');
-
+                $InteresPagado  = Abono::where('id_creditos',$IdCred)->where('NumPago',$NumPago)->sum('pago_intereses');
+                $Info_Credito   = Credito::where('id_creditos',$IdCred)->where('activo',1)->first();
+                //$Cuotas_pend    =  $Total_ / $Info_Credito->cuota;
+                $Cuotas_pend    = RefAbonos::WHERE('id_creditos',$IdCred)->where('Pagado',0)->count();
                 
-                $Cuotas_pend    =  $Total_ / $Info_Credito->cuota;
-                $Taza_          =  $Info_Credito->taza_interes / 100;
                 $Abono_         =  $Info_Credito->cuota;
-                
-                
-                $Interes_       = ($Info_Credito->intereses_por_cuota * $Cuotas_pend) - $Descuentos ;
+                // $Interes_       = ($Info_Credito->intereses_por_cuota * $Cuotas_pend) - $Descuentos ;
+                $Interes_       = ((($Info_Credito->intereses_por_cuota * $Cuotas_pend) - $InteresPagado ) ) - $Descuentos ;  
                 $Total_         = $Total_ - $Descuentos;
                 $Capital_       = $Total_  - $Interes_ ;
 
@@ -493,14 +491,7 @@ class Abono extends Model
                     RefAbonos::where('id_creditos',  $a->id_creditos)->where('numero_pago',  $a->numero_pago)->update([
                         "Pagado"=> 1,
                     ]);
-
-                    // $Abonos_cancelados[] = [                    
-                    //     'ID_CREDITO'           => $a->id_creditos,
-                    //     'NUM_PAGO'        => $a->numero_pago,
-                    // ];
                 }
-                //RefAbonosCancelados::insert($Abonos_cancelados);
-
                 Credito::where('id_creditos',  $IdCred)->update([
                     "saldo" => 0,
                     "estado_credito" => 4,
