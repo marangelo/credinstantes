@@ -103,3 +103,7 @@ Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')
 Route::get('RecuperacionCobro', 'ReportsController@RecuperacionCobro')->name('RecuperacionCobro');
 Route::post('CalcRecuperacion', 'ReportsController@CalcRecuperacion')->name('CalcRecuperacion');
 
+Route::get('Arqueos', 'ArqueosController@ShowHome')->name('Arqueos');
+Route::get('ShowDetalles/{ZONA}', 'ArqueosController@ShowDetalles')->name('ShowDetalles');
+Route::get('ArqueoInit/{ZONA}', 'ArqueosController@Init')->name('ArqueoInit');
+

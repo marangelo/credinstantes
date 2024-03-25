@@ -157,6 +157,12 @@
                     <p>Morosidad</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Arqueos</p>
+                  </a>
+                </li>
               </ul>
           </li>
           @endif
