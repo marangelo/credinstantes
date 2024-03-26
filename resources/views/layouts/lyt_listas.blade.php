@@ -35,6 +35,10 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+  
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed {{ (request()->segment(1)  == 'Perfil' ) ? ' sidebar-closed sidebar-collapse ' : '' }}">
 <div class="wrapper">
@@ -87,6 +91,8 @@
 <!-- date-range-picker -->
 <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
 
+<!-- Toastr -->
+<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>

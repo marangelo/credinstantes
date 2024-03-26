@@ -64,14 +64,12 @@
     })
     function InitTable() {
 
-        var slCli   = $("#id_select_cliente option:selected").val();  
         var slZna   = $("#id_select_zona option:selected").val();  
         var dtEnd   = $("#dtEnd").val();
         var dtIni   = $("#dtIni").val(); 
 
 
 
-        slCli      = isValue(slCli,-1,true) 
         slZna      = isValue(slZna,-1,true) 
         dtEnd      = isValue(dtEnd,'N/D',true) 
         dtIni      = isValue(dtIni,'N/D',true) 
@@ -86,9 +84,6 @@
         dt_End_ = dt_End.format('YYYY-MM-DD');
         
         $("#lbl_titulo_reporte").text(lbl_titulo_reporte)
-
-
-
         
 
         $("#tbl_ingresos").DataTable({
@@ -97,6 +92,7 @@
             "destroy": true,
             "autoWidth": false,
             "info": false,
+            order: [[0, 'desc']],
             "language": {
             "zeroRecords": "NO HAY COINCIDENCIAS",
             "paginate": {
@@ -111,13 +107,12 @@
             "search": "BUSCAR"
             },
             "ajax":{
-                "url": "getAbonos",
+                "url": "getDataArqueos",
                 "type": 'POST',
                 'dataSrc': '',
                 "data": {                
                     dtIni   : dt_Ini_,
                     dtEnd   : dt_End_,
-                    IdCln   : slCli,
                     IdZna   : slZna,
                     _token  : "{{ csrf_token() }}" 
                 }
@@ -126,40 +121,38 @@
             'columns': [
                 {
                     "title": "ID",
-                    "data": "cuota_cobrada",
-                    render: $.fn.dataTable.render.number(',', '.', 2, '')
+                    "data": "Id"
                 },                 
-                {"title": "ZONA / RUTA","data": "Nombre", "render": function(data, type, row, meta) {
+                {"title": "ZONA / RUTA","data": "Zona", "render": function(data, type, row, meta) {
                     
-                    return '[ ' + row.id_abonoscreditos + ' ] - ' +row.Nombre + ' ' + row.apellido ;
+                    return '[ ' + row.Id + ' ] - ' +row.Zona + ' ' + row.Zona ;
                 }},
                 {
                     "title": "FECHA ARQUEO",
+                    "data": "Fecha_Cuota",
+                }, 
+                {
+                    "title": "CUOTA COBRADA",
                     "data": "cuota_cobrada",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 }, 
                 {
-                    "title": "SISTEMA",
-                    "data": "pago_capital",
-                    render: $.fn.dataTable.render.number(',', '.', 2, '')
-                }, 
-                {
-                    "title": "TOTAL",
-                    "data": "pago_intereses",
+                    "title": "DEP. TRANSFERENCIA",
+                    "data": "deposito_tranferencia",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },      
                 {
-                    "title": "EFECTIVO",
-                    "data": "pago_intereses",
+                    "title": "GASTO OPERACION",
+                    "data": "gasto_operacion",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },  
-                {"title": "  ","data": "Nombre", "render": function(data, type, row, meta) {
+                {"title": "  ","data": "Id", "render": function(data, type, row, meta) {
                     
                     return `<div class="card-tools text-center">
-                                <button type="button" class="btn btn-success primary" title="Date range">
+                                <a href="ShowDetalles/`+ row.Id +`" class="btn btn-success primary">
                                     <i class="far fa-edit"></i>
-                                </button>
-                                <button type="button" class="btn btn-primary" data-card-widget="collapse" title="Collapse">
+                                </a>
+                                <button type="button" class="btn btn-primary">
                                     <i class="fas fa-print"></i>
                                 </button>
                             </div>` ;

@@ -12,7 +12,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-          <span class="badge badge-info"> #: {{$Arqueo->id_arqueo}}</span>
+          <span class="badge badge-info"> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></span>
             <h1> {{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / ESTA PENDIENTE EL NOMBRE</h1>
           </div>
           <div class="col-sm-6">
@@ -41,8 +41,7 @@
               @csrf
                 <div class="row">
                   <div class="col-md-3">
-                    <label>FECHA ARQUEO</label>
-                    
+                    <label>FECHA ARQUEO</label>                    
                     <div class="form-group">
                       <div class="input-group date" id="dt-arqueo" data-target-input="nearest">
                           <div class="input-group-append" data-target="#dt-arqueo" data-toggle="datetimepicker">
@@ -58,7 +57,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text bg-white"><i class="fas fa-dollar-sign"></i></span>
                       </div>
-                      <input type="text" class="form-control" id="" placeholder="0.00 " value="{{$Arqueo->deposito_dia}}">
+                      <input type="text" class="form-control" id="txt_deposito_dia" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -67,7 +66,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text bg-olive"><i class="fas fa-dollar-sign"></i></span>
                       </div>
-                      <input type="text" class="form-control" id="" placeholder="0.00 " value="{{$Arqueo->deposito_tranferencia}}" >
+                      <input type="text" class="form-control" id="txt_deposito_tranferencia" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_tranferencia,2) }}" onkeypress='return isNumberKey(event)'>
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -78,9 +77,9 @@
                           <i class="fas fa-dollar-sign"></i>
                         </span>
                       </div>
-                      <input type="text" class="form-control" placeholder="0.00 " value="{{$Arqueo->gasto_operacion}}">
+                      <input type="text" class="form-control" placeholder="0.00 " value="{{ number_format($Arqueo->gasto_operacion,2) }}" id="txt_gastos" onkeypress='return isNumberKey(event)'>
                       <div class="input-group-append">
-                        <div class="input-group-text btn-success"><i class="fas fa-plus-circle"></i></div>
+                        <div class="input-group-text btn-success" id="bt_save_arqueo"><i class="fas fa-save"></i></div>
                       </div>
                     </div>
 
@@ -96,37 +95,14 @@
                       </div>
               
                       <div class="card-body">
-                        <table class="table table-hover table-bordered" id="tbl_moneda_nio">
-                          <thead>
-                            <tr>
-                              <th style="width: 10px">#</th>
-                              <th class="text-center">DENOMINACION</th>
-                              <th class="text-center">CANTIDAD</th>
-                              <th class="text-center">TOTAL</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @php($m_nio=1)
-                            @foreach ($Arqueo->getDetalles as $m)
-                              @if($m->moneda === 'NIO')
-                                <tr>
-                                  <td>{{$m_nio}}.</td>
-                                  <td class="text-right">C$ {{number_format($m->denominacion,2)}}</td>
-                                  <td class="text-right">{{number_format($m->cantidad,2)}}</td>
-                                  <td class="text-right">C$ {{number_format($m->total,2)}}</td>
-                                </tr>
-                                @php($m_nio++)
-                              @endif                            
-                            @endforeach
-                          </tbody>
-                        </table>
+                        <table class="table table-hover table-bordered" id="tbl_moneda_nio"></table>
                       </div>
                       <div class="card-footer p-0">
                         <ul class="nav nav-pills flex-column">                  
                           <li class="nav-item">
                             <a href="#" class="nav-link">
                               SUB TOTAL CORDOBAS
-                              <span class="text-bold text-lg float-right text-success">C$ 0.00</span>
+                              <span class="text-bold text-lg float-right text-success">C$ <span id="ID_TOTAL_NIO">11111</span></span>
                             </a>
                           </li>                 
                         </ul>
@@ -138,42 +114,19 @@
                       <div class="card-header">
                         <h3 class="card-title">DOLARES</h3>
                         <div class="card-tools">
-                          <span class="badge badge-warning"> T/C: C$. 36.00</span>
+                          <span class="badge badge-warning"> T/C: C$. <span id="lbl_moneda_tc">{{number_format($Arqueo->tc,2)}}</span></span>
                         </div>
                       </div>
               
                       <div class="card-body">
-                        <table class="table table-hover table-bordered" id="tbl_moneda_usd">
-                          <thead>
-                            <tr>
-                              <th style="width: 10px">#</th>
-                              <th class="text-center">DENOMINACION</th>
-                              <th class="text-center">CANTIDAD</th>
-                              <th class="text-center">TOTAL</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @php($m_usd=1)
-                            @foreach ($Arqueo->getDetalles as $m)
-                              @if($m->moneda === 'USD')
-                                <tr>
-                                  <td>{{$m_usd}}.</td>
-                                  <td class="text-right">$ {{number_format($m->denominacion,2)}}</td>
-                                  <td class="text-right">{{number_format($m->cantidad,2)}}</td>
-                                  <td class="text-right">C$ {{number_format($m->total,2)}}</td>
-                                </tr>
-                                @php($m_usd++)
-                              @endif                            
-                            @endforeach
-                          </tbody>
-                        </table>
+                        <table class="table table-hover table-bordered" id="tbl_moneda_usd"></table>
                       </div>
                       <div class="card-footer p-0">
                         <ul class="nav nav-pills flex-column">                  
                           <li class="nav-item">
                             <a href="#" class="nav-link">
                               SUB TOTAL DOLARES - CORDOBAS
-                              <span class="text-bold text-lg float-right text-success">C$ 0.00</span>
+                              <span class="text-bold text-lg float-right text-success">C$ <span id="id_lbl_total_usd"></span></span>
                             </a>
                           </li>                 
                         </ul>
@@ -186,27 +139,25 @@
                   <div class="row"> 
                     <div class="col-sm-4 col-md-4">
                       <div class="description-block border-right">
-                        <h5 class="description-header text-warning">C$ <span id="xxxxxx">0.00</span></h5>
+                        <h5 class="description-header text-warning">C$ <span id="id_lbl_total_final">0.00</span></h5>
                         <span class="description-text">TOTAL </span>
                       </div>
                     </div>    
                     <div class="col-sm-4 col-md-4">
                       <div class="description-block border-right">
-                        <h5 class="description-header text-warning">C$ <span id="xxxxxx">0.00</span></h5>
+                        <h5 class="description-header text-warning">C$ <span id="id_total_sistema">0.00</span></h5>
                         <span class="description-text">SISTEMA </span>
                       </div>
                     </div>             
                     <div class="col-sm-4 col-md-4">
                       <div class="description-block ">
-                        <h5 class="description-header text-orange" >C$ <span id="xxxxxx" >0.00</span></h5>
+                        <h5 class="description-header text-orange" >C$ <span id="TOTAL_SYS_VS_CASH" >0.00</span></h5>
                         <span class="description-text">SISTEMA vs EFECTIVO</span>
                       </div>
                     </div>
                 </div>
                 <!-- /.row -->
               </div>
-                
-               
               </div>
             
               <!-- /.card-body -->

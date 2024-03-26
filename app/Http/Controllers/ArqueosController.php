@@ -29,4 +29,28 @@ class ArqueosController extends Controller {
         $InitArqueo         = Arqueo::InitArqueo($Zona);
         return response()->json($InitArqueo);
     }
+    public function getDataArqueos(Request $request)
+    {
+        $response = Arqueo::getDataArqueos($request);
+        
+        return response()->json($response);
+    }
+    public function DataTableMoneda(Request $request)
+    {
+        $response = Arqueo::DataTableMoneda($request);
+        
+        return response()->json($response);
+    }
+    public function UpdateRowArqueo(Request $request)
+    {
+        $response = Arqueo::UpdateRowArqueo($request);
+        
+        return response()->json($response);
+    }
+    public function UpdateArqueo(Request $request)
+    {
+        $response = Arqueo::UpdateArqueo($request);
+        
+        return response()->json($response);
+    }
 }

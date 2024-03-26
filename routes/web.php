@@ -106,4 +106,8 @@ Route::post('CalcRecuperacion', 'ReportsController@CalcRecuperacion')->name('Cal
 Route::get('Arqueos', 'ArqueosController@ShowHome')->name('Arqueos');
 Route::get('ShowDetalles/{ZONA}', 'ArqueosController@ShowDetalles')->name('ShowDetalles');
 Route::get('ArqueoInit/{ZONA}', 'ArqueosController@Init')->name('ArqueoInit');
+Route::post('getDataArqueos', 'ArqueosController@getDataArqueos')->name('getDataArqueos');
+Route::post('ShowDetalles/DataTableMoneda', 'ArqueosController@DataTableMoneda')->name('ShowDetalles/DataTableMoneda');
+Route::post('ShowDetalles/UpdateRowArqueo', 'ArqueosController@UpdateRowArqueo')->name('ShowDetalles/UpdateRowArqueo');
+Route::post('ShowDetalles/UpdateArqueo', 'ArqueosController@UpdateArqueo')->name('ShowDetalles/UpdateArqueo');
 
