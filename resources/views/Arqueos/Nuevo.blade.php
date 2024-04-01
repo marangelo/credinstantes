@@ -110,6 +110,7 @@
                     </div>
                   </div>
                   <div class="col-md-6">
+
                     <div class="card">
                       <div class="card-header">
                         <h3 class="card-title">DOLARES</h3>
@@ -120,6 +121,15 @@
               
                       <div class="card-body">
                         <table class="table table-hover table-bordered" id="tbl_moneda_usd"></table>
+                    
+                        <div class="row mt-3">                        
+                          <div class="col-sm-12">
+                            <div class="form-group">
+                              <label>Comentarios</label>
+                              <textarea class="form-control" rows="5" placeholder="Algun Comentario ..." id="id_commit"> {{$Arqueo->comentario}}</textarea>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div class="card-footer p-0">
                         <ul class="nav nav-pills flex-column">                  
@@ -132,6 +142,8 @@
                         </ul>
                       </div>
                     </div>
+
+
                   </div>
                 </div>
 

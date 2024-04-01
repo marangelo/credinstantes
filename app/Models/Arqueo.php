@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
 
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Style;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Fill;
+
 class Arqueo extends Model {
     public $timestamps = false;
     protected $table = "tbl_arqueo";
@@ -28,12 +35,14 @@ class Arqueo extends Model {
                 $Deposit    = $request->input('Deposit');
                 $Tranfe     = $request->input('Tranfe');
                 $Gastos     = $request->input('Gastos');
+                $Commit     = $request->input('Commit');
 
                 $response = Arqueo::where('id_arqueo',$Arqueo)->update([
                     "fecha_arqueo"          => $Fecha,
                     "deposito_dia"          => $Deposit,
                     "deposito_tranferencia" => $Tranfe,
-                    "gasto_operacion"       => $Gastos
+                    "gasto_operacion"       => $Gastos,
+                    "comentario"            => $Commit
                 ]);
 
                 return $response;   
@@ -73,6 +82,319 @@ class Arqueo extends Model {
             }
         }
     } 
+
+    public static function Export($ID) {
+        
+        $objPHPExcel = new PHPExcel();
+        $tituloReporte = "";
+        $titulosColumnas = array();
+
+        $Arqueo     = Arqueo::find($ID);
+        $ttSistema  = 33000;
+
+        
+
+        $estiloTituloColumnas = array(
+            'font' => array(
+                        'name'  => 'Arial',
+                        'bold'  => true,
+                        'size'      => 10,
+            ),
+            'alignment' =>  array(
+                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                                'wrap'          => TRUE
+                            ),
+            'borders' => array(
+                            'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+            'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,)
+            )
+        );
+                
+            $estiloInformacion = new PHPExcel_Style();
+            $estiloInformacion->applyFromArray(
+                array(
+                    'borders' => array(
+                    'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
+                    'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
+                    )
+                )
+            );
+
+            $right = array(
+                'alignment' =>  array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                    'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    'wrap' => TRUE
+                )
+            );
+
+
+          
+
+                $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:D3');
+                $style = array(
+                    'font' => array(
+                    'name'      => 'Tahoma',
+                    'bold'      => true,
+                    'italic'    => false,
+                    'strike'    => false,
+                    'size'      => 12,
+                    'color'     => array('rgb' => 'FFFFFF')
+                    ),
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '4472C4') 
+                    ),
+                    'alignment' => array(
+                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    ),
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN
+                        )
+                    )
+                );
+                $objPHPExcel->getActiveSheet()->getStyle('A1:D3')->applyFromArray($style);
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', "CREDINSTANTE ARQUEO DE CAJA MARTES 19 DE MARZO ")
+                ->setCellValue('A5',  'ZONA/RUTA')
+                ->setCellValue('B5',  'SISTEMA')
+                ->setCellValue('C5',  number_format($ttSistema,0,'.',''))
+                ->setCellValue('D5',  '')
+                ->setCellValue('A6',  'ARQ #'.$Arqueo->id_arqueo.' '. strtoupper ( $Arqueo->getZona->nombre_zona ).' / ESTA PENDIENTE EL NOMBRE')
+                ->setCellValue('B6',  'DENOMINACION')
+                ->setCellValue('C6',  'CANTIDAD')
+                ->setCellValue('D6',  'TOTAL');
+
+                
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+                
+                $objPHPExcel->getActiveSheet()->getStyle('A5:D5')->applyFromArray($estiloTituloColumnas);  
+                $objPHPExcel->getActiveSheet()->getStyle('A6:D6')->applyFromArray($estiloTituloColumnas);  
+
+
+                
+
+                $i=7;
+                $ttNIO = 0;
+                foreach ($Arqueo->getDetalles as $a ){
+                    if($a->moneda === 'NIO'){  
+                        $objPHPExcel->setActiveSheetIndex(0)
+                                    ->setCellValue('A'.$i,  '')
+                                    ->setCellValue('B'.$i,  $a->denominacion)
+                                    ->setCellValue('C'.$i,  $a->cantidad)
+                                    ->setCellValue('D'.$i,  $a->total);
+                                    $ttNIO += $a->total;
+                                    $i++;
+                    }
+                }
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'SUB TOTAL CORDOBAS')
+                ->setCellValue('B'.$i,  '-')
+                ->setCellValue('C'.$i,  '-')
+                ->setCellValue('D'.$i,  number_format($ttNIO,0,'.',''));
+                $i++;
+
+                $ttUSD = 0 ;
+                foreach ($Arqueo->getDetalles as $a ){
+                    if($a->moneda === 'USD'){  
+                        $objPHPExcel->setActiveSheetIndex(0)
+                                    ->setCellValue('A'.$i,  '')
+                                    ->setCellValue('B'.$i,  $a->denominacion)
+                                    ->setCellValue('C'.$i,  $a->cantidad)
+                                    ->setCellValue('D'.$i,  $a->total);
+                                    $ttUSD += $a->total;
+                                    $i++;
+                    }
+                }
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'SUB TOTAL DOLARES - CORDOBAS')
+                ->setCellValue('B'.$i,  '-')
+                ->setCellValue('C'.$i,  '-')
+                ->setCellValue('D'.$i,  number_format($ttUSD,0,'.',''));
+                $i++;
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'DESEMBOLSOS DEL DIA ')
+                ->setCellValue('B'.$i,  '-')
+                ->setCellValue('C'.$i,  '-')
+                ->setCellValue('D'.$i,  number_format($Arqueo->deposito_dia,0,'.',''));
+                $i++;
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'DEPOSITOS O TRANSFERENCIAS')
+                ->setCellValue('B'.$i,  '-')
+                ->setCellValue('C'.$i,  '-')
+                ->setCellValue('D'.$i,  number_format($Arqueo->deposito_tranferencia,0,'.',''));
+                $i++;
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'GASTO OPERATIVO DEL DIA')
+                ->setCellValue('B'.$i,  '-')
+                ->setCellValue('C'.$i,  '-')
+                ->setCellValue('D'.$i,  number_format($Arqueo->gasto_operacion,0,'.',''));
+                $i++;
+
+                $ttTotal = $ttNIO + $ttUSD + $Arqueo->deposito_dia + $Arqueo->deposito_tranferencia + $Arqueo->gasto_operacion ;
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'TOTAL')
+                ->setCellValue('B'.$i,  '-')
+                ->setCellValue('C'.$i,  '-')
+                ->setCellValue('D'.$i,  number_format($ttTotal,0,'.',''));
+                $i++;
+
+                $ttTotal_Final =  $ttTotal - $ttSistema;
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'CUADRADO SEGÚN SISTEMA CONTRA EFECTIVO')
+                ->setCellValue('B'.$i,  '-')
+                ->setCellValue('C'.$i,  '-')
+                ->setCellValue('D'.$i,  number_format($ttTotal_Final,0,'.',''));
+                
+                $objPHPExcel->getActiveSheet()->mergeCells('A31:B31');
+                $i = $i + 2 ; 
+
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A34',  'COMENTARIO:');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',  $Arqueo->comentario); 
+                $objPHPExcel->getActiveSheet()->mergeCells('A35:D36');
+                $style = array(
+                    'alignment' => array(
+                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    ),
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN
+                        )
+                    )
+                );
+                $objPHPExcel->getActiveSheet()->getStyle('A35:D36')->applyFromArray($style);
+                
+
+
+                $f = 39; 
+
+
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$f,  '_____________________________________');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$f,  '_____________________________________');
+                $objPHPExcel->getActiveSheet()->mergeCells('C'.$f.':D'.$f);                 
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$f.':B'.$f);
+
+                $f++;
+                
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$f,  'FIRMA DEL GESTOR');
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$f.':B'.$f);                
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$f,  'FIRMA OPERACIONES');
+                $objPHPExcel->getActiveSheet()->mergeCells('C'.$f.':D'.$f); 
+
+
+                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A7:D31");
+                //$objPHPExcel->getActiveSheet()->getStyle("B7:D".($i-1))->applyFromArray($right);
+                $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
+                $objPHPExcel->getActiveSheet()->getStyle('C5:D5')->getNumberFormat()->setFormatCode($formatCode);
+                $objPHPExcel->getActiveSheet()->getStyle('B7:D31')->getNumberFormat()->setFormatCode($formatCode);
+                $objPHPExcel->getActiveSheet()->getStyle('B7:D31')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+
+
+
+                //COLORES DE LOS TOTALES
+                $color_totales = array(                   
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '00B050') 
+                    )
+                );
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('B5')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D18')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D26')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D28')->applyFromArray($color_totales);
+
+                 //COLORES DE LOS TOTALES
+                $color_totales = array(                   
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '92D050') 
+                    )
+                );
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A18')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A26')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A28')->applyFromArray($color_totales);
+
+                $color_totales = array(                   
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '7030A0') 
+                    )
+                );
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A29')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D29')->applyFromArray($color_totales);
+
+
+                
+                $color_totales = array(                   
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => 'FFFF00') 
+                    )
+                );
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A30')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D30')->applyFromArray($color_totales);
+
+                $color_totales = array(                   
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => 'ED7D31') 
+                    )
+                );
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D31')->applyFromArray($color_totales);
+
+                $color_totales = array(                   
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => 'F8CBAD') 
+                    )
+                );
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A6:D6')->applyFromArray($color_totales);
+
+                
+
+
+                $objPHPExcel->setActiveSheetIndex(0)->mergeCells('C5:D5');
+                $style_center = array(
+                    'alignment' => array(
+                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    ),
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => 'FFFF00') 
+                    )
+                );
+
+                $objPHPExcel->getActiveSheet()->getStyle('C5:D5')->applyFromArray($style_center);
+                $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A31:B31');
+
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A7',  'BILLETES CORDOBAS');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A14',  'MONEDAS CORDOBAS');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A19',  'DOLARES');
+
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="Arqueos.xlsx"');
+                header('Cache-Control: max-age=0');
+        
+                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+                $objWriter->save('php://output');
+        
+        
+    }
 
     public static function DataTableMoneda(Request $request)
     {

@@ -147,6 +147,7 @@
             var txt_deposito_dia    = $("#txt_deposito_dia").val();
             var txt_tranferencia    = $("#txt_deposito_tranferencia").val();
             var txt_gastos          = $("#txt_gastos").val();
+            var txt_commit          = $("#id_commit").val();
 
             dtIni_                  = moment(dtIni, 'DD/MM/YYYY');
             txt_deposito_dia_       = numeral(isValue(txt_deposito_dia,0,true)).format('0.00')
@@ -161,6 +162,7 @@
                     Deposit : txt_deposito_dia_,
                     Tranfe  : txt_tranferencia_,
                     Gastos  : txt_gastos_,
+                    Commit  : txt_commit,
                     _token  : "{{ csrf_token() }}" 
                 },
                 type: 'post',

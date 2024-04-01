@@ -111,3 +111,4 @@ Route::post('ShowDetalles/DataTableMoneda', 'ArqueosController@DataTableMoneda')
 Route::post('ShowDetalles/UpdateRowArqueo', 'ArqueosController@UpdateRowArqueo')->name('ShowDetalles/UpdateRowArqueo');
 Route::post('ShowDetalles/UpdateArqueo', 'ArqueosController@UpdateArqueo')->name('ShowDetalles/UpdateArqueo');
 
+Route::get('ExportArqueo/{ID}', 'ArqueosController@ExportArqueo')->name('ExportArqueo');

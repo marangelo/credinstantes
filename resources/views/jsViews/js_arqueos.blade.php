@@ -152,9 +152,9 @@
                                 <a href="ShowDetalles/`+ row.Id +`" class="btn btn-success primary">
                                     <i class="far fa-edit"></i>
                                 </a>
-                                <button type="button" class="btn btn-primary">
+                                <a href="ExportArqueo/`+ row.Id +`" class="btn btn-primary">
                                     <i class="fas fa-print"></i>
-                                </button>
+                                </a>
                             </div>` ;
                 }},      
             ],

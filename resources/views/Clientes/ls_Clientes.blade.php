@@ -31,14 +31,18 @@
         <div class="row">
           <div class="col-12">
             <label>Zonas</label>
-            <div class="form-group">
-              <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                  <option value="0"  selected="selected">Todos</option>
-                  @foreach ($Zonas as $z)
-                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
-                  @endforeach
-              </select>
-            </div>
+              @if (request()->is('Activos/*'))
+                @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                <div class="form-group">
+                  <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                      <option value="0"  selected="selected">Todos</option>
+                      @foreach ($Zonas as $z)
+                      <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
+                      @endforeach
+                  </select>
+                </div>
+                @endif
+              @endif
 
             
             <!-- /.card -->
@@ -226,7 +230,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input type="text" class="form-control" id="txtTelefono" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
+                          <input type="text" class="form-control" id="txtTelefono" onkeypress='return isNumberKey(event)'>
                         </div>
                       </div>
 
@@ -441,7 +445,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input type="text" class="form-control" id="edtTelefono" data-inputmask="'mask': ['999-9999-9999', '+099 999 9999']" data-mask>
+                          <input type="text" class="form-control" id="edtTelefono" onkeypress='return isNumberKey(event)'>
                         </div>
                       </div>
 

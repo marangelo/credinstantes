@@ -135,7 +135,7 @@ class Clientes extends Model
     }
     public static function Clientes_promotor($Zona){
 
-        $ClientesInactivos = Clientes::getInactivos();
+        $ClientesInactivos = Clientes::getInactivos($Zona);
 
         $ClientePromotores = ClientePromotores::get();
 
