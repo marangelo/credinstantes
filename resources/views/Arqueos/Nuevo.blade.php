@@ -9,20 +9,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-          <span class="badge badge-info"> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></span>
-            <h1> {{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / ESTA PENDIENTE EL NOMBRE</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">{{$Titulo}}</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
+      
     </section>
 
     <!-- Main content -->
@@ -32,50 +19,57 @@
           <div class="col-12">
             <!-- /.card -->
             <div class="card">
-              <div class="card-header" style="display:none">
-             
+              <div class="card-header" >
+              <h3 class="card-title"></h3>
+                <span class="text">{{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / {{strtoupper ( $Arqueo->getZona->UsuarioCobrador->nombre ) }}</span>
+                <small class="badge badge-info"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
+
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" id="dt-arqueo" data-target-input="nearest">
+                      <div class="input-group-append" data-target="#dt-arqueo" data-toggle="datetimepicker">
+                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                        <input type="text" class="form-control datetimepicker-input" data-target="#dt-arqueo" id="dtIni" name="nmIni" value="{{ date('d/m/Y', strtotime($Arqueo->fecha_arqueo)) }}"/>                          
+                    </div>
+                </div>
               
               </div>
               <!-- /.card-header -->
               <div class="card-body">
               @csrf
-                <div class="row">
+                <div class="row">                  
                   <div class="col-md-3">
-                    <label>FECHA ARQUEO</label>                    
-                    <div class="form-group">
-                      <div class="input-group date" id="dt-arqueo" data-target-input="nearest">
-                          <div class="input-group-append" data-target="#dt-arqueo" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                          </div>
-                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-arqueo" id="dtIni" name="nmIni" value="{{ date('d/m/Y', strtotime($Arqueo->fecha_arqueo)) }}"/>                          
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <label >DEP. DEL DIA C$.</label>
+                    <label >DEPOSITOS DEL DIA.</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text bg-white"><i class="fas fa-dollar-sign"></i></span>
+                        <span class="input-group-text bg-white"> C$. </span>
                       </div>
                       <input type="text" class="form-control" id="txt_deposito_dia" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <label >DEP O TRANSF. C$.</label>
+                    <label >DEPOSITOS O TRANSFERENCIAS.</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text bg-olive"><i class="fas fa-dollar-sign"></i></span>
+                        <span class="input-group-text bg-olive">C$.</span>
                       </div>
                       <input type="text" class="form-control" id="txt_deposito_tranferencia" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_tranferencia,2) }}" onkeypress='return isNumberKey(event)'>
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <label>GASTO OPERATI. DEL DIA C$.</label>
+                    <label>SISTEMA </label>    <em>(Capital + Interes)</em>               
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text bg-purple">
-                          <i class="fas fa-dollar-sign"></i>
-                        </span>
+                        <span class="input-group-text bg-olive"> C$. </span>
+                      </div>
+                      <input type="text" class="form-control" id="id_total_sistema" placeholder="0.00 " value="{{ number_format($Cobrado,2) }}" onkeypress='return isNumberKey(event)'>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label>GASTO OPERATI. DEL DIA.</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text bg-purple">C$.</span>
                       </div>
                       <input type="text" class="form-control" placeholder="0.00 " value="{{ number_format($Arqueo->gasto_operacion,2) }}" id="txt_gastos" onkeypress='return isNumberKey(event)'>
                       <div class="input-group-append">
@@ -149,19 +143,13 @@
 
                 <div class="card-footer">
                   <div class="row"> 
-                    <div class="col-sm-4 col-md-4">
+                    <div class="col-sm-6 col-md-6">
                       <div class="description-block border-right">
                         <h5 class="description-header text-warning">C$ <span id="id_lbl_total_final">0.00</span></h5>
                         <span class="description-text">TOTAL </span>
                       </div>
-                    </div>    
-                    <div class="col-sm-4 col-md-4">
-                      <div class="description-block border-right">
-                        <h5 class="description-header text-warning">C$ <span id="id_total_sistema">0.00</span></h5>
-                        <span class="description-text">SISTEMA </span>
-                      </div>
-                    </div>             
-                    <div class="col-sm-4 col-md-4">
+                    </div>
+                    <div class="col-sm-6 col-md-6">
                       <div class="description-block ">
                         <h5 class="description-header text-orange" >C$ <span id="TOTAL_SYS_VS_CASH" >0.00</span></h5>
                         <span class="description-text">SISTEMA vs EFECTIVO</span>

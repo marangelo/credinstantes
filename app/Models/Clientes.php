@@ -87,6 +87,7 @@ class Clientes extends Model
     public static function getInactivos($id)
     {
         $e = 1;
+        $role   = Auth::User()->id_rol;
 
         //BUSCA LOS CREDITOS QUE TENGA SOLAMENTE CREDITOS INACTIVOS & NO TENGA ACTIVOS O VENCIDOS Y EN MORA
         $Clientes_Inactivos = Clientes::select('tbl_clientes.id_clientes')
@@ -98,6 +99,10 @@ class Clientes extends Model
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'");
+        
+        if ($role === 2) {
+            $id = Auth::User()->id_zona;
+        }
     
         if ($id > 0) {
             $Clientes_Inactivos->where('tbl_clientes.id_zona', $id);

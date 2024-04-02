@@ -62,6 +62,7 @@
             vTableArticulos.search(this.value).draw();
         });
     })
+
     function InitTable() {
 
         var slZna   = $("#id_select_zona option:selected").val();  
@@ -118,42 +119,56 @@
                 }
             },
             buttons: [{extend: 'excelHtml5'}],
+            "columnDefs": [
+                {"className": "dt-center", "targets": [0,1,2 ]},
+                {"className": "dt-right", "targets": [3,4,5,6]},
+                { "width": "8%", "targets": [] },
+                { "width": "12%", "targets": [  ] },
+                { "visible":false, "searchable": false,"targets": [] }
+            ],
             'columns': [
                 {
-                    "title": "ID",
+                    "title": "#",
                     "data": "Id"
                 },                 
-                {"title": "ZONA / RUTA","data": "Zona", "render": function(data, type, row, meta) {
+                {"title": "ZONA / NOMBRE ","data": "Zona", "render": function(data, type, row, meta) {
                     
-                    return '[ ' + row.Id + ' ] - ' +row.Zona + ' ' + row.Zona ;
+                    return row.Zona + '/ ' + row.Nombre ;
                 }},
                 {
                     "title": "FECHA ARQUEO",
                     "data": "Fecha_Cuota",
                 }, 
                 {
-                    "title": "CUOTA COBRADA",
+                    "title": "CUOTA COBRADA C$.",
                     "data": "cuota_cobrada",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 }, 
                 {
-                    "title": "DEP. TRANSFERENCIA",
+                    "title": "DEP. TRANSFERENCIA C$.",
                     "data": "deposito_tranferencia",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },      
                 {
-                    "title": "GASTO OPERACION",
+                    "title": "GASTO OPERACION C$.",
                     "data": "gasto_operacion",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },  
-                {"title": "  ","data": "Id", "render": function(data, type, row, meta) {
-                    
+                {
+                    "title": "SISTEMA C$.",
+                    "data": "Sistema",
+                    render: $.fn.dataTable.render.number(',', '.', 2, '')
+                },  
+                {"title": "  ","data": "Id", "render": function(data, type, row, meta) {                    
                     return `<div class="card-tools text-center">
                                 <a href="ShowDetalles/`+ row.Id +`" class="btn btn-success primary">
                                     <i class="far fa-edit"></i>
                                 </a>
                                 <a href="ExportArqueo/`+ row.Id +`" class="btn btn-primary">
                                     <i class="fas fa-print"></i>
+                                </a>
+                                <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </div>` ;
                 }},      
@@ -162,6 +177,25 @@
 
         $("#tbl_ingresos_length").hide();
         $("#tbl_ingresos_filter").hide();
+    }
+    function Remover(ID) {
+        $.ajax({
+            url: "RemoveArqueo",
+            data: {
+                Arqueo  : ID,
+                _token  : "{{ csrf_token() }}" 
+            },
+            type: 'post',
+            async: true,
+            success: function(response) {
+                InitTable(); 
+            },
+            error: function(response) {
+                swal("Oops", "No se ha podido guardar!", "error");
+            }
+        }).done(function(data) {
+        });
+        
     }
 
     

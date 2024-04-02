@@ -26,7 +26,8 @@ class Arqueo extends Model {
     {
         return $this->hasOne(Zonas::class, 'id_zona','id_zona');
     }
-    public static function UpdateArqueo(Request $request){
+    public static function UpdateArqueo(Request $request)
+    {
         if ($request->ajax()) {
             try {
 
@@ -36,13 +37,15 @@ class Arqueo extends Model {
                 $Tranfe     = $request->input('Tranfe');
                 $Gastos     = $request->input('Gastos');
                 $Commit     = $request->input('Commit');
+                $ttSYS      = $request->input('ttSYS');
 
                 $response = Arqueo::where('id_arqueo',$Arqueo)->update([
                     "fecha_arqueo"          => $Fecha,
                     "deposito_dia"          => $Deposit,
                     "deposito_tranferencia" => $Tranfe,
                     "gasto_operacion"       => $Gastos,
-                    "comentario"            => $Commit
+                    "comentario"            => $Commit,
+                    "Sistema"               => $ttSYS
                 ]);
 
                 return $response;   
@@ -83,14 +86,15 @@ class Arqueo extends Model {
         }
     } 
 
-    public static function Export($ID) {
+    public static function Export($ID) 
+    {
         
         $objPHPExcel = new PHPExcel();
         $tituloReporte = "";
         $titulosColumnas = array();
 
         $Arqueo     = Arqueo::find($ID);
-        $ttSistema  = 33000;
+        $ttSistema  = $Arqueo->Sistema;
 
         
 
@@ -161,7 +165,7 @@ class Arqueo extends Model {
                 $objPHPExcel->getActiveSheet()->getStyle('A1:D3')->applyFromArray($style);
 
                 $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', "CREDINSTANTE ARQUEO DE CAJA MARTES 19 DE MARZO ")
+                ->setCellValue('A1', "CREDINSTANTE ARQUEO DE CAJA ". strtoupper(\Date::parse($Arqueo->fecha_arqueo)->format('d F'))) 
                 ->setCellValue('A5',  'ZONA/RUTA')
                 ->setCellValue('B5',  'SISTEMA')
                 ->setCellValue('C5',  number_format($ttSistema,0,'.',''))
@@ -219,13 +223,13 @@ class Arqueo extends Model {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'SUB TOTAL DOLARES - CORDOBAS')
                 ->setCellValue('B'.$i,  '-')
                 ->setCellValue('C'.$i,  '-')
-                ->setCellValue('D'.$i,  number_format($ttUSD,0,'.',''));
+                ->setCellValue('D'.$i,  number_format($ttUSD,2,'.',''));
                 $i++;
 
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'DESEMBOLSOS DEL DIA ')
                 ->setCellValue('B'.$i,  '-')
                 ->setCellValue('C'.$i,  '-')
-                ->setCellValue('D'.$i,  number_format($Arqueo->deposito_dia,0,'.',''));
+                ->setCellValue('D'.$i,  number_format($Arqueo->deposito_dia,2,'.',''));
                 $i++;
 
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'DEPOSITOS O TRANSFERENCIAS')
@@ -245,7 +249,7 @@ class Arqueo extends Model {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'TOTAL')
                 ->setCellValue('B'.$i,  '-')
                 ->setCellValue('C'.$i,  '-')
-                ->setCellValue('D'.$i,  number_format($ttTotal,0,'.',''));
+                ->setCellValue('D'.$i,  number_format($ttTotal,2,'.',''));
                 $i++;
 
                 $ttTotal_Final =  $ttTotal - $ttSistema;
@@ -253,7 +257,7 @@ class Arqueo extends Model {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'CUADRADO SEGÚN SISTEMA CONTRA EFECTIVO')
                 ->setCellValue('B'.$i,  '-')
                 ->setCellValue('C'.$i,  '-')
-                ->setCellValue('D'.$i,  number_format($ttTotal_Final,0,'.',''));
+                ->setCellValue('D'.$i,  number_format($ttTotal_Final,2,'.',''));
                 
                 $objPHPExcel->getActiveSheet()->mergeCells('A31:B31');
                 $i = $i + 2 ; 
@@ -442,13 +446,13 @@ class Arqueo extends Model {
             
             $array_arqueos[$key] = [
                 "Id"                        => $a->id_arqueo,
-                "Fecha_Cuota"               => $a->fecha_arqueo,
-                "Zona"                      => $a->id_zona,
-                // "Nombre"            => strtoupper($a->credito->Clientes->nombre),
-                // "apellido"          => strtoupper($a->credito->Clientes->apellidos),
+                "Fecha_Cuota"               => \Date::parse($a->fecha_arqueo)->format('d-m-Y') ,
+                "Zona"                      => $a->getZona->nombre_zona,
+                "Nombre"                    => strtoupper($a->getZona->UsuarioCobrador->nombre),
                 "cuota_cobrada"             => $a->deposito_dia,
                 "deposito_tranferencia"     => $a->deposito_tranferencia,
                 "gasto_operacion"           => $a->gasto_operacion,
+                "Sistema"                   => $a->Sistema,
             ];
                 
         }
@@ -456,7 +460,6 @@ class Arqueo extends Model {
 
         return $array_arqueos;
     }
-
 
     public static function InitArqueo($IdZona)
     {
@@ -519,6 +522,58 @@ class Arqueo extends Model {
             return response()->json($mensaje);
         }
 
+    }
+
+    public static function Cobrado($ID)
+    {
+        $Arqueo     = Arqueo::find($ID);
+        
+        $Fecha      = $Arqueo->fecha_arqueo;
+        $Zona       = $Arqueo->id_zona;
+
+        $CAPITAL    = Pagos::where('id_zona', $Zona)->whereDate('FECHA_ABONO', '=', $Fecha)->sum('CAPITAL');
+        $INTERES    = Pagos::where('id_zona', $Zona)->whereDate('FECHA_ABONO', '=', $Fecha)->sum('INTERES');
+
+        $Cobrado    = $CAPITAL + $INTERES;
+
+        return $Cobrado;
+
+    }
+
+    public static function AjaxCobrado(Request $request)
+    {
+        $ID         = $request->input('Arqueo');
+        $Fecha      = $request->input('Fecha');
+
+        $Arqueo     = Arqueo::find($ID);
+        $Zona       = $Arqueo->id_zona;
+
+        $CAPITAL    = Pagos::where('id_zona', $Zona)->whereDate('FECHA_ABONO', '=', $Fecha)->sum('CAPITAL');
+        $INTERES    = Pagos::where('id_zona', $Zona)->whereDate('FECHA_ABONO', '=', $Fecha)->sum('INTERES');
+
+        $Cobrado    = $CAPITAL + $INTERES;
+
+        return $Cobrado;
+
+    }
+    public static function RemoveArqueo(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $ID         = $request->input('Arqueo');
+                
+                $response =   Arqueo::where('id_arqueo',  $ID)->update([
+                    "activo" => 0,
+                ]);
+    
+                return $response;
+    
+    
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
     }
 
 }

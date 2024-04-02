@@ -21,9 +21,15 @@ class ArqueosController extends Controller {
     {         
         $Titulo     = "Arqueo Nuevo";
         $Arqueo     = Arqueo::find($ID); 
-        
+        $Cobrado    = Arqueo::Cobrado($ID);
     
-        return view('Arqueos.Nuevo', compact('Titulo','Arqueo'));
+        return view('Arqueos.Nuevo', compact('Titulo','Arqueo','Cobrado'));
+    }
+
+    public function UpdateRecuperado(Request $request)
+    {
+        $Cobrado    = Arqueo::AjaxCobrado($request);
+        return response()->json($Cobrado);
     }
     public function Init($Zona)
     {         
@@ -57,6 +63,11 @@ class ArqueosController extends Controller {
     public function ExportArqueo($ID)
     {
         $response = Arqueo::Export($ID);
+    }
+    public function RemoveArqueo(Request $request)
+    {
+        $response = Arqueo::RemoveArqueo($request);
+        return response()->json($response);
     }
 
 }

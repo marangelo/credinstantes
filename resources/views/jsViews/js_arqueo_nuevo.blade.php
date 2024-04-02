@@ -17,9 +17,43 @@
         InitTable();
        
         $('#dt-arqueo').datetimepicker({
-            format: 'DD/MM/YYYY'
+            format: 'DD/MM/YYYY',
+            defaultDate: new Date()
         });
 
+        $("#dt-arqueo").on("change.datetimepicker", ({date, oldDate}) => {
+            // console.log("New date", date);
+            // console.log("Old date", oldDate);
+
+            var Arqueo = $("#id_moneda").text();
+            var dtIni  = $("#dtIni").val();
+            dtIni_     = moment(dtIni, 'DD/MM/YYYY');
+
+
+            $.ajax({
+                url: "UpdateRecuperado",
+                data: {
+                    Arqueo  : Arqueo,
+                    Fecha   : dtIni_.format('YYYY-MM-DD'),
+                    _token  : "{{ csrf_token() }}" 
+                },
+                type: 'post',
+                async: true,
+                success: function(response) {
+                    var ttRecuperado = numeral(isValue(response,0,true)).format('0,00.00')
+                    $('#id_total_sistema').val(ttRecuperado)
+                    //InitTable();
+                    UpdateTotal();
+                },
+                error: function(response) {
+                    swal("Oops", "No se ha podido guardar!", "error");
+                }
+            }).done(function(data) {
+            });
+        })
+
+        
+    
         
 
         $('#tbl_moneda_nio ').on('click', "td", function() {
@@ -37,7 +71,6 @@
                 title: "C$. " + Denomi_,
                 text: "Digitar valor a ingresar " ,
                 input: 'text',
-                target: document.getElementById('mdlHorasParo'),
                 inputPlaceholder: 'Digite la cantidad',
                 inputAttributes: {
                     id: 'cantidad',
@@ -47,7 +80,6 @@
                 showCancelButton: true,
                 confirmButtonText: 'Guardar',
                 showLoaderOnConfirm: true,
-                inputValue: canti_,
                 inputValidator: (value) => {
                     if (!value) {
                         return 'Digita la cantidad por favor';
@@ -105,7 +137,6 @@
                 showCancelButton: true,
                 confirmButtonText: 'Guardar',
                 showLoaderOnConfirm: true,
-                inputValue: canti_,
                 inputValidator: (value) => {
                     if (!value) {
                         return 'Digita la cantidad por favor';
@@ -146,6 +177,8 @@
             var dtIni               = $("#dtIni").val();
             var txt_deposito_dia    = $("#txt_deposito_dia").val();
             var txt_tranferencia    = $("#txt_deposito_tranferencia").val();
+            var total_SYS           = $('#id_total_sistema').val();
+
             var txt_gastos          = $("#txt_gastos").val();
             var txt_commit          = $("#id_commit").val();
 
@@ -153,6 +186,7 @@
             txt_deposito_dia_       = numeral(isValue(txt_deposito_dia,0,true)).format('0.00')
             txt_tranferencia_       = numeral(isValue(txt_tranferencia,0,true)).format('0.00')
             txt_gastos_             = numeral(isValue(txt_gastos,0,true)).format('0.00')
+            total_SYS_             = numeral(isValue(total_SYS,0,true)).format('0.00')
 
             $.ajax({
                 url: "UpdateArqueo",
@@ -163,6 +197,7 @@
                     Tranfe  : txt_tranferencia_,
                     Gastos  : txt_gastos_,
                     Commit  : txt_commit,
+                    ttSYS   : total_SYS_,
                     _token  : "{{ csrf_token() }}" 
                 },
                 type: 'post',
@@ -193,7 +228,7 @@
         var total_NIO           = $('#ID_TOTAL_NIO').html();
         var total_USD           = $('#id_lbl_total_usd').html();
 
-        var total_SYS           = $('#id_total_sistema').html();
+        var total_SYS           = $('#id_total_sistema').val();
 
         txt_deposito_dia_       = numeral(isValue(txt_deposito_dia,0,true)).format('0.00')
         txt_tranferencia_       = numeral(isValue(txt_tranferencia,0,true)).format('0.00')
@@ -207,9 +242,10 @@
 
         var TOTAL_SYS_VS_CASH   = parseFloat(numeral(TOTAL_FINAL).format("0.00")) - parseFloat(numeral(total_SYS).format("0.00"))
 
-        TOTAL_SYS_VS_CASH = (TOTAL_SYS_VS_CASH < 0) ? 0 : TOTAL_SYS_VS_CASH ;
+        //TOTAL_SYS_VS_CASH = (TOTAL_SYS_VS_CASH < 0) ? 0 : TOTAL_SYS_VS_CASH ;
 
         $('#id_lbl_total_final').html(numeral(TOTAL_FINAL).format("0,00.00"));
+        
         $('#TOTAL_SYS_VS_CASH').html(numeral(TOTAL_SYS_VS_CASH).format("0,00.00"));
         
     }
@@ -217,8 +253,7 @@
     function InitTable(){
         var IdArqueo = $("#id_moneda").text();
 
-        var TOTAL_SISTEMA = numeral(3000).format("0,00.00");
-        $('#id_total_sistema').html(TOTAL_SISTEMA);
+
 
         var_tbl_moneda_nio =  $("#tbl_moneda_nio").DataTable({
             "responsive": true, 
@@ -252,6 +287,11 @@
                     _token  : "{{ csrf_token() }}" 
                 }
             },
+            "columnDefs": [
+                {"className": "dt-center", "targets": [0]},
+                {"className": "dt-right", "targets": [1,2,3]},
+                { "visible":false,"targets": [0] }
+            ],
             'columns': [
                 {
                     "title": "#",
@@ -328,6 +368,11 @@
                     _token  : "{{ csrf_token() }}" 
                 }
             },
+            "columnDefs": [
+                {"className": "dt-center", "targets": [0]},
+                {"className": "dt-right", "targets": [1,2,3]},
+                { "visible":false,"targets": [0] }
+            ],
             'columns': [
                 {
                     "title": "#",
@@ -369,8 +414,6 @@
                 $('#id_lbl_total_usd').html(TOTAL);
             }
         })
-        
-      
     }
     
     function soloNumeros(caracter, e, numeroVal) {
@@ -399,7 +442,6 @@
 
         return true;
     }
-   
-    
+
 
 </script>
