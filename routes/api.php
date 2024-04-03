@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('CalcularEstados', 'ApiController@CalcularEstados')->name('CalcularEstados');
+Route::get('SetTelefonos', 'ApiController@SetTelefonos')->name('SetTelefonos');

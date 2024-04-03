@@ -138,7 +138,8 @@ class Clientes extends Model
                     ->where('activo', 1)
                     ->where('estado_credito', 1);
     }
-    public static function Clientes_promotor($Zona){
+    public static function Clientes_promotor($Zona)
+    {
 
         $ClientesInactivos = Clientes::getInactivos($Zona);
 
@@ -205,7 +206,8 @@ class Clientes extends Model
     {
         return $this->getCreditos()->whereIn('estado_credito', [3, 2]);
     }
-    public static function editClient(Request $request) {
+    public static function editClient(Request $request) 
+    {
         if ($request->ajax()) {
             try {
 
@@ -237,7 +239,8 @@ class Clientes extends Model
             }
         }
     }
-    public static function creditCheck(Request $request) {
+    public static function creditCheck(Request $request) 
+    {
         if ($request->ajax()) {
             try {
 
@@ -293,6 +296,16 @@ class Clientes extends Model
                 return response()->json($mensaje);
             }
         }
+    }
+    public static function CleanPhone($cadena) {
+        $caracteresEspeciales = array('+', '_', '-', " ");
+        $cadenaLimpia = str_replace($caracteresEspeciales, '', $cadena);
+    
+        if(strlen($cadenaLimpia) > 8) {
+            $cadenaLimpia = substr($cadenaLimpia, 3);
+        }
+        
+        return $cadenaLimpia;
     }
 
 
