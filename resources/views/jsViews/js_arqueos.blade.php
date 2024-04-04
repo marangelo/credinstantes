@@ -165,7 +165,7 @@
                                     <i class="far fa-edit"></i>
                                 </a>
                                 <a href="ExportArqueo/`+ row.Id +`" class="btn btn-primary">
-                                    <i class="fas fa-print"></i>
+                                    <i class="far fa-file-excel"></i>
                                 </a>
                                 <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
                                     <i class="fas fa-trash"></i>

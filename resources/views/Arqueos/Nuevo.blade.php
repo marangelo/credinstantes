@@ -18,19 +18,20 @@
         <div class="row">
           <div class="col-12">
             <!-- /.card -->
+            <small class="badge badge-info mb-1"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
             <div class="card">
               <div class="card-header" >
-              <h3 class="card-title"></h3>
-                <span class="text">{{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / {{strtoupper ( $Arqueo->getZona->UsuarioCobrador->nombre ) }}</span>
-                <small class="badge badge-info"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
-
+              <h3 class="card-title">{{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / {{strtoupper ( $Arqueo->getZona->UsuarioCobrador->nombre ) }}</h3>
                 <div class="card-tools">
-                  <div class="input-group input-group-sm" id="dt-arqueo" data-target-input="nearest">
-                      <div class="input-group-append" data-target="#dt-arqueo" data-toggle="datetimepicker">
-                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                        <input type="text" class="form-control datetimepicker-input" data-target="#dt-arqueo" id="dtIni" name="nmIni" value="{{ date('d/m/Y', strtotime($Arqueo->fecha_arqueo)) }}"/>                          
+                  <div class="input-group" id="dt-arqueo" data-target-input="nearest">
+                    <div class="input-group-append" data-target="#dt-arqueo" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
+                    <input type="text" class="form-control datetimepicker-input" data-target="#dt-arqueo" id="dtIni" name="nmIni" value="{{ date('d/m/Y', strtotime($Arqueo->fecha_arqueo)) }}"/>     
+                    <span class="input-group-append">
+                      <a href="../ExportArqueo/{{$Arqueo->id_arqueo}}" class="btn btn-success"><i class="far fa-file-excel"></i></a>
+                    </span>
+                  </div>
                 </div>
               
               </div>
@@ -39,7 +40,7 @@
               @csrf
                 <div class="row">                  
                   <div class="col-md-3">
-                    <label >DEPOSITOS DEL DIA.</label>
+                    <label >DESEMBOLSOS DEL DIA.</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text bg-white"> C$. </span>
@@ -75,6 +76,7 @@
                       <div class="input-group-append">
                         <div class="input-group-text btn-success" id="bt_save_arqueo"><i class="fas fa-save"></i></div>
                       </div>
+                      
                     </div>
 
                     </div>

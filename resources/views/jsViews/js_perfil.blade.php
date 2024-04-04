@@ -3,7 +3,7 @@
         $("#lbl_cancelacion").hide();
         $("#tbl_abonos_creditos").DataTable({
             "responsive": true, 
-            "order": [[0, 'asc']]
+            "order": [[0, 'desc']],
             "lengthChange": false, 
             "autoWidth": false,
             "buttons": ["copy", "excel", "print"]
