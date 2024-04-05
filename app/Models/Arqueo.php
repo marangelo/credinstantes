@@ -56,7 +56,8 @@ class Arqueo extends Model {
             }
         }
     } 
-    public static function UpdateRowArqueo(Request $request){
+    public static function UpdateRowArqueo(Request $request)
+    {
         if ($request->ajax()) {
             try {
 
@@ -170,7 +171,7 @@ class Arqueo extends Model {
                 ->setCellValue('B5',  'SISTEMA')
                 ->setCellValue('C5',  number_format($ttSistema,0,'.',''))
                 ->setCellValue('D5',  '')
-                ->setCellValue('A6',  'ARQ #'.$Arqueo->id_arqueo.' '. strtoupper ( $Arqueo->getZona->nombre_zona ).' / ESTA PENDIENTE EL NOMBRE')
+                ->setCellValue('A6',  'ARQ #'.$Arqueo->id_arqueo.' '. strtoupper ( $Arqueo->getZona->nombre_zona ). ' / ' . strtoupper ($Arqueo->getZona->UsuarioCobrador->nombre))
                 ->setCellValue('B6',  'DENOMINACION')
                 ->setCellValue('C6',  'CANTIDAD')
                 ->setCellValue('D6',  'TOTAL');
