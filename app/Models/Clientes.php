@@ -129,7 +129,7 @@ class Clientes extends Model
     
     public function getCreditos()
     {
-        return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->orderBy('id_creditos', 'asc')->where('activo',1);
+        return $this->hasMany(Credito::class, 'id_clientes','id_clientes')->orderBy('id_creditos', 'desc')->where('activo',1);
     }
 
     public function Credito_activo()

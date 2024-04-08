@@ -128,10 +128,12 @@ class ReportsModels extends Model {
         $dtIni    = $request->input('dtIni').' 00:00:00';
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $Cobra    = Auth::id();
-        $pago_capital = 0 ;
-        
 
-        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->where('registrado_por', $Cobra);        
+        $pago_capital = 0 ;
+
+        $user_home = Usuario::where('id_rol', 1)->pluck('id')->first();
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->whereIn('registrado_por', [$Cobra,$user_home]);   
+        
         $pago_intereses = $Obj->sum( 'INTERES' );       
         
         foreach ($Obj->get() as $k => $p) {
