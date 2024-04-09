@@ -21,7 +21,7 @@
             <small class="badge badge-info mb-1"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
             <div class="card">
               <div class="card-header" >
-              <h3 class="card-title">{{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / {{strtoupper ( $Arqueo->getZona->UsuarioCobrador->nombre ) }}</h3>
+              <h3 class="card-title">{{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / {{strtoupper ( (empty($Arqueo->getZona->UsuarioCobrador->nombre)) ? 'N/D' : $Arqueo->getZona->UsuarioCobrador->nombre ) }}</h3>
                 <div class="card-tools">
                   <div class="input-group" id="dt-arqueo" data-target-input="nearest">
                     <div class="input-group-append" data-target="#dt-arqueo" data-toggle="datetimepicker">

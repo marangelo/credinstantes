@@ -165,13 +165,15 @@ class Arqueo extends Model {
                 );
                 $objPHPExcel->getActiveSheet()->getStyle('A1:D3')->applyFromArray($style);
 
+                $name_user_arqueo = (empty($Arqueo->getZona->UsuarioCobrador->nombre)) ? 'N/D' : $Arqueo->getZona->UsuarioCobrador->nombre ;
+
                 $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', "CREDINSTANTE ARQUEO DE CAJA ". strtoupper(\Date::parse($Arqueo->fecha_arqueo)->format('d F'))) 
                 ->setCellValue('A5',  'ZONA/RUTA')
                 ->setCellValue('B5',  'SISTEMA')
                 ->setCellValue('C5',  number_format($ttSistema,0,'.',''))
                 ->setCellValue('D5',  '')
-                ->setCellValue('A6',  'ARQ #'.$Arqueo->id_arqueo.' '. strtoupper ( $Arqueo->getZona->nombre_zona ). ' / ' . strtoupper ($Arqueo->getZona->UsuarioCobrador->nombre))
+                ->setCellValue('A6',  'ARQ #'.$Arqueo->id_arqueo.' '. strtoupper ( $Arqueo->getZona->nombre_zona ). ' / ' . strtoupper ($name_user_arqueo))
                 ->setCellValue('B6',  'DENOMINACION')
                 ->setCellValue('C6',  'CANTIDAD')
                 ->setCellValue('D6',  'TOTAL');
@@ -444,12 +446,14 @@ class Arqueo extends Model {
         $array_arqueos = array();
         
         foreach ($Arqueos as $key => $a) {  
-            
+
+            $name_user_arqueo = (empty($a->getZona->UsuarioCobrador->nombre)) ? 'N/D' : $a->getZona->UsuarioCobrador->nombre ;
+
             $array_arqueos[$key] = [
                 "Id"                        => $a->id_arqueo,
                 "Fecha_Cuota"               => \Date::parse($a->fecha_arqueo)->format('d-m-Y') ,
                 "Zona"                      => $a->getZona->nombre_zona,
-                "Nombre"                    => strtoupper($a->getZona->UsuarioCobrador->nombre),
+                "Nombre"                    => strtoupper($name_user_arqueo),
                 "cuota_cobrada"             => $a->deposito_dia,
                 "deposito_tranferencia"     => $a->deposito_tranferencia,
                 "gasto_operacion"           => $a->gasto_operacion,
