@@ -126,14 +126,16 @@ class ReportsModels extends Model {
     public static function CalcRecuperacion(Request $request)
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
-        $dtEnd    = $request->input('dtEnd').' 23:59:59';
+        $dtEnd    = $request->input('dtEnd').' 00:00:00';
+        
         $Cobra    = Auth::id();
-        $role     = Auth::User()->id_rol;
+        $id_zona  = Auth::User()->id_zona;
         
         $pago_capital = 0 ;
 
         $user_home = Usuario::where('id_rol', 1)->pluck('id')->first();
-        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->whereIn('registrado_por', [$Cobra,$user_home])->Where('id_zona',$role);   
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->whereIn('registrado_por', [$Cobra,$user_home])->Where('id_zona',$id_zona);   
+
         
         $pago_intereses = $Obj->sum( 'INTERES' );       
         
@@ -304,15 +306,14 @@ class ReportsModels extends Model {
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+
         $role   = Auth::User()->id_rol;
         $Prom   = Auth::id();
 
         $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
         $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
         
- 
-        if ($Zona > 0) {
-            
+        if ($Zona > 0) {            
             $Creditos->Where(function($query) use ($Zona) {
                 $query->whereHas('Clientes', function ($query) use ($Zona) {
                     $query->where('id_zona', $Zona);
