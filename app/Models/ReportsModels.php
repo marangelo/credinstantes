@@ -22,6 +22,7 @@ class ReportsModels extends Model {
         $Day    = date('N', strtotime($Date));
 
         $Creditos_Activos =  Credito::where('activo', 1)->where('estado_credito', 1);
+
         if ($Day > 0) {
             $Creditos_Activos->Where('id_diassemana',$Day);
         }
@@ -37,17 +38,20 @@ class ReportsModels extends Model {
         foreach ($Creditos_ALDIA as $key => $v) {
 
             if ($v->saldo > 0) {
-                $array_creditos_aldia[$key] = [
-                    "id_pagoabono"           => $v->id_creditos,
-                    "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
-                    "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
-                    "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
-                    "telefono"               => $v->Clientes->telefono,
-                    "cuota"                  => $v->cuota,
-                    "saldo"                  => $v->saldo,
-                    "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
-                    "Estado"                 => strtoupper($v->Estado->nombre_estado)
-                ];
+                if ($v->Clientes->activo > 0) {
+                    $array_creditos_aldia[$key] = [
+                        "id_pagoabono"           => $v->id_creditos,
+                        "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
+                        "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                        "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
+                        "telefono"               => $v->Clientes->telefono,
+                        "cuota"                  => $v->cuota,
+                        "saldo"                  => $v->saldo,
+                        "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
+                        "Estado"                 => strtoupper($v->Estado->nombre_estado)
+                    ];
+                }
+                
             }
         }
 
@@ -64,17 +68,20 @@ class ReportsModels extends Model {
         foreach ($Creditos_Anexados as $key => $v) {
 
             if ($v->saldo > 0) {
-                $array_anexados[$key] = [
-                    "id_pagoabono"           => $v->id_creditos,
-                    "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
-                    "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
-                    "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
-                    "telefono"               => $v->Clientes->telefono,
-                    "cuota"                  => $v->cuota,
-                    "saldo"                  => $v->saldo,
-                    "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
-                    "Estado"                 => strtoupper($v->Estado->nombre_estado)
-                ];
+                if ($v->Clientes->activo > 0) {
+                    $array_anexados[$key] = [                    
+                        "id_pagoabono"           => $v->id_creditos,
+                        "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
+                        "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                        "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
+                        "telefono"               => $v->Clientes->telefono,
+                        "cuota"                  => $v->cuota,
+                        "saldo"                  => $v->saldo,
+                        "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
+                        "Estado"                 => strtoupper($v->Estado->nombre_estado)
+                    ];
+                }
+                
             }
         }
 
