@@ -87,6 +87,7 @@ class Clientes extends Model
     public static function getInactivos($id)
     {
         $e = 1;
+        $role   = Auth::User()->id_rol;
 
         //BUSCA LOS CREDITOS QUE TENGA SOLAMENTE CREDITOS INACTIVOS & NO TENGA ACTIVOS O VENCIDOS Y EN MORA
         $Clientes_Inactivos = Clientes::select('tbl_clientes.id_clientes')
@@ -98,6 +99,10 @@ class Clientes extends Model
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%3%'");
+        
+        if ($role === 2) {
+            $id = Auth::User()->id_zona;
+        }
     
         if ($id > 0) {
             $Clientes_Inactivos->where('tbl_clientes.id_zona', $id);
@@ -133,9 +138,10 @@ class Clientes extends Model
                     ->where('activo', 1)
                     ->where('estado_credito', 1);
     }
-    public static function Clientes_promotor($Zona){
+    public static function Clientes_promotor($Zona)
+    {
 
-        $ClientesInactivos = Clientes::getInactivos();
+        $ClientesInactivos = Clientes::getInactivos($Zona);
 
         $ClientePromotores = ClientePromotores::get();
 
@@ -200,7 +206,8 @@ class Clientes extends Model
     {
         return $this->getCreditos()->whereIn('estado_credito', [3, 2]);
     }
-    public static function editClient(Request $request) {
+    public static function editClient(Request $request) 
+    {
         if ($request->ajax()) {
             try {
 
@@ -232,7 +239,8 @@ class Clientes extends Model
             }
         }
     }
-    public static function creditCheck(Request $request) {
+    public static function creditCheck(Request $request) 
+    {
         if ($request->ajax()) {
             try {
 
@@ -288,6 +296,16 @@ class Clientes extends Model
                 return response()->json($mensaje);
             }
         }
+    }
+    public static function CleanPhone($cadena) {
+        $caracteresEspeciales = array('+', '_', '-', " ");
+        $cadenaLimpia = str_replace($caracteresEspeciales, '', $cadena);
+    
+        if(strlen($cadenaLimpia) > 8) {
+            $cadenaLimpia = substr($cadenaLimpia, 3);
+        }
+        
+        return $cadenaLimpia;
     }
 
 

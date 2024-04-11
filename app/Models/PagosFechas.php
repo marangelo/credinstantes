@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
@@ -75,6 +75,7 @@ class PagosFechas extends Model {
     {
         $Creditos = Credito::where('activo',1)->where('saldo','>',0);
         $fechaActual = now(); 
+        $role   = Auth::User()->id_rol;
 
         if ($tipoMora == 'atrasada') {
             $Creditos->where('estado_credito', 2);
@@ -85,6 +86,10 @@ class PagosFechas extends Model {
         $Creditos = $Creditos->get()->pluck('id_creditos');
 
         $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+
+        if ($role === 2) {
+            $Zona = Auth::User()->id_zona;
+        }
 
         if ($Zona > -1) {
             $Mora->where('ID_ZONA', $Zona);

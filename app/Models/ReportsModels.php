@@ -22,6 +22,7 @@ class ReportsModels extends Model {
         $Day    = date('N', strtotime($Date));
 
         $Creditos_Activos =  Credito::where('activo', 1)->where('estado_credito', 1);
+
         if ($Day > 0) {
             $Creditos_Activos->Where('id_diassemana',$Day);
         }
@@ -37,17 +38,20 @@ class ReportsModels extends Model {
         foreach ($Creditos_ALDIA as $key => $v) {
 
             if ($v->saldo > 0) {
-                $array_creditos_aldia[$key] = [
-                    "id_pagoabono"           => $v->id_creditos,
-                    "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
-                    "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
-                    "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
-                    "telefono"               => $v->Clientes->telefono,
-                    "cuota"                  => $v->cuota,
-                    "saldo"                  => $v->saldo,
-                    "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
-                    "Estado"                 => strtoupper($v->Estado->nombre_estado)
-                ];
+                if ($v->Clientes->activo > 0) {
+                    $array_creditos_aldia[$key] = [
+                        "id_pagoabono"           => $v->id_creditos,
+                        "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
+                        "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                        "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
+                        "telefono"               => $v->Clientes->telefono,
+                        "cuota"                  => $v->cuota,
+                        "saldo"                  => $v->saldo,
+                        "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
+                        "Estado"                 => strtoupper($v->Estado->nombre_estado)
+                    ];
+                }
+                
             }
         }
 
@@ -64,17 +68,20 @@ class ReportsModels extends Model {
         foreach ($Creditos_Anexados as $key => $v) {
 
             if ($v->saldo > 0) {
-                $array_anexados[$key] = [
-                    "id_pagoabono"           => $v->id_creditos,
-                    "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
-                    "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
-                    "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
-                    "telefono"               => $v->Clientes->telefono,
-                    "cuota"                  => $v->cuota,
-                    "saldo"                  => $v->saldo,
-                    "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
-                    "Estado"                 => strtoupper($v->Estado->nombre_estado)
-                ];
+                if ($v->Clientes->activo > 0) {
+                    $array_anexados[$key] = [                    
+                        "id_pagoabono"           => $v->id_creditos,
+                        "Nombre"                 => $v->Clientes->nombre. ' ' . $v->Clientes->apellidos,
+                        "direccion_domicilio"    => $v->Clientes->direccion_domicilio,
+                        "zona"                   => (isset($v->Clientes->getZona->nombre_zona) && $v->Clientes->getZona->nombre_zona) ? $v->Clientes->getZona->nombre_zona : 'N/D' ,
+                        "telefono"               => $v->Clientes->telefono,
+                        "cuota"                  => $v->cuota,
+                        "saldo"                  => $v->saldo,
+                        "pendiente"              => $v->AbonoLogs->isNotEmpty() ? $v->AbonoLogs->first()->SALDO_PENDIENTE : 0,
+                        "Estado"                 => strtoupper($v->Estado->nombre_estado)
+                    ];
+                }
+                
             }
         }
 
@@ -103,7 +110,7 @@ class ReportsModels extends Model {
         
         foreach ($Abonos as $key => $a) {
 
-            $CAPITAL  = (strtotime($a->FECHA_ABONO) <= strtotime("2024-03-16")) ? $a->CAPITAL : $a->CAPITAL_OLD;
+            $CAPITAL  = (strtotime($a->FECHA_ABONO) <= strtotime("2024-03-16")) ? $a->CAPITAL : $a->CAPITAL;
 
             $Ingreso_neto = $CAPITAL + $a->INTERES ;            
             
@@ -126,16 +133,21 @@ class ReportsModels extends Model {
     public static function CalcRecuperacion(Request $request)
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
-        $dtEnd    = $request->input('dtEnd').' 23:59:59';
-        $Cobra    = Auth::id();
-        $pago_capital = 0 ;
+        $dtEnd    = $request->input('dtEnd').' 00:00:00';
         
+        $Cobra    = Auth::id();
+        $id_zona  = Auth::User()->id_zona;
+        
+        $pago_capital = 0 ;
 
-        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->Where('activo',1)->where('registrado_por', $Cobra);        
+        $user_home = Usuario::where('id_rol', 1)->pluck('id')->first();
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->whereIn('registrado_por', [$Cobra,$user_home])->Where('id_zona',$id_zona);   
+
+        
         $pago_intereses = $Obj->sum( 'INTERES' );       
         
         foreach ($Obj->get() as $k => $p) {
-            $pago_capital  += (strtotime($p->FECHA_ABONO) <= strtotime("2024-03-16")) ? $p->CAPITAL : $p->CAPITAL_OLD;
+            $pago_capital  += (strtotime($p->FECHA_ABONO) <= strtotime("2024-03-16")) ? $p->CAPITAL : $p->CAPITAL;
         }
         
         $Total_Recuperado = $pago_capital + $pago_intereses;
@@ -251,8 +263,8 @@ class ReportsModels extends Model {
             $Opt = Auth::User()->id_zona;
         }
     
-        $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL_OLD END) + INTERES) as total, 
-                                    SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL_OLD END)) CAPITAL, SUM(INTERES) INTERES')
+        $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END) + INTERES) as total, 
+                                    SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                 ->whereBetween('FECHA_ABONO', [$D1, $D2])
                 ->where('activo', 1)
                 ->when($Opt > -1, function ($query) use ($Opt) {
@@ -301,15 +313,14 @@ class ReportsModels extends Model {
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+
         $role   = Auth::User()->id_rol;
         $Prom   = Auth::id();
 
         $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
         $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
         
- 
-        if ($Zona > 0) {
-            
+        if ($Zona > 0) {            
             $Creditos->Where(function($query) use ($Zona) {
                 $query->whereHas('Clientes', function ($query) use ($Zona) {
                     $query->where('id_zona', $Zona);

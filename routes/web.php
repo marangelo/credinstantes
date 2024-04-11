@@ -103,3 +103,13 @@ Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')
 Route::get('RecuperacionCobro', 'ReportsController@RecuperacionCobro')->name('RecuperacionCobro');
 Route::post('CalcRecuperacion', 'ReportsController@CalcRecuperacion')->name('CalcRecuperacion');
 
+Route::get('Arqueos', 'ArqueosController@ShowHome')->name('Arqueos');
+Route::get('ShowDetalles/{ZONA}', 'ArqueosController@ShowDetalles')->name('ShowDetalles');
+Route::get('ArqueoInit/{ZONA}', 'ArqueosController@Init')->name('ArqueoInit');
+Route::post('getDataArqueos', 'ArqueosController@getDataArqueos')->name('getDataArqueos');
+Route::post('ShowDetalles/DataTableMoneda', 'ArqueosController@DataTableMoneda')->name('ShowDetalles/DataTableMoneda');
+Route::post('ShowDetalles/UpdateRowArqueo', 'ArqueosController@UpdateRowArqueo')->name('ShowDetalles/UpdateRowArqueo');
+Route::post('ShowDetalles/UpdateArqueo', 'ArqueosController@UpdateArqueo')->name('ShowDetalles/UpdateArqueo');
+Route::post('ShowDetalles/UpdateRecuperado', 'ArqueosController@UpdateRecuperado')->name('ShowDetalles/UpdateRecuperado');
+Route::post('RemoveArqueo', 'ArqueosController@RemoveArqueo')->name('RemoveArqueo');
+Route::get('ExportArqueo/{ID}', 'ArqueosController@ExportArqueo')->name('ExportArqueo');

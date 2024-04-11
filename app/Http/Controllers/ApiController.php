@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Credito;
 use App\Models\EstadosMonitor;
+use App\Models\Clientes;
 use Carbon\Carbon;
 use Mavinoo\Batch\Batch;
 
@@ -36,5 +37,30 @@ class ApiController extends Controller{
 
         return response()->json($Creditos);
 
+    }
+    public function SetTelefonos() 
+    {
+        $Cliente        = Clientes::all();
+        $objClientes    = new Clientes;
+        
+        $ArrayClientes  = [] ;
+        $StringRemove   = array('+', '_', '-', " ");
+
+        foreach ($Cliente as $k => $v) {    
+            
+            $NewPhone = str_replace($StringRemove, '', $v->telefono);        
+            $NewPhone = (strlen($NewPhone) > 8) ? substr($NewPhone, 3) : $NewPhone ;
+
+            $ArrayClientes[$k] = [
+                'id_clientes'    => $v->id_clientes,
+                //'oldTelefono'   =>  $v->telefono,
+                'telefono'      => $NewPhone,
+            ];
+        }
+        
+        \Batch::update($objClientes, $ArrayClientes, 'id_clientes');
+
+        return response()->json($ArrayClientes);
+        
     }
 }

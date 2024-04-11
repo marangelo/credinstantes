@@ -63,7 +63,8 @@
                     <table class="table table-striped" id="tbl_abonos_creditos">
                                 <thead>
                                 <tr>
-                                  <th>COD/ESTADO</th>
+                                  <th>COD</th>
+                                  <th>ESTADO</th>
                                   <th>INICIO</th>
                                   <th>FIN</th>
                                   <th>CULMINO</th>
@@ -81,7 +82,8 @@
                                 
                                   @foreach ($perfil_cliente->getCreditos as $c)
                                   <tr>
-                                    <td>#{{$c->id_creditos}}
+                                    <td>{{$c->id_creditos}}</td>
+                                    <td>
                                         <span class="badge @switch($c->estado_credito)
                                             @case(1)
                                                 bg-success

@@ -47,4 +47,9 @@ class Zonas extends Model
             }
         }
     }
+
+    public function UsuarioCobrador()
+    {
+        return $this->hasOne(Usuario::class, 'id_zona','id_zona')->where('id_rol',2)->where('activo','S');
+    }
 }
