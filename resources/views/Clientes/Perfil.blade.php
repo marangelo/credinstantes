@@ -82,7 +82,7 @@
                                 
                                   @foreach ($perfil_cliente->getCreditos as $c)
                                   <tr>
-                                    <td>#{{$c->id_creditos}}</td>
+                                    <td>{{$c->id_creditos}}</td>
                                     <td>
                                         <span class="badge @switch($c->estado_credito)
                                             @case(1)
