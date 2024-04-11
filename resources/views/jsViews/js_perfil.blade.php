@@ -1,13 +1,28 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#lbl_cancelacion").hide();
+
         $("#tbl_abonos_creditos").DataTable({
-            "responsive": true, 
+            "responsive": true,
             "order": [[0, 'desc']],
-            "lengthChange": false, 
+            "lengthChange": false,
             "autoWidth": false,
-            "buttons": ["copy", "excel", "print"]
+            "buttons": ["copy", "excel", "print"],
+            columnDefs: [{ visible: false, targets: 1 }],
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+
+                api.column(1, { page: 'current' }).data().each(function(group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before('<tr class="group"><td colspan="13">' + group + '</td></tr>');
+                        last = group;
+                    }
+                });
+            }
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
+
 
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY'
