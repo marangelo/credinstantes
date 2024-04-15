@@ -32,7 +32,31 @@
                 "emptyTable": "-",
                 "search": "BUSCAR"
             },
-            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ]
+            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ],
+            columnDefs: [{ visible: false, targets: 0 }],
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+
+                api.column(0, { page: 'current' }).data().each(function(group, i) {
+                    if (last !== group) {
+
+                        var tr_color = 'success'
+                        if (group != 'AL DIA') {
+                            (group === 'EN MORA') ? tr_color = 'danger' : tr_color = 'warning'
+                        }
+
+                        $(rows).eq(i).before('<tr class="bg-'+tr_color+' group"><td colspan="13">' + group + '</td></tr>');
+
+                        
+                        last = group;
+                    }
+                });
+
+
+
+            }
             
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
@@ -365,13 +389,12 @@
                     var span = `<span class="badge `+ Colors[response.estado_credito]+`  ">`+  (Estados[response.estado_credito])?? 'N/A' +`</span>`
                     dta_table.push({ 
                         id_creditos         : response.id_creditos,
-                        fecha_apertura      : response.fecha_apertura,
-                        fecha_ultimo_abono  : response.fecha_ultimo_abono,
-                        saldo               : response.saldo,
-                        total               : response.total,
+                        fecha_apertura      : moment(response.fecha_apertura).format('DD/MM/YYYY'),
+                        fecha_ultimo_abono  : moment(response.fecha_ultimo_abono).format('DD/MM/YYYY'),
+                        saldo               : numeral(isValue(response.saldo,0,true)).format('0,00.00'),
+                        total               : numeral(isValue(response.total,0,true)).format('0,00.00'),
                         estado_credito      : span
                     })
-
                 });
 
                 dta_header = [
@@ -473,7 +496,7 @@
             responsive: true,
             "bPaginate": true,
             "order": [
-                [0, "asc"]
+                [0, "desc"]
             ],
             "lengthMenu": [
                 [7, -1],

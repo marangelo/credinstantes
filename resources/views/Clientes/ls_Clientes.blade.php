@@ -64,6 +64,7 @@
                   <table id="tbl_clientes" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                    <th>Estado</th>
                     <th>Nombre</th>
                     <th>Telefono</th>
                     <th>Departamento</th>
@@ -74,52 +75,50 @@
                         <th></th>
                       @endif
                     @endif
+                    
                   </tr>
                   </thead>
                   <tbody>
-                 
-                  @foreach ($Clientes as $c)  
-                   @php
-                      $Estados = $c->getCreditos->first(); 
-                      @endphp
-                       
+                    @foreach ($Clientes as $c)  
+                    @php $Estados = $c->getCreditos->first(); @endphp
                     @if ($Estados->estado_credito != 4 || request()->is('Inactivos/*'))
-                    <tr>
+                      <tr>
                       <td>
-                        
-
-                        <a href="../Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
-                        @if ($c->getCreditos->isNotEmpty())
-                                <span class="badge @switch($Estados->estado_credito)
-                                              @case(1)
-                                                  bg-success
-                                                  @break
-                                              @case(2)
-                                                  bg-danger
-                                                  @break
-                                              @case(3)
-                                                  bg-warning
-                                                  @break
-                                              @default
-                                                  ''
-                                          @endswitch">{{ $Estados->Estado->nombre_estado }}</span>
-                            @else 
-                                <p> - </p>
-                            @endif
-                      </td>
-                      <td>{{ strtoupper($c->telefono) }} </td>
-                      <td>
-                        @if(isset($c->getMunicipio->nombre_municipio) && $c->getMunicipio->nombre_municipio)
-                          {{ strtoupper($c->getMunicipio->nombre_municipio) }} 
-                        @endif 
-                      </td>
-                      <td>
-                        @if(isset($c->getZona->nombre_zona) && $c->getZona->nombre_zona)
-                          {{ strtoupper($c->getZona->nombre_zona) }} 
-                        @endif 
-                        
-                      </td>
-                      <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
+                          {{ $Estados->estado_credito ? strtoupper($c->getCreditos->first()->Estado->nombre_estado) : ' - ' }}
+                        </td>
+                        <td>
+                          <a href="../Perfil/{{ strtoupper($c->id_clientes) }}" class=""><strong>#{{ strtoupper($c->id_clientes) }} </strong> : {{ strtoupper($c->nombre) }} : {{ strtoupper($c->apellidos) }}</a>
+                          @if ($c->getCreditos->isNotEmpty())
+                                  <span class="badge @switch($Estados->estado_credito)
+                                                @case(1)
+                                                    bg-success
+                                                    @break
+                                                @case(2)
+                                                    bg-danger
+                                                    @break
+                                                @case(3)
+                                                    bg-warning
+                                                    @break
+                                                @default
+                                                    ''
+                                            @endswitch">{{ $Estados->Estado->nombre_estado }}</span>
+                              @else 
+                                  <p> - </p>
+                              @endif
+                        </td>
+                        <td>{{ strtoupper($c->telefono) }} </td>
+                        <td>
+                          @if(isset($c->getMunicipio->nombre_municipio) && $c->getMunicipio->nombre_municipio)
+                            {{ strtoupper($c->getMunicipio->nombre_municipio) }} 
+                          @endif 
+                        </td>
+                        <td>
+                          @if(isset($c->getZona->nombre_zona) && $c->getZona->nombre_zona)
+                            {{ strtoupper($c->getZona->nombre_zona) }} 
+                          @endif 
+                          
+                        </td>
+                        <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
                       
                         @if (request()->is('Activos/*'))
                           @if (Session::get('rol') == '1' || Session::get('rol') == '3')
@@ -142,7 +141,10 @@
                           @endif
                         @endif
                       
-                    </tr>
+                       
+
+                        </td>
+                      </tr>
                     @endif 
                     @endforeach
 
