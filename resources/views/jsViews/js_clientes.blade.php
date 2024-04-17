@@ -39,24 +39,40 @@
                 var rows = api.rows({ page: 'current' }).nodes();
                 var last = null;
 
+                var alDiaCount = 0;
+                var moraCount = 0;
+                var vencidoCount = 0;
+
+                $.each(api.column(0, { page: 'all' }).data(), function (_, group) {
+                    switch (group) {
+                        case 'AL DIA':  alDiaCount++; break;
+                        case 'EN MORA': moraCount++; break;
+                        case 'VENCIDO': vencidoCount++; break;
+                    }
+                });
+                $("#id_al_dia_count").text(alDiaCount);
+                $("#id_al_mora_count").text(moraCount);
+                $("#id_al_vencido_count").text(vencidoCount);
+                
+
                 api.column(0, { page: 'current' }).data().each(function(group, i) {
                     if (last !== group) {
-
+                        
                         var tr_color = 'success'
                         if (group != 'AL DIA') {
                             (group === 'EN MORA') ? tr_color = 'danger' : tr_color = 'warning'
                         }
+                        if(group === 'INACTIVO') {
+                            tr_color = ''
+                        }
 
-                        $(rows).eq(i).before('<tr class="bg-'+tr_color+' group"><td colspan="13">' + group + '</td></tr>');
-
-                        
+                        $(rows).eq(i).before('<tr class="text-center bg-'+tr_color+' group"><td colspan="13">' + group + '</td></tr>');
                         last = group;
                     }
                 });
 
-
-
-            }
+            },
+            
             
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
