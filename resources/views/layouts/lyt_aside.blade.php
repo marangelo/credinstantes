@@ -180,9 +180,22 @@
             
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                    <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Visitar</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                   <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Ingresos</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Morosidad</p>
                   </a>
                 </li>
                 <li class="nav-item">
