@@ -113,3 +113,9 @@ Route::post('ShowDetalles/UpdateArqueo', 'ArqueosController@UpdateArqueo')->name
 Route::post('ShowDetalles/UpdateRecuperado', 'ArqueosController@UpdateRecuperado')->name('ShowDetalles/UpdateRecuperado');
 Route::post('RemoveArqueo', 'ArqueosController@RemoveArqueo')->name('RemoveArqueo');
 Route::get('ExportArqueo/{ID}', 'ArqueosController@ExportArqueo')->name('ExportArqueo');
+
+
+//RUTAS PARA EDITAR CREDITOS
+
+Route::get('EditarCredito/{ID}', 'CredinstanteController@EditarCredito')->name('EditarCredito');
+Route::post('UpdateCredito', 'CredinstanteController@UpdateCredito')->name('UpdateCredito');

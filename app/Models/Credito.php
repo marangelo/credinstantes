@@ -208,6 +208,76 @@ class Credito extends Model
         }
         
     }
+    public static function UpdateCredito(Request $request)
+    {
+
+        if ($request->ajax()) {
+            try {
+                $IdCredito      = $request->input('IdCredito_');
+                $Cuotas_        = $request->input('Cuotas_');
+                $FechaOpen      = $request->input('FechaOpen');
+
+                $fecha = new DateTime($FechaOpen);
+                $Fecha_abonos = [];
+
+                $IdCliente =    Credito::select('id_clientes')->where('id_creditos', $IdCredito)->first()->id_clientes;
+
+                // ACTUALIZA LA INFORMACION DEL CLIENTE
+                Clientes::where('id_clientes',  $IdCliente)->update([                   
+                    'id_zona'              => $request->input('Zona_'),
+                    'id_municipio'         => $request->input('Municipio_'),
+                    'nombre'               => $request->input('Nombre_'),
+                    'apellidos'            => $request->input('Apellido_'),
+                    'direccion_domicilio'  => $request->input('Dire_'),
+                    'cedula'               => $request->input('Cedula_'),
+                    'telefono'             => $request->input('Tele_'),
+                ]);
+
+                 //CALCULO PARA LA FECHA DE ABONOS
+                 for ($i = 1; $i <= $Cuotas_; $i++) {
+                    $fecha->add(new DateInterval('P1W')); 
+                    $Fecha_abonos[] = [
+                        'id_creditos'    => $IdCredito,
+                        'numero_pago'  => $i, 
+                        'FechaPago'   => $fecha->format('Y-m-d')
+                    ];
+                    
+                }
+                // ACTUALIZA LA INFORMACION DEL CREDITO
+                $response =  Credito::where('id_creditos', $IdCredito)->update([
+                    'asignado'            => $request->input('Promotor_'),
+                    "fecha_ultimo_abono"   => $Fecha_abonos[$Cuotas_-1]['FechaPago'],
+                    'fecha_apertura'      => date('Y-m-d',strtotime($FechaOpen)),
+                    'id_diassemana'       => $request->input('DiaSemana_'),
+                    'monto_credito'       => $request->input('Monto_'),
+                    'plazo'               => $request->input('Plato_'),
+                    'taza_interes'        => $request->input('Interes_'),
+                    'numero_cuotas'       => $Cuotas_,
+                    'total'               => $request->input('Total_'),
+                    'cuota'               => $request->input('vlCuota'),
+                    'interes'             => $request->input('vlInteres'),
+                    'intereses_por_cuota' => $request->input('InteresesPorCuota'),
+                    'saldo'               => $request->input('Saldos_'),
+                    'activo'              => 1
+                ]);
+
+                //elimina los registro de la tabla RefAbonos
+                RefAbonos::where('id_creditos', $IdCredito)->delete();
+
+                //ELIMINA TODOS LOS ABONOS QUE CREADITO A TENIDO
+                Abono::where('id_creditos', $IdCredito)->delete();
+
+                $response = RefAbonos::insert($Fecha_abonos); 
+
+                return $response;
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+        
+    }
     public static function AddCredito(Request $request)
     {
 

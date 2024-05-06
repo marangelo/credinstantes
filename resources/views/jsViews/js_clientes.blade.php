@@ -10,6 +10,7 @@
         });
 
         var userRole = $("#id_rol_user").text();
+        
         $('#id_select_zona').change(function() {
             var selectedValue = this.value;           
             window.location.href = currentPath.slice(0, -1) + selectedValue;
@@ -76,7 +77,7 @@
             
         }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
-        $("#btn_edit_credito").click(function(){
+        $("#btn_update_credito").click(function(){
             
                 var Municipio_  = $("#edtMunicipio option:selected").val();  
                 var Zona_       = $("#edtZonas option:selected").val();  
@@ -409,20 +410,25 @@
                         fecha_ultimo_abono  : moment(response.fecha_ultimo_abono).format('DD/MM/YYYY'),
                         saldo               : numeral(isValue(response.saldo,0,true)).format('0,00.00'),
                         total               : numeral(isValue(response.total,0,true)).format('0,00.00'),
-                        estado_credito      : span
+                        estado_credito      : span,
+                        disabled            : response.disabled
                     })
                 });
-
+                
                 dta_header = [
                     {"title": "#","data": "id_creditos"},                         
                     {"title": "Fecha Apertura","data": "fecha_apertura"}, 
                     {"title": "Ultm Abono","data": "fecha_ultimo_abono"},                                     
                     {"title": "SALDO","data": "saldo"},
                     {"title": "TOTAL","data": "total"},
-                    {"title": "ESTADO","data": "estado_credito"},
-                    
-                    {"title": "","data": "estado_credito", "render": function(data, type, row, meta) {                        
-                        return`<button type="button" class="btn btn-block bg-gradient-primary" onClick="ChanceStatus(`+ row.id_creditos +`)">CAMBIAR</button>`;
+                    {"title": "ESTADO","data": "estado_credito"},                    
+                    {"title": "","data": "estado_credito", "render": function(data, type, row, meta) {    
+                    return`
+                    <div class="card-tools">
+                        `+ row.disabled +`
+                        <button type="button" class="btn btn-block bg-gradient-primary" onClick="ChanceStatus(`+ row.id_creditos +`)">CAMBIAR</button>
+                    </div>
+                        `;
                     }}
                 ]
 
@@ -501,6 +507,11 @@
                 });
             }
         })
+    }
+    function EditarCredito(Credito) {
+
+        window.location.href = "../EditarCredito/"+Credito;
+        
     }
 
     function table_render(Table,datos,Header,columnDefs,Filter){

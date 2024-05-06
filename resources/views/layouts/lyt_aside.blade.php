@@ -121,7 +121,7 @@
 
           @endif
           @if( Session::get('rol') == '1')
-          <li class="nav-item ">
+          <li class="nav-item menu-open">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
             
@@ -165,8 +165,28 @@
                 </li>
               </ul>
           </li>
+          <li class="nav-header">FINANZAS</li>
+          <li class="nav-item">
+            <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-file"></i>
+              <p>Planillas</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-file"></i>
+              <p>Gst. Operaciones</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-file"></i>
+              <p>Cons. Indicadores</p>
+            </a>
+          </li>
+         
           @endif
-
+          <li class="nav-header">OPCIONES</li>
           @if( Session::get('rol') == '3')
           <li class="nav-item ">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">

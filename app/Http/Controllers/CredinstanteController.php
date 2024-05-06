@@ -316,8 +316,24 @@ class CredinstanteController extends Controller {
     {
         $IdCl_           = $request->input('Cliente_');
         $Credito_Cliente = Clientes::find($IdCl_);
-        
-        return response()->json($Credito_Cliente->getCreditos);
+        $ArrayCreditos   = [];
+        foreach ($Credito_Cliente->getCreditos as $key => $value) {
+
+            $disabled = $value->abonosCount() > 0 ? '<button type="button" class="btn btn-block bg-gradient-success " disabled> EDITAR</button>  ' : '<button type="button" class="btn btn-block bg-gradient-success " onClick="EditarCredito('.$value->id_creditos.')">EDITAR</button>  ';
+
+            $ArrayCreditos[$key] = [
+                'id_creditos'           => $value->id_creditos,
+                'fecha_apertura'        => $value->fecha_apertura,
+                'fecha_ultimo_abono'    => $value->fecha_ultimo_abono,
+                'saldo'                 => $value->saldo,
+                'total'                 => $value->total,
+                'estado_credito'        => $value->estado_credito,
+                'id_clientes'           => $value->fecha_apertura,
+                'disabled'              => $disabled
+            ];
+        }
+
+        return response()->json($ArrayCreditos);
     }
     public function updatePassword(Request $request)
     {
@@ -363,6 +379,28 @@ class CredinstanteController extends Controller {
         return view('Promotor.Metricas',compact('Titulo','Promo'));
 
     }
+
+    public function EditarCredito($IdCredito)
+    {
+        
+        $Titulo = "ACTUALIZAR CREDITO";
+
+        $Municipios  = Municipios::getMunicipios();  
+        $DiasSemana  = DiasSemana::getDiasSemana();
+        $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('activo','S')->get(); 
+
+        $Credito     = Credito::find($IdCredito);
+
+        return view('Clientes.Editar',compact('Titulo','Municipios','DiasSemana','Zonas','Promo','IdCredito','Credito'));
+    }
+    public function UpdateCredito(Request $request)
+    {
+        $response = Credito::UpdateCredito($request);
+        
+        return response()->json($response);
+    }
+
     
 
 
