@@ -242,22 +242,28 @@ class ReportsModels extends Model {
         return $array_clientes;
     }
 
-    public static function getDashboard($Opt)
+    public static function getDashboard($Opt, $dt_ini, $dt_end)
     {
+
+        $D1      = $dt_ini . ' 00:00:00';
+        $D2      = $dt_end . ' 23:59:59';
+
         $array_dashboard    = [];
         $vLabel             = [];
         $vData              = [];
         $ttPagoCapital      = 0;
         $ttPagoIntereses    = 0;
 
-        $dtNow  = date('Y-m-d');
-        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
-        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+        // $dtNow  = date('Y-m-d');
+        // $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
+        // $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';
+        
+
         $role   = Auth::User()->id_rol;
 
 
-        $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada');
-        $MoraVencida  = PagosFechas::getMora($Opt,'vencida');
+        $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
+        $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
 
         if ($role == 2) {
             $Opt = Auth::User()->id_zona;
@@ -274,8 +280,8 @@ class ReportsModels extends Model {
                 ->get();
 
         
-        $Saldos_Cartera = Credito::Saldos_Cartera($Opt);
-        $Clientes       = Credito::Creditos($Opt);
+        $Saldos_Cartera = Credito::Saldos_Cartera($Opt,$D1, $D2);
+        $Clientes       = Credito::Creditos($Opt,$D1, $D2);
 
 
 

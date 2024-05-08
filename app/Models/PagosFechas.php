@@ -71,7 +71,7 @@ class PagosFechas extends Model {
 
         return $AbonosPendientes;
     }
-    public static function getMora($Zona, $tipoMora)
+    public static function getMora($Zona, $tipoMora,$D1, $D2)
     {
         $Creditos = Credito::where('activo',1)->where('saldo','>',0);
         $fechaActual = now(); 
@@ -85,7 +85,8 @@ class PagosFechas extends Model {
 
         $Creditos = $Creditos->get()->pluck('id_creditos');
 
-        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+        //$Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereBetween('FECHA_PAGO', [$D1, $D2]);
 
         if ($role === 2) {
             $Zona = Auth::User()->id_zona;

@@ -32,54 +32,79 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        
-        <div class="card-header">
-          <h3 class="card-title" id="IdCardTitle"></h3>
-          <div class="card-tools">
-            <div class="input-group input-group-sm">
-              <select class="custom-select" style="width: auto;" id="IdFilterByZone" >
+        <div class="row">
+          <div class="col-md-4">
+            <label>Zonas</label>
+            <div class="form-group">
+              <select class="form-control select2" style="width: 100%;" id="IdFilterByZone" name="IdZona">
                 <option value="-1" selected="selected"> Todas </option>
-                @foreach ($Zonas as $z)
-                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
-                @endforeach
-                
+                  @foreach ($Zonas as $z)
+                    <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                  @endforeach
+              
               </select>
-              <div class="input-group-append">
-                <div class="btn btn-primary" id="IdbtnFilter">
-                  <i class="fa fa-filter"></i>
-                </div>
+              
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label>INICIO</label>
+            <div class="form-group">
+              <div class="input-group date" id="dt-ini" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('d/m/Y') }}"/>
+                  <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                  
+                  
+                  
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label>CULMINA</label>
+            <div class="form-group">
+              <div class="input-group date" id="dt-end" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" name="nmEnd" value="{{ date('d/m/Y') }}"/>
+                  <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
+                      <div class="input-group-text" id="IdbtnFilter"><i class="fa fa-calendar"></i></div>
+                  </div>
+                  <div class="input-group-text btn btn-primary"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>
+
+                  
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-4">
+            <div class="info-box mb-3 bg-info">
+
+              <div class="info-box-content">
+                <span class="info-box-text">CLIENTES NUEVOS</span>
+                <span class="info-box-number"><span id="lblClientesNuevos"></span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-4">
+            <div class="info-box " style="background-color: #FF8000;">              
+              <div class="info-box-content ">
+                <span class="">REPRESTAMOS</span>
+                <span class="info-box-number"><span id="lblRePrestamo" > 0.00</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-4">
+            <div class="info-box mb-3 bg-danger">
+              <div class="info-box-content">
+                <span class="info-box-text"> SALDOS COLOCADOS</span>
+                <span class="info-box-number"><small>C$ </small><span id="lblSaldosColocados"> 0.00</span></span>
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-4">
-              <div class="info-box mb-3 bg-info">
-
-                <div class="info-box-content">
-                  <span class="info-box-text">CLIENTES NUEVOS</span>
-                  <span class="info-box-number"><span id="lblClientesNuevos"></span></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4">
-              <div class="info-box " style="background-color: #FF8000;">              
-                <div class="info-box-content ">
-                  <span class="">REPRESTAMOS</span>
-                  <span class="info-box-number"><span id="lblRePrestamo" > 0.00</span></span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4">
-              <div class="info-box mb-3 bg-danger">
-                <div class="info-box-content">
-                  <span class="info-box-text"> SALDOS COLOCADOS</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblSaldosColocados"> 0.00</span></span>
-                </div>
-              </div>
-            </div>
-          </div>
         <div class="card">
             
               <div class="card-body">

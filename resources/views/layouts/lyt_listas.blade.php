@@ -119,5 +119,6 @@
 <!-- Page specific script -->
 @yield('metodosjs')
 
+<script src="{{ asset('js/chart.js/Chart.min.js') }}"></script>
 </body>
 </html>

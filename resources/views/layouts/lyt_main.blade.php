@@ -77,6 +77,7 @@
 
 <script src="{{ asset('js/Funciones.js') }}"></script>
 <script src="{{ asset('js/dashboard.js') }}"></script>
-
+<!-- Page specific script -->
+@yield('metodosjs')
 </body>
 </html>

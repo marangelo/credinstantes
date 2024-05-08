@@ -68,17 +68,19 @@ class Credito extends Model
     {
         return Credito::where('activo',1)->get();
     }
-    public static function Creditos($Zona)
+    public static function Creditos($Zona,$D1, $D2)
     {
         return CreditosHistory::where('CREDITO_ACTIVO', 1)
+                //->whereBetween('FECHA', [$D1, $D2])
                 ->whereIn('ESTADO_CREDITO', [1, 2, 3])
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
                 })->get();        
     }
-    public static function Saldos_Cartera($Zona)
+    public static function Saldos_Cartera($Zona,$D1, $D2)
     {
         return CreditosHistory::where('CREDITO_ACTIVO', 1)
+                //->whereBetween('FECHA', [$D1, $D2])
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
                 })->sum('SALDO_CREDITO');        

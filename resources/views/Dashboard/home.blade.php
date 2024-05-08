@@ -1,13 +1,10 @@
-@extends('layouts.lyt_main')
+@extends('layouts.lyt_listas')
 @section('metodosjs')
 @include('jsViews.js_dashboard')
 @endsection
 @section('content')
 <div class="wrapper">
 
-  <!-- Main Sidebar Container -->
-  @include('layouts.lyt_aside')
- 
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -32,27 +29,47 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        @if( Session::get('rol') == '1' )
-        <div class="card-header">
-          <h3 class="card-title" id="IdCardTitle"></h3>
-          <div class="card-tools">
-            <div class="input-group input-group-sm">
-              <select class="custom-select" style="width: auto;" id="IdFilterByZone" >
+        @if( Session::get('rol') == '1' || Session::get('rol') == '3' )
+        <div class="row">        
+          <div class="col-md-4">
+            <label>Zonas</label>
+            <div class="form-group">
+              <select class="form-control select2" style="width: 100%;" id="IdFilterByZone" name="IdZona">
                 <option value="-1" selected="selected"> Todas </option>
-                @foreach ($Zonas as $z)
-                  <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
-                @endforeach
-                
+                  @foreach ($Zonas as $z)
+                    <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                  @endforeach
+              
               </select>
-              <div class="input-group-append">
-                <div class="btn btn-primary" id="IdbtnFilter">
-                  <i class="fa fa-filter"></i>
-                </div>
-                <table id="tbl_metrias_home" class="table table-bordered table-striped"></table>
-             
+              
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <label>INICIO</label>
+            <div class="form-group">
+              <div class="input-group date" id="dt-Ini" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-Ini" id="dtIni" value="{{ date('01/m/Y') }}"/>
+                  <div class="input-group-append" data-target="#dt-Ini" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
               </div>
             </div>
           </div>
+
+          <div class="col-md-4">
+            <label>CULMINA</label>
+            <div class="form-group">
+              <div class="input-group date" id="dt-End" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-End" id="dtEnd" value="{{ date('d/m/Y') }}"/>
+                  <div class="input-group-append" data-target="#dt-End" data-toggle="datetimepicker">
+                      <div class="input-group-text" ><i class="fa fa-calendar"></i></div>
+                  </div>
+                  <div class="input-group-text btn btn-primary"  id="IdbtnFilter" ><i class="fa fa-filter" ></i></div>
+                  <table id="tbl_metrias_home" class="table table-bordered table-striped"></table>
+              </div>
+            </div>
+          </div>          
         </div>
         @endif
 
