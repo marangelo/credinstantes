@@ -40,7 +40,7 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        @if( Session::get('rol') == '1' || Session::get('rol') == '2' )
+        @if( Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '3')
           <li class="nav-item">
             <a href="{{ route('Dashboard')}}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>

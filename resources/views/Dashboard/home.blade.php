@@ -56,146 +56,214 @@
         </div>
         @endif
 
-          @if( Session::get('rol') == '1' )
-          <div class="row">
-            <div class="col-12 col-sm-6 col-md-2">
-              <div class="info-box " style="background-color: #008000;">
-                
-                <div class="info-box-content ">
-                  <span class="info-box-text">INGRESO NETO</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span></span>
+        @switch(Session::get('rol'))
+            @case(1)
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-2">
+                <div class="info-box " style="background-color: #008000;">
+                  
+                  <div class="info-box-content ">
+                    <span class="info-box-text">INGRESO NETO</span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span></span>
+                  </div>
+                  <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
+                <!-- /.info-box -->
               </div>
-              <!-- /.info-box -->
-            </div>
-          
-            <div class="col-12 col-sm-6 col-md-2">
-              <div class="info-box mb-3" style="background-color: #00BFFF;">
-
-                <div class="info-box-content">
-                  <span class="info-box-text">CAPITAL</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblCapital"></span>
-                  </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
-              <!-- /.info-box -->
-            </div>
-  
-            <div class="clearfix hidden-md-up"></div>
-
-            <div class="col-12 col-sm-6 col-md-3">
-              <div class="info-box mb-3 bg-warning" >
-
-                <div class="info-box-content">
-                  <span class="info-box-text">UTILIDAD BRUTA</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblInteres"></span></span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
-              <!-- /.info-box -->
-            </div>
             
-            <div class="col-12 col-sm-6 col-md-2">
-              <div class="info-box mb-3 bg-info">
+              <div class="col-12 col-sm-6 col-md-2">
+                <div class="info-box mb-3" style="background-color: #00BFFF;">
 
-                <div class="info-box-content">
-                  <span class="info-box-text">CREDITOS ACTIVOS</span>
-                  <span class="info-box-number"><span id="lblClientes"></span></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">CAPITAL</span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblCapital"></span>
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
+                <!-- /.info-box -->
               </div>
-              <!-- /.info-box -->
+    
+              <div class="clearfix hidden-md-up"></div>
+
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3 bg-warning" >
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">UTILIDAD BRUTA</span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblInteres"></span></span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+              
+              <div class="col-12 col-sm-6 col-md-2">
+                <div class="info-box mb-3 bg-info">
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">CREDITOS ACTIVOS</span>
+                    <span class="info-box-number"><span id="lblClientes"></span></span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+
+              <div class="col-12 col-sm-12 col-md-3">
+                <div class="info-box mb-3" style="background-color: #FFA0AB;">
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">SALDO DE CARTERA</span>
+                    <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+              <!-- /.col -->
             </div>
 
-            <div class="col-12 col-sm-12 col-md-3">
-              <div class="info-box mb-3" style="background-color: #FFA0AB;">
+              <div class="row">
+                <div class="col-6 col-sm-6 col-md-6">
+                  <div class="info-box " style="background-color: #FF8000;">              
+                    <div class="info-box-content ">
+                      <span class=""> MORA ATRASADA </span>
+                      <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
+                      </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-6 col-sm-6 col-md-6">
+                  <div class="info-box mb-3 bg-danger">
 
-                <div class="info-box-content">
-                  <span class="info-box-text">SALDO DE CARTERA</span>
-                  <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text"> MORA VENCIDA </span>
+                      <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
+                      </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  <!-- /.info-box -->
                 </div>
-                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-          </div>
+                @break
+        
+            @case(3)
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box " style="background-color: #008000;">
+                  
+                  <div class="info-box-content ">
+                    <span class="info-box-text">INGRESO NETO</span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span></span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box mb-3 bg-info">
 
-          <div class="row">
-            <div class="col-6 col-sm-6 col-md-6">
-              <div class="info-box " style="background-color: #FF8000;">              
-                <div class="info-box-content ">
-                  <span class=""> MORA ATRASADA </span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
-                  </span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">CREDITOS ACTIVOS</span>
+                    <span class="info-box-number"><span id="lblClientes"></span></span>
+                  </div>
                 </div>
-                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-6 col-sm-6 col-md-6">
-              <div class="info-box mb-3 bg-danger">
 
-                <div class="info-box-content">
-                  <span class="info-box-text"> MORA VENCIDA </span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
-                  </span>
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box mb-3" style="background-color: #FFA0AB;">
+                  <div class="info-box-content">
+                    <span class="info-box-text">SALDO DE CARTERA</span>
+                    <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
+                  </div>
+                  <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
+                <!-- /.info-box -->
               </div>
-              <!-- /.info-box -->
-            </div>
-          </div>
-          @else
-          <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
-              <div class="info-box mb-3 bg-info">
 
-                <div class="info-box-content">
-                  <span class="info-box-text">CREDITOS ACTIVOS</span>
-                  <span class="info-box-number"><span id="lblClientes"></span></span>
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="info-box " style="background-color: #FF8000;">              
+                  <div class="info-box-content ">
+                    <span class=""> MORA ATRASADA </span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
                 </div>
+                <!-- /.info-box -->
               </div>
-            </div>
 
-            <div class="col-12 col-sm-6 col-md-3">
-              <div class="info-box mb-3" style="background-color: #FFA0AB;">
-                <div class="info-box-content">
-                  <span class="info-box-text">SALDO DE CARTERA</span>
-                  <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
-              <!-- /.info-box -->
-            </div>
-            <div class="col-12 col-sm-6 col-md-3">
-              <div class="info-box " style="background-color: #FF8000;">              
-                <div class="info-box-content ">
-                  <span class=""> MORA ATRASADA </span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
-                  </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
-              <!-- /.info-box -->
-            </div>
-            <div class="col-12 col-sm-6 col-md-3">
-              <div class="info-box mb-3 bg-danger">
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="info-box mb-3 bg-danger">
 
-                <div class="info-box-content">
-                  <span class="info-box-text"> MORA VENCIDA </span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
-                  </span>
+                  <div class="info-box-content">
+                    <span class="info-box-text"> MORA VENCIDA </span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
+                <!-- /.info-box -->
               </div>
-              <!-- /.info-box -->
             </div>
-          </div>
-          @endif
+            @break
+        
+            @case(2)
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3 bg-info">
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">CREDITOS ACTIVOS</span>
+                    <span class="info-box-number"><span id="lblClientes"></span></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3" style="background-color: #FFA0AB;">
+                  <div class="info-box-content">
+                    <span class="info-box-text">SALDO DE CARTERA</span>
+                    <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box " style="background-color: #FF8000;">              
+                  <div class="info-box-content ">
+                    <span class=""> MORA ATRASADA </span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3 bg-danger">
+
+                  <div class="info-box-content">
+                    <span class="info-box-text"> MORA VENCIDA </span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>
+              </div>
+        @endswitch
+
+        
   
 
         <div class="row">
