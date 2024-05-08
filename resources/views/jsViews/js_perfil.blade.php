@@ -31,8 +31,8 @@
             format: 'DD/MM/YYYY'
         });
 
-      
-        
+
+       
 
         $("#slTipoAbono").change(function() {
             
@@ -330,6 +330,12 @@
         });
         $("#tbl_pagos_realizados_length").hide();
         
+    }
+
+    function EditarCredito(Credito) {
+
+        window.location.href = "../EditarCredito/"+Credito;
+
     }
 
     function initTable_modal(id,datos){

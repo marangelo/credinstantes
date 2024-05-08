@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
+use Auth;
+
 use App\Models\Clientes;
 use App\Models\Municipios;
 use App\Models\Departamentos;
@@ -317,10 +319,15 @@ class CredinstanteController extends Controller {
         $IdCl_           = $request->input('Cliente_');
         $Credito_Cliente = Clientes::find($IdCl_);
         $ArrayCreditos   = [];
+
+        $Role = Auth::User()->id_rol;
+
         foreach ($Credito_Cliente->getCreditos as $key => $value) {
 
             $disabled = $value->abonosCount() > 0 ? '<button type="button" class="btn btn-block bg-gradient-success " disabled> EDITAR</button>  ' : '<button type="button" class="btn btn-block bg-gradient-success " onClick="EditarCredito('.$value->id_creditos.')">EDITAR</button>  ';
 
+            $disabled = ($Role == '1') ? $disabled : '';
+            
             $ArrayCreditos[$key] = [
                 'id_creditos'           => $value->id_creditos,
                 'fecha_apertura'        => $value->fecha_apertura,

@@ -125,20 +125,32 @@
                                     <td class="project-actions text-right">
 
                                       <div class="row">
+                                        
                                         <div class="col-md-12">
                                             <button type="button" class="btn btn-primary btn-block btn-sm" onclick="getModalHistorico({{$c->id_creditos}})"><i class="fas fa-history"></i> </button>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 mt-1">
                                           @if( Session::get('rol') != '4')
                                             <button type="button" class="btn btn-success btn-block btn-sm" onclick="getIdCredi({{$c->id_creditos}})"><i class="fas fa-money-bill-alt"></i> </button>
                                           @endif    
                                         </div>
+                                        <div class="col-md-12 mt-1">
+                                          @if( Session::get('rol') == '1')
+                                            @if($c->abonosCount() > 0)
+                                              <button type="button" class="btn btn-info btn-block btn-sm " disabled> <i class="fas fa-edit"></i></button> 
+                                            @else
+                                              <button type="button" class="btn btn-block bg-gradient-success " onClick="EditarCredito({{$c->id_creditos}})"><i class="fas fa-edit"></i></button> 
+                                            @endif
+                                          @endif                                          
+                                        </div>  
                                         
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 mt-1">
                                           @if( Session::get('rol') == '1')
                                             <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmItem({{$c->id_creditos}})"><i class="fas fa-trash"></i> </button>
                                           @endif                                          
-                                        </div>                                        
+                                        </div>  
+                                        
+                                        
                                       </div>
 
 
