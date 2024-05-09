@@ -166,19 +166,19 @@
               </ul>
           </li>
           <li class="nav-header">FINANZAS</li>
-          <li class="nav-item">
+          <li class="nav-item" style="display:none" >
             <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file"></i>
               <p>Planillas</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('GastosOperaciones')}}" class="nav-link {{ (request()->is('GastosOperaciones')) ? 'active' : '' }}" >
+            <a href="{{route('gastosoperaciones')}}" class="nav-link {{ (request()->is('gastosoperaciones')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file"></i>
               <p>Gst. Operaciones</p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" style="display:none">
             <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file"></i>
               <p>Cons. Indicadores</p>

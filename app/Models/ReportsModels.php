@@ -282,6 +282,7 @@ class ReportsModels extends Model {
         
         $Saldos_Cartera = Credito::Saldos_Cartera($Opt,$D1, $D2);
         $Clientes       = Credito::Creditos($Opt,$D1, $D2);
+        $GastosOperativos = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
 
 
 
@@ -292,6 +293,10 @@ class ReportsModels extends Model {
             $ttPagoIntereses    += $dia->INTERES;
         }
         $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
+
+        
+        
+        $ttCuotaCobrada =  $ttCuotaCobrada - $GastosOperativos;
         
         $array_dashboard = [
             "INGRESO"           => $ttCuotaCobrada,
