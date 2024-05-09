@@ -85,8 +85,6 @@
             var Zona_       = $("#selZona option:selected").val();
             var Promotor    = $("#slPromotor option:selected").val();
 
-            console.log(Promotor);
-
             var Nombre_      = $("#txtNombre").val();   
             var Apellido_    = $("#txtApellido").val();   
             var Cedula_      = $("#txtCedula").val();

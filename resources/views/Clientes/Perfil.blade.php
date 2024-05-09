@@ -177,161 +177,159 @@
   </div>
 
   <div class="modal fade" id="modal-xl">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Nuevo Credito en paralelo</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form class="form-horizontal">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Fecha Apertura</label>
-                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
-                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                        </div>
-                    </div> 
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Dia de Visita</label>
-                      <select class="form-control" id="slDiaVisita">
-                        @foreach ($DiasSemana as $d)
-                          <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
-                        @endforeach
-                      </select>                        
-                    </div> 
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Promotor</label>
-                      <select class="form-control" id="slPromotor">
-                        @foreach ($Promo as $p)
-                          <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
-                        @endforeach
-                      </select>                        
-                    </div> 
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Monto</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                          </div>
-                          <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'  >
-                          
-                        </div>
-                      </div>
-                  </div>
-
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Plazo</label>
-                      <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                          </div>
-                          <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Interes</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-percentage"></i></span>
-                          </div>
-                          <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>N° Cuotas</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                          </div>
-                          <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Total</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                          </div>
-                          <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Cuota</label>
-                      <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                          </div>
-                          <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Saldos</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                          </div>
-                          <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Intereses</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                          </div>
-                          <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group">
-                      <label>Intereses por cuota</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                          </div>
-                          <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" id="btn_add_credito">Aplicar</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Nuevo Credito en paralelo</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <!-- /.modal-dialog -->
+        <div class="modal-body">
+          <form class="form-horizontal">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Fecha Apertura</label>
+                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
+                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div> 
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Dia de Visita</label>
+                  <select class="form-control" id="slDiaVisita">
+                    @foreach ($DiasSemana as $d)
+                      <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                    @endforeach
+                  </select>                        
+                </div> 
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Promotor</label>
+                  <select class="form-control" id="slPromotor">
+                    @foreach ($Promo as $p)
+                      <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
+                    @endforeach
+                  </select>                        
+                </div> 
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Monto</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'  >
+                      
+                    </div>
+                  </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Plazo</label>
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                      </div>
+                      <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Interes</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                      </div>
+                      <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>N° Cuotas</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                      </div>
+                      <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Total</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Cuota</label>
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Saldos</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Intereses</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                  <label>Intereses por cuota</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                      </div>
+                      <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btn_add_credito">Aplicar</button>
+        </div>
       </div>
+    </div>
+  </div>
  
   <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">

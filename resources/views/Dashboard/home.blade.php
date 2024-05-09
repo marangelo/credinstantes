@@ -29,7 +29,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        @if( Session::get('rol') == '1' || Session::get('rol') == '3' )
+        @if( Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '3' )
         <div class="row">        
           <div class="col-md-4">
             <label>Zonas</label>

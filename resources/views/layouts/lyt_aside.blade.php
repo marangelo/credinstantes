@@ -173,7 +173,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
+            <a href="{{route('GastosOperaciones')}}" class="nav-link {{ (request()->is('GastosOperaciones')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file"></i>
               <p>Gst. Operaciones</p>
             </a>

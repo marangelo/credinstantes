@@ -116,6 +116,12 @@ Route::get('ExportArqueo/{ID}', 'ArqueosController@ExportArqueo')->name('ExportA
 
 
 //RUTAS PARA EDITAR CREDITOS
-
 Route::get('EditarCredito/{ID}', 'CredinstanteController@EditarCredito')->name('EditarCredito');
 Route::post('UpdateCredito', 'CredinstanteController@UpdateCredito')->name('UpdateCredito');
+
+//RUTAS DE GASTOS DE OPERACIONES
+Route::get('GastosOperaciones', 'GastosOperacionesController@ShowHome')->name('GastosOperaciones');
+Route::post('getGastosOperaciones', 'GastosOperacionesController@getGastosOperaciones')->name('getGastosOperaciones');
+Route::post('SaveGastoOperaciones', 'GastosOperacionesController@SaveGastoOperaciones')->name('SaveGastoOperaciones');
+Route::post('RemoveGasto', 'GastosOperacionesController@RemoveGasto')->name('RemoveGasto');
+Route::get('ExportGastos', 'GastosOperacionesController@ExportGastos')->name('ExportGastos');

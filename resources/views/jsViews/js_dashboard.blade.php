@@ -49,8 +49,6 @@
 
         var dtEnd   = $("#dtEnd").val();
         var dtIni   = $("#dtIni").val();
-
-        console.log(dtEnd,dtIni)
         
         dtEnd      = isValue(dtEnd,'N/D',true) 
         dtIni      = isValue(dtIni,'N/D',true)
