@@ -9,7 +9,7 @@ class GastosOperacionesController extends Controller {
         $this->middleware('auth');
     }
 
-    public function ShowHome()
+    public function gastosoperaciones()
     {         
         $Titulo      = "Gastos Operaciones";
         return view('GastosOperaciones.Home', compact('Titulo'));
