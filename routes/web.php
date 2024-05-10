@@ -120,7 +120,7 @@ Route::get('EditarCredito/{ID}', 'CredinstanteController@EditarCredito')->name('
 Route::post('UpdateCredito', 'CredinstanteController@UpdateCredito')->name('UpdateCredito');
 
 //RUTAS DE GASTOS DE OPERACIONES
-Route::get('gastosoperaciones', 'GastosOperacionesController@gastosoperaciones')->name('gastosoperaciones');
+Route::get('Gastos', 'GastosOperacionesController@Gastos')->name('Gastos');
 Route::post('getGastosOperaciones', 'GastosOperacionesController@getGastosOperaciones')->name('getGastosOperaciones');
 Route::post('SaveGastoOperaciones', 'GastosOperacionesController@SaveGastoOperaciones')->name('SaveGastoOperaciones');
 Route::post('RemoveGasto', 'GastosOperacionesController@RemoveGasto')->name('RemoveGasto');
