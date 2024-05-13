@@ -125,3 +125,15 @@ Route::post('getGastosOperaciones', 'GastosOperacionesController@getGastosOperac
 Route::post('SaveGastoOperaciones', 'GastosOperacionesController@SaveGastoOperaciones')->name('SaveGastoOperaciones');
 Route::post('RemoveGasto', 'GastosOperacionesController@RemoveGasto')->name('RemoveGasto');
 Route::get('ExportGastos', 'GastosOperacionesController@ExportGastos')->name('ExportGastos');
+
+
+
+
+Route::get('Payrolls', 'PayrollsController@getPayrolls')->name('Payrolls');
+
+
+
+
+Route::get('Employee', 'EmployeeController@Employee')->name('Employee');
+Route::get('AddEmployee', 'EmployeeController@AddEmployee')->name('AddEmployee');
+Route::post('SaveEmployee', 'EmployeeController@SaveEmployee')->name('SaveEmployee');

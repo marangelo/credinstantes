@@ -147,9 +147,7 @@
           <button type="button" class="btn btn-success" id="btn_save_abono">Guardar</button>
         </div>
       </div>
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
   </div>
   </div>
 @endsection

@@ -23,8 +23,6 @@ class GastosOperaciones extends Model {
         $dtIni    = $request->input('dtIni').' 00:00:00';
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
 
-        
-
         $Obj =  GastosOperaciones::whereBetween('fecha_gasto', [$dtIni, $dtEnd])->Where('activo',1)->get();
 
         $array_gasto_ope = array();
