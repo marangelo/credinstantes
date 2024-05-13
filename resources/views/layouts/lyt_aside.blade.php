@@ -178,8 +178,8 @@
               <p>Gst. Operativos</p>
             </a>
           </li>
-          <li class="nav-item" style="display:none">
-            <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
+          <li class="nav-item" >
+            <a href="{{route('Consolidado')}}" class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file"></i>
               <p>Cons. Indicadores</p>
             </a>

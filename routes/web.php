@@ -137,3 +137,5 @@ Route::get('EditPayrolls/{id_employee}', 'PayrollsController@EditPayrolls')->nam
 Route::get('Employee', 'EmployeeController@Employee')->name('Employee');
 Route::get('AddEmployee', 'EmployeeController@AddEmployee')->name('AddEmployee');
 Route::post('SaveEmployee', 'EmployeeController@SaveEmployee')->name('SaveEmployee');
+
+Route::get('Consolidado', 'ConsolidadoController@Consolidado')->name('Consolidado');
