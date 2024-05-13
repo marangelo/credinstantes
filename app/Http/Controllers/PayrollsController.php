@@ -45,8 +45,10 @@ class PayrollsController extends Controller {
 
         $Employes = $Payrolls->PayrollEmploye;
         $IdPayRoll = $Id ; 
+
+        $Titulo = "Editar Nomina";
         
-        return view('Payroll.EditPayroll',compact('Employes','IdPayRoll'));
+        return view('Payroll.EditPayroll',compact('Employes','IdPayRoll','Titulo'));
     }
     public function IngresosEgresos($Id_Payroll,$Id_Employee)
     {

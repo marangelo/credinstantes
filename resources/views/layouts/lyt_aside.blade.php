@@ -20,7 +20,7 @@
     </ul>
   </nav>
   <!-- /.navbar -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#!" class="brand-link">
       <img src="{{ asset('img/Logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -51,7 +51,7 @@
           </li>        
           @endif
           <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+              <a href="#" class="nav-link {{ (request()->is('Activos/*')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-table"></i>
                   <p>Clientes<i class="fas fa-angle-left right"></i></p>
               </a>
@@ -167,7 +167,7 @@
           </li>
           <li class="nav-header">FINANZAS</li>
           <li class="nav-item" >
-            <a href="{{route('Payrolls')}}" class="nav-link {{ (request()->is('Payrolls')) ? 'active' : '' }}" >
+            <a href="{{route('Payrolls')}}" class="nav-link {{ (request()->is('Payrolls') || request()->is('Employee') || request()->is('AddEmployee') ) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file"></i>
               <p>Planillas</p>
             </a>

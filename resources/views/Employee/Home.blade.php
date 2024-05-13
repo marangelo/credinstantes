@@ -47,9 +47,6 @@
                             <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar" aria-label="Buscar">
                            
                             <div class="card-tools">
-                                <button type="button" class="btn btn-primary" id="btn-buscar-abonos">
-                                    <i class="fa fa-filter"></i>
-                                </button>
                                 <button type="button" class="btn btn-warning" id="btn-add-employee">
                                     <i class="fas fa-plus-circle "></i>
                                 </button>
@@ -68,8 +65,6 @@
                         <th scope="col">Email</th>
                         <th scope="col">Telefono</th>
                         <th scope="col">Direccion</th>
-                        <th scope="col">Contrato</th>
-                        <th scope="col">Vacaciones</th>
                         <th class="text-end" scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -87,9 +82,6 @@
                             <td class="text-nowrap">{{$e->email }}</td>
                             <td class="text-nowrap">{{$e->phone_number }}</td>
                             <td class="text-nowrap">{{$e->address }}</td>
-                            <td><span class="badge badge rounded-pill d-block p-2 badge-soft-success"> Tipo de contrato  <span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
-                            </td>
-                            <td class="text-end">{{number_format($e->vacation_balance,2) }}</td>
                             <td class="text-end">
                             <div>
                                 <button class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="Editar({{$e->id_employee}})"><span class="text-500 fas fa-edit"></span></button>

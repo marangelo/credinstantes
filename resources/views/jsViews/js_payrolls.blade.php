@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function () {
- 
+    
     var Selectors = {
         MODAL_REQUEST: '#modal_new_request',        
     };
@@ -109,12 +109,44 @@ $(document).ready(function () {
             
         }
 
-    })
+    });
 
-
+    initializeDataTable('#tbl_payrolls');
 
 
 });
+
+
+function initializeDataTable(id) {
+    $(id).DataTable({
+        "destroy": true,
+        "info": false,
+        "bPaginate": true,
+        "responsive": true, 
+        "order": [
+            [0, "asc"]
+        ],
+        "lengthMenu": [
+            [7, -1],
+            [7, "Todo"]
+        ],
+        "language": {
+            "zeroRecords": "NO HAY COINCIDENCIAS",
+            "paginate": {
+                "first": "Primera",
+                "last": "Última ",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "-",
+            "search": "BUSCAR"
+        },
+        });
+
+        $(id+"_length").hide();
+        $(id+"_filter").hide();
+}
 
 
 function CalcDiffDay(){
@@ -307,4 +339,5 @@ function MSG(txt) {
         }
     })
 }
+
 </script>

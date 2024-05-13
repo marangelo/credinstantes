@@ -38,32 +38,26 @@
               <div class="card-body">
               @csrf
                 <div class="row">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                          <option value="-1"  selected="selected">Mes...</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                     <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                        <option value="-1"  selected="selected">Year...</option>
+                      @for($mes = 1; $mes <= 12; $mes++)
+                        <option value="{{$mes}}">{{Date::parse(date('F', mktime(0, 0, 0, $mes, 1)))->format('F')}}</option>
+                      @endfor
                     </select>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <div class="input-group date" id="dt-end" data-target-input="nearest">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            </div>
-                            <input type="search" class="form-control" id="id_txt_buscar" placeholder="Search" aria-label="Search">
+                        <div class="input-group date" id="dt-end" data-target-input="nearest">                            
+                            <select class="form-control select2" id="id_select_zona" name="IdZona">
+                              @for($year = 2024; $year >= 2022; $year--)
+                                <option value="{{$year}}">{{$year}}</option>
+                              @endfor
+                            </select>
                             <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                <div class="input-group-text"><i class="fa fa-filter"></i></div>
                             </div>
                             <div class="card-tools">
-                                <button type="button" class="btn btn-primary" id="btn-buscar-abonos">
-                                    <i class="fa fa-filter"></i>
-                                </button>
+                               
                                 <button type="button" class="btn btn-warning" id="btn-add-nomina">
                                     <i class="fas fa-plus-circle "></i>
                                 </button>
@@ -77,7 +71,7 @@
                   </div>
                 </div>
                 
-                <table id="tbl_ingresos" class="table table-bordered table-striped">
+                <table id="tbl_payrolls" class="table">
                     <thead >
                         <tr>
                             <th>Nóminas</th>
@@ -93,18 +87,17 @@
                         <tr>                                  
                             <td>
                                 <div class="d-flex align-items-center position-relative">
-                                
-                                <div class="flex-1">
-                                    <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900" href="EditPayrolls/{{$p->id_payrolls}}">1Q-Jun-00</a></h6>
-                                    <p class="text-500 fs--2 mb-0">  {{$p->Type->payroll_type_name}}</p>
-                                </div>
+                                  <div class="flex-1">
+                                      <h6 class="mb-0 fw-semi-bold"><a class="stretched-link text-900" href="EditPayrolls/{{$p->id_payrolls}}">1Q-Jun-00</a></h6>
+                                      <p class="text-500 fs--2 mb-0">  {{$p->Type->payroll_type_name}}</p>
+                                  </div>
                                 </div>
                             </td>
                             <td>{{ Date::parse($p->start_date)->format('D, M d, Y')  }} </td>
                             <td>{{ Date::parse($p->end_date)->format('D, M d, Y')}} </td>
                             <td><a class="text-primary fw-semi-bold" href="#!">C$ 500,000.00</a></td>
                             <td>
-                            <span class="badge badge rounded-pill d-block p-2 {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}<span class="ms-1 {{$p->Status->status_icon}}" data-fa-transform="shrink-2"></span>
+                              <span class="badge badge rounded-pill d-block p-2 {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}<span class="ms-1 {{$p->Status->status_icon}}" data-fa-transform="shrink-2"></span>
                             </span>
                             <td>
                                 <div>
@@ -148,14 +141,19 @@
         <div class="modal-body">            
             <div class="row g-3">
                 <div class="col-md-12 mb-12">
-                    <select class="form-control select2" style="width: 100%;" id="payroll_type" name="PayrollType">
-                        @foreach($PayRollType as $t)
-                        <option value="{{$t->id_payroll_type}}"> {{$t->payroll_type_name}}</option>
-                        @endforeach
-                    </select>
+                    <div class="input-group date" id="dtInicio" data-target-input="nearest">
+                        <div class="input-group-append" data-target="#dtInicio" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                        <select class="custom-select" id="payroll_type"  name="PayrollType">
+                          @foreach($PayRollType as $t)
+                            <option value="{{$t->id_payroll_type}}"> {{$t->payroll_type_name}}</option>
+                          @endforeach
+                        </select>
+                    </div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3 mt-3">
                     <label>Inicio</label>
                     <div class="input-group date" id="dtInicio" data-target-input="nearest">
                         <div class="input-group-append" data-target="#dtInicio" data-toggle="datetimepicker">

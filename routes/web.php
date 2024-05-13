@@ -130,7 +130,7 @@ Route::get('ExportGastos', 'GastosOperacionesController@ExportGastos')->name('Ex
 
 
 Route::get('Payrolls', 'PayrollsController@getPayrolls')->name('Payrolls');
-
+Route::get('EditPayrolls/{id_employee}', 'PayrollsController@EditPayrolls')->name('EditPayrolls/{id_employee}');
 
 
 
