@@ -37,8 +37,8 @@
                   Crear Nuevo empleado
                 </h3>
                 <div class="card-tools">
-                    <button type="sumit" class="btn btn-warning" id="btn-add-arqueo">
-                        <i class="fas fa-plus-circle "></i>
+                    <button type="sumit" class="btn btn-success" id="btn-add-arqueo">
+                        <i class="fas fa-save "></i>
                     </button>
                 </div>
               </div>
@@ -106,7 +106,7 @@
                                         <div class="col-sm-4 mb-3">
                                             <label class="form-label" for="event-name">Salario Mensual: </label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-dollar-sign"></span></span>
-                                                <input class="form-control" id="event-name" type="text" name="Salario_Mensual" placeholder="000,000.00" data-inputmask="'mask': '999,999.99'" data-mask value="{{ $Employee->salario_mensual ?? '' }}" />
+                                                <input class="form-control" id="event-name" type="text" name="Salario_Mensual" placeholder="C$ 00.00" value="{{ $Employee->salario_mensual ?? '' }}" />
                                             </div>
                                         </div>
                                         <div class="col-sm-4 mb-3">

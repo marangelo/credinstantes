@@ -130,9 +130,10 @@ Route::get('ExportGastos', 'GastosOperacionesController@ExportGastos')->name('Ex
 
 
 Route::get('Payrolls', 'PayrollsController@getPayrolls')->name('Payrolls');
-Route::get('EditPayrolls/{id_employee}', 'PayrollsController@EditPayrolls')->name('EditPayrolls/{id_employee}');
+Route::post('SavePayroll', 'PayrollsController@SavePayroll')->name('SavePayroll');
 Route::post('EmployeeTypePayroll', 'PayrollsController@EmployeeTypePayroll')->name('EmployeeTypePayroll');
-
+Route::get('EditPayrolls/{id_employee}', 'PayrollsController@EditPayrolls')->name('EditPayrolls/{id_employee}');
+Route::post('RemovePayroll', 'PayrollsController@RemovePayroll')->name('RemovePayroll');
 
 Route::get('Employee', 'EmployeeController@Employee')->name('Employee');
 Route::get('AddEmployee', 'EmployeeController@AddEmployee')->name('AddEmployee');

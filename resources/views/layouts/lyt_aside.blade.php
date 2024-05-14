@@ -167,20 +167,26 @@
           </li>
           <li class="nav-header">FINANZAS</li>
           <li class="nav-item" >
-            <a href="{{route('Payrolls')}}" class="nav-link {{ (request()->is('Payrolls') || request()->is('Employee') || request()->is('AddEmployee') ) ? 'active' : '' }}" >
-              <i class="nav-icon fas fa-file"></i>
+            <a href="{{route('Payrolls')}}" class="nav-link {{ (request()->is('Payrolls') || request()->is('EditPayrolls/*') ) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-money-check-alt"></i>
               <p>Planillas</p>
+            </a>
+          </li>
+          <li class="nav-item" >
+            <a href="{{route('Employee')}}" class="nav-link {{ (request()->is('Employee') || request()->is('AddEmployee') || request()->is('EditEmployee/*') ) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-users"></i>
+              <p>Empleados</p>
             </a>
           </li>
           <li class="nav-item">
             <a href="{{route('Gastos')}}" class="nav-link {{ (request()->is('Gastos')) ? 'active' : '' }}" >
-              <i class="nav-icon fas fa-file"></i>
+              <i class="nav-icon fas fa-dollar-sign"></i>
               <p>Gst. Operativos</p>
             </a>
           </li>
           <li class="nav-item" >
             <a href="{{route('Consolidado')}}" class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
-              <i class="nav-icon fas fa-file"></i>
+              <i class="nav-icon fas fa-file-invoice-dollar"></i>
               <p>Cons. Indicadores</p>
             </a>
           </li>

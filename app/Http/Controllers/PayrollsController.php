@@ -24,7 +24,7 @@ class PayrollsController extends Controller {
 
         $PayRollType    = PayrollType::where('active',1)->get();    
 
-        $Payrolls       = Payroll::all();
+        $Payrolls       = Payroll::where('active',1)->get();
 
         $Inactec        = Inatec::where('active',1)->first();  
         $InssParonal    = InssPatronal::where('active',1)->first();  
@@ -39,16 +39,21 @@ class PayrollsController extends Controller {
         $response = Payroll::SavePayroll($request);
         return response()->json($response);
     }
+    public function RemovePayroll(Request $request)
+    {        
+        $response = Payroll::RemovePayroll($request);
+        return response()->json($response);
+    }
+
     public function EditPayrolls($Id)
     {
         $Payrolls = Payroll::where('id_payrolls',$Id)->first();
 
-        $Employes = $Payrolls->PayrollEmploye;
-        $IdPayRoll = $Id ; 
-
         $Titulo = "Editar Nomina";
+
+        $Employes = $Payrolls->PayrollEmploye;
         
-        return view('Payroll.EditPayroll',compact('Employes','IdPayRoll','Titulo'));
+        return view('Payroll.EditPayroll',compact('Employes','Payrolls','Titulo'));
     }
     public function IngresosEgresos($Id_Payroll,$Id_Employee)
     {

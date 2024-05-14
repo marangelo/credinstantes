@@ -26,8 +26,6 @@ class Employee extends Model {
     {
             try {
                 DB::transaction(function () use ($request) {
-
-
                     $r = Employee::insert([
                         'first_name' => $request->input('nombres'),
                         'last_name' => $request->input('apellidos'),
@@ -39,12 +37,12 @@ class Employee extends Model {
                         'active' => $request->input('isActivo'),
                         'position_id' => 0,
                         'contract_type_id' => 0,
-                        'salario_mensual' => $request->input('Salario_Mensual'),
+                        'salario_mensual' => number_format(str_replace(',', '', $request->input('Salario_Mensual')),2,'.',''),
                     ]);
                 }); 
                 
             } catch (Exception $e) {
-                
+                dd($e->getMessage());
                 $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
                 return response()->json($mensaje);
             }
@@ -66,7 +64,7 @@ class Employee extends Model {
                     'inss_number'           => $request->num_inss,
                     'email'                 => $request->email,
                     'address'               => $request->direccion,
-                    'active'                => $request->activo,
+                    'active'                => $request->isActivo,
                     'salario_mensual'       => number_format(str_replace(',', '', $request->input('Salario_Mensual')),2,'.','')
                 ]);
                 

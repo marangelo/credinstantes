@@ -12,10 +12,6 @@ class Payroll extends Model {
     protected $table = "tbl_payrolls";
     protected $connection = 'mysql';
     protected $primaryKey = 'id_payrolls';
-    public function Company()
-    {
-        return $this->belongsTo(Company::class, 'company_id','id_compy');
-    }
     public function Status()
     {
         return $this->belongsTo(PayrollStatus::class, 'payroll_status_id','id_payroll_status');
@@ -34,7 +30,7 @@ class Payroll extends Model {
             try {
                 DB::transaction(function () use ($request) {
                     $p = new Payroll();
-                    $p->company_id              = $request->payroll_commpany_;
+                    $p->company_id              = 0;
                     $p->payroll_type_id         = $request->payroll_type_;
                     $p->payroll_status_id       = 1;
                     $p->payroll_name            = 'N/D';
@@ -44,16 +40,35 @@ class Payroll extends Model {
                     $p->Inatec                  = $request->payroll_inactec_;
                     $p->observation             = $request->payroll_observation_;
                     $p->user_id                 = Auth::User()->id;
+                    $p->active                 = 1;
                     $p->save();
                     
                 }); 
                 
             } catch (Exception $e) {
-                
+                dd($e->getMessage());
                 $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
                 return response()->json($mensaje);
             }
         
+    }
+    public static function RemovePayroll(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $Id           = $request->input('id_');
+                $response =  Payroll::where('id_payrolls',  $Id)->update([
+                    "active" => 0,
+                ]);
+                
+                return $response;
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
     }
     public static function EmployeeTypePayroll(Request $request)
     {

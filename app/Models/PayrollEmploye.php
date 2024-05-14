@@ -12,6 +12,6 @@ class PayrollEmploye extends Model {
     public $timestamps = false;
     public function Employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id','id_employee');
+        return $this->belongsTo(Employee::class, 'employee_id','id_employee')->where('active', 1);
     }
 }

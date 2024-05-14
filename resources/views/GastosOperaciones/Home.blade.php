@@ -103,7 +103,7 @@
       <div class="modal-content">
         <div class="modal-header">
             <div class="user-block">
-              <img class="img-circle" src="{{asset('img/user.png')}}" alt="User Image">
+              <img class="img-circle" src="{{asset('img/nomina.png')}}" alt="User Image">
               <span class="username"><a href="#"> Nuevo Gasto </a></span>
               <span class="description"># Ingrese informacion para gastos de operacion</span>
             </div>
