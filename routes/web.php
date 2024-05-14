@@ -131,11 +131,16 @@ Route::get('ExportGastos', 'GastosOperacionesController@ExportGastos')->name('Ex
 
 Route::get('Payrolls', 'PayrollsController@getPayrolls')->name('Payrolls');
 Route::get('EditPayrolls/{id_employee}', 'PayrollsController@EditPayrolls')->name('EditPayrolls/{id_employee}');
-
+Route::post('EmployeeTypePayroll', 'PayrollsController@EmployeeTypePayroll')->name('EmployeeTypePayroll');
 
 
 Route::get('Employee', 'EmployeeController@Employee')->name('Employee');
 Route::get('AddEmployee', 'EmployeeController@AddEmployee')->name('AddEmployee');
 Route::post('SaveEmployee', 'EmployeeController@SaveEmployee')->name('SaveEmployee');
+Route::post('UpdateEmployee', 'EmployeeController@UpdateEmployee')->name('UpdateEmployee');
+Route::get('/EditEmployee/{id_employee}', 'EmployeeController@editEmployee')->name('EditEmployee');
+Route::post('rmEmployee', 'EmployeeController@rmEmployee')->name('rmEmployee');
+
+
 
 Route::get('Consolidado', 'ConsolidadoController@Consolidado')->name('Consolidado');

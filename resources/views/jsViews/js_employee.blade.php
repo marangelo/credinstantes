@@ -2,10 +2,7 @@
     const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
     const endOfMonth   = moment().subtract(0, "days").format("YYYY-MM-DD");
     $('[data-mask]').inputmask()
-    $('#txt_email').inputmask({
-        alias: 'email'
-    });
-
+  
 
     var Selectors = {
         TABLE_SETTING: '#modal_new_product',
@@ -20,12 +17,13 @@
     $(document).ready(function () {
         var labelRange = startOfMonth + " to " + endOfMonth;
 
-        $('.form-check-input').on('click', function() {
+        $('.custom-control-input').on('click', function() {
         
             var isChecked   = $(this).prop('checked');
             var payrollType = $(this).data('payroll-type');
             var id_employee = $("#txt_employee").val();
-            console.log(payrollType)
+
+            console.log(id_employee,payrollType,isChecked)
 
             SendData(id_employee,payrollType,isChecked)
         });

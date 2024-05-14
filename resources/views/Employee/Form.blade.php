@@ -29,7 +29,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <!-- /.card -->
+            <form method="POST" action="{{ (isset($Employee)) ? route('UpdateEmployee') : route('SaveEmployee') }}" enctype="multipart/form-data">
             <div class="card">
               <div class="card-header" >
                 <h3 class="card-title">
@@ -37,7 +37,7 @@
                   Crear Nuevo empleado
                 </h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-warning" id="btn-add-arqueo">
+                    <button type="sumit" class="btn btn-warning" id="btn-add-arqueo">
                         <i class="fas fa-plus-circle "></i>
                     </button>
                 </div>
@@ -45,7 +45,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @csrf
-                <form method="POST" action="{{ (isset($Employee)) ? route('UpdateEmployee') : route('SaveEmployee') }}" enctype="multipart/form-data">
+                
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
@@ -54,10 +54,10 @@
 
                                     @csrf
                                     @if(session('message_success')) 
-                                    <div class="alert alert-success border-2 d-flex align-items-center" role="alert">
-                                        <div class="bg-success me-3 icon-item"><span class="fas fa-check-circle text-white fs-3"></span></div>
-                                        <p class="mb-0 flex-1">{{ session('message_success') }}</p>
-                                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert alert-success alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                                        {{ session('message_success') }}
                                     </div>
                                     @endif
                                     @if(isset($Employee)) 
@@ -83,7 +83,7 @@
                                         </div>
                                         
                                         <div class="col-sm-4">
-                                            <label class="form-label" for="event-name">EMail</label>
+                                            <label class="form-label" for="event-name">Email</label>
                                             <div class="input-group"><span class="input-group-text "><span class="far fa-envelope"></span></span>
                                                 <input class="form-control" id="txt_email" type="text" name="email" placeholder="email@ejemplo.com" value="{{ $Employee->email ?? '' }}" />
                                             </div>
@@ -98,88 +98,91 @@
                                         <div class="col-sm-4 mb-3">
                                             <label class="form-label" for="event-name">Telefono</label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-phone-alt"></span></span>
-                                                <input class="form-control" id="event-name" type="text" name="telefono" placeholder="+505-0000-000" data-inputmask="'mask': ['+505-9999-9999']" data-mask value="{{ $Employee->phone_number ?? '' }}" />
+                                                <input class="form-control" id="event-name" type="text" name="telefono" placeholder="+505-0000-000" value="{{ $Employee->phone_number ?? '' }}" />
                                             </div>
                                         </div>
                                         
                                         
-                                        <div class="col-sm-3 mb-3">
+                                        <div class="col-sm-4 mb-3">
                                             <label class="form-label" for="event-name">Salario Mensual: </label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-dollar-sign"></span></span>
-                                                <input class="form-control" id="event-name" type="text" name="num_inss" placeholder="000,000.00" data-inputmask="'mask': '999,999.99'" data-mask value="{{ $Employee->inss_number ?? '' }}" />
+                                                <input class="form-control" id="event-name" type="text" name="Salario_Mensual" placeholder="000,000.00" data-inputmask="'mask': '999,999.99'" data-mask value="{{ $Employee->salario_mensual ?? '' }}" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-3 mb-3">
+                                        <div class="col-sm-4 mb-3">
                                             <label class="form-label" for="event-name">Numero INSS</label>
                                             <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
                                             <input class="form-control" id="event-name" type="text" name="num_inss" placeholder="0000000-0" data-inputmask="'mask': ['9999999-9']" data-mask value="{{ $Employee->inss_number ?? '' }}" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-3 mb-3">
-                                            <label class="form-label" for="event-name">Planilla</label>
-                                            <select class="custom-select" >
-                                                <option>option 1</option>
-                                                <option>option 2</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-3 mb-3">
-                                            <label class="form-label" for="event-name">Activo</label>
-                                            <select class="custom-select" >
-                                                <option>option 1</option>
-                                                <option>option 2</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                        <div class="border-dashed-bottom my-3"></div>
-                                        </div>
-                                        
-                                        
-                                        
                                        
+                                        <div class="col-sm-4 mb-3">
+                                            <label class="form-label" for="event-name">Activo</label>
+                                            <select class="custom-select" name="isActivo">
+                                                <option value="1" >SI</option>
+                                                <option value="0">NO</option>
+                                            </select>
+                                        </div>
+                                                                            
                                         
                                         <div class="col-12">
-                                        <label class="form-label" for="event-description">Direccion</label>
-                                        <textarea class="form-control" rows="6" required="" name="direccion" >
-                                            {{ $Employee->address ?? '' }}
-                                        </textarea>
-                                        </div>
-                                        @if(isset($Employee))                     
-                                            <div class="border-dashed-bottom my-3"></div>
-                                            <h6>Planillas que pertenece </h6>
-                                            @foreach($PayrollTypes as $t)
-                                            <div class="form-check custom-checkbox mb-0">
-                                                <input class="form-check-input" type="checkbox" data-payroll-type="{{$t->id_payroll_type}}" 
-                                                    @if(isset($Employee->ListPayrollType))
-                                                        @php
-                                                            $found = false;
-                                                            foreach ($Employee->ListPayrollType as $payrollType) {
-                                                            if ($payrollType['payrolls_id'] == $t->id_payroll_type) {
-                                                                $found = true;
-                                                                break;
-                                                            }
-                                                            }
-                                                        @endphp
-                                                        @if($found) checked="checked" @endif
-                                                    @endif />
-                                                <label class="form-label mb-0"><strong>{{$t->payroll_type_name}}</strong></label>
-                                                <div class="form-text mt-0">UNIDAD DE NEGOCIO</div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label class="form-label" for="event-description">Direccion</label>
+                                                    <textarea class="form-control" rows="6" required="" name="direccion" >{{ $Employee->address ?? '' }}</textarea>
+                                                </div>
+                                                @if(isset($Employee))   
+                                                <div class="col-12">
+                                                    <label class="form-label" for="event-planillas"> </label>
+                                                    <div class="card card-secondary">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">Tipo de Planillas</h3>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="form-group">
+                                                                        @foreach($PayrollTypes as $t)
+                                                                        <div class="custom-control custom-checkbox mt-3">
+                                                                            <input class="custom-control-input" type="checkbox" id="Checkbox_{{$t->id_payroll_type}}" data-payroll-type="{{$t->id_payroll_type}}"
+                                                                                @if(isset($Employee->ListPayrollType))
+                                                                                    @php
+                                                                                        $found = false;
+                                                                                        foreach ($Employee->ListPayrollType as $payrollType) {
+                                                                                            if ($payrollType['payrolls_id'] == $t->id_payroll_type) {
+                                                                                                $found = true;
+                                                                                                break;
+                                                                                            }
+                                                                                        }
+                                                                                    @endphp
+                                                                                    @if($found) checked="checked" @endif
+                                                                                @endif />
+                                                                            <label for="Checkbox_{{$t->id_payroll_type}}" class="custom-control-label">{{$t->payroll_type_name}}</label>
+                                                                        </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
                                             </div>
-                                            @endforeach
-                                        @endif
+                                        </div>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                
+                </div>
                             
               </div>
             
               <!-- /.card-body -->
             </div>
-            <!-- /.card -->
+            </form>
           </div>
           <!-- /.col -->
         </div>

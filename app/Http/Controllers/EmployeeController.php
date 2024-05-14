@@ -58,17 +58,12 @@ class EmployeeController extends Controller {
 
     public function EditEmployee($id)
     {
-        $Contract = Contract::where('active',1)->get();  
-        $Position = Position::where('active',1)->get();
-        $Paises =   Catalogos::Nacionalidades();
-
-        $Employee = Employee::where('id_employee',$id)->first();  
-
-        $date_in = EmployeeController::formatFechaDiferencia($Employee->date_in);
-
+        
+        $Titulo = "Editar Empleado";
+        $Employee = Employee::where('id_employee',$id)->first();          
         $PayrollTypes = PayrollType::where('active',1)->get();  
     
-        return view('Employee.Form', compact('Contract','Position','Paises','Employee','date_in','PayrollTypes'));
+        return view('Employee.Form', compact('Employee','PayrollTypes','Titulo'));
 
     }
 
