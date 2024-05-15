@@ -77,7 +77,7 @@ class ReportsController extends Controller {
     }
     public function getDashboard($Opt,Request $request)
     {      
-        $response = ReportsModels::getDashboard($Opt,$request->input('dt_ini'),$request->input('dt_end'));
+        $response = ReportsModels::getDashboard($Opt,$request->input('dt_ini'));
         
         return response()->json($response);
     }

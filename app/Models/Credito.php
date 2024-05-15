@@ -63,7 +63,6 @@ class Credito extends Model
         return $this->hasMany(Abono::class, 'id_creditos','id_creditos')->where('activo',1);
     }
 
-
     public static function getCreditos()
     {
         return Credito::where('activo',1)->get();
@@ -71,7 +70,7 @@ class Credito extends Model
     public static function Creditos($Zona,$D1, $D2)
     {
         return CreditosHistory::where('CREDITO_ACTIVO', 1)
-                //->whereBetween('FECHA', [$D1, $D2])
+                ->whereDate('FECHA', '<=', $D2)
                 ->whereIn('ESTADO_CREDITO', [1, 2, 3])
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
@@ -80,7 +79,7 @@ class Credito extends Model
     public static function Saldos_Cartera($Zona,$D1, $D2)
     {
         return CreditosHistory::where('CREDITO_ACTIVO', 1)
-                //->whereBetween('FECHA', [$D1, $D2])
+                ->whereDate('FECHA', '<=', $D2)
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
                 })->sum('SALDO_CREDITO');        

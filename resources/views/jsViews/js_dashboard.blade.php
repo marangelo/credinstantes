@@ -47,13 +47,11 @@
         var $salesChart = $('#sales-chart')
 
 
-        var dtEnd   = $("#dtEnd").val();
         var dtIni   = $("#dtIni").val();
-        
-        dtEnd      = isValue(dtEnd,'N/D',true) 
+         
         dtIni      = isValue(dtIni,'N/D',true)
     
-        const [dt_Ini_, dt_End_] = [dtIni, dtEnd].map(dt => moment(dt, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+        const [dt_Ini_] = [dtIni].map(dt => moment(dt, 'DD/MM/YYYY').format('YYYY-MM-DD'));
 
         
         
@@ -66,7 +64,7 @@
 
         
 
-        $.getJSON("getDashboard/"+Opt, { dt_ini: dt_Ini_, dt_end: dt_End_ }, function(dataset) {
+        $.getJSON("getDashboard/"+Opt, { dt_ini: dt_Ini_ }, function(dataset) {
             var data =  [
                 {
                 "INGRESO_NETO": "",

@@ -31,7 +31,7 @@
       <div class="container-fluid">
         @if( Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '3' )
         <div class="row">        
-          <div class="col-md-4">
+          <div class="col-md-6">
             <label>Zonas</label>
             <div class="form-group">
               <select class="form-control select2" style="width: 100%;" id="IdFilterByZone" name="IdZona">
@@ -44,25 +44,12 @@
               
             </div>
           </div>
-          
-          <div class="col-md-4">
-            <label>INICIO</label>
-            <div class="form-group">
-              <div class="input-group date" id="dt-Ini" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-Ini" id="dtIni" value="{{ date('01/m/Y') }}"/>
-                  <div class="input-group-append" data-target="#dt-Ini" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
+          <div class="col-md-6">
             <label>CULMINA</label>
             <div class="form-group">
-              <div class="input-group date" id="dt-End" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-End" id="dtEnd" value="{{ date('d/m/Y') }}"/>
-                  <div class="input-group-append" data-target="#dt-End" data-toggle="datetimepicker">
+              <div class="input-group date" id="dt-Ini" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-Ini" id="dtIni" value="{{ date('d/m/Y') }}"/>
+                  <div class="input-group-append" data-target="#dt-Ini" data-toggle="datetimepicker">
                       <div class="input-group-text" ><i class="fa fa-calendar"></i></div>
                   </div>
                   <div class="input-group-text btn btn-primary"  id="IdbtnFilter" ><i class="fa fa-filter" ></i></div>

@@ -242,11 +242,10 @@ class ReportsModels extends Model {
         return $array_clientes;
     }
 
-    public static function getDashboard($Opt, $dt_ini, $dt_end)
+    public static function getDashboard($Opt, $dt_end)
     {
 
-        $D1      = $dt_ini . ' 00:00:00';
-        $D2      = $dt_end . ' 23:59:59';
+       
 
         $array_dashboard    = [];
         $vLabel             = [];
@@ -254,10 +253,9 @@ class ReportsModels extends Model {
         $ttPagoCapital      = 0;
         $ttPagoIntereses    = 0;
 
-        // $dtNow  = date('Y-m-d');
-        // $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
-        // $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';
-        
+
+        $D1     = date('Y-m-01', strtotime($dt_end)). ' 00:00:00';
+        $D2     = $dt_end . ' 23:59:59';
 
         $role   = Auth::User()->id_rol;
 
