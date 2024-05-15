@@ -8,7 +8,7 @@
         });
 
 
-        $('#dt-Ini,#dt-End').datetimepicker({
+        $('#dt-Ini').datetimepicker({
             format: 'DD/MM/YYYY'
         });
 

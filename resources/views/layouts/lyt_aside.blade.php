@@ -166,6 +166,7 @@
               </ul>
           </li>
           <li class="nav-header">FINANZAS</li>
+          
           <li class="nav-item" >
             <a href="{{route('Payrolls')}}" class="nav-link {{ (request()->is('Payrolls') || request()->is('EditPayrolls/*') ) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-money-check-alt"></i>
@@ -184,13 +185,14 @@
               <p>Gst. Operativos</p>
             </a>
           </li>
+          @if( Session::get('rol') == '1')
           <li class="nav-item" >
             <a href="{{route('Consolidado')}}" class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
-              <p>Cons. Indicadores</p>
+              <p>Conso. Indicadores</p>
             </a>
           </li>
-         
+          @endif
           @endif
           <li class="nav-header">OPCIONES</li>
           @if( Session::get('rol') == '3')

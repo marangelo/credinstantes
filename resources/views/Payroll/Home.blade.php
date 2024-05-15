@@ -86,7 +86,7 @@
                                 <span class="username">
                                   <a href="EditPayrolls/{{$p->id_payrolls}}">1Q-Jun-00</a>
                                 </span>
-                                <span class="description"> {{$p->Type->payroll_type_name}} - <span class="badge badge-warning {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}</span> </span>
+                                <span class="description"> {{$p->Type->payroll_type_name}} - <span class="badge {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}</span> </span>
                               </div>
                             </td>
                             <td>{{ Date::parse($p->start_date)->format('D, M d, Y')  }} </td>
@@ -135,8 +135,8 @@
           <div class="modal-body">            
               <div class="row g-3">
                   <div class="col-md-12 mb-12">
-                      <div class="input-group date" id="dtInicio" data-target-input="nearest">
-                          <div class="input-group-append" data-target="#dtInicio" data-toggle="datetimepicker">
+                      <div class="input-group">
+                          <div class="input-group-append" >
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
                           <select class="custom-select" id="payroll_type"  name="PayrollType">
@@ -146,6 +146,7 @@
                           </select>
                       </div>
                   </div>
+                  
 
                   <div class="col-md-6 mb-3 mt-3">
                       <label>Inicio</label>

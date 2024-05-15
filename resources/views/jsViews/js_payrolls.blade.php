@@ -1,15 +1,15 @@
 <script type="text/javascript">
 $(document).ready(function () {
     
+    
+
+    $('#dtInicio,#dtFinal').datetimepicker({
+        format: 'DD/MM/YYYY'
+    });
     initializeDataTable('#tbl_payrolls');
-    var Selectors = {
-        MODAL_REQUEST: '#modal_new_request',        
-    };
-
-
 
     $("#btn-add-nomina").click(function(){
-        var obj = document.querySelector(Selectors.MODAL_REQUEST);
+        var obj = document.querySelector('#modal_new_request');
         var modal = new window.bootstrap.Modal(obj);
         $("#id_form").text("0");
         modal.show();
@@ -59,6 +59,13 @@ function SaveData() {
 
     var FechaInicio     = $('#IdFechaInicio').val();
     var FechaFinal      = $('#IdFechaFinal').val();
+
+    FechaInicio      = isValue(FechaInicio,'N/D',true)
+    FechaFinal      = isValue(FechaFinal,'N/D',true)
+    
+    const [FechaInicio_ , FechaFinal_] = [FechaInicio,FechaFinal].map(dt => moment(dt, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+
+
     var inatec          = $('#payroll_inactec').val();
     var inss_patronal   = $('#payroll_inss_patronal').val();
     var payroll_type    = $('#payroll_type').val();
@@ -68,8 +75,8 @@ function SaveData() {
     $.ajax({
         url: "SavePayroll",
         data: {
-            payroll_date_ini_       : FechaInicio,
-            payroll_date_end_       : FechaFinal,
+            payroll_date_ini_       : FechaInicio_,
+            payroll_date_end_       : FechaFinal_,
             payroll_inactec_        : inatec,
             payroll_inss_patronal_  : inss_patronal,
             payroll_type_           : payroll_type,
