@@ -176,7 +176,7 @@
           <li class="nav-item" >
             <a href="{{route('Employee')}}" class="nav-link {{ (request()->is('Employee') || request()->is('AddEmployee') || request()->is('EditEmployee/*') ) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-users"></i>
-              <p>Empleados</p>
+              <p>Colaboradores</p>
             </a>
           </li>
           <li class="nav-item">
