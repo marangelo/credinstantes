@@ -30,7 +30,7 @@
       <div class="container-fluid">
         <div class="card card-secondary">
           <div class="card-header">
-            <h3 class="card-title"> Planilla:  1Q-JUN-00</h3>
+            <h3 class="card-title"> Planilla:  {{$Payrolls->payroll_name}}</h3>
             <span id="Id_PayRoll" style="display:none"></span>
           </div>
           <!-- /.card-header -->
@@ -69,27 +69,26 @@
                 </thead>
                 <tbody>
                   @foreach($Employes as $p)
-                  @if(isset($p->Employee->first_name))  
 
-                  @php $Comisiones = 1500 @endphp
-                  @php $NetoPagar  = $Comisiones + $p->Employee->salario_mensual@endphp
+                  @php $Comisiones = $p->comision @endphp
+                  @php $NetoPagar  = $Comisiones + $p->salario_mensual @endphp
                   @php $Vacaciones = ( $NetoPagar / 30 ) * 2.5 @endphp
                   @php $Aguinaldo  = ( $NetoPagar / 12 ) @endphp
                   @php $Indenizacion = ( $NetoPagar / 12 ) @endphp
                   
                   <tr>
                     <td class="align-middle">
-                      <a class=" text-900" href="#!" onclick="AddGastos({{$p}})" ><h6 class="mb-0 text-nowrap">{{$p->Employee->first_name}}  {{$p->Employee->last_name}}  </h6></a>
+                      <a class=" text-900" href="#!" onclick="AddGastos({{$p}})" ><h6 class="mb-0 text-nowrap">{{$p->employee_full_name}}  </h6></a>
                       <p class="mb-0"> LA POSICION SUPUESTAMENTE</p>
                       
                     </td>
-                    <td class="align-middle text-center">{{$p->Employee->cedula_number}}</td>
-                    <td class="align-middle text-end">{{$p->Employee->inss_number}}</td>
-                    <td class="align-middle text-end"> - </td>
-                    <td class="align-middle text-center"> - </td>
-                    <td class="align-middle text-center">C$. {{ number_format($p->Employee->salario_mensual,2) }} </td>
-                    <td class="align-middle text-center"> - </td>
-                    <td class="align-middle text-center">C$. {{ number_format(($p->Employee->salario_mensual / 2 ),2)}} </td>
+                    <td class="align-middle text-center"> {{$p->cedula}} </td>
+                    <td class="align-middle text-end">{{$p->inns}}</td>
+                    <td class="align-middle text-end"> {{$p->mes}} </td>
+                    <td class="align-middle text-center"> {{$p->fecha}} </td>
+                    <td class="align-middle text-center">C$. {{ number_format($p->salario_mensual,2) }} </td>
+                    <td class="align-middle text-center"> {{ number_format($p->dias_trabajados,2) }} </td>
+                    <td class="align-middle text-center">C$. {{ number_format( $p->salario_quincenal,2)}} </td>
                     <td class="align-middle text-center">C$. {{ number_format($Comisiones,2) }} </td>
                     <td class="align-middle text-center">C$. {{ number_format($NetoPagar,2) }} </td>
                     <td class="align-middle text-center"> - </td>
@@ -98,7 +97,6 @@
                     <td class="align-middle text-center">C$. {{ number_format($Indenizacion,2) }}</td>
                     
                   </tr>
-                  @endif
                   @endforeach
                 </tbody>
                   <tfoot>
@@ -136,6 +134,7 @@
                   <img class="img-circle" src="{{asset('img/user-01.png')}}" alt="User Image">
                   <span class="username"><a href="#" id="id_txt_nombre_empleado"> -  </a></span>
                   <span class="description"># Nomina: <span id="id_description"> {{$Payrolls->id_payrolls}} </span>  |  {{$Payrolls->start_date}} al {{$Payrolls->end_date}}  </span>
+                  <span id="id_num_row" style="display:none"></span>
                 </div>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -147,14 +146,14 @@
                     <div class="col-md-6 mb-3">
                         <label class="fs-0 " for="eventValDay">Comision C$.: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-donate"></span></span>
-                            <input class="form-control" id="payroll_inss_patronal" type="text" name="inss_patronal"  placeHolder="0.00" >
+                            <input class="form-control" id="payroll_comision" type="text" name="inss_patronal"  placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label class="fs-0 " for="eventValDay">Dias Trabajados: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-calendar"></span></span>
-                            <input class="form-control" id="payroll_inactec" type="text" name="inatec" placeHolder="0.00" >
+                            <input class="form-control" id="payroll_dias_trabajados" type="text" name="inatec" placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>
                     </div>
 
@@ -162,7 +161,7 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-success" id="btn_save_abono">Guardar</button>
+              <button type="button" class="btn btn-success" id="btn_save">Guardar</button>
             </div>
           </div>
         </div>

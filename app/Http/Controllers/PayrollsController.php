@@ -11,6 +11,7 @@ use App\Models\InssPatronal;
 use App\Models\Inatec;
 use App\Models\Employee;
 use App\Models\Payroll;
+use App\Models\Payroll_details;
 
 
 class PayrollsController extends Controller {
@@ -51,9 +52,14 @@ class PayrollsController extends Controller {
 
         $Titulo = "Editar Nomina";
 
-        $Employes = $Payrolls->PayrollEmploye;
+        $Employes = $Payrolls->PayrollDetails;
         
         return view('Payroll.EditPayroll',compact('Employes','Payrolls','Titulo'));
+    }
+    public function UpdatePayroll(Request $request)
+    {
+        $response = Payroll_details::UpdatePayroll($request);
+        return response()->json($response);
     }
     public function IngresosEgresos($Id_Payroll,$Id_Employee)
     {

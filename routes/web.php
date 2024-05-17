@@ -134,6 +134,7 @@ Route::post('SavePayroll', 'PayrollsController@SavePayroll')->name('SavePayroll'
 Route::post('EmployeeTypePayroll', 'PayrollsController@EmployeeTypePayroll')->name('EmployeeTypePayroll');
 Route::get('EditPayrolls/{id_employee}', 'PayrollsController@EditPayrolls')->name('EditPayrolls/{id_employee}');
 Route::post('RemovePayroll', 'PayrollsController@RemovePayroll')->name('RemovePayroll');
+Route::post('UpdatePayroll', 'PayrollsController@UpdatePayroll')->name('UpdatePayroll');
 
 Route::get('Employee', 'EmployeeController@Employee')->name('Employee');
 Route::get('AddEmployee', 'EmployeeController@AddEmployee')->name('AddEmployee');
@@ -141,6 +142,7 @@ Route::post('SaveEmployee', 'EmployeeController@SaveEmployee')->name('SaveEmploy
 Route::post('UpdateEmployee', 'EmployeeController@UpdateEmployee')->name('UpdateEmployee');
 Route::get('/EditEmployee/{id_employee}', 'EmployeeController@editEmployee')->name('EditEmployee');
 Route::post('rmEmployee', 'EmployeeController@rmEmployee')->name('rmEmployee');
+
 
 
 

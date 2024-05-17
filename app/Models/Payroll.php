@@ -23,27 +23,85 @@ class Payroll extends Model {
     public function PayrollEmploye()
     {
         return $this->hasMany(PayrollEmploye::class, 'payrolls_id','payroll_type_id');
+        
     }
+    public function PayrollDetails()
+    {
+        return $this->hasMany(Payroll_details::class, 'payroll_id', 'id_payrolls');
+    }
+    public static function setNamePayroll(Request $request)
+    {
+        $dtIni = $request->payroll_date_ini_;
 
+        return date('d', strtotime($dtIni)) <= 15 ? "1Q-" . date('M-y', strtotime($dtIni)) : "2Q-" . date('M-y', strtotime($dtIni));
+    }
+    public static function setPayrollDetails($Id_payroll)
+    {
+        $Payrolls = Payroll::where('id_payrolls',$Id_payroll)->first();
+
+        $Key = 0 ;
+
+        $Employes = $Payrolls->PayrollEmploye;
+
+        foreach ($Employes as $p) {
+            if(isset($p->Employee->first_name)){
+                $Comisiones = 0;
+                $NetoPagar  = $Comisiones + $p->Employee->salario_mensual;
+                $Vacaciones = ( $NetoPagar / 30 ) * 2.5 ;
+                $Aguinaldo  = ( $NetoPagar / 12 ) ;
+                $Indenizacion = ( $NetoPagar / 12 ) ;
+    
+                $datos_a_insertar[$Key] = [
+                    'payroll_id'            => $Id_payroll,
+                    'employee_full_name'    => $p->Employee->first_name . " " . $p->Employee->last_name,
+                    'employee_position'     => '',
+                    'cedula'                => $p->Employee->cedula_number,
+                    'inns'                  => $p->Employee->inss_number,
+                    'mes'                   => '',
+                    'fecha'                 => null,
+                    'salario_mensual'       => $p->Employee->salario_mensual,
+                    'dias_trabajados'       => 0,
+                    'salario_quincenal'     => ($p->Employee->salario_mensual / 2 ),
+                    'comision'              => $Comisiones,
+                    'neto_pagar'            => $NetoPagar,
+                    'vacaciones'            => $Vacaciones,
+                    'aguinaldo'             => $Aguinaldo,
+                    'indenmnizacion'        => $Indenizacion,
+                ];
+                $Key++;
+            }
+            
+            
+        }
+        Payroll_details::where('payroll_id', $Id_payroll)->delete();
+        Payroll_details::insert($datos_a_insertar);
+    }
     public static function SavePayroll(Request $request)
     {
             try {
+
                 DB::transaction(function () use ($request) {
-                    $p = new Payroll();
-                    $p->company_id              = 0;
-                    $p->payroll_type_id         = $request->payroll_type_;
-                    $p->payroll_status_id       = 1;
-                    $p->payroll_name            = 'N/D';
-                    $p->start_date              = $request->payroll_date_ini_;
-                    $p->end_date                = $request->payroll_date_end_;
-                    $p->inss_patronal           = $request->payroll_inss_patronal_;
-                    $p->Inatec                  = $request->payroll_inactec_;
-                    $p->observation             = $request->payroll_observation_;
-                    $p->user_id                 = Auth::User()->id;
-                    $p->active                 = 1;
-                    $p->save();
-                    
-                }); 
+
+                    $idInsertado = Payroll::insertGetId([
+                        'company_id'            => 0,
+                        'payroll_type_id'       => $request->payroll_type_,
+                        'payroll_status_id'     => 1,
+                        'payroll_name'          => self::setNamePayroll($request),
+                        'start_date'            => $request->payroll_date_ini_,
+                        'end_date'              => $request->payroll_date_end_,
+                        'inss_patronal'         => $request->payroll_inss_patronal_,
+                        'Inatec'                => $request->payroll_inactec_,
+                        'observation'           => $request->payroll_observation_,
+                        'user_id'               => Auth::User()->id,
+                        'active'                => 1,
+                        'updated_at'            => date('Y-m-d H:i:s'),
+                        'created_at'            => date('Y-m-d H:i:s'),
+                    ]);
+
+                    self::setPayrollDetails($idInsertado);
+                });
+                
+                
                 
             } catch (Exception $e) {
                 dd($e->getMessage());
@@ -95,4 +153,5 @@ class Payroll extends Model {
             }
         }
     }
+    
 }

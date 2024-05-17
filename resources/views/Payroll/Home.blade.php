@@ -84,7 +84,7 @@
                               <div class="user-block">
                                 <img class="img-circle" src="{{ asset('/img/nomina.png') }}" alt="user image">
                                 <span class="username">
-                                  <a href="EditPayrolls/{{$p->id_payrolls}}">1Q-Jun-00</a>
+                                  <a href="EditPayrolls/{{$p->id_payrolls}}">{{$p->payroll_name}}</a>
                                 </span>
                                 <span class="description"> {{$p->Type->payroll_type_name}} - <span class="badge {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}</span> </span>
                               </div>
