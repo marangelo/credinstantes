@@ -294,12 +294,14 @@ class ReportsModels extends Model {
 
         
         
-        $ttCuotaCobrada =  $ttCuotaCobrada - $GastosOperativos;
+        //$ttPagoIntereses =  $ttPagoIntereses - $GastosOperativos;
+        $ttUtilidadNeta = $ttPagoIntereses - $GastosOperativos;
         
         $array_dashboard = [
             "INGRESO"           => $ttCuotaCobrada,
             "CAPITAL"           => $ttPagoCapital,
             "INTERESES"         => $ttPagoIntereses,
+            "UTIL_NETA"         => $ttUtilidadNeta,
             "SALDOS_CARTERA"    => $Saldos_Cartera,
             "MORA_ATRASADA"     => $MoraAtrasada,
             "MORA_VENCIDA"      => $MoraVencida,

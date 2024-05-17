@@ -86,21 +86,31 @@
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
-              </div>
-    
-              <div class="clearfix hidden-md-up"></div>
+              </div>    
 
-              <div class="col-12 col-sm-6 col-md-3">
+              <div class="col-12 col-sm-6 col-md-2">
                 <div class="info-box mb-3 bg-warning" >
 
                   <div class="info-box-content">
-                    <span class="info-box-text">UTILIDAD BRUTA</span>
+                    <span class="info-box-text">UTILIDAD BRUTA</span>
                     <span class="info-box-number"><small>C$ </small><span id="lblInteres"></span></span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
               </div>
+
+              <div class="col-12 col-sm-6 col-md-2">
+                <div class="info-box mb-3" style="background-color: #008000;" >
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">UTILIDAD NETA</span>
+                    <span class="info-box-number"><small>C$ </small><span id="lbl_ultil_neta">C$ 0.00</span></span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div>              
               
               <div class="col-12 col-sm-6 col-md-2">
                 <div class="info-box mb-3 bg-info">
@@ -114,7 +124,7 @@
                 <!-- /.info-box -->
               </div>
 
-              <div class="col-12 col-sm-12 col-md-3">
+              <div class="col-12 col-sm-12 col-md-2">
                 <div class="info-box mb-3" style="background-color: #FFA0AB;">
 
                   <div class="info-box-content">

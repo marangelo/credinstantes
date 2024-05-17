@@ -70,6 +70,7 @@
                 "INGRESO_NETO": "",
                 "CAPITAL": "",
                 "UTILIDAD_BRUTA": "",
+                "UTILIDAD_NETA" : "", 
                 "CREDITOS_ACTIVOS" : "",
                 "SALDO_CARTERA": "",
                 "MORA_ATRASADA" : "",
@@ -93,12 +94,14 @@
             $("#lblCapital").text(CAPITAL)
         
             var INTERESES = dataset['INTERESES'];
-        
-            INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');
-        
+            INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');        
             $("#lblInteres").text(INTERESES)
-
             data[0]['UTILIDAD_BRUTA'] = INTERESES;
+
+            var UTIL_NETA     = numeral(isValue(dataset['UTIL_NETA'],0,true)).format('0,00.00');        
+            $("#lbl_ultil_neta").text(UTIL_NETA)
+            data[0]['UTILIDAD_NETA'] = INTERESES;
+
         
             var Clientes = dataset['clientes_activos'];
             Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
@@ -234,6 +237,7 @@
                 {"title": "INGRESO NETO","data"   : "INGRESO_NETO"},                
                 {"title": "CAPITAL","data"    : "CAPITAL"},
                 {"title": "UTILIDAD BRUTA","data"    : "UTILIDAD_BRUTA"},
+                {"title": "UTILIDAD NETA","data"    : "UTILIDAD_NETA"},
                 {"title": "CREDITOS ACTIVOS","data"   : "CREDITOS_ACTIVOS"},
                 {"title": "SALDO DE CARTERA","data"   : "SALDO_CARTERA"},
                 {"title": "MORA ATRASADA","data"   : "MORA_ATRASADA"},
