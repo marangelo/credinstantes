@@ -200,6 +200,13 @@
         "order": [
             [0, "asc"]
         ],
+        "columnDefs": [
+            {
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            }
+        ],
         "lengthMenu": [
             [7, -1],
             [7, "Todo"]
@@ -230,7 +237,7 @@
             "info": false,
             "bPaginate": true,
             "order": [
-                [0, "DESC"]
+                [0, "desc"]
             ],
             "lengthMenu": [
                 [7, -1],

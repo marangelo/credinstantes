@@ -41,7 +41,6 @@
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
                             <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar" aria-label="Buscar">
-                           
                             <div class="card-tools">
                                 <button type="button" class="btn btn-success" id="btn-add-employee">
                                     <i class="fas fa-plus-circle "></i>
@@ -57,6 +56,7 @@
                 <table class="table table-hover table-striped overflow-hidden"  id="tbl_employee">
                     <thead>
                     <tr>
+                        <th scope="col">#</th>
                         <th scope="col">Nombre y apellidos</th>
                         <th scope="col">Email</th>
                         <th scope="col">Telefono</th>
@@ -66,11 +66,13 @@
                     <tbody>
                         @foreach($Employee as $e)
                         <tr class="align-middle">
+                          <td class="align-middle">@if($e->active == 0) Inactivo  @endif</td>
                             <td class="align-middle white-space-nowrap path">
                               <div class="user-block">
                                 <img class="img-circle img-bordered-sm" src="{{ asset('/img/user-01.png') }}" alt="user image">
                                 <span class="username">
-                                  <a href="EditEmployee/{{$e->id_employee}}">{{$e->first_name }} {{$e->last_name}}</a>
+                                  <a href="EditEmployee/{{$e->id_employee}}">{{$e->first_name }} {{$e->last_name}}</a> 
+                                  @if($e->active == 0) <span class="badge bg-danger">Inactivo {{$e->inactive}}</span>  @endif
                                 </span>
                                 <span class="description">Aqui puede ir un poco mas de Informacion</span>
                               </div>

@@ -23,7 +23,7 @@ class EmployeeController extends Controller {
     public function Employee()
     {        
         $Titulo = "Nuevo Empleado";
-        $Employee = Employee::where('active',1)->get();
+        $Employee = Employee::whereIn('active', [0, 1])->get();
         return view('Employee.Home',Compact('Employee','Titulo'));
     }
 

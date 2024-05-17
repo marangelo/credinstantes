@@ -119,8 +119,8 @@
                                         <div class="col-sm-4 mb-3">
                                             <label class="form-label" for="event-name">Activo</label>
                                             <select class="custom-select" name="isActivo">
-                                                <option value="1" >SI</option>
-                                                <option value="0">NO</option>
+                                                <option value="1" {{($Employee->active == 1) ? 'selected' : ''}} >SI</option>
+                                                <option value="0" {{($Employee->active == 0) ? 'selected' : ''}} >NO</option>
                                             </select>
                                         </div>
                                                                             
