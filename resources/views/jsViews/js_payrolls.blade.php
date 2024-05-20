@@ -5,8 +5,7 @@ $(document).ready(function () {
 
     $('#dtInicio,#dtFinal').datetimepicker({
         format: 'DD/MM/YYYY'
-    });
-    initializeDataTable('#tbl_payrolls');
+    });    
 
     $("#btn-add-nomina").click(function(){
         var obj = document.querySelector('#modal_new_request');
@@ -18,6 +17,15 @@ $(document).ready(function () {
     $('#btn_save_abono').click(function () {
         SaveData();
     });
+
+    $('#btn_filter').click(function () {
+        var select_month    = $('#select_month').val();
+        var select_year     = $('#select_year').val();
+        
+        window.location.href = "Payrolls?month=" + select_month + "&year=" + select_year;
+    });
+
+    initializeDataTable('#tbl_payrolls');
 
 });
 

@@ -12,7 +12,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Modulo de Planillas</h1>
+            <h1>Modulo de Nóminas</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -39,22 +39,22 @@
               @csrf
                 <div class="row">
                   <div class="col-md-6">
-                    <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                      @for($mes = 1; $mes <= 12; $mes++)
-                        <option value="{{$mes}}">{{Date::parse(date('F', mktime(0, 0, 0, $mes, 1)))->format('F')}}</option>
-                      @endfor
+                    <select class="form-control select2" style="width: 100%;" id="select_month" name="IdZona">
+                        @for($mes = 1; $mes <= 12; $mes++)
+                        <option value="{{$mes}}" {{ $mes == date('n') ? 'selected' : '' }}>{{ Date::parse(date('F', mktime(0, 0, 0, $mes, 1)))->format('F')}}</option>
+                        @endfor
                     </select>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                         <div class="input-group date" id="dt-end" data-target-input="nearest">                            
-                            <select class="form-control select2" id="id_select_zona" name="IdZona">
+                            <select class="form-control select2" id="select_year" name="select_year">
                               @for($year = 2024; $year >= 2022; $year--)
                                 <option value="{{$year}}">{{$year}}</option>
                               @endfor
                             </select>
                             <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-filter"></i></div>
+                                <div class="input-group-text" id="btn_filter"><i class="fa fa-filter"></i></div>
                             </div>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-success" id="btn-add-nomina">
@@ -71,16 +71,16 @@
                     <thead >
                         <tr>
                             <th>Nóminas</th>
-                            <th>Desde</th>
-                            <th>Hasta</th>
-                            <th>Neto a Pagar</th>
-                            <th>Acciones</th>
+                            <th class="text-center">Desde</th>
+                            <th class="text-center">Hasta</th>
+                            <th class="text-center">Neto a Pagar</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($Payrolls as $p)
                         <tr>                                  
-                            <td>
+                            <td >
                               <div class="user-block">
                                 <img class="img-circle" src="{{ asset('/img/nomina.png') }}" alt="user image">
                                 <span class="username">
@@ -89,15 +89,17 @@
                                 <span class="description"> {{$p->Type->payroll_type_name}} - <span class="badge {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}</span> </span>
                               </div>
                             </td>
-                            <td>{{ Date::parse($p->start_date)->format('D, M d, Y')  }} </td>
-                            <td>{{ Date::parse($p->end_date)->format('D, M d, Y')}} </td>
-                            <td>C$ 0.00</td>
+                            <td class="text-center">{{ Date::parse($p->start_date)->format('D, M d, Y')  }} </td>
+                            <td class="text-center">{{ Date::parse($p->end_date)->format('D, M d, Y')}} </td>
+                            <td class="text-center">C$. {{ number_format($p->neto_pagado,2) }}</td>
                             <td>
                              
-                                <div>
-                                    <button class="btn p-0 text-white" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="edit_request({{$p}})"><span class="text-500 fas fa-lock-open"></span></button>
+                                <div class="text-center">
                                     <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="edit_request({{$p}})"><span class="text-500 fas fa-edit"></span></button>
-                                    <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover"  onClick="Remover({{$p}})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                    @if($p->payroll_status_id == 1)
+                                      <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$p}})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                    @endif
+
                                 </div>
                             </td>
                         </tr>

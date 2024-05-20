@@ -20,17 +20,21 @@ class PayrollsController extends Controller {
         Date::setLocale('es');
         $this->middleware('auth');
     }
-    public function getPayrolls()
+    public function getPayrolls(Request $request)
     {        
+        $month = $request->query('month');
+        $year = $request->query('year');
 
-        $PayRollType    = PayrollType::where('active',1)->get();    
+        $Payrolls = Payroll::where('active', 1)
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->get();
 
-        $Payrolls       = Payroll::where('active',1)->get();
-
+        $PayRollType    = PayrollType::where('active',1)->get();   
         $Inactec        = Inatec::where('active',1)->first();  
         $InssParonal    = InssPatronal::where('active',1)->first();  
 
-        $Titulo         = "Nomina";
+        $Titulo         = "Nómina";
         
         
         return view('Payroll.Home',compact('PayRollType','Inactec','InssParonal','Payrolls','Titulo'));
@@ -49,16 +53,21 @@ class PayrollsController extends Controller {
     public function EditPayrolls($Id)
     {
         $Payrolls = Payroll::where('id_payrolls',$Id)->first();
+        
+        $retView = ($Payrolls->payroll_type_id === 1) ? 'Payroll.Quincenal' : 'Payroll.Depreciacion ' ;
 
-        $Titulo = "Editar Nomina";
+        $Titulo = $Payrolls->Type->payroll_type_name;
 
         $Employes = $Payrolls->PayrollDetails;
         
-        return view('Payroll.EditPayroll',compact('Employes','Payrolls','Titulo'));
+        return view($retView,compact('Employes','Payrolls','Titulo'));
     }
     public function UpdatePayroll(Request $request)
     {
-        $response = Payroll_details::UpdatePayroll($request);
+        $Type_PayRoll = $request->input('id_Type_PayRoll_');
+
+        $response = ($Type_PayRoll == 1) ? Payroll_details::UpdateQuincenal($request) : Payroll_details::UpdateDepreciacion($request) ;
+
         return response()->json($response);
     }
     public function IngresosEgresos($Id_Payroll,$Id_Employee)
@@ -71,6 +80,20 @@ class PayrollsController extends Controller {
     public function EmployeeTypePayroll(Request $request)
     {        
         $response = Payroll::EmployeeTypePayroll($request);
+        return response()->json($response);
+    }
+
+    public function ExportPayroll(Request $request)
+    {
+        $Type_PayRoll = $request->input('TypePayRoll');
+
+        $response = ($Type_PayRoll == 1) ? Payroll::ExportPayrollQuincenal($request) : Payroll::ExportPayrollDepreciacion($request) ;
+
+    }
+
+    public function ProcessPayroll(Request $request)
+    {        
+        $response = Payroll::ProcessPayroll($request);
         return response()->json($response);
     }
 }  

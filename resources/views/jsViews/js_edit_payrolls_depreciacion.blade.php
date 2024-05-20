@@ -39,18 +39,16 @@
 
         $('#btn_save').click(function() {
 
-            var payroll_comision            = $('#payroll_comision').val();
-            var payroll_dias_trabajados     = $('#payroll_dias_trabajados').val();
-            var salario_mensual             = $('#salario_mensual').val();
+            var pago_depreciacion           = $('#pago_depreciacion').val();
+            var depreciacion_concepto       = $('#depreciacion_concepto').val();
             var payroll_num_row             = $('#id_num_row').html();
             var id_Type_PayRoll             = $('#id_Type_PayRoll').html();
 
             var data = {
-                payroll_comision_            : payroll_comision,
-                payroll_dias_trabajados_     : payroll_dias_trabajados,
-                payroll_num_row_             : payroll_num_row,
-                salario_mensual_             : salario_mensual,
-                id_Type_PayRoll_             : id_Type_PayRoll,
+                pago_depreciacion_      : pago_depreciacion,
+                depreciacion_concepto_  : depreciacion_concepto,
+                payroll_num_row_        : payroll_num_row,
+                id_Type_PayRoll_        : id_Type_PayRoll,
                 _token  : "{{ csrf_token() }}" 
             };
 
@@ -80,7 +78,7 @@
         });
 
         $('#btn_export_payroll').click(function() {
-            var idPayroll   = $("#id_description").html();            
+            var idPayroll       = $("#id_description").html();
             var TypePayRoll     = $("#id_Type_PayRoll").html();
             
             window.location.href = "../ExportPayroll?" + $.param({ id_Payroll: idPayroll, TypePayRoll: TypePayRoll}); 
@@ -125,18 +123,18 @@
 
     function AddGastos(e) {
         var name                = isValue(e.employee_full_name,'N/D',true)
-        var DiasTrabajados      = numeral(isValue(e.dias_trabajados,0,true)).format('0.00')
-        var Comision            = numeral(isValue(e.comision,0,true)).format('0.00')
-        var SalarioMensual      = numeral(isValue(e.salario_mensual,0,true)).format('0.00')
-
+    
+        var NetoPagor   = numeral(isValue(e.neto_pagar,0,true)).format('0.00');
+        var Concepto    = numeral(isValue(e.concepto,'N/D',true)).format('0.00');
 
 
         $('#id_txt_nombre_empleado').html(name);
-        $('#payroll_dias_trabajados').val(DiasTrabajados);
-        $('#payroll_comision').val(Comision);
-        $('#salario_mensual').val(SalarioMensual);
-
         $('#id_num_row').html(e.id_payroll_details);
+
+        $('#pago_depreciacion').val(NetoPagor);
+        $('#salario_mensual').val(Concepto);
+
+        
 
         var obj = document.querySelector('#modal_add_gasto');
         var modal = new window.bootstrap.Modal(obj);

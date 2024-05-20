@@ -168,9 +168,9 @@
           <li class="nav-header">FINANZAS</li>
           
           <li class="nav-item" >
-            <a href="{{route('Payrolls')}}" class="nav-link {{ (request()->is('Payrolls') || request()->is('EditPayrolls/*') ) ? 'active' : '' }}" >
+            <a href="{{route('Payrolls', ['month' => date('n'), 'year' => date('Y')])}}" class="nav-link {{ (request()->is('Payrolls') || request()->is('EditPayrolls/*') ) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-money-check-alt"></i>
-              <p>Planillas</p>
+              <p>Nóminas</p>
             </a>
           </li>
           <li class="nav-item" >
