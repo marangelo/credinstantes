@@ -6,10 +6,12 @@
         $("#btn_process_payroll").click(function() {
             var IdPayroll           = $("#id_description").html();
             var neto_pagar_payroll  = $("#neto_pagar_payroll").html();
+            var Type_PayRoll        = $('#PayRoll_status').html();
 
             var data = {
                 idPayroll_          : IdPayroll,
                 neto_pagar_payroll_ : neto_pagar_payroll,
+                Type_PayRoll_       : Type_PayRoll,
                 _token      : "{{ csrf_token() }}"
             };
 
@@ -42,13 +44,13 @@
             var pago_depreciacion           = $('#pago_depreciacion').val();
             var depreciacion_concepto       = $('#depreciacion_concepto').val();
             var payroll_num_row             = $('#id_num_row').html();
-            var id_Type_PayRoll             = $('#id_Type_PayRoll').html();
+            var id_Type_PayRoll             = $('#PayRoll_type').html();
 
             var data = {
                 pago_depreciacion_      : pago_depreciacion,
                 depreciacion_concepto_  : depreciacion_concepto,
                 payroll_num_row_        : payroll_num_row,
-                id_Type_PayRoll_        : id_Type_PayRoll,
+                PayRoll_type_           : id_Type_PayRoll,
                 _token  : "{{ csrf_token() }}" 
             };
 
@@ -79,7 +81,7 @@
 
         $('#btn_export_payroll').click(function() {
             var idPayroll       = $("#id_description").html();
-            var TypePayRoll     = $("#id_Type_PayRoll").html();
+            var TypePayRoll     = $("#PayRoll_type").html();
             
             window.location.href = "../ExportPayroll?" + $.param({ id_Payroll: idPayroll, TypePayRoll: TypePayRoll}); 
         });

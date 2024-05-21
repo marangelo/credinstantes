@@ -283,9 +283,6 @@ class ReportsModels extends Model {
 
         $GastosOperativos = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
 
-        $PagosNomina = Payroll::whereBetween('end_date', [$D1, $D2])->where('active', 1)->where('payroll_status_id', 3)->sum('neto_pagado');
-
-
 
         foreach ($Dias as $dia) {
             $vLabel[]   = 'D' . $dia->dy; 
@@ -298,7 +295,7 @@ class ReportsModels extends Model {
         
         
         //$ttPagoIntereses =  $ttPagoIntereses - $GastosOperativos;
-        $ttUtilidadNeta = $ttPagoIntereses - ($GastosOperativos + $PagosNomina);
+        $ttUtilidadNeta = $ttPagoIntereses - $GastosOperativos ;
         
         $array_dashboard = [
             "INGRESO"           => $ttCuotaCobrada,

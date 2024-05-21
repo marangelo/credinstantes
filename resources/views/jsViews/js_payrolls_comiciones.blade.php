@@ -42,22 +42,15 @@
         $('#btn_save').click(function() {
 
         
-            var payroll_dias_trabajados     = $('#payroll_dias_trabajados').val();
-            var salario_mensual             = $('#salario_mensual').val();
-            var payroll_num_row             = $('#id_num_row').html();
-            var payroll_inss                = $('#payroll_inss').val();
-            var payroll_ir                  = $('#payroll_ir').val();
-            var id_PayRoll_status           = $('#PayRoll_status').html();
-            var PayRoll_type                = $('#PayRoll_type').html();
+            var comisiones          = $('#txt_comisiones').val();           
+            var payroll_num_row     = $('#id_num_row').html();
+            var PayRoll_type   = $('#PayRoll_type').html();
 
+            
             var data = {
-                payroll_dias_trabajados_     : payroll_dias_trabajados,
+                comisiones_     : comisiones,
                 payroll_num_row_             : payroll_num_row,
-                salario_mensual_             : salario_mensual,
-                payroll_inss_                : payroll_inss,
-                payroll_ir_                  : payroll_ir,
-                id_PayRoll_status_           : id_PayRoll_status,
-                PayRoll_type_                : PayRoll_type,
+                PayRoll_type_   : PayRoll_type,
                 _token  : "{{ csrf_token() }}" 
             };
 
@@ -132,18 +125,12 @@
 
     function AddGastos(e) {
         var name                = isValue(e.employee_full_name,'N/D',true)
-        var DiasTrabajados      = numeral(isValue(e.dias_trabajados,0,true)).format('0.00')
-        var SalarioMensual      = numeral(isValue(e.salario_mensual,0,true)).format('0.00')
-        var inss                = numeral(isValue(e.inss_patronal,0,true)).format('0.00')
-        var ir                  = numeral(isValue(e.ir,0,true)).format('0.00')
+        var Comisiones      = numeral(isValue(e.comision,0,true)).format('0.00');
 
 
 
         $('#id_txt_nombre_empleado').html(name);
-        $('#payroll_dias_trabajados').val(DiasTrabajados);
-        $('#salario_mensual').val(SalarioMensual);
-        $('#payroll_inss').val(inss);
-        $('#payroll_ir').val(ir);
+        $('#txt_comisiones').val(Comisiones);
 
         $('#id_num_row').html(e.id_payroll_details);
 

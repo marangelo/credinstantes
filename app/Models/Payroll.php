@@ -51,16 +51,10 @@ class Payroll extends Model {
 
         $Employes = $Payrolls->PayrollEmploye;
 
-        if ($Payrolls->payroll_type_id == 1) {
+        if ($Payrolls->payroll_type_id == 1 || $Payrolls->payroll_type_id == 3) {
+
             foreach ($Employes as $p) {
-                if(isset($p->Employee->first_name)){
-                    $Comisiones = 0;
-                    
-                    $NetoPagar  = $Comisiones + $p->Employee->salario_mensual;
-                    $Vacaciones = ( $NetoPagar / 30 ) * 2.5 ;
-                    $Aguinaldo  = ( $NetoPagar / 12 ) ;
-                    $Indenizacion = ( $NetoPagar / 12 ) ;
-        
+                if(isset($p->Employee->first_name)){        
                     $datos_a_insertar[$Key] = [
                         'payroll_id'            => $Id_payroll,
                         'employee_full_name'    => $p->Employee->first_name . " " . $p->Employee->last_name,
@@ -71,12 +65,12 @@ class Payroll extends Model {
                         'fecha'                 => date('Y-m-d H:i:s'),
                         'salario_mensual'       => $p->Employee->salario_mensual,
                         'dias_trabajados'       => 0,
-                        'salario_quincenal'     => ($p->Employee->salario_mensual / 2 ),
-                        'comision'              => $Comisiones,
-                        'neto_pagar'            => $NetoPagar,
-                        'vacaciones'            => $Vacaciones,
-                        'aguinaldo'             => $Aguinaldo,
-                        'indenmnizacion'        => $Indenizacion,
+                        'salario_quincenal'     => 0,
+                        'comision'              => 0,
+                        'neto_pagar'            => 0,
+                        'vacaciones'            => 0,
+                        'aguinaldo'             => 0,
+                        'indenmnizacion'        => 0,
                     ];
     
                     $Key++;
@@ -166,14 +160,38 @@ class Payroll extends Model {
     {
         if ($request->ajax()) {
             try {
-                $IdPayRoll           = $request->input('idPayroll_');
+                $IdPayRoll      = $request->input('idPayroll_');
+                $PayRoll_status = $request->input('Type_PayRoll_');
+
+                $PayRoll_status = $PayRoll_status + 1 ;
+
                 $NetoPagado = number_format(str_replace(',', '', $request->input('neto_pagar_payroll_')),2,'.','');
+
+                $dateRecord = date('Y-m-d H:i:s');
                 
                 $response =  Payroll::where('id_payrolls',  $IdPayRoll)->update([
                     "neto_pagado"       => $NetoPagado,
-                    "payroll_status_id" => 3,
-                    "updated_at"        => date('Y-m-d H:i:s'),
+                    "payroll_status_id" => $PayRoll_status,
+                    "updated_at"        => $dateRecord,
                 ]);
+
+
+                //GENERAR EL PAGO DE NOMINA DENTRO DE LOS GASTOS DE OPERACION
+                if ($PayRoll_status == '3') {
+
+                    $Payrolls = Payroll::where('id_payrolls',$IdPayRoll)->first();
+                    $NamePayroll = $Payrolls->payroll_name;
+                    $NameType    =   $Payrolls->Type->payroll_type_name;
+
+                    $response = GastosOperaciones::insert([
+                        'concepto'      => "PAGO DE ".$NameType.": ".$NamePayroll,
+                        'fecha_gasto'   => $dateRecord,
+                        'monto'         => $NetoPagado,
+                        'id_user'       => Auth::id(),
+                        'activo'        => 1,
+                    ]); 
+                }
+                
                 
                 return $response;
                 
@@ -255,7 +273,7 @@ class Payroll extends Model {
         );
 
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:N3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:M3');
         $style = array(
             'font' => array(
             'name'      => 'Tahoma',
@@ -279,7 +297,7 @@ class Payroll extends Model {
                 )
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A1:N3')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:M3')->applyFromArray($style);
     
         $color_totales = array(                   
             'fill' => array(
@@ -298,14 +316,13 @@ class Payroll extends Model {
         ->setCellValue('F5',  'SALARIO MENSUAL')
         ->setCellValue('G5',  'DIAS TRABAJADOS')
         ->setCellValue('H5',  'SALARIO QUINCENAL')
-        ->setCellValue('I5',  'COMISION')
-        ->setCellValue('J5',  'NETO A PAGAR')
-        ->setCellValue('K5',  'FIRMA')
-        ->setCellValue('L5',  'VACACIONES')
-        ->setCellValue('M5',  'PROV. AGUINALDO')
-        ->setCellValue('N5',  'PROV. INDENMNIZACION');
+        ->setCellValue('I5',  'NETO A PAGAR')
+        ->setCellValue('J5',  'FIRMA')
+        ->setCellValue('K5',  'VACACIONES')
+        ->setCellValue('L5',  'PROV. AGUINALDO')
+        ->setCellValue('M5',  'PROV. INDENMNIZACION');
 
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:N5')->applyFromArray($color_totales);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:M5')->applyFromArray($color_totales);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
@@ -317,11 +334,10 @@ class Payroll extends Model {
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
         
-        $objPHPExcel->getActiveSheet()->getStyle('A5:N5')->applyFromArray($estiloTituloColumnas);      
+        $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->applyFromArray($estiloTituloColumnas);      
 
         $i=6;
         
@@ -340,12 +356,11 @@ class Payroll extends Model {
             ->setCellValue('F'.$i,  $e->salario_mensual)
             ->setCellValue('G'.$i,  $e->dias_trabajados)
             ->setCellValue('H'.$i,  $e->salario_quincenal)
-            ->setCellValue('I'.$i,  $e->comision)
-            ->setCellValue('J'.$i,  $e->neto_pagar)
-            ->setCellValue('K'.$i,  ' ')
-            ->setCellValue('L'.$i,  $e->vacaciones)
-            ->setCellValue('M'.$i,  $e->aguinaldo)
-            ->setCellValue('N'.$i,  $e->indenmnizacion);
+            ->setCellValue('I'.$i,  $e->neto_pagar)
+            ->setCellValue('J'.$i,  ' ')
+            ->setCellValue('K'.$i,  $e->vacaciones)
+            ->setCellValue('L'.$i,  $e->aguinaldo)
+            ->setCellValue('M'.$i,  $e->indenmnizacion);
 
             $ttVACACIONES += $e->vacaciones;
             $ttAGUINALDO += $e->aguinaldo;
@@ -360,17 +375,17 @@ class Payroll extends Model {
         $objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode($formatCode);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  '')
                 ->setCellValue('A'.$i,  'SUBTOTAL')
-                ->setCellValue('j'.$i,  number_format($ttNetoPagar,2,'.',''))
-                ->setCellValue('L'.$i,  number_format($ttVACACIONES,2,'.',''))
-                ->setCellValue('M'.$i,  number_format($ttAGUINALDO,2,'.',''))
-                ->setCellValue('N'.$i,  number_format($ttINDENMNIZACION,2,'.',''));
+                ->setCellValue('I'.$i,  number_format($ttNetoPagar,2,'.',''))
+                ->setCellValue('K'.$i,  number_format($ttVACACIONES,2,'.',''))
+                ->setCellValue('L'.$i,  number_format($ttAGUINALDO,2,'.',''))
+                ->setCellValue('M'.$i,  number_format($ttINDENMNIZACION,2,'.',''));
                 
         
-        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:N".$num_row);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:N6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:N6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:N'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:N'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:M".$num_row);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:M6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:M6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:M'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:M'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="NominaQuincenal.xlsx"');
@@ -509,6 +524,169 @@ class Payroll extends Model {
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="NominaDepreciacion.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        
+        
+    }
+    public static function ExportPayrollComisiones(Request $request) 
+    {
+        
+        $objPHPExcel = new PHPExcel();
+        $tituloReporte = "";
+        $titulosColumnas = array();
+
+        $id_Payroll = $request->input('id_Payroll');
+
+
+        $Payrolls    = Payroll::Where('id_payrolls', $id_Payroll)->first();
+        $Employes   = $Payrolls->PayrollDetails;
+        $NameMonth  = strtoupper($Employes->first()->mes). " " . date('Y');
+
+
+        $num_row    =  $Employes->count() + 6;
+    
+        $estiloTituloColumnas = array(
+            'font' => array(
+                        'name'  => 'Arial',
+                        'bold'  => true,
+                        'size'      => 10,
+            ),
+            'alignment' =>  array(
+                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                                'wrap'          => TRUE
+                            ),
+            'borders' => array(
+                            'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+            'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,)
+            )
+        );
+                
+        $estiloInformacion = new PHPExcel_Style();
+        $estiloInformacion->applyFromArray(
+            array(
+                'borders' => array(
+                'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
+                'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
+                )
+            )
+        );
+
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:K3');
+        $style = array(
+            'font' => array(
+            'name'      => 'Tahoma',
+            'bold'      => true,
+            'italic'    => false,
+            'strike'    => false,
+            'size'      => 10,
+            'color'     => array('rgb' => 'FFFFFF')
+            ),
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => '4472C4') 
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A1:K3')->applyFromArray($style);
+    
+        $color_totales = array(                   
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => '92D050') 
+            )
+        );
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1', "CREDINSTANTES | NOMINA DE PAGO ". $NameMonth) 
+        ->setCellValue('A5',  'NOMBRES Y APELLIDOS')
+        ->setCellValue('B5',  'MES        ')
+        ->setCellValue('C5',  'FECHA')
+        ->setCellValue('D5',  'CEDULA')
+        ->setCellValue('E5',  'INSS')
+        ->setCellValue('F5',  'COMISIONES')
+        ->setCellValue('G5',  'NETO A PAGAR')
+        ->setCellValue('H5',  'FIRMA')
+        ->setCellValue('I5',  'VACACIONES')
+        ->setCellValue('J5',  'PROV. AGUINALDO')
+        ->setCellValue('K5',  'PROV. INDENMNIZACION');
+
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:K5')->applyFromArray($color_totales);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A5:K5')->applyFromArray($estiloTituloColumnas);      
+
+        $i=6;
+        
+        $ttVACACIONES = 0;
+        $ttAGUINALDO = 0;
+        $ttINDENMNIZACION = 0;
+        $ttNetoPagar = 0;   
+
+        foreach ($Employes as $e ){
+            $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'.$i,  $e->employee_full_name)
+            ->setCellValue('B'.$i,  strtoupper($e->mes))
+            ->setCellValue('C'.$i,  \Date::parse($e->fecha)->format('d/m/Y'))
+            ->setCellValue('D'.$i,  $e->cedula)
+            ->setCellValue('E'.$i,  $e->inns)
+            ->setCellValue('F'.$i,  $e->comision)
+            ->setCellValue('G'.$i,  $e->neto_pagar)
+            ->setCellValue('H'.$i,  ' ')
+            ->setCellValue('I'.$i,  $e->vacaciones)
+            ->setCellValue('J'.$i,  $e->aguinaldo)
+            ->setCellValue('K'.$i,  $e->indenmnizacion);
+
+            $ttVACACIONES += $e->vacaciones;
+            $ttAGUINALDO += $e->aguinaldo;
+            $ttINDENMNIZACION += $e->indenmnizacion;
+            $ttNetoPagar += $e->neto_pagar;
+
+            $i++;
+            
+        }
+
+        $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
+        $objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  '')
+                ->setCellValue('A'.$i,  'SUBTOTAL')
+                ->setCellValue('G'.$i,  number_format($ttNetoPagar,2,'.',''))
+                ->setCellValue('I'.$i,  number_format($ttVACACIONES,2,'.',''))
+                ->setCellValue('J'.$i,  number_format($ttAGUINALDO,2,'.',''))
+                ->setCellValue('K'.$i,  number_format($ttINDENMNIZACION,2,'.',''));
+                
+        
+        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:K".$num_row);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:K6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:K6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:K'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:K'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="NominaComisiones.xlsx"');
         header('Cache-Control: max-age=0');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');

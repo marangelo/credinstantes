@@ -234,6 +234,26 @@
                 </li>
                 
               </ul>
+              <li class="nav-header">FINANZAS</li>
+          
+          <li class="nav-item" >
+            <a href="{{route('Payrolls', ['month' => date('n'), 'year' => date('Y')])}}" class="nav-link {{ (request()->is('Payrolls') || request()->is('EditPayrolls/*') ) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-money-check-alt"></i>
+              <p>Nóminas</p>
+            </a>
+          </li>
+          <li class="nav-item" >
+            <a href="{{route('Employee')}}" class="nav-link {{ (request()->is('Employee') || request()->is('AddEmployee') || request()->is('EditEmployee/*') ) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-users"></i>
+              <p>Colaboradores</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('Gastos')}}" class="nav-link {{ (request()->is('Gastos')) ? 'active' : '' }}" >
+              <i class="nav-icon fas fa-dollar-sign"></i>
+              <p>Gst. Operativos</p>
+            </a>
+          </li>
           </li>
           @endif
           

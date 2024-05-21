@@ -87,8 +87,8 @@ class GastosOperaciones extends Model {
         $tituloReporte = "";
         $titulosColumnas = array();
 
-        $dt_ini = $request->input('dt_ini');
-        $dt_end = $request->input('dt_end');
+        $dt_ini    = $request->input('dt_ini').' 00:00:00';
+        $dt_end    = $request->input('dt_end').' 23:59:59';
 
 
         $Gastos     = GastosOperaciones::WhereBetween('fecha_gasto', [$dt_ini, $dt_end])->Where('activo',1)->get();
@@ -159,7 +159,7 @@ class GastosOperaciones extends Model {
         );
         
         $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1', "CREDINSTANTES GASTOS OPERATIVOS ". strtoupper(\Date::parse($dt_ini)->format('d F'))) 
+        ->setCellValue('A1', "CREDINSTANTES GASTOS OPERATIVOS ". strtoupper(\Date::parse($dt_ini)->format('F'))) 
         ->setCellValue('A5',  'CONCEPTO')
         ->setCellValue('B5',  'FECHA')
         ->setCellValue('C5',  'MONTO');

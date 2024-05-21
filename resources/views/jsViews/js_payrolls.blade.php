@@ -29,6 +29,10 @@ $(document).ready(function () {
 
 });
 
+function edit_payroll(id) {
+    window.location.href = "EditPayrolls/" + id.id_payrolls ;
+}
+
 
 function initializeDataTable(id) {
     $(id).DataTable({

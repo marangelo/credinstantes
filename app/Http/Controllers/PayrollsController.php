@@ -54,7 +54,17 @@ class PayrollsController extends Controller {
     {
         $Payrolls = Payroll::where('id_payrolls',$Id)->first();
         
-        $retView = ($Payrolls->payroll_type_id === 1) ? 'Payroll.Quincenal' : 'Payroll.Depreciacion ' ;
+        switch ($Payrolls->payroll_type_id) {
+            case 1:
+            $retView = 'Payroll.Quincenal';
+            break;
+            case 2:
+            $retView = 'Payroll.Depreciacion';
+            break;
+            case 3:
+            $retView = 'Payroll.Comiciones';
+            break;
+        }
 
         $Titulo = $Payrolls->Type->payroll_type_name;
 
@@ -64,9 +74,19 @@ class PayrollsController extends Controller {
     }
     public function UpdatePayroll(Request $request)
     {
-        $Type_PayRoll = $request->input('id_Type_PayRoll_');
+        $PayRoll_type = $request->input('PayRoll_type_');
 
-        $response = ($Type_PayRoll == 1) ? Payroll_details::UpdateQuincenal($request) : Payroll_details::UpdateDepreciacion($request) ;
+        switch ($PayRoll_type) {
+            case 1:
+                $response = Payroll_details::UpdateQuincenal($request);
+                break;
+            case 2:
+                $response = Payroll_details::UpdateDepreciacion($request);
+                break;
+            case 3:
+                $response = Payroll_details::UpdateComisiones($request);
+                break;
+        }
 
         return response()->json($response);
     }
@@ -85,10 +105,19 @@ class PayrollsController extends Controller {
 
     public function ExportPayroll(Request $request)
     {
-        $Type_PayRoll = $request->input('TypePayRoll');
+        $PayRoll_type = $request->input('TypePayRoll');
 
-        $response = ($Type_PayRoll == 1) ? Payroll::ExportPayrollQuincenal($request) : Payroll::ExportPayrollDepreciacion($request) ;
-
+        switch ($PayRoll_type) {
+            case 1:
+                $response = Payroll::ExportPayrollQuincenal($request);
+                break;
+            case 2:
+                $response = Payroll::ExportPayrollDepreciacion($request);
+                break;
+            case 3:
+                $response = Payroll::ExportPayrollComisiones($request);
+                break;
+        }
     }
 
     public function ProcessPayroll(Request $request)

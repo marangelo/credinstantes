@@ -71,6 +71,7 @@
                     <thead >
                         <tr>
                             <th>Nóminas</th>
+                            <th>Estado</th>
                             <th class="text-center">Desde</th>
                             <th class="text-center">Hasta</th>
                             <th class="text-center">Neto a Pagar</th>
@@ -86,16 +87,17 @@
                                 <span class="username">
                                   <a href="EditPayrolls/{{$p->id_payrolls}}">{{$p->payroll_name}}</a>
                                 </span>
-                                <span class="description"> {{$p->Type->payroll_type_name}} - <span class="badge {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}</span> </span>
+                                <span class="description"> {{$p->Type->payroll_type_name}}</span>
                               </div>
                             </td>
+                            <td><span class="badge {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}</span></td>
                             <td class="text-center">{{ Date::parse($p->start_date)->format('D, M d, Y')  }} </td>
                             <td class="text-center">{{ Date::parse($p->end_date)->format('D, M d, Y')}} </td>
                             <td class="text-center">C$. {{ number_format($p->neto_pagado,2) }}</td>
                             <td>
                              
                                 <div class="text-center">
-                                    <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="edit_request({{$p}})"><span class="text-500 fas fa-edit"></span></button>
+                                    <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="edit_payroll({{$p}})"><span class="text-500 fas fa-edit"></span></button>
                                     @if($p->payroll_status_id == 1)
                                       <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$p}})"><span class="text-500 fas fa-trash-alt"></span></button>
                                     @endif
