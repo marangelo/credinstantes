@@ -10,13 +10,18 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 id="lbl_titulo_reporte"> Nómina:  {{$Payrolls->payroll_name}} </h1>
+          <div class="col-sm-6">            
+            <div class="user-block">
+              <img class="img-circle img-bordered-sm" src="{{ asset('/img/nomina.png') }}" alt="user image">
+              <span class="username">
+              {{$Titulo}} - {{$Payrolls->payroll_name}} 
+              </span>
+              <span class="description">Periodo {{$Payrolls->start_date}}  al {{$Payrolls->end_date}} </span>
+            </div>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">{{$Titulo}}</li>
+              <li class="breadcrumb-item active"><span class="badge {{$Payrolls->Status->status_color}}"> <i class="{{$Payrolls->Status->status_icon}}"></i> {{$Payrolls->Status->payroll_status_name}}</span></li>
             </ol>
           </div>
         </div>
@@ -46,8 +51,8 @@
               <table class="table table-striped border-bottom" id="tbl_payroll_details">
                 <thead class="light">
                   <tr class="bg-primary text-white dark__bg-1000">
-                  <th class="border-0">Nombres Y Apellidos</th>
-                  <th class="border-0 text-center">Cedula</th>
+                  <th class="border-0">NOMBRES Y APELLIDOS</th>
+                  <th class="border-0 text-center">CEDULA</th>
                   <th class="border-0 text-center">N INSS</th>
                   <th class="border-0 text-center">MES</th>
                   <th class="border-0 text-center">FECHA</th>

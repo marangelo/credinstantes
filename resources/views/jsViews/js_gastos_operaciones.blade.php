@@ -123,10 +123,10 @@
             "language": {
             "zeroRecords": "NO HAY COINCIDENCIAS",
             "paginate": {
-                "first": "Primera",
-                "last": "Última ",
-                "next": "Siguiente",
-                "previous": "Anterior"
+            "first": "Primera",
+            "last": "Última ",
+            "next": "Siguiente",
+            "previous": "Anterior"
             },
             
             "lengthMenu": "MOSTRAR _MENU_",
@@ -134,38 +134,46 @@
             "search": "BUSCAR"
             },
             "ajax":{
-                "url": "getGastosOperaciones",
-                "type": 'POST',
-                'dataSrc': '',
-                "data": {                
-                    dtIni   : dt_Ini_,
-                    dtEnd   : dt_End_,
-                    _token  : "{{ csrf_token() }}" 
-                }
+            "url": "getGastosOperaciones",
+            "type": 'POST',
+            'dataSrc': '',
+            "data": {                
+                dtIni   : dt_Ini_,
+                dtEnd   : dt_End_,
+                _token  : "{{ csrf_token() }}" 
+            }
             },
             buttons: [{extend: 'excelHtml5'}],
             "columnDefs": [
-                {"className": "dt-center", "targets": [0,1,2,4,5 ]},
-                {"className": "dt-right", "targets": [3]},
-                { "width": "8%", "targets": [] },
-                { "width": "12%", "targets": [  ] },
-                { "visible":false, "searchable": false,"targets": [] }
+            {"className": "dt-center", "targets": [0,1,2,4,5 ]},
+            {"className": "dt-right", "targets": [3]},
+            { "width": "8%", "targets": [] },
+            { "width": "12%", "targets": [  ] },
+            { "visible":false, "searchable": false,"targets": [] }
             ],
             'columns': [
-                { "title": "#", "data": "Id" },
-                { "title": "CONCEPTO", "data": "Concepto" },
-                { "title": "FECHA GASTO", "data": "Fecha_gasto" },
-                { "title": "MONTO C$.", "data": "Monto", render: $.fn.dataTable.render.number(',', '.', 2, '') },
-                { "title": "CREADO POR.", "data": "Usuario" },
-                {"title": "  ","data": "Id", "render": function(data, type, row, meta) {                    
-                    return `<div class="card-tools text-center">
-                                <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </div>` ;
-                }},   
-                
+            { "title": "#", "data": "Id" },
+            { "title": "CONCEPTO", "data": "Concepto" },
+            { "title": "FECHA GASTO", "data": "Fecha_gasto" },
+            { "title": "MONTO C$.", "data": "Monto", render: $.fn.dataTable.render.number(',', '.', 2, '') },
+            { "title": "CREADO POR.", "data": "Usuario" },
+            {"title": "  ","data": "Id", "render": function(data, type, row, meta) {                    
+                return `<div class="card-tools text-center">
+                    <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    </div>` ;
+            }},   
+            
             ],
+            "footerCallback": function (row, data, start, end, display) {
+            var api = this.api();
+            var total = api.column(3, { page: 'current' }).data().reduce(function (a, b) {
+                return parseFloat(a) + parseFloat(b);
+            }, 0);
+            total = numeral(total).format('0,0.00');
+            $(api.column(3).footer()).html("C$. " + total);
+            }
         })
 
         $("#tbl_gastos_operaciones_length").hide();

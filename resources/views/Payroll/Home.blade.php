@@ -90,7 +90,7 @@
                                 <span class="description"> {{$p->Type->payroll_type_name}}</span>
                               </div>
                             </td>
-                            <td><span class="badge {{$p->Status->status_color}}">{{$p->Status->payroll_status_name}}</span></td>
+                            <td><span class="badge {{$p->Status->status_color}}"> <i class="{{$p->Status->status_icon}}"></i>  {{$p->Status->payroll_status_name}}</span></td>
                             <td class="text-center">{{ Date::parse($p->start_date)->format('D, M d, Y')  }} </td>
                             <td class="text-center">{{ Date::parse($p->end_date)->format('D, M d, Y')}} </td>
                             <td class="text-center">C$. {{ number_format($p->neto_pagado,2) }}</td>

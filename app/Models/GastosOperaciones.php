@@ -183,7 +183,6 @@ class GastosOperaciones extends Model {
             $i++;
         }
         
-        $i = $i + 2 ; 
 
 
         $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';

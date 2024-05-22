@@ -83,7 +83,16 @@
                   </div>
                 </div>
                 
-                <table id="tbl_gastos_operaciones" class="table table-bordered table-striped"></table>
+                <table id="tbl_gastos_operaciones" class="table table-bordered table-striped">
+                  <tfoot>
+                  <tr>
+                    <th>TOTAL</th>
+                    <th colspan="3">Footer for 6 columns</th>
+                    <th colspan="2"></th>
+                    
+                  </tr>
+                  </tfoot>
+                </table>
               </div>
             
               <!-- /.card-body -->

@@ -239,7 +239,7 @@ class Payroll extends Model {
 
         $Payrolls    = Payroll::Where('id_payrolls', $id_Payroll)->first();
         $Employes   = $Payrolls->PayrollDetails;
-        $NameMonth  = strtoupper($Employes->first()->mes). " " . date('Y');
+        $NameMonth  = strtoupper($Payrolls->Type->payroll_type_name) . " | " .$Payrolls->payroll_name;
 
 
         $num_row    =  $Employes->count() + 6;
@@ -308,7 +308,7 @@ class Payroll extends Model {
         );
         
         $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1', "CREDINSTANTES | NOMINA DE PAGO ". $NameMonth) 
+        ->setCellValue('A1', "CREDINSTANTE | ". $NameMonth) 
         ->setCellValue('A5',  'NOMBRES Y APELLIDOS')
         ->setCellValue('B5',  'MES        ')
         ->setCellValue('C5',  'FECHA')
@@ -408,7 +408,7 @@ class Payroll extends Model {
 
         $Payrolls   = Payroll::Where('id_payrolls', $id_Payroll)->first();
         $Employes   = $Payrolls->PayrollDetails;
-        $NameMonth  = strtoupper($Employes->first()->mes). " " . date('Y');
+        $NameMonth  = strtoupper($Payrolls->Type->payroll_type_name) . " | " .$Payrolls->payroll_name;
 
         $num_row    =  $Employes->count() + 6;
     
@@ -476,7 +476,7 @@ class Payroll extends Model {
         );
         
         $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1', "CREDINSTANTES | NOMINA DE PAGO ". $NameMonth) 
+        ->setCellValue('A1', "CREDINSTANTE | ". $NameMonth) 
         ->setCellValue('A5',  'NOMBRES Y APELLIDOS')
         ->setCellValue('B5',  'MES        ')
         ->setCellValue('C5',  'FECHA')
@@ -543,7 +543,7 @@ class Payroll extends Model {
 
         $Payrolls    = Payroll::Where('id_payrolls', $id_Payroll)->first();
         $Employes   = $Payrolls->PayrollDetails;
-        $NameMonth  = strtoupper($Employes->first()->mes). " " . date('Y');
+        $NameMonth  = strtoupper($Payrolls->Type->payroll_type_name) . " | " .$Payrolls->payroll_name;
 
 
         $num_row    =  $Employes->count() + 6;
@@ -612,7 +612,7 @@ class Payroll extends Model {
         );
         
         $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1', "CREDINSTANTES | NOMINA DE PAGO ". $NameMonth) 
+        ->setCellValue('A1', "CREDINSTANTE | ". $NameMonth) 
         ->setCellValue('A5',  'NOMBRES Y APELLIDOS')
         ->setCellValue('B5',  'MES        ')
         ->setCellValue('C5',  'FECHA')

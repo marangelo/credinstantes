@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
   <link rel="icon" type="image/x-icon" href="{{asset('img/favicon.ico')}}">
-    <title>CREDIN$TANTES | {{$Titulo}} </title>
+    <title>CREDIN$TANTE | {{$Titulo}} </title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
