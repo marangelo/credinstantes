@@ -21,6 +21,7 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
             $role = Auth::User()->id_rol;
 
+            
             switch ($role) {
                 case '1':
                     return redirect(RouteServiceProvider::HOME);
@@ -31,7 +32,7 @@ class RedirectIfAuthenticated
                 break;
     
                 case '3':
-                    return redirect('Activos/0');
+                    return redirect(RouteServiceProvider::HOME);
                 break;
 
                 case '4':

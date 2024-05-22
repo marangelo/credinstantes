@@ -3,7 +3,7 @@ $(document).ready(function () {
     
     
 
-    $('#dtInicio,#dtFinal').datetimepicker({
+    $('#dtInicio,#dtFinal,#dtPayroll').datetimepicker({
         format: 'DD/MM/YYYY'
     });    
 
@@ -72,10 +72,13 @@ function SaveData() {
     var FechaInicio     = $('#IdFechaInicio').val();
     var FechaFinal      = $('#IdFechaFinal').val();
 
+    var DatePayroll      = $('#IdDatePayroll').val();
+
     FechaInicio      = isValue(FechaInicio,'N/D',true)
     FechaFinal      = isValue(FechaFinal,'N/D',true)
+    DatePayroll     = isValue(DatePayroll,'N/D',true)
     
-    const [FechaInicio_ , FechaFinal_] = [FechaInicio,FechaFinal].map(dt => moment(dt, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+    const [FechaInicio_ , FechaFinal_,DatePayroll_] = [FechaInicio,FechaFinal,DatePayroll].map(dt => moment(dt, 'DD/MM/YYYY').format('YYYY-MM-DD'));
 
 
     var inatec          = $('#payroll_inactec').val();
@@ -93,6 +96,7 @@ function SaveData() {
             payroll_inss_patronal_  : inss_patronal,
             payroll_type_           : payroll_type,
             payroll_observation_    : payroll_observation,
+            payroll_date_           : DatePayroll_,
             _token  : "{{ csrf_token() }}" 
         },
         type: 'post',

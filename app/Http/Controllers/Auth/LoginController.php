@@ -19,6 +19,8 @@ class LoginController extends Controller
     public function redirectTo() {
 
         $role = Auth::User()->id_rol;
+
+        
     
         switch ($role) {
             case '1':
@@ -30,7 +32,7 @@ class LoginController extends Controller
             break;
 
             case '3':
-                return 'Activos/0';
+                return 'Dashboard';
             break;
 
             default:

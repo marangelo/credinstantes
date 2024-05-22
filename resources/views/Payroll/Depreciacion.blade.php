@@ -96,11 +96,15 @@
                 <a href="#" class="btn bg-warning" id="btn_export_payroll">
                   <i class="fas fa-file-excel"></i> Exportar
                 </a>
-                @if($Payrolls->payroll_status_id == 1 || $Payrolls->payroll_status_id == 2)
+                @if(Auth::User()->id_rol == 1  && $Payrolls->payroll_status_id < 3)
                 <a href="#" class="btn btn-success" id="btn_process_payroll">
                   <i class="far fa-credit-card"></i> Procesar
                 </a>
-                @endif
+                @elseif(Auth::User()->id_rol == 3 && $Payrolls->payroll_status_id == 1)
+                <a href="#" class="btn btn-primary" id="btn_process_payroll">
+                  <i class="fas fa-check"></i> Aprobar
+                </a>
+              @endif
               </div>
             
           </div>

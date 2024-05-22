@@ -95,14 +95,12 @@
                             <td class="text-center">{{ Date::parse($p->end_date)->format('D, M d, Y')}} </td>
                             <td class="text-center">C$. {{ number_format($p->neto_pagado,2) }}</td>
                             <td>
-                             
+                              @if($p->payroll_status_id == 1 || Auth::User()->id_rol == 1)
                                 <div class="text-center">
-                                    <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="edit_payroll({{$p}})"><span class="text-500 fas fa-edit"></span></button>
-                                    @if($p->payroll_status_id == 1)
-                                      <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$p}})"><span class="text-500 fas fa-trash-alt"></span></button>
-                                    @endif
-
+                                    <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="edit_payroll({{$p}})"><span class="text-500 fas fa-edit"></span></button>                                    
+                                    <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$p}})"><span class="text-500 fas fa-trash-alt"></span></button>
                                 </div>
+                              @endif
                             </td>
                         </tr>
                         @endforeach    
@@ -138,6 +136,7 @@
           </div>
           <div class="modal-body">            
               <div class="row g-3">
+
                   <div class="col-md-12 mb-12">
                       <div class="input-group">
                           <div class="input-group-append" >
@@ -148,6 +147,17 @@
                               <option value="{{$t->id_payroll_type}}"> {{$t->payroll_type_name}}</option>
                             @endforeach
                           </select>
+                      </div>
+                  </div>
+
+
+                  <div class="col-md-12 mb-12 mt-3">
+                    <label>Fecha Nómina</label>
+                      <div class="input-group date" id="dtPayroll" data-target-input="nearest">
+                          <div class="input-group-append" data-target="#dtPayroll" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                          </div>
+                          <input type="text" class="form-control datetimepicker-input" data-target="#dtPayroll" id="IdDatePayroll" value="{{ date('d/m/y') }}"/>
                       </div>
                   </div>
                   

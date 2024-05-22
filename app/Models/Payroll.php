@@ -115,6 +115,7 @@ class Payroll extends Model {
                         'payroll_type_id'       => $request->payroll_type_,
                         'payroll_status_id'     => 1,
                         'payroll_name'          => self::setNamePayroll($request),
+                        'payroll_date'          => $request->payroll_date_,
                         'start_date'            => $request->payroll_date_ini_,
                         'end_date'              => $request->payroll_date_end_,
                         'inss_patronal'         => $request->payroll_inss_patronal_,

@@ -75,7 +75,7 @@
                   
                   <tr>
                     <td class="align-middle">
-                      @if($Payrolls->payroll_status_id == 1 || $Payrolls->payroll_status_id == 2)
+                      @if($Payrolls->payroll_status_id == 1 || Auth::User()->id_rol == 1)
                         <a class="text-900" href="#!" onclick="AddGastos({{$p}})"><h6 class="mb-0 text-nowrap">{{$p->employee_full_name}}</h6></a>
                       @else
                       <a class="text-900" href="#!" ><h6 class="mb-0 text-nowrap">{{$p->employee_full_name}}</h6></a>
@@ -119,10 +119,14 @@
               <a href="#" class="btn bg-warning" id="btn_export_payroll">
                 <i class="fas fa-file-excel"></i> Exportar
               </a>
-              @if($Payrolls->payroll_status_id == 1 || $Payrolls->payroll_status_id == 2)
-              <a href="#" class="btn btn-success" id="btn_process_payroll">
-                <i class="far fa-credit-card"></i> Procesar
-              </a>
+              @if(Auth::User()->id_rol == 1  && $Payrolls->payroll_status_id < 3)
+                <a href="#" class="btn btn-success" id="btn_process_payroll">
+                  <i class="far fa-credit-card"></i> Procesar
+                </a>
+                @elseif(Auth::User()->id_rol == 3 && $Payrolls->payroll_status_id == 1)
+                <a href="#" class="btn btn-primary" id="btn_process_payroll">
+                  <i class="fas fa-check"></i> Aprobar
+                </a>
               @endif
             </div>
             
