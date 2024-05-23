@@ -381,7 +381,7 @@
                 {"title": "PENDIENTE","data": "saldo_cuota", "render": function(data, type, row, meta) {
 
                     if(row.saldo_cuota > 0){
-                        return `<a href="#" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+`)" class=""><span class="badge rounded-pill ms-3 badge-soft-info text-danger">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> </a>  `
+                        return `<a href="#" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+ `,`+ row.NumPago +`)" class=""><span class="badge rounded-pill ms-3 badge-soft-info text-danger">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> </a>  `
                     }else{
                         return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
                     }
@@ -428,7 +428,7 @@
         
     }
 
-    function AbonoPendiente(Monto,Id){
+    function AbonoPendiente(Monto,Id,Num_Pago){
         const FechaAbono = moment().format('YYYY-MM-DD HH:mm:ss');
         Swal.fire({
             title: '¿Quiere realizar el pago pendiente  ?',
@@ -448,6 +448,8 @@
                         Total_      : Monto,
                         FechaAbono  : FechaAbono,
                         Tipo        : 0,
+                        NumPago     : Num_Pago,
+                        Desc        : 0,
                         _token      : "{{ csrf_token() }}" 
                     },
                     type: 'post',

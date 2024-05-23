@@ -246,10 +246,8 @@ class CredinstanteController extends Controller {
             case '0':
                 // $response = Abono::SaveNewAbono($request);
                 // Clientes::CheckStatus($request->input('IdCred'));
-
                 $response = Abono::NewPagos($request);
                 Clientes::CheckStatus($request->input('IdCred'));
-
 
                 break;
             case '1':
