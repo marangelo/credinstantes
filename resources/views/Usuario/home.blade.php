@@ -35,6 +35,9 @@
           <button type="submit" class="btn btn-credi-primary btn-block text-white">Acceder</button>
         </div>
       </form>
+      <div class="text-center ">
+        <p class="description">{{ENV('APP_VERSION')}}</p>
+      </div>
     </div>
     <!-- /.card-body -->
   </div>
