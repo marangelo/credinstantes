@@ -80,10 +80,12 @@
                             <td class="text-nowrap">{{$e->email }}</td>
                             <td class="text-nowrap">{{$e->phone_number }}</td>
                             <td class="text-end">
+                            @if(Auth::User()->id_rol == 1)
                             <div>
                                 <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="Editar({{$e->id_employee}})"><span class="text-500 fas fa-edit"></span></button>
                                 <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$e->id_employee}})"><span class="text-500 fas fa-trash-alt"></span></button>
                             </div>
+                            @endif
                             </td>
                         </tr>
                         @endforeach     

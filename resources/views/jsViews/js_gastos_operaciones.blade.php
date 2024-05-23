@@ -157,12 +157,15 @@
             { "title": "FECHA GASTO", "data": "Fecha_gasto" },
             { "title": "MONTO C$.", "data": "Monto", render: $.fn.dataTable.render.number(',', '.', 2, '') },
             { "title": "CREADO POR.", "data": "Usuario" },
-            {"title": "  ","data": "Id", "render": function(data, type, row, meta) {                    
+            {"title": "  ","data": "Id", "render": function(data, type, row, meta) {        
+                            
                 return `<div class="card-tools text-center">
-                    <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                    </div>` ;
+                    <?php if(Auth::User()->id_rol == 1): ?>
+                        <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>` ;
             }},   
             
             ],
