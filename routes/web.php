@@ -125,6 +125,7 @@ Route::post('getGastosOperaciones', 'GastosOperacionesController@getGastosOperac
 Route::post('SaveGastoOperaciones', 'GastosOperacionesController@SaveGastoOperaciones')->name('SaveGastoOperaciones');
 Route::post('RemoveGasto', 'GastosOperacionesController@RemoveGasto')->name('RemoveGasto');
 Route::get('ExportGastos', 'GastosOperacionesController@ExportGastos')->name('ExportGastos');
+route::post('getGasto', 'GastosOperacionesController@getGasto')->name('getGasto');
 
 Route::get('Payrolls', 'PayrollsController@getPayrolls')->name('Payrolls');
 Route::post('SavePayroll', 'PayrollsController@SavePayroll')->name('SavePayroll');

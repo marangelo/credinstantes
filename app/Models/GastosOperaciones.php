@@ -18,6 +18,23 @@ class GastosOperaciones extends Model {
     protected $table = "tbl_gastos_operaciones";
     protected $primaryKey = 'id_gasto_operaciones';
 
+    public static function getGasto(Request $request)
+    {
+        $ID = $request->input('IdGasto');
+        $Obj = GastosOperaciones::where('id_gasto_operaciones', $ID)->get();
+        $array_gasto_ope = array();
+        foreach ($Obj as $key => $a) {
+            $array_gasto_ope[$key] = [
+                "Id" => $a->id_gasto_operaciones,
+                "Fecha_gasto" => \Date::parse($a->fecha_gasto)->format('d/m/Y'),
+                "Concepto" => $a->concepto,
+                "Monto" => $a->monto,
+                "Usuario" => $a->id_user,
+            ];
+        }
+        return $array_gasto_ope;
+    }
+
     public static function getGastosOperaciones(Request $request)
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
@@ -44,14 +61,23 @@ class GastosOperaciones extends Model {
     {
         if ($request->ajax()) {
             try {
+                $ID = $request->input('_IdGasto');
 
-                $response = GastosOperaciones::insert([
-                    'concepto'      => $request->input('_Concepto'),
-                    'fecha_gasto'   => $request->input('_Fecha'),
-                    'monto'         => $request->input('_Monto'),
-                    'id_user'       => Auth::id(),
-                    'activo'        => 1,
-                ]); 
+                if ($ID == '0') {
+                    $response = GastosOperaciones::insert([
+                        'concepto'      => $request->input('_Concepto'),
+                        'fecha_gasto'   => $request->input('_Fecha'),
+                        'monto'         => $request->input('_Monto'),
+                        'id_user'       => Auth::id(),
+                        'activo'        => 1,
+                    ]);
+                } else {
+                    $response = GastosOperaciones::where('id_gasto_operaciones', $ID)->update([
+                        'concepto'      => $request->input('_Concepto'),
+                        'fecha_gasto'   => $request->input('_Fecha'),
+                        'monto'         => $request->input('_Monto'),
+                    ]);
+                }
 
                 return $response;
                 

@@ -36,5 +36,10 @@ class GastosOperacionesController extends Controller {
     {
         $response = GastosOperaciones::ExportGastos($request);
     }
+    public function getGasto(Request $request)
+    {
+        $response = GastosOperaciones::getGasto($request);
+        return response()->json($response);
+    }
 
 }

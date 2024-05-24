@@ -113,8 +113,9 @@
         <div class="modal-header">
             <div class="user-block">
               <img class="img-circle" src="{{asset('img/nomina.png')}}" alt="User Image">
-              <span class="username"><a href="#"> Nuevo Gasto </a></span>
+              <span class="username"><a href="#"> <span id="accion_form_gasto"></span> Gasto </a></span>
               <span class="description"># Ingrese informacion para gastos de operacion</span>
+              <span id="IdGasto" >0</span>
             </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>

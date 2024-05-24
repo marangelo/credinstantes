@@ -27,10 +27,14 @@
             dt_End_ = dt_End.format('YYYY-MM-DD');
             
             window.location.href = "ExportGastos?" + $.param({ dt_ini: dt_Ini_, dt_end: dt_End_ }); 
-        })
+        });
 
         
         $("#btn-openModal-gasto").click(function(){
+            $("#accion_form_gasto").html('Nuevo');
+            $("#IdGasto").html('0');
+            $("#txt_concepto").val('');
+            $("#txt_Total_monto").val('');
             $('#modal-lg').modal('show');          
         })
 
@@ -39,11 +43,14 @@
                 var Fecha      = $("#IdFechaGasto").val();   
                 var Monto    = $("#txt_Total_monto").val();   
                 var Concepto      = $("#txt_concepto").val();
+                var IdGasto      = $("#IdGasto").html();
                 
                         
                 _Monto      = isValue(Monto,'N/D',true);
                 _Concepto   = isValue(Concepto,'N/D',true);
                 _Fecha      = isValue(Fecha,'N/D',true);   
+                _IdGasto    = isValue(IdGasto,'0',true);
+
                 const FechaGasto = moment(_Fecha, 'DD/MM/YYYY');
 
                 if(_Fecha ==='N/D'|| _Monto === 'N/D' || _Concepto ==='N/D'){
@@ -56,6 +63,7 @@
                             _Fecha      : FechaGasto.format('YYYY-MM-DD'),
                             _Monto      : _Monto,
                             _Concepto   : _Concepto,
+                            _IdGasto    : _IdGasto,
                             _token      : "{{ csrf_token() }}" 
                         },
                         async: true,
@@ -161,6 +169,9 @@
                             
                 return `<div class="card-tools text-center">
                     <?php if(Auth::User()->id_rol == 1): ?>
+                        <a href="#!" onClick="Editar(`+ row.Id +`)" class="btn btn-info">
+                            <i class="fas fa-edit"></i>
+                        </a>
                         <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
                             <i class="fas fa-trash"></i>
                         </a>
@@ -201,6 +212,33 @@
         });
         
     }
+
+    function Editar(ID) {
+        $.ajax({
+            url: "getGasto",
+            data: {
+                IdGasto  : ID,
+                _token  : "{{ csrf_token() }}" 
+            },
+            type: 'post',
+            async: true,
+            success: function(response) {
+                $("#accion_form_gasto").html('Editar');
+                $("#IdGasto").html(response[0].Id);
+                $("#txt_concepto").val(response[0].Concepto);
+                $("#txt_Total_monto").val(response[0].Monto);
+                $("#IdFechaGasto").val(response[0].Fecha_gasto);
+
+                $('#modal-lg').modal('show');
+            },
+            error: function(response) {
+                swal("Oops", "No se ha podido guardar!", "error");
+            }
+        }).done(function(data) {
+        });
+        
+    }
+
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
