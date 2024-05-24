@@ -245,8 +245,6 @@ class ReportsModels extends Model {
     public static function getDashboard($Opt, $dt_end)
     {
 
-       
-
         $array_dashboard    = [];
         $vLabel             = [];
         $vData              = [];
@@ -291,8 +289,6 @@ class ReportsModels extends Model {
             $ttPagoIntereses    += $dia->INTERES;
         }
         $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
-
-        
         
         //$ttPagoIntereses =  $ttPagoIntereses - $GastosOperativos;
         $ttUtilidadNeta = $ttPagoIntereses - $GastosOperativos ;
@@ -310,8 +306,12 @@ class ReportsModels extends Model {
             "Data"              => $vData
         ];
 
+
+
         return $array_dashboard;
     }
+    
+    
 
     public static function getDashboardPromotor($Zona)
     {
