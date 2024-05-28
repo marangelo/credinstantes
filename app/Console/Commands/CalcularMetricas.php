@@ -23,21 +23,15 @@ class CalcularMetricas extends Command
     public function handle()
     {
         $array_zonas = Zonas::where('activo', 1)->pluck('id_zona')->toArray();
-        $array_zonas[-1] = -1;
-
-        
-
-        
-
-        
+        $array_zonas[-1] = -1;        
         
         $Id_Rol = 1;
-        $dt_end = date('Y-m-d');
 
         $array_to_insert    = [];
 
-        $D1     = date('Y-m-01', strtotime($dt_end)). ' 00:00:00';
-        $D2     = $dt_end . ' 23:59:59';
+        $dtNow  = date('Y-m-d');
+        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59'; 
 
         foreach ($array_zonas as $key => $z) {
                         
@@ -83,7 +77,7 @@ class CalcularMetricas extends Command
                     "clientes_activos"  => $Clientes->count(),
                     'Zona_id'           => $Id_Zona,
                     'rol_id'            => $Id_Rol,
-                    'Fecha'             => $dt_end,
+                    'Fecha'             => $dtNow,
                 ];
             }
         }
