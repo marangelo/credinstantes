@@ -79,11 +79,13 @@ class ReportsController extends Controller {
     {      
         $Fecha = $request->input('dt_ini');
 
-        if ($Fecha == date('Y-m-d')) {
-            $response = ReportsModels::getDashboard($Opt, $Fecha);
-        } else {
-            $response = ReportsModels::getMetricasHistory($Opt, $Fecha);
-        }
+        // if ($Fecha == date('Y-m-d')) {
+        //     $response = ReportsModels::getDashboard($Opt, $Fecha);
+        // } else {
+        //     $response = ReportsModels::getMetricasHistory($Opt, $Fecha);
+        // }
+
+        $response = ReportsModels::getDashboard($Opt, $Fecha);
         
         return response()->json($response);
     }
