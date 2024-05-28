@@ -463,5 +463,57 @@ class ReportsModels extends Model {
 
         return $array_merge;
     }
+
+    public static function getMetricasHistory($Zona, $Fecha)
+    {
+        $D1     = date('Y-m-01', strtotime($Fecha)). ' 00:00:00';
+        $D2     = $Fecha . ' 23:59:59';
+
+        $vLabel             = [];
+        $vData              = [];
+        $array_dashboard    = [];
+
+
+        if (Auth::User()->id_rol == 2) {
+            $Zona = Auth::User()->id_zona;
+        }
+
+        $array_dashboard = [
+            "INGRESO"           => 0,
+            "CAPITAL"           => 0,
+            "INTERESES"         => 0,
+            "UTIL_NETA"         => 0,
+            "SALDOS_CARTERA"    => 0,
+            "MORA_ATRASADA"     => 0,
+            "MORA_VENCIDA"      => 0,
+            "clientes_activos"  => 0,
+        ];
+
+        $Dias = Pagos::selectRaw('DAY(FECHA_ABONO) as dy, SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END) + INTERES) as total')
+                ->whereBetween('FECHA_ABONO', [$D1, $D2])
+                ->where('activo', 1)
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('id_zona', $Zona);
+                })
+                ->groupByRaw('DAY(FECHA_ABONO)')
+                ->get();
+
+        foreach ($Dias as $dia) {
+            $vLabel[]   = 'D' . $dia->dy; 
+            $vData[]    = $dia->total; 
+        }
+
+        $Metricas = MetricasHistory::where('fecha', $Fecha)->where('Zona_id',$Zona)->get()->toArray()[0] ?? [];
+
+        if ($Metricas) {
+            $array_dashboard = array_merge($array_dashboard, $Metricas);
+        }
+
+        $array_dashboard["label"]       = $vLabel;
+        $array_dashboard["Data"]        = $vData;
+        
+        
+        return $array_dashboard;
+    }
     
 }

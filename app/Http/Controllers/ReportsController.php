@@ -75,9 +75,15 @@ class ReportsController extends Controller {
         
         return response()->json($response);
     }
-    public function getDashboard($Opt)
-    {
-        $response = ReportsModels::getDashboard($Opt);
+    public function getDashboard($Opt,Request $request)
+    {      
+        $Fecha = $request->input('dt_ini');
+
+        if ($Fecha == date('Y-m-d')) {
+            $response = ReportsModels::getDashboard($Opt, $Fecha);
+        } else {
+            $response = ReportsModels::getMetricasHistory($Opt, $Fecha);
+        }
         
         return response()->json($response);
     }
