@@ -75,6 +75,7 @@ class PagosFechas extends Model {
     {
         $Creditos = Credito::where('activo',1)->where('saldo','>',0);
         $fechaActual = now(); 
+
         $role   = Auth::User()->id_rol;
 
         if ($tipoMora == 'atrasada') {
@@ -91,6 +92,28 @@ class PagosFechas extends Model {
         if ($role === 2) {
             $Zona = Auth::User()->id_zona;
         }
+
+        if ($Zona > -1) {
+            $Mora->where('ID_ZONA', $Zona);
+        }
+
+        return $Mora->sum('SALDO_PENDIENTE');
+    }
+    public static function getMoraCalcHistory($Zona, $tipoMora,$D1, $D2)
+    {
+        $Creditos = Credito::where('activo',1)->where('saldo','>',0);
+        $fechaActual = now(); 
+        
+        if ($tipoMora == 'atrasada') {
+            $Creditos->where('estado_credito', 2);
+        } elseif ($tipoMora == 'vencida') {
+            $Creditos->where('estado_credito',3);
+        }
+
+        $Creditos = $Creditos->get()->pluck('id_creditos');
+
+        //$Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereBetween('FECHA_PAGO', [$D1, $D2]);
 
         if ($Zona > -1) {
             $Mora->where('ID_ZONA', $Zona);
