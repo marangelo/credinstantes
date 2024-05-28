@@ -75,7 +75,8 @@
                     <th>Telefono</th>
                     <th>Departamento</th>
                     <th>Zona</th>
-                    <th>Direccion</th>                    
+                    <th>Direccion</th>    
+                    <th>Saldo C$.</th>                
                     @if (request()->is('Activos/*'))
                       @if (Session::get('rol') == '1' || Session::get('rol') == '3')
                         <th></th>
@@ -116,9 +117,10 @@
                           
                         </td>
                         <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
-                        @if (request()->is('Activos/*'))
+                        <td>{{ number_format($c->getCreditos->sum('saldo'),2)}}</td>
+                          @if (request()->is('Activos/*'))
                           @if (Session::get('rol') == '1' || Session::get('rol') == '3')
-                          <td>
+                        <td>
                             <div class="card-tools text-center">  
                                 <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
                                     <i class="fas fa-pencil-alt">
@@ -133,7 +135,7 @@
                                 </a>
                                 @endif
                               </div>
-                              </td>
+                          </td>
                           @endif
                         @endif
 
