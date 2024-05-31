@@ -2,11 +2,22 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\GastosOperaciones;
+use App\Traits\CheckUserLock;
 
-class GastosOperacionesController extends Controller {
+class GastosOperacionesController extends Controller 
+{
+    use CheckUserLock;
     public function __construct()
     {
         $this->middleware('auth');
+        // Luego verificar si el usuario está bloqueado
+        $this->middleware(function ($request, $next) {
+            $response = $this->checkUserLock();
+            if ($response) {
+                return $response; 
+            }
+            return $next($request);
+        });
     }
 
     public function Gastos()

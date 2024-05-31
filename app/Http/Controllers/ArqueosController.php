@@ -4,11 +4,22 @@ use Illuminate\Http\Request;
 use App\Models\Arqueo;
 use App\Models\Zonas;
 use App\Exports\ExportArqueo;
+use App\Traits\CheckUserLock;
 
-class ArqueosController extends Controller {
+class ArqueosController extends Controller 
+{   
+    use CheckUserLock;
     public function __construct()
     {
         $this->middleware('auth');
+        // Luego verificar si el usuario está bloqueado
+        $this->middleware(function ($request, $next) {
+            $response = $this->checkUserLock();
+            if ($response) {
+                return $response; 
+            }
+            return $next($request);
+        });
     }
 
     public function ShowHome()

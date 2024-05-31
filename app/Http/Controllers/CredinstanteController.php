@@ -17,11 +17,23 @@ use App\Models\PagosFechas;
 use App\Models\Roles;
 use App\Models\DateRecord;
 use CodersFree\Date\Date;
+use App\Traits\CheckUserLock;
 
-class CredinstanteController extends Controller {
+class CredinstanteController extends Controller 
+{
+    use CheckUserLock;
+
     public function __construct()
     {
         $this->middleware('auth');
+        // Luego verificar si el usuario está bloqueado
+        $this->middleware(function ($request, $next) {
+            $response = $this->checkUserLock();
+            if ($response) {
+                return $response; 
+            }
+            return $next($request);
+        });
     }
     public function getDashboard()
     {         

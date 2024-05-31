@@ -16,11 +16,22 @@ use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\ReportsModels;
 use CodersFree\Date\Date;
+use App\Traits\CheckUserLock;
 
-class ReportsController extends Controller {
+class ReportsController extends Controller 
+{
+    use CheckUserLock; 
     public function __construct()
     {
         $this->middleware('auth');
+        // Luego verificar si el usuario está bloqueado
+        $this->middleware(function ($request, $next) {
+            $response = $this->checkUserLock();
+            if ($response) {
+                return $response; 
+            }
+            return $next($request);
+        });
     }
     public function RecuperacionCobro(){
         $Titulo      = "Recuperacion";

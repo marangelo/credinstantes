@@ -9,11 +9,22 @@ use App\Models\Employee;
 use App\Models\PayrollType;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\CheckUserLock;
 
-class EmployeeController extends Controller {
+class EmployeeController extends Controller 
+{
+    use CheckUserLock;
     public function __construct()
     {
         $this->middleware('auth');
+        // Luego verificar si el usuario está bloqueado
+        $this->middleware(function ($request, $next) {
+            $response = $this->checkUserLock();
+            if ($response) {
+                return $response; 
+            }
+            return $next($request);
+        });
     }
     public function getHome()
     {        
