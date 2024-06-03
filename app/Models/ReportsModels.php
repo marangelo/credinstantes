@@ -257,7 +257,6 @@ class ReportsModels extends Model {
 
         $role   = Auth::User()->id_rol;
 
-
         $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
         $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
 
@@ -514,11 +513,22 @@ class ReportsModels extends Model {
             $vData[]    = $dia->total; 
         }
 
+
         $Metricas = MetricasHistory::where('fecha', $Fecha)->where('Zona_id',$Zona)->get()->toArray()[0] ?? [];
 
         if ($Metricas) {
             $array_dashboard = array_merge($array_dashboard, $Metricas);
         }
+
+        // if (date('d') == '01') {
+        //     $D1     = date('Y-m-01', strtotime('-1 month', strtotime($Fecha))). ' 00:00:00';
+        //     $D2     = date('Y-m-t', strtotime('-1 month', strtotime($Fecha))). ' 23:59:59';   
+        // } 
+
+        $array_dashboard["MORA_ATRASADA"]       = MetricasHistory::getMoraHistory($Zona,'MORA_ATRASADA');
+        $array_dashboard["MORA_VENCIDA"]        = MetricasHistory::getMoraHistory($Zona,'MORA_VENCIDA');
+
+        
 
         $array_dashboard["label"]       = $vLabel;
         $array_dashboard["Data"]        = $vData;

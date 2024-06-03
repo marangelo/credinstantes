@@ -11,4 +11,18 @@ class MetricasHistory extends Model {
     protected $table = "tbl_metricas_history";    
     protected $primaryKey = 'id_metricas';
 
+
+    public static function getMoraHistory($zona,$Mora)
+    {
+        try {
+            $moraAtrasada = MetricasHistory::where('Zona_id', $zona)
+                ->orderBy('id_metricas', 'DESC')
+                ->value($Mora);
+
+            return $moraAtrasada;
+        } catch (Exception $e) {
+            // Handle the exception
+        }
+    }
+
 }

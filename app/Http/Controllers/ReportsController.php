@@ -90,7 +90,7 @@ class ReportsController extends Controller
     {      
         $Fecha = $request->input('dt_ini');
 
-        if ($Fecha == date('Y-m-d')) {
+        if ($Fecha >= date('Y-m-d')) {
             $response = ReportsModels::getDashboard($Opt, $Fecha);
         } else {
             $response = ReportsModels::getMetricasHistory($Opt, $Fecha);
