@@ -18,6 +18,11 @@ class GastosOperaciones extends Model {
     protected $table = "tbl_gastos_operaciones";
     protected $primaryKey = 'id_gasto_operaciones';
 
+    public function Creado()
+    {
+        return $this->belongsTo(Usuario::class, 'id_user','id');
+    }
+
     public static function getGasto(Request $request)
     {
         $ID = $request->input('IdGasto');
@@ -29,7 +34,7 @@ class GastosOperaciones extends Model {
                 "Fecha_gasto" => \Date::parse($a->fecha_gasto)->format('d/m/Y'),
                 "Concepto" => $a->concepto,
                 "Monto" => $a->monto,
-                "Usuario" => $a->id_user,
+                "Usuario" => $a->Creado->nombre,
             ];
         }
         return $array_gasto_ope;
@@ -51,7 +56,7 @@ class GastosOperaciones extends Model {
                 "Fecha_gasto"   => \Date::parse($a->fecha_gasto)->format('d-m-Y') ,
                 "Concepto"      => $a->concepto,
                 "Monto"         => $a->monto,
-                "Usuario"       => $a->id_user,
+                "Usuario"       => $a->Creado->nombre,
             ];
                 
         }

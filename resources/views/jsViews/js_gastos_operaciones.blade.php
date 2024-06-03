@@ -127,14 +127,15 @@
             "destroy": true,
             "autoWidth": false,
             "info": false,
-            order: [[0, 'desc']],
+            "order": [[0, 'desc']],
+            "lengthMenu": [[1000,-1], [1000,"Todo"]],
             "language": {
             "zeroRecords": "NO HAY COINCIDENCIAS",
             "paginate": {
-            "first": "Primera",
-            "last": "Última ",
-            "next": "Siguiente",
-            "previous": "Anterior"
+                "first": "Primera",
+                "last": "Última ",
+                "next": "Siguiente",
+                "previous": "Anterior"
             },
             
             "lengthMenu": "MOSTRAR _MENU_",
@@ -142,43 +143,42 @@
             "search": "BUSCAR"
             },
             "ajax":{
-            "url": "getGastosOperaciones",
-            "type": 'POST',
-            'dataSrc': '',
-            "data": {                
-                dtIni   : dt_Ini_,
-                dtEnd   : dt_End_,
-                _token  : "{{ csrf_token() }}" 
-            }
+                "url": "getGastosOperaciones",
+                "type": 'POST',
+                'dataSrc': '',
+                "data": {                
+                    dtIni   : dt_Ini_,
+                    dtEnd   : dt_End_,
+                    _token  : "{{ csrf_token() }}" 
+                }
             },
             buttons: [{extend: 'excelHtml5'}],
             "columnDefs": [
-            {"className": "dt-center", "targets": [0,1,2,4,5 ]},
-            {"className": "dt-right", "targets": [3]},
-            { "width": "8%", "targets": [] },
-            { "width": "12%", "targets": [  ] },
-            { "visible":false, "searchable": false,"targets": [] }
+                {"className": "dt-center", "targets": [0,1,2,4,5 ]},
+                {"className": "dt-right", "targets": [3]},
+                { "width": "8%", "targets": [] },
+                { "width": "12%", "targets": [  ] },
+                { "visible":false, "searchable": false,"targets": [] }
             ],
             'columns': [
-            { "title": "#", "data": "Id" },
-            { "title": "CONCEPTO", "data": "Concepto" },
-            { "title": "FECHA GASTO", "data": "Fecha_gasto" },
-            { "title": "MONTO C$.", "data": "Monto", render: $.fn.dataTable.render.number(',', '.', 2, '') },
-            { "title": "CREADO POR.", "data": "Usuario" },
-            {"title": "  ","data": "Id", "render": function(data, type, row, meta) {        
-                            
-                return `<div class="card-tools text-center">
-                    <?php if(Auth::User()->id_rol == 1): ?>
-                        <a href="#!" onClick="Editar(`+ row.Id +`)" class="btn btn-info">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    <?php endif; ?>
-                </div>` ;
-            }},   
-            
+                { "title": "#", "data": "Id" },
+                { "title": "CONCEPTO", "data": "Concepto" },
+                { "title": "FECHA GASTO", "data": "Fecha_gasto" },
+                { "title": "MONTO C$.", "data": "Monto", render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                { "title": "CREADO POR.", "data": "Usuario" },
+                {"title": "  ","data": "Id", "render": function(data, type, row, meta) {        
+                                
+                    return `<div class="card-tools text-center">
+                        <?php if(Auth::User()->id_rol == 1): ?>
+                            <a href="#!" onClick="Editar(`+ row.Id +`)" class="btn btn-info">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>` ;
+                }},   
             ],
             "footerCallback": function (row, data, start, end, display) {
             var api = this.api();
