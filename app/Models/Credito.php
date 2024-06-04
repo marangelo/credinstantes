@@ -76,6 +76,17 @@ class Credito extends Model
                     $query->where('ID_ZONA', $Zona);
                 })->get();        
     }
+    public static function ClientesRenovados($Zona,$D1, $D2)
+    {
+        return Reloan::whereBetween('date_reloan', [$D1,$D2])->count();
+    }
+    public static function ClientesNuevos($Zona,$D1, $D2)
+    {
+        $Reloan = Reloan::whereBetween('date_reloan', [$D1,$D2])->get()->toArray();
+        $NewClients = CreditosHistory::whereBetween('FECHA', [$D1,$D2]);
+
+        return $NewClients->whereNotIn('ID_CREDITO', array_column($Reloan, 'loan_id'))->count();
+    }
     public static function Saldos_Cartera($Zona,$D1, $D2)
     {
         return CreditosHistory::where('CREDITO_ACTIVO', 1)

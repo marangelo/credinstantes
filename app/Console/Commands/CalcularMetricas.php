@@ -10,6 +10,7 @@ use App\Models\PagosFechas;
 use App\Models\GastosOperaciones;
 use App\Models\Credito;
 use App\Models\Pagos;
+use App\Models\Consolidado;
 
 class CalcularMetricas extends Command
 {
@@ -27,7 +28,8 @@ class CalcularMetricas extends Command
         
         $Id_Rol = 1;
 
-        $array_to_insert    = [];
+        $array_to_insert      = [];
+        $array_consolidado    = [];
 
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
@@ -57,13 +59,18 @@ class CalcularMetricas extends Command
                 $ttPagoIntereses    += $dia->INTERES; 
             }
             $Saldos_Cartera = Credito::Saldos_Cartera($Id_Zona,$D1, $D2);
-            $Clientes       = Credito::Creditos($Id_Zona,$D1, $D2);
+            $Clientes       = Credito::Creditos($Id_Zona,$D1, $D2);            
+        
 
             $GastosOperativos = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
 
             $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
 
             $ttUtilidadNeta = $ttPagoIntereses - $GastosOperativos ;
+
+            //Clientes Nuevos y Renovados
+            $ClientesRenovados      = Credito::ClientesRenovados($Id_Zona,$D1, $D2);
+            $ClientesNuevos         = Credito::ClientesNuevos($Id_Zona,$D1, $D2);
 
             if ( $ttCuotaCobrada > 0) {
                 $array_to_insert[$key] = [
@@ -73,17 +80,33 @@ class CalcularMetricas extends Command
                     "UTIL_NETA"         => $ttUtilidadNeta,
                     "SALDOS_CARTERA"    => $Saldos_Cartera,
                     "MORA_ATRASADA"     => $MoraAtrasada,
-                    "MORA_VENCIDA"      => $MoraVencida,
-                    "clientes_activos"  => $Clientes->count(),
+                    "MORA_VENCIDA"      => $MoraVencida,                    
                     'Zona_id'           => $Id_Zona,
                     'rol_id'            => $Id_Rol,
                     'Fecha'             => $dtNow,
+                    "clientes_activos"      => $Clientes->count(),
                 ];
+
+                if ($Id_Zona < 0) {
+                    $array_consolidado[$key] = [
+                        'fecha'             => $dtNow,
+                        "clientes_activos"      => $Clientes->count(),
+                        "clientes_renovados"    => $ClientesRenovados,
+                        "clientes_nuevos"       => $ClientesNuevos,
+                        "gastos_operativos"     => $GastosOperativos,
+                        "mora_atrasada"         => $MoraAtrasada,
+                        "mora_vencida"          => $MoraVencida, 
+                        "saldo_cartera"         => $Saldos_Cartera,
+                    ];
+                }
+                
+
+
             }
         }
-        
-        MetricasHistory::insert($array_to_insert);
-
+        //MetricasHistory::insert($array_to_insert);
+        //Guarda los registros a la tabla consolidado        
+        Consolidado::insert($array_consolidado);
 
     }
 }
