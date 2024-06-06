@@ -30,35 +30,55 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              
-              <div class="table-responsive scrollbar">
-                <table class="table table-striped border-bottom" id="tbl_consolidado">
-                  <thead class="light">
-                    <tr class="bg-primary text-white dark__bg-1000">
-                      <th></th>
-                      <th class="border-0">COMPARATIVO DEL MES</th>
-                      <th class="border-0 text-center">JUNIO</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>1</td><td>NUMERO DE CLIENTES</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>2</td><td>SALDOS DE CARTERA</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>3</td><td>EFECTIVO DISPONIBLE  DE CAP</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>4</td><td>DESEMBOLSOS  DEL MES</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>5</td><td>CLIENTES NUEVOS</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>6</td><td>RENOVACIONES</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>7</td><td>MORA ATRASADA</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>8</td><td>MORA VENCIDA</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>9</td><td>RECUPERACION </td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>10</td><td>INGRESOS FINANCIEROS</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>11</td><td>GASTOS OPERATIVOS</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>12</td><td>UTILIDADES DE ACCIONISTAS REINVERTIDAS</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>13</td><td>REINVERCION DE INTERESES / P CAPITAL</td><td class="align-middle text-center">0</td></tr>
-                    <tr><td>14</td><td>UTILIDADES RETENIDAS PARA PROVICION</td><td class="align-middle text-center">0</td></tr>
-                  </tbody>
-                    
-                </table>
+              <div class="card-header">
+              <h5 class="card-title">CONSOLIDADO DE INDICADORES</h5>
+                <div class="card-tools">
+                  <div class="btn-group">
+                    <div class="input-group date" id="dt-end" data-target-input="nearest">                            
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-primary" id="btn-openModal-gasto">
+                                <i class="fas fa-plus-circle "></i>
+                            </button>
+                            <button type="button" class="btn btn-success" id="btn-export-gasto">
+                                <i class="fas fa-file-excel "></i>
+                            </button>
+                        </div>
+                      </div>    
+                    </div>
+                  </div>
+                </div>
+              <div class="card-body">
+                
+                <div class="table-responsive scrollbar">
+                  <table class="table table-striped border-bottom" id="tbl_consolidado">
+                    <thead class="light">
+                      <tr class="bg-primary text-white dark__bg-1000">
+                        <th></th>
+                        <th class="border-0">COMPARATIVO DEL MES</th>
+                        @foreach ($Consolidado['header_date'] as $k) 
+                              <th class="border-0 text-center">{{date("M", strtotime($k)) . ltrim(date("y", strtotime($k)), '0')}}</th>
+                          @endforeach
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($Consolidado['header_date_rows'] as $r)
+                        <tr>
+                          <td>1</td>
+                          <td>{{$r['CONCEPTO']}}</td>
+                          @foreach ($Consolidado['header_date'] as $k) 
+                            <td class="align-middle text-right">{{ $r[date("M", strtotime($k)) . ltrim(date("y", strtotime($k)), '0')] }}</td>                                
+                          @endforeach
+                        </tr>
+                      @endforeach
+                      
+                      
+                    </tbody>
+                      
+                  </table>
+                </div>
               </div>
+              
+              
             
             </div>
             <!-- /.card -->

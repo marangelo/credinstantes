@@ -11,22 +11,39 @@ class Consolidado extends Model {
     public $timestamps = false;
     protected $table = "tbl_consolidados";
 
-    /**
-     * Eliminar los últimos cinco días a partir de una fecha dada.
-     *
-     * @param string $date La fecha a partir de la cual se eliminarán los últimos cinco días.
-     * @return void
-     */
-    public static function deleteLastThreeDays($date) {
-        // Obtener la fecha actual si no se proporciona ninguna fecha
-        if (!$date) {
-            $date = Carbon::now()->toDateString();
+    //CREA UNA FUNCIONA STATIC PARA LEER UN PROCEDURE QUE SE LLAMA CalcConsolidado Y RECIBE COMO PARAMETRO EL YEAR ACTUAL
+    public static function CalcConsolidado($year){
+        try {
+            $json_arrays = array();
+            $i = 0 ;
+
+            $months = array(
+                //'Jan', 'Feb', 'Mar', 'Apr', 'May', 
+                'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+            );
+            foreach($months as $m){
+                $json_arrays['header_date'][$i] = $m . ' ' . substr($year, -2);
+                $i++;
+            }
+        
+            $Rows = \DB::select('CALL CalcConsolidado(?)', array($year));
+
+            foreach($Rows as $r){
+                $json_arrays['header_date_rows'][$i]['CONCEPTO'] = $r->Concepto;
+                foreach($json_arrays['header_date'] as $dtFecha => $valor){
+                    
+                    $rows_in = date("M", strtotime($valor)) . ltrim(date("y", strtotime($valor)), '0');
+
+                    $json_arrays['header_date_rows'][$i][$rows_in] = ($r->$rows_in=='0.0' || $r->$rows_in=='00.00') ? '0.00' : number_format($r->$rows_in,2)  ;
+    
+                }
+                $i++;
+            }
+
+
+            return $json_arrays;
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        // Calcular la fecha cinco días atrás
-        $fiveDaysAgo = Carbon::parse($date)->subDays(4)->toDateString();
-
-        // Eliminar los registros correspondientes a los últimos cinco días
-        self::where('fecha', '>=', $fiveDaysAgo)->delete();
     }
 }

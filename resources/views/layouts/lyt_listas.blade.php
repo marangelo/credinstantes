@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="icon" type="image/x-icon" href="{{asset('img/favicon.ico')}}">
+  <link rel="icon" type="image/x-icon" href="{{asset('img/logo.png')}}">
   <title>CREDIN$TANTE | {{$Titulo}}</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
 
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed {{ (request()->segment(1)  == 'Perfil' ) ? ' sidebar-closed sidebar-collapse ' : '' }}">
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed {{ (request()->segment(1)  == 'Perfil' || request()->segment(1)  == 'Consolidado' ) ? ' sidebar-closed sidebar-collapse ' : '' }}">
 <div class="wrapper">
 <!-- Preloader -->
 <div class="preloader flex-column justify-content-center align-items-center">

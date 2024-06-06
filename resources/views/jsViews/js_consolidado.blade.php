@@ -10,7 +10,7 @@
             "destroy": true,
             "info": false,
             "bPaginate": false,
-            "responsive": true, 
+            "responsive": false, 
             "columnDefs": [
                 { "targets": 0, "visible": false }
             ],

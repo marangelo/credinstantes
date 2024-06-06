@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\Consolidado;
 
 
 class ConsolidadoController extends Controller
@@ -13,6 +14,8 @@ class ConsolidadoController extends Controller
     public function Consolidado()
     {
         $Titulo = "Consolidado";
-        return view('Consolidado.Home', compact('Titulo'));
+       
+        $Consolidado = Consolidado::CalcConsolidado(date('Y'));
+        return view('Consolidado.Home', compact('Titulo', 'Consolidado'));
     }
 }
