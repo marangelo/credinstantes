@@ -88,16 +88,46 @@ class CalcularMetricas extends Command
                 ];
 
                 if ($Id_Zona < 0) {
-                    $array_consolidado[$key] = [
-                        'fecha'             => $dtNow,
-                        "clientes_activos"      => $Clientes->count(),
-                        "clientes_renovados"    => $ClientesRenovados,
-                        "clientes_nuevos"       => $ClientesNuevos,
-                        "gastos_operativos"     => $GastosOperativos,
-                        "mora_atrasada"         => $MoraAtrasada,
-                        "mora_vencida"          => $MoraVencida, 
-                        "saldo_cartera"         => $Saldos_Cartera,
+                    $array_consolidado = [
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "gastos_operativos",
+                            "Valor"     => $GastosOperativos
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "mora_atrasada",
+                            "Valor"     => $MoraAtrasada
+                        
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "mora_vencida",
+                            "Valor"     => $MoraVencida
+                        ],             
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "saldo_cartera",
+                            "Valor"     => $Saldos_Cartera
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "clientes_nuevos",
+                            "Valor"     => $ClientesNuevos
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "clientes_activos",
+                            "Valor"     => $Clientes->count()
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "clientes_renovados",
+                            "Valor"     => $ClientesRenovados
+                        ]
                     ];
+                    
+
                 }
                 
 
