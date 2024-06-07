@@ -59,8 +59,8 @@ class CalcularMetricas extends Command
                 $ttPagoIntereses    += $dia->INTERES; 
             }
             $Saldos_Cartera = Credito::Saldos_Cartera($Id_Zona,$D1, $D2);
-            $Clientes       = Credito::Creditos($Id_Zona,$D1, $D2);            
-        
+            $Clientes       = Credito::Creditos($Id_Zona,$D1, $D2);           
+            
 
             $GastosOperativos = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
 
@@ -88,6 +88,7 @@ class CalcularMetricas extends Command
                 ];
 
                 if ($Id_Zona < 0) {
+        
                     $array_consolidado = [
                         [
                             "Fecha"     => $dtNow,
@@ -124,6 +125,16 @@ class CalcularMetricas extends Command
                             "Fecha"     => $dtNow,
                             "Concepto"  => "clientes_renovados",
                             "Valor"     => $ClientesRenovados
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "ingreso_neto",
+                            "Valor"     => $ttCuotaCobrada
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            "Concepto"  => "utilidad_bruta",
+                            "Valor"     => $ttPagoIntereses
                         ]
                     ];
                     
