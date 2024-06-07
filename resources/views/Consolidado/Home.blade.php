@@ -36,7 +36,7 @@
                   <div class="btn-group">
                     <div class="input-group date" id="dt-end" data-target-input="nearest">                            
                         <div class="card-tools">
-                            <button type="button" class="btn btn-primary" id="btn-openModal-gasto">
+                            <button type="button" class="btn btn-primary" id="btn-consolidado-add">
                                 <i class="fas fa-plus-circle "></i>
                             </button>
                             <button type="button" class="btn btn-success" id="btn-export-gasto">

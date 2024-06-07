@@ -1,5 +1,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
+        
+        $('#btn-consolidado-add').click(function () {
+            window.location.href = 'AddConsolidado';
+        });
 
 
 

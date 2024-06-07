@@ -145,3 +145,8 @@ Route::get('/EditEmployee/{id_employee}', 'EmployeeController@editEmployee')->na
 Route::post('rmEmployee', 'EmployeeController@rmEmployee')->name('rmEmployee');
 
 Route::get('Consolidado', 'ConsolidadoController@Consolidado')->name('Consolidado');
+Route::get('AddConsolidado', 'ConsolidadoController@AddConsolidado')->name('AddConsolidado');
+Route::post('SaveIndiador', 'ConsolidadoController@SaveIndiador')->name('SaveIndiador');
+Route::post('getIndicadores', 'ConsolidadoController@getIndicadores')->name('getIndicadores');
+Route::post('RemoveIndicador', 'ConsolidadoController@RemoveIndicador')->name('RemoveIndicador');
+route::post('getInfoIndicador', 'ConsolidadoController@getInfoIndicador')->name('getInfoIndicador');

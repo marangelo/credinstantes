@@ -11,6 +11,11 @@ class Consolidado extends Model {
     public $timestamps = false;
     protected $table = "tbl_consolidados";
 
+    public function ConsolidadoCategoria()
+    {
+        return $this->hasMany(ConsolidadoCat::class, 'key', 'Concepto');
+    }
+
     //CREA UNA FUNCIONA STATIC PARA LEER UN PROCEDURE QUE SE LLAMA CalcConsolidado Y RECIBE COMO PARAMETRO EL YEAR ACTUAL
     public static function CalcConsolidado($year){
         try {
@@ -45,5 +50,94 @@ class Consolidado extends Model {
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public static function getIndicadores(Request $request)
+    {
+        $dtEnd  = $request->input('dtEnd').' 00:00:00';
+        $array  = array();
+        
+        $Indicadores = ConsolidadoCat::WhereIn('id_cat_consolidado',[8,9,12,13,14])->get()->toArray();
+
+        $Obj =  Consolidado::where('Fecha', '=', $dtEnd)
+                            ->whereIn('Concepto', array_column($Indicadores, 'key'))
+                            ->get();
+
+        foreach ($Obj as $key => $a) {  
+            $array[$key] = [
+                "Id"            => $a->id_consolidado,
+                "Fecha_gasto"   => \Date::parse($a->Fecha)->format('d-m-Y') ,
+                "Concepto"      => $a->ConsolidadoCategoria[0]->descripcion,
+                "Monto"         => $a->Valor,
+                "Usuario"       =>'',
+            ];
+                
+        }
+        return $array;
+    }
+    public static function SaveIndiador(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $existingRecord = Consolidado::where('Concepto', $request->input('_Indicador'))
+                    ->where('Fecha', $request->input('_Fecha'))
+                    ->exists();
+
+                if ($existingRecord) {
+                    $response = Consolidado::where('Concepto', $request->input('_Indicador'))
+                    ->where('Fecha', $request->input('_Fecha'))
+                    ->update([
+                        'Concepto'  => $request->input('_Indicador'),
+                        'Fecha'     => $request->input('_Fecha'),
+                        'Valor'     => $request->input('_Monto'),
+                    ]);
+                } else {
+                    $response = Consolidado::insert([
+                        'Concepto'  => $request->input('_Indicador'),
+                        'Fecha'     => $request->input('_Fecha'),
+                        'Valor'     => $request->input('_Monto'),
+                    ]);
+                }
+
+                return $response;
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+    }
+    public static function RemoveIndicador(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $ID         = $request->input('IdIndicador');
+                
+                $response =   Consolidado::where('id_consolidado',  $ID)->delete();
+    
+                return $response;
+    
+    
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        }
+    }
+    public static function getInfoIndicador(Request $request)
+    {
+        $ID = $request->input('IdConso');
+        $Obj = Consolidado::where('id_consolidado', $ID)->get();
+        $array_gasto_ope = array();
+        foreach ($Obj as $key => $a) {
+            $array_gasto_ope = [
+                "Id" => $a->id_consolidado,
+                "Fecha" => \Date::parse($a->Fecha)->format('d/m/Y'),
+                "Concepto" => $a->Concepto,
+                "Monto" => $a->Valor,
+            ];
+        }
+        return $array_gasto_ope;
     }
 }
