@@ -56,8 +56,8 @@
                         <th></th>
                         <th class="border-0">COMPARATIVO DEL MES</th>
                         @foreach ($Consolidado['header_date'] as $k) 
-                              <th class="border-0 text-center">{{date("M", strtotime($k)) . ltrim(date("y", strtotime($k)), '0')}}</th>
-                          @endforeach
+                          <th class="border-0 text-center">{{$k}}</th>
+                        @endforeach
                       </tr>
                     </thead>
                     <tbody>
@@ -66,14 +66,25 @@
                           <td>1</td>
                           <td>{{$r['CONCEPTO']}}</td>
                           @foreach ($Consolidado['header_date'] as $k) 
-                            <td class="align-middle text-right">{{ $r[date("M", strtotime($k)) . ltrim(date("y", strtotime($k)), '0')] }}</td>                                
+                            <td class="align-middle text-right">{{ $r[$k] }}</td>                                
                           @endforeach
                         </tr>
                       @endforeach
-                      
-                      
                     </tbody>
-                      
+                    <tfoot>
+                    
+                        <tr>
+                          <td></td>
+                          <td>TOTAL</td>
+                          @foreach ($Consolidado['header_date'] as $r)
+                            <!-- @foreach ($Consolidado['header_date'] as $k) 
+                             
+                            @endforeach -->
+                            <td class="align-middle text-right">0.00</td> 
+                        @endforeach
+                      </tr>
+                     
+                    </tfoot>  
                   </table>
                 </div>
               </div>

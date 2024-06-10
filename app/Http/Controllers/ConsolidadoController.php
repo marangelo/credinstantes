@@ -15,8 +15,9 @@ class ConsolidadoController extends Controller
     public function Consolidado()
     {
         $Titulo = "Consolidado";
-       
+    
         $Consolidado = Consolidado::CalcConsolidado(date('Y'));
+        
         return view('Consolidado.Home', compact('Titulo', 'Consolidado'));
     }
     public function AddConsolidado()

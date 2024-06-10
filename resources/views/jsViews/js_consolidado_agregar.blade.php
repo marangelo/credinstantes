@@ -79,15 +79,10 @@
 
     function InitTable() {
 
-        var dtEnd   = $("#dtEnd").val(); 
+        var dtEnd           = isValue($("#dtEnd").val(),'N/D',true) 
 
-        dtEnd      = isValue(dtEnd,'N/D',true) 
-
-        const dt_End = moment(dtEnd, 'DD/MM/YYYY');
-
-      
-        dt_End_ = dt_End.format('YYYY-MM-DD');
-        
+        const dt_End    = moment(dtEnd, 'DD/MM/YYYY');
+        dt_End_         = dt_End.format('YYYY-MM-DD');        
         
 
         $("#tbl_gastos_operaciones").DataTable({
@@ -148,12 +143,12 @@
                 }},   
             ],
             "footerCallback": function (row, data, start, end, display) {
-            var api = this.api();
-            var total = api.column(3, { page: 'current' }).data().reduce(function (a, b) {
-                return parseFloat(a) + parseFloat(b);
-            }, 0);
-            total = numeral(total).format('0,0.00');
-            $(api.column(3).footer()).html("C$. " + total);
+                var api = this.api();
+                var total = api.column(3, { page: 'current' }).data().reduce(function (a, b) {
+                    return parseFloat(a) + parseFloat(b);
+                }, 0);
+                total = numeral(total).format('0,0.00');
+                $(api.column(3).footer()).html("C$. " + total);
             }
         })
 

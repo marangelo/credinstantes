@@ -81,7 +81,8 @@
                     <tr>
                       <th>TOTAL</th>
                       <th colspan="2"> - </th>
-                      <th colspan="2"></th>
+                      <th ></th>
+                      <th></th>
                       
                     </tr>
                   </tfoot>

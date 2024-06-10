@@ -27,7 +27,7 @@ class Consolidado extends Model {
                 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
             );
             foreach($months as $m){
-                $json_arrays['header_date'][$i] = $m . ' ' . substr($year, -2);
+                $json_arrays['header_date'][$i] = $m . substr($year, -2);
                 $i++;
             }
         
@@ -35,11 +35,13 @@ class Consolidado extends Model {
 
             foreach($Rows as $r){
                 $json_arrays['header_date_rows'][$i]['CONCEPTO'] = $r->Concepto;
+
                 foreach($json_arrays['header_date'] as $dtFecha => $valor){
                     
                     $rows_in = date("M", strtotime($valor)) . ltrim(date("y", strtotime($valor)), '0');
 
                     $json_arrays['header_date_rows'][$i][$rows_in] = ($r->$rows_in=='0.0' || $r->$rows_in=='00.00') ? '0.00' : number_format($r->$rows_in,2)  ;
+                    
     
                 }
                 $i++;
@@ -59,7 +61,7 @@ class Consolidado extends Model {
         
         $Indicadores = ConsolidadoCat::WhereIn('id_cat_consolidado',[8,9,12,13,14])->get()->toArray();
 
-        $Obj =  Consolidado::where('Fecha', '=', $dtEnd)
+        $Obj =  Consolidado::whereMonth('Fecha', '=', date('m', strtotime($dtEnd)))
                             ->whereIn('Concepto', array_column($Indicadores, 'key'))
                             ->get();
 

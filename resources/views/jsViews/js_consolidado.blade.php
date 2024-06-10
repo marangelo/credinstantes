@@ -37,6 +37,16 @@
                 "emptyTable": "-",
                 "search": "BUSCAR"
             },
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api();
+                var total = api.column(2, { page: 'current' }).data().reduce(function (a, b) {
+                    return parseFloat(a) + parseFloat(b);
+                }, 0);
+                
+                total = numeral(total).format('0,0.00');
+                console.log(total);
+                //$(api.column(3).footer()).html("C$. " + total);
+            }
             });
 
             $(id+"_length").hide();
