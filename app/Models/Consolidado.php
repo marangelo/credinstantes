@@ -40,13 +40,12 @@ class Consolidado extends Model {
                     
                     $rows_in = date("M", strtotime($valor)) . ltrim(date("y", strtotime($valor)), '0');
 
-                    $json_arrays['header_date_rows'][$i][$rows_in] = ($r->$rows_in=='0.0' || $r->$rows_in=='00.00') ? '0.00' : number_format($r->$rows_in,2)  ;
+                    $json_arrays['header_date_rows'][$i][$rows_in] =  number_format($r->$rows_in,2)  ;
                     
-    
                 }
                 $i++;
             }
-
+            
 
             return $json_arrays;
         } catch (Exception $e) {

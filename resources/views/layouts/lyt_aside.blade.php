@@ -187,7 +187,7 @@
           </li>
           @if( Session::get('rol') == '1')
           <li class="nav-item" >
-            <a href="{{route('Consolidado')}}" class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
+            <a  href="{{route('Consolidado', ['year' => date('Y')])}}"  class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
               <p>Conso. Indicadores</p>
             </a>

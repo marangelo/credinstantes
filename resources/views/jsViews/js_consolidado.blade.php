@@ -5,6 +5,12 @@
             window.location.href = 'AddConsolidado';
         });
 
+        $('#btn_filter').click(function () {      
+            var select_year     = $('#select_year').val();
+            
+            window.location.href = "Consolidado?year=" + select_year ;
+        });
+
 
 
         initializeDataTable('#tbl_consolidado');

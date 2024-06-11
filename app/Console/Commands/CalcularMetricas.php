@@ -146,7 +146,11 @@ class CalcularMetricas extends Command
             }
         }
         //MetricasHistory::insert($array_to_insert);
-        //Guarda los registros a la tabla consolidado        
+        //Guarda los registros a la tabla consolidado    
+            Consolidado::whereMonth('Fecha', date('m'))
+                ->whereYear('Fecha', date('Y'))
+                ->whereNotIn('Concepto', ['util_reinvertidas', 'util_provicion', 'desembolso_mes', 'reinvercion_capital', 'efectivo_disp'])
+                ->delete();
         Consolidado::insert($array_consolidado);
 
     }

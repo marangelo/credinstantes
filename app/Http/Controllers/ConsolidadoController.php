@@ -12,13 +12,15 @@ class ConsolidadoController extends Controller
         $this->middleware('auth');
     }
 
-    public function Consolidado()
+    public function Consolidado(Request $request)
     {
         $Titulo = "Consolidado";
+
+        $year = $request->query('year');
     
-        $Consolidado = Consolidado::CalcConsolidado(date('Y'));
+        $Consolidado = Consolidado::CalcConsolidado($year);
         
-        return view('Consolidado.Home', compact('Titulo', 'Consolidado'));
+        return view('Consolidado.Home', compact('Titulo', 'Consolidado', 'year'));
     }
     public function AddConsolidado()
     {

@@ -23,8 +23,6 @@
             var payrollType = $(this).data('payroll-type');
             var id_employee = $("#txt_employee").val();
 
-            console.log(id_employee,payrollType,isChecked)
-
             SendData(id_employee,payrollType,isChecked)
         });
 

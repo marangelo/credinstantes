@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <div class="input-group date" id="dt-end" data-target-input="nearest">                            
                             <select class="form-control select2" id="select_year" name="select_year">
-                              @for($year = 2024; $year >= 2022; $year--)
+                              @for($year = date('Y'); $year >= 2024; $year--)
                                 <option value="{{$year}}">{{$year}}</option>
                               @endfor
                             </select>
