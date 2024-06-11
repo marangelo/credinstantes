@@ -7,6 +7,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Style;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Fill;
+
 class Consolidado extends Model {
     public $timestamps = false;
     protected $table = "tbl_consolidados";
@@ -140,5 +147,142 @@ class Consolidado extends Model {
             ];
         }
         return $array_gasto_ope;
+    }
+    public static function ExportConsolidado(Request $request) 
+    {
+
+        
+        
+        $objPHPExcel = new PHPExcel();
+        $tituloReporte = "";
+        $titulosColumnas = array();
+
+        $SelectYear = $request->input('SelectYear');
+
+        $Consolidado = Consolidado::CalcConsolidado($SelectYear);
+      
+
+        $NameMonth  = 'TITULO';
+
+        $num_row    =  20 ;
+    
+        $estiloTituloColumnas = array(
+            'font' => array(
+                        'name'  => 'Arial',
+                        'bold'  => true,
+                        'size'      => 10,
+            ),
+            'alignment' =>  array(
+                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                                'wrap'          => TRUE
+                            ),
+            'borders' => array(
+                            'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+            'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,)
+            )
+        );
+                
+        $estiloInformacion = new PHPExcel_Style();
+        $estiloInformacion->applyFromArray(
+            array(
+                'borders' => array(
+                'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
+                'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
+                )
+            )
+        );
+
+
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H3');
+        $style = array(
+            'font' => array(
+            'name'      => 'Tahoma',
+            'bold'      => true,
+            'italic'    => false,
+            'strike'    => false,
+            'size'      => 10,
+            'color'     => array('rgb' => 'FFFFFF')
+            ),
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => '4472C4') 
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A1:H3')->applyFromArray($style);
+    
+        $color_totales = array(                   
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => '92D050') 
+            )
+        );
+        
+        $objPHPExcel->setActiveSheetIndex()
+        ->setCellValue('A1', "CREDINSTANTE | ". $NameMonth)
+        ->setCellValue('A5', "CONCEPTO ") ;
+        
+        $alphabet = range('B', 'Z');
+        foreach ($Consolidado['header_date'] as $k) {
+            $column = array_shift($alphabet);
+            $objPHPExcel->getActiveSheet()->setCellValue($column.'5', $k);
+            
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:H5')->applyFromArray($color_totales);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A5:H5')->applyFromArray($estiloTituloColumnas);      
+
+        $i=6;
+        
+        $ttNetoPagar = 0;
+
+
+        $nameColumn = range('B', 'Z');
+        foreach ($Consolidado['header_date_rows'] as $r => $v) {
+            $objPHPExcel->setActiveSheetIndex()->setCellValue('A'.$i,  strtoupper($v['CONCEPTO']));
+                foreach ($Consolidado['header_date'] as $k => $vl)  {
+                    $column = $nameColumn[$k];
+                    $objPHPExcel->getActiveSheet()->setCellValue($column.$i, $v[$vl]);
+                }
+            $i++;
+        }
+
+        $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
+        $objPHPExcel->getActiveSheet()->getStyle('H'.$i)->getNumberFormat()->setFormatCode($formatCode);
+                
+        
+        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:H".$num_row);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:H6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:H6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="NominaDepreciacion.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        
+        
     }
 }

@@ -11,6 +11,12 @@
             window.location.href = "Consolidado?year=" + select_year ;
         });
 
+        $('#btn-export-consolidado').click(function() {
+            var select_year       = $("#select_year").val();
+            
+            window.location.href = "ExportConsolidado?" + $.param({ SelectYear: select_year}); 
+        });
+
 
 
         initializeDataTable('#tbl_consolidado');

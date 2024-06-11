@@ -51,4 +51,9 @@ class ConsolidadoController extends Controller
         return response()->json($response);
     }
 
+    public function ExportConsolidado(Request $request)
+    {
+        $response = Consolidado::ExportConsolidado($request);
+    }
+
 }
