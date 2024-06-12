@@ -160,9 +160,9 @@ class Consolidado extends Model {
         $SelectYear = $request->input('SelectYear');
 
         $Consolidado = Consolidado::CalcConsolidado($SelectYear);
-      
 
-        $NameMonth  = 'TITULO';
+        $NameMonth = 'CONSOLIDADO | ' . \Date::parse(date('Y-m-d'))->format('F');
+        $NameMonth = mb_strtoupper($NameMonth);
 
         $num_row    =  20 ;
     
@@ -240,7 +240,7 @@ class Consolidado extends Model {
             
         }
 
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:H5')->applyFromArray($color_totales);
+        $objPHPExcel->setActiveSheetIndex()->getStyle('A5:H5')->applyFromArray($color_totales);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
@@ -253,32 +253,27 @@ class Consolidado extends Model {
         $objPHPExcel->getActiveSheet()->getStyle('A5:H5')->applyFromArray($estiloTituloColumnas);      
 
         $i=6;
-        
-        $ttNetoPagar = 0;
-
 
         $nameColumn = range('B', 'Z');
         foreach ($Consolidado['header_date_rows'] as $r => $v) {
             $objPHPExcel->setActiveSheetIndex()->setCellValue('A'.$i,  strtoupper($v['CONCEPTO']));
                 foreach ($Consolidado['header_date'] as $k => $vl)  {
-                    $column = $nameColumn[$k];
-                    $objPHPExcel->getActiveSheet()->setCellValue($column.$i, $v[$vl]);
+                    $column     = $nameColumn[$k];
+                    $Valor      = str_replace(',', '', $v[$vl]);
+                    $objPHPExcel->getActiveSheet()->setCellValue($column.$i, $Valor);
                 }
             $i++;
         }
 
         $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
         $objPHPExcel->getActiveSheet()->getStyle('H'.$i)->getNumberFormat()->setFormatCode($formatCode);
-                
-        
         $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:H".$num_row);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:H6')->getNumberFormat()->setFormatCode($formatCode);
         $objPHPExcel->getActiveSheet()->getStyle('C6:H6')->getNumberFormat()->setFormatCode($formatCode);
         $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
         $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="NominaDepreciacion.xlsx"');
+        header('Content-Disposition: attachment;filename="Consolidado.xlsx"');
         header('Cache-Control: max-age=0');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');

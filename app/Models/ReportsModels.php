@@ -260,6 +260,7 @@ class ReportsModels extends Model {
         $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
         $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
 
+
         if ($role == 2) {
             $Opt = Auth::User()->id_zona;
         }
@@ -520,15 +521,12 @@ class ReportsModels extends Model {
             $array_dashboard = array_merge($array_dashboard, $Metricas);
         }
 
-        // if (date('d') == '01') {
-        //     $D1     = date('Y-m-01', strtotime('-1 month', strtotime($Fecha))). ' 00:00:00';
-        //     $D2     = date('Y-m-t', strtotime('-1 month', strtotime($Fecha))). ' 23:59:59';   
-        // } 
+        //MUESTRA LA METRICAS ACTUALES , PARA QUE TENGA REGISTRO ACTUAL
+        $MoraAtrasada = PagosFechas::getMora($Zona,'atrasada',$D1, $D2);
+        $MoraVencida  = PagosFechas::getMora($Zona,'vencida',$D1, $D2);
 
-        $array_dashboard["MORA_ATRASADA"]       = MetricasHistory::getMoraHistory($Zona,'MORA_ATRASADA');
-        $array_dashboard["MORA_VENCIDA"]        = MetricasHistory::getMoraHistory($Zona,'MORA_VENCIDA');
-
-        
+        $array_dashboard["MORA_ATRASADA"]       = $MoraAtrasada;
+        $array_dashboard["MORA_VENCIDA"]        = $MoraVencida;       
 
         $array_dashboard["label"]       = $vLabel;
         $array_dashboard["Data"]        = $vData;

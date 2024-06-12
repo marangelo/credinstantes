@@ -24,7 +24,7 @@ class CalcularMetricas extends Command
     public function handle()
     {
         $array_zonas = Zonas::where('activo', 1)->pluck('id_zona')->toArray();
-        $array_zonas[-1] = -1;        
+        $array_zonas[-1] = -1;                
         
         $Id_Rol = 1;
 
@@ -33,7 +33,7 @@ class CalcularMetricas extends Command
 
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
-        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59'; 
+        $D2     = date('Y-m-d', strtotime($dtNow)). ' 23:59:59'; 
 
         foreach ($array_zonas as $key => $z) {
                         
@@ -42,7 +42,7 @@ class CalcularMetricas extends Command
             $ttPagoIntereses    = 0;
 
             $MoraAtrasada = PagosFechas::getMoraCalcHistory($Id_Zona,'atrasada',$D1, $D2);
-            $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);
+            $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);            
             
             $Dias = Pagos::selectRaw('SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                     ->whereBetween('FECHA_ABONO', [$D1, $D2])
@@ -145,9 +145,14 @@ class CalcularMetricas extends Command
 
             }
         }
-        //MetricasHistory::insert($array_to_insert);
-        //Guarda los registros a la tabla consolidado    
-            Consolidado::whereMonth('Fecha', date('m'))
+
+        //INSERTA METRICAS ACTUALIES 
+        MetricasHistory::insert($array_to_insert);        
+        
+        
+        
+        // ELIMINA REGISTROS ALMACENADOS DE FECHA Y GUARDADO DE INFORMACION
+        Consolidado::whereMonth('Fecha', date('m'))
                 ->whereYear('Fecha', date('Y'))
                 ->whereNotIn('Concepto', ['util_reinvertidas', 'util_provicion', 'desembolso_mes', 'reinvercion_capital', 'efectivo_disp'])
                 ->delete();
