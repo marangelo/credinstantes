@@ -272,6 +272,33 @@ class Consolidado extends Model {
         $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
         $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
+
+        
+        $style_firmas = array(   
+            'font' => array(
+                'name'      => 'Tahoma',
+                'bold'      => true,
+                'italic'    => false,
+                'strike'    => false,
+                'size'      => 10,
+            ),                
+            'alignment' => [
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            ],
+        );
+
+
+        $objPHPExcel->setActiveSheetIndex()->setCellValue('B27',  '_____________________________________');
+        $objPHPExcel->getActiveSheet()->mergeCells('B27:C27');                 
+        $objPHPExcel->setActiveSheetIndex()->setCellValue('B28',  'FIRMA DEL COORDINADOR');
+        $objPHPExcel->getActiveSheet()->mergeCells('B28:C28');                
+        $objPHPExcel->setActiveSheetIndex()->setCellValue('B29',  'CREDIN$TANTE');
+        $objPHPExcel->getActiveSheet()->mergeCells('B29:C29');                
+        $objPHPExcel->getActiveSheet()->getStyle('B28:C29')->applyFromArray($style_firmas);
+        
+    
+
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Consolidado.xlsx"');
         header('Cache-Control: max-age=0');
