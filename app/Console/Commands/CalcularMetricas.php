@@ -92,47 +92,65 @@ class CalcularMetricas extends Command
                     $array_consolidado = [
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "gastos_operativos",
                             "Valor"     => $GastosOperativos
                         ],
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "mora_atrasada",
                             "Valor"     => $MoraAtrasada
                         
                         ],
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "mora_vencida",
                             "Valor"     => $MoraVencida
                         ],             
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "saldo_cartera",
                             "Valor"     => $Saldos_Cartera
                         ],
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "clientes_nuevos",
                             "Valor"     => $ClientesNuevos
                         ],
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "clientes_activos",
                             "Valor"     => $Clientes->count()
                         ],
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "clientes_renovados",
                             "Valor"     => $ClientesRenovados
                         ],
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "ingreso_neto",
                             "Valor"     => $ttCuotaCobrada
                         ],
                         [
                             "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "utilidad_bruta",
                             "Valor"     => $ttPagoIntereses
                         ]
@@ -147,13 +165,14 @@ class CalcularMetricas extends Command
         }
 
         //INSERTA METRICAS ACTUALIES 
+
+        //Borra las metricas de MetricasHistory para el Fecha que contiene $dtNow
+        MetricasHistory::where('Fecha', $dtNow)->delete();
         MetricasHistory::insert($array_to_insert);        
         
-        
-        
         // ELIMINA REGISTROS ALMACENADOS DE FECHA Y GUARDADO DE INFORMACION
-        Consolidado::whereMonth('Fecha', date('m'))
-                ->whereYear('Fecha', date('Y'))
+        Consolidado::where('num_month', date('m'))
+                ->where('num_year', date('Y'))
                 ->whereNotIn('Concepto', ['util_reinvertidas', 'util_provicion', 'desembolso_mes', 'reinvercion_capital', 'efectivo_disp'])
                 ->delete();
         Consolidado::insert($array_consolidado);

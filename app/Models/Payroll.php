@@ -71,6 +71,8 @@ class Payroll extends Model {
                         'vacaciones'            => 0,
                         'aguinaldo'             => 0,
                         'indenmnizacion'        => 0,
+                        'inss_laboral'          => 0,
+                        'inss_patronal'         => 0,
                     ];
     
                     $Key++;
@@ -274,7 +276,7 @@ class Payroll extends Model {
         );
 
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:M3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:O3');
         $style = array(
             'font' => array(
             'name'      => 'Tahoma',
@@ -298,7 +300,7 @@ class Payroll extends Model {
                 )
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A1:M3')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:O3')->applyFromArray($style);
     
         $color_totales = array(                   
             'fill' => array(
@@ -317,13 +319,15 @@ class Payroll extends Model {
         ->setCellValue('F5',  'SALARIO MENSUAL')
         ->setCellValue('G5',  'DIAS TRABAJADOS')
         ->setCellValue('H5',  'SALARIO QUINCENAL')
-        ->setCellValue('I5',  'NETO A PAGAR')
-        ->setCellValue('J5',  'FIRMA')
-        ->setCellValue('K5',  'VACACIONES')
-        ->setCellValue('L5',  'PROV. AGUINALDO')
-        ->setCellValue('M5',  'PROV. INDENMNIZACION');
+        ->setCellValue('I5',  'INSS LABORAL')
+        ->setCellValue('J5',  'NETO A PAGAR')
+        ->setCellValue('K5',  'FIRMA')
+        ->setCellValue('L5',  'INSS PATRONAL')
+        ->setCellValue('M5',  'VACACIONES')
+        ->setCellValue('N5',  'PROV. AGUINALDO')
+        ->setCellValue('O5',  'PROV. INDENMNIZACION');
 
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:M5')->applyFromArray($color_totales);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:O5')->applyFromArray($color_totales);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
@@ -337,8 +341,10 @@ class Payroll extends Model {
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
         
-        $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->applyFromArray($estiloTituloColumnas);      
+        $objPHPExcel->getActiveSheet()->getStyle('A5:O5')->applyFromArray($estiloTituloColumnas);      
 
         $i=6;
         
@@ -357,11 +363,13 @@ class Payroll extends Model {
             ->setCellValue('F'.$i,  $e->salario_mensual)
             ->setCellValue('G'.$i,  $e->dias_trabajados)
             ->setCellValue('H'.$i,  $e->salario_quincenal)
-            ->setCellValue('I'.$i,  $e->neto_pagar)
-            ->setCellValue('J'.$i,  ' ')
-            ->setCellValue('K'.$i,  $e->vacaciones)
-            ->setCellValue('L'.$i,  $e->aguinaldo)
-            ->setCellValue('M'.$i,  $e->indenmnizacion);
+            ->setCellValue('I'.$i,  $e->inss_laboral)
+            ->setCellValue('J'.$i,  $e->neto_pagar)
+            ->setCellValue('K'.$i,  ' ')
+            ->setCellValue('L'.$i,  $e->inss_patronal)
+            ->setCellValue('M'.$i,  $e->vacaciones)
+            ->setCellValue('N'.$i,  $e->aguinaldo)
+            ->setCellValue('O'.$i,  $e->indenmnizacion);
 
             $ttVACACIONES += $e->vacaciones;
             $ttAGUINALDO += $e->aguinaldo;
@@ -376,17 +384,17 @@ class Payroll extends Model {
         $objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode($formatCode);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  '')
                 ->setCellValue('A'.$i,  'SUBTOTAL')
-                ->setCellValue('I'.$i,  number_format($ttNetoPagar,2,'.',''))
-                ->setCellValue('K'.$i,  number_format($ttVACACIONES,2,'.',''))
-                ->setCellValue('L'.$i,  number_format($ttAGUINALDO,2,'.',''))
-                ->setCellValue('M'.$i,  number_format($ttINDENMNIZACION,2,'.',''));
+                ->setCellValue('J'.$i,  number_format($ttNetoPagar,2,'.',''))
+                ->setCellValue('M'.$i,  number_format($ttVACACIONES,2,'.',''))
+                ->setCellValue('N'.$i,  number_format($ttAGUINALDO,2,'.',''))
+                ->setCellValue('O'.$i,  number_format($ttINDENMNIZACION,2,'.',''));
                 
         
-        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:M".$num_row);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:M6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:M6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:M'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:M'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:O".$num_row);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:O6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:O6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:O'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:O'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="NominaQuincenal.xlsx"');

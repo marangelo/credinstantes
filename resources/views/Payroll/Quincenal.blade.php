@@ -59,8 +59,10 @@
                   <th class="border-0 text-center">SALARIO BASICO MENSUAL</th>
                   <th class="border-0 text-center">DIAS TRABADOS</th>
                   <th class="border-0 text-center">SALARIO QUINCENAL</th>
+                  <th class="border-0 text-center">INSS LABORAL</th>
                   <th class="border-0 text-center">NETO A PAGAR</th>
                   <th class="border-0 text-center">FIRMA</th>
+                  <th class="border-0 text-center">INSS PATRONAL</th>
                   <th class="border-0 text-center">VACACIONES</th>
                   <th class="border-0 text-center">PROV AGUINALDO</th>
                   <th class="border-0 text-center">PROV. INDEMNIZACION</th>
@@ -95,8 +97,10 @@
                     <td class="align-middle text-centrightrightrighter">C$. {{ number_format($p->salario_mensual,2) }} </td>
                     <td class="align-middle text-center"> {{ number_format($p->dias_trabajados,2) }} </td>
                     <td class="align-middle text-center">C$. {{ number_format( $p->salario_quincenal,2)}} </td>
+                    <td class="align-middle text-right">C$. {{ number_format($p->inss_laboral,2) }} </td>
                     <td class="align-middle text-right">C$. {{ number_format($NetoPagar,2) }} </td>
                     <td class="align-middle text-center"> - </td>
+                    <td class="align-middle text-right">C$. {{ number_format($p->inss_patronal,2) }} </td>
                     <td class="align-middle text-right">C$. {{ number_format($Vacaciones,2) }} </td>
                     <td class="align-middle text-right">C$. {{ number_format($Aguinaldo,2) }} </td>
                     <td class="align-middle text-right">C$. {{ number_format($Indenizacion,2) }}</td>
@@ -111,9 +115,9 @@
                   <tfoot>
                     
                     <tr>
-                      <td class="border-0" colspan="8">SUB TOTAL.</td>
+                      <td class="border-0" colspan="9">SUB TOTAL.</td>
                       <td class="border-0 text-right">C$. <span id="neto_pagar_payroll">{{ number_format($ttNETO,2) }}</span></td>
-                      <td class="border-0 text-center"> - </td>
+                      <td class="border-0 text-center" colspan="2">  </td>
                       <td class="border-0 text-right">C$. {{ number_format($ttVACACIONES,2) }}</td>
                       <td class="border-0 text-right">C$. {{ number_format($ttAGUINALDO,2) }}</td>
                       <td class="border-0 text-right">C$. {{ number_format($ttINDENMNIZACION,2) }}</td>
@@ -163,7 +167,7 @@
                 <div class="row g-3">
 
                     <div class="col-md-6 mb-3">
-                        <label class="fs-0 " for="eventValDay">Salario Mensual C$.: </label>                    
+                        <label class="fs-0 " for="eventValDay">SALARIO MENSUAL C$.: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-donate"></span></span>
                             <input class="form-control" id="salario_mensual" type="text" name="inss_patronal"  placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>
@@ -171,20 +175,20 @@
 
                   
                     <div class="col-md-6 mb-3">
-                        <label class="fs-0 " for="eventValDay">Dias Trabajados: </label>                    
+                        <label class="fs-0 " for="eventValDay">DIAS TRABAJADOS: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-calendar"></span></span>
                             <input class="form-control" id="payroll_dias_trabajados" type="text" name="inatec" placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>
                     </div>
                     
                     <div class="col-md-6 mb-3">
-                        <label class="fs-0 " for="eventValDay">INSS C$.: </label>                    
+                        <label class="fs-0 " for="eventValDay">INSS PATRONAL C$.: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-donate"></span></span>
                             <input class="form-control" id="payroll_inss" type="text" placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="fs-0 " for="eventValDay">IR C$.: </label>                    
+                        <label class="fs-0 " for="eventValDay">INSS LABORAL C$.: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-donate"></span></span>
                             <input class="form-control" id="payroll_ir" type="text" placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>

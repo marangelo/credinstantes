@@ -151,3 +151,4 @@ Route::post('getIndicadores', 'ConsolidadoController@getIndicadores')->name('get
 Route::post('RemoveIndicador', 'ConsolidadoController@RemoveIndicador')->name('RemoveIndicador');
 route::post('getInfoIndicador', 'ConsolidadoController@getInfoIndicador')->name('getInfoIndicador');
 Route::get('ExportConsolidado', 'ConsolidadoController@ExportConsolidado')->name('ExportConsolidado');
+Route::post('UpdateConsolidado', 'ConsolidadoController@UpdateConsolidado')->name('UpdateConsolidado');

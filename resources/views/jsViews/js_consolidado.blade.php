@@ -16,6 +16,37 @@
             
             window.location.href = "ExportConsolidado?" + $.param({ SelectYear: select_year}); 
         });
+        $('#btn-update-consolidado').click(function() {
+
+            $.ajax({
+                url: "UpdateConsolidado",
+                type: 'post',
+                data: {
+                    _token      : "{{ csrf_token() }}" 
+                },                
+                async: true,
+                success: function(response) {
+                    if(response){
+                        Swal.fire({
+                        title: 'Correcto ' ,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }    
+                        })
+                    }
+                },
+                error: function(response) {
+                    Swal.fire("Oops", "No se ha podido guardar!", "error");
+                }
+            });
+            
+        });
 
 
 
@@ -50,13 +81,13 @@
                 "search": "BUSCAR"
             },
             "footerCallback": function (row, data, start, end, display) {
-                var api = this.api();
-                var total = api.column(2, { page: 'current' }).data().reduce(function (a, b) {
-                    return parseFloat(a) + parseFloat(b);
-                }, 0);
+                // var api = this.api();
+                // var total = api.column(2, { page: 'current' }).data().reduce(function (a, b) {
+                //     return parseFloat(a) + parseFloat(b);
+                // }, 0);
                 
-                total = numeral(total).format('0,0.00');
-                console.log(total);
+                // total = numeral(total).format('0,0.00');
+                // console.log(total);
                 //$(api.column(3).footer()).html("C$. " + total);
             }
             });

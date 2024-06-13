@@ -48,11 +48,14 @@
                         </div>
                         <div class="card-tools">
                             <button type="button" class="btn btn-primary" id="btn-consolidado-add">
-                                <i class="fas fa-plus-circle "></i>
+                              <i class="fas fa-plus-circle "></i>
                             </button>
                             <button type="button" class="btn btn-success" id="btn-export-consolidado">
-                            <i class="fas fa-file-excel "></i>
-                        </button>
+                              <i class="fas fa-file-excel "></i>
+                            </button>
+                            <button type="button" class="btn btn-success" id="btn-update-consolidado">
+                              <i class="fas fa-sync-alt "></i>
+                            </button>
                         </div>
                       
                     </div>

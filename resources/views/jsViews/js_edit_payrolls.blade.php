@@ -134,8 +134,12 @@
         var name                = isValue(e.employee_full_name,'N/D',true)
         var DiasTrabajados      = numeral(isValue(e.dias_trabajados,0,true)).format('0.00')
         var SalarioMensual      = numeral(isValue(e.salario_mensual,0,true)).format('0.00')
-        var inss                = numeral(isValue(e.inss_patronal,0,true)).format('0.00')
-        var ir                  = numeral(isValue(e.ir,0,true)).format('0.00')
+        
+        var salarioQuincenal    = SalarioMensual / 2
+        var inss                = numeral((salarioQuincenal * 0.07)).format('0.00')
+        var ir                  = numeral((salarioQuincenal * 0.215)).format('0.00')
+
+        console.log(ir,inss)
 
 
 

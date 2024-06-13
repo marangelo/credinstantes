@@ -31,7 +31,7 @@ class Payroll_details extends Model {
                 $NetoPagar =  $SalarioQuiencenal;
                 
                 //RESTAR DEDUCCIONES DE LEY
-                $NetoPagar  = $NetoPagar - $payroll_inss - $payroll_ir;
+                $NetoPagar  = $NetoPagar - $payroll_inss;
 
                 $Vacaciones = ( $SalarioQuiencenal / 15 ) * 2.5 ;
                 $Aguinaldo  = ( $SalarioQuiencenal / 12 ) ;
@@ -44,8 +44,8 @@ class Payroll_details extends Model {
                     'vacaciones'        => $Vacaciones,
                     'aguinaldo'         => $Aguinaldo,
                     'indenmnizacion'    => $Indenizacion,
-                    'inss_patronal'     => $payroll_inss,
-                    'ir'                => $payroll_ir,
+                    'inss_laboral'      => $payroll_inss,
+                    'inss_patronal'     => $payroll_ir,
                 ]);
                 
                 return $response;

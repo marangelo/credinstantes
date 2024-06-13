@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Artisan;
 
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -62,19 +63,29 @@ class Consolidado extends Model {
 
     public static function getIndicadores(Request $request)
     {
-        $dtEnd  = $request->input('dtEnd').' 00:00:00';
+        //$dtEnd  = $request->input('dtEnd').' 00:00:00';
+
+        $num_month  = intval(date('m', strtotime($request->input('dtEnd'))));
+        $num_year   = intval(date('Y', strtotime($request->input('dtEnd'))));
+
+        
         $array  = array();
+
         
         $Indicadores = ConsolidadoCat::WhereIn('id_cat_consolidado',[8,9,12,13,14])->get()->toArray();
 
-        $Obj =  Consolidado::whereMonth('Fecha', '=', date('m', strtotime($dtEnd)))
+        $Obj =  Consolidado::where('num_month', $num_month)
+                            ->where('num_year', $num_year)
                             ->whereIn('Concepto', array_column($Indicadores, 'key'))
                             ->get();
+        
+
+        
 
         foreach ($Obj as $key => $a) {  
             $array[$key] = [
                 "Id"            => $a->id_consolidado,
-                "Fecha_gasto"   => \Date::parse($a->Fecha)->format('d-m-Y') ,
+                "Fecha_gasto"   => $a->num_month . '/' . $a->num_year, 
                 "Concepto"      => $a->ConsolidadoCategoria[0]->descripcion,
                 "Monto"         => $a->Valor,
                 "Usuario"       =>'',
@@ -87,24 +98,36 @@ class Consolidado extends Model {
     {
         if ($request->ajax()) {
             try {
+                $Fecha      = $request->input('_Fecha'); 
+                $num_month  = date('m', strtotime($request->input('_Fecha')));
+                $num_year   = date('Y', strtotime($request->input('_Fecha')));
 
-                $existingRecord = Consolidado::where('Concepto', $request->input('_Indicador'))
-                    ->where('Fecha', $request->input('_Fecha'))
+                $Indicador  = $request->input('_Indicador');
+                $Monto      = $request->input('_Monto');
+                
+
+                $existingRecord = Consolidado::where('Concepto', $Indicador)
+                    ->where('num_month', $num_month)
+                    ->where('num_year', $num_year)
                     ->exists();
-
                 if ($existingRecord) {
-                    $response = Consolidado::where('Concepto', $request->input('_Indicador'))
-                    ->where('Fecha', $request->input('_Fecha'))
+                    $response = Consolidado::where('Concepto', $Indicador)
+                    ->where('num_month', $num_month)
+                    ->where('num_year', $num_year)
                     ->update([
-                        'Concepto'  => $request->input('_Indicador'),
-                        'Fecha'     => $request->input('_Fecha'),
-                        'Valor'     => $request->input('_Monto'),
+                        'Concepto'  => $Indicador,
+                        'Fecha'     => $Fecha,
+                        'num_month' => $num_month,
+                        'num_year'  => $num_year,
+                        'Valor'     => $Monto,
                     ]);
                 } else {
                     $response = Consolidado::insert([
-                        'Concepto'  => $request->input('_Indicador'),
-                        'Fecha'     => $request->input('_Fecha'),
-                        'Valor'     => $request->input('_Monto'),
+                        'Concepto'  => $Indicador,
+                        'Fecha'     => $Fecha,
+                        'num_month' => $num_month,
+                        'num_year'  => $num_year,
+                        'Valor'     => $Monto,
                     ]);
                 }
 
@@ -141,7 +164,7 @@ class Consolidado extends Model {
         foreach ($Obj as $key => $a) {
             $array_gasto_ope = [
                 "Id" => $a->id_consolidado,
-                "Fecha" => \Date::parse($a->Fecha)->format('d/m/Y'),
+                "Fecha" => \Date::parse(date('Y-m-d'))->format('d/m/Y'),
                 "Concepto" => $a->Concepto,
                 "Monto" => $a->Valor,
             ];
@@ -150,9 +173,6 @@ class Consolidado extends Model {
     }
     public static function ExportConsolidado(Request $request) 
     {
-
-        
-        
         $objPHPExcel = new PHPExcel();
         $tituloReporte = "";
         $titulosColumnas = array();
@@ -306,5 +326,10 @@ class Consolidado extends Model {
         $objWriter->save('php://output');
         
         
+    }
+
+    public static function UpdateConsolidado()
+    {
+        Artisan::call('metricas:calcular');
     }
 }
