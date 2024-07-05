@@ -255,8 +255,6 @@ class ReportsModels extends Model {
         $D1     = date('Y-m-01', strtotime($dt_end)). ' 00:00:00';
         $D2     = $dt_end . ' 23:59:59';
 
-        dd($D1, $D2);
-
         $role   = Auth::User()->id_rol;
 
         $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
