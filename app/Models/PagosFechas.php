@@ -86,8 +86,8 @@ class PagosFechas extends Model {
 
         $Creditos = $Creditos->get()->pluck('id_creditos');
 
-        //$Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
-        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereBetween('FECHA_PAGO', [$D1, $D2]);
+        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
+        //$Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereBetween('FECHA_PAGO', [$D1, $D2]);
 
         if ($role === 2) {
             $Zona = Auth::User()->id_zona;
@@ -102,6 +102,7 @@ class PagosFechas extends Model {
     public static function getMoraCalcHistory($Zona, $tipoMora,$D1, $D2)
     {
         $Creditos = Credito::where('activo',1)->where('saldo','>',0);
+        $fechaActual = now(); 
         
         if ($tipoMora == 'atrasada') {
             $Creditos->where('estado_credito', 2);
@@ -111,7 +112,8 @@ class PagosFechas extends Model {
 
         $Creditos = $Creditos->get()->pluck('id_creditos');
 
-        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereBetween('FECHA_PAGO', [$D1, $D2]);
+        //$Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereBetween('FECHA_PAGO', [$D1, $D2]);
+        $Mora = PagosFechas::whereIn('ID_CREDITO', $Creditos)->whereDate('FECHA_PAGO', '<=', $fechaActual);
         if ($Zona > -1) {
             $Mora->where('ID_ZONA', $Zona);
         }
