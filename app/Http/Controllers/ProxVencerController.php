@@ -1,8 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use App\Models\ProxVencer;
-use App\Models\Clientes;
 use App\Models\Zonas;
 
 class ProxVencerController extends Controller
@@ -13,10 +14,15 @@ class ProxVencerController extends Controller
     }
 
     public function ProxVencer(){
-        $Clientes    = Clientes::getClientes(0);  
         $Zonas       = Zonas::getZonas(); 
         $Titulo      = "Ingresos Diarios";
-        return view('ProxVencer.Form', compact('Clientes','Titulo','Zonas'));
+        return view('ProxVencer.Form', compact('Titulo','Zonas'));
 
+    }
+    public function getProxVencer(Request $request)
+    {
+        $response = ProxVencer::getProxVencer($request);
+        
+        return response()->json($response);
     }
 }

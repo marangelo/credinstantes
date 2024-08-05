@@ -154,3 +154,4 @@ Route::get('ExportConsolidado', 'ConsolidadoController@ExportConsolidado')->name
 Route::post('UpdateConsolidado', 'ConsolidadoController@UpdateConsolidado')->name('UpdateConsolidado');
 
 Route::get('ProxVencer', 'ProxVencerController@ProxVencer')->name('ProxVencer');
+Route::post('getProxVencer', 'ProxVencerController@getProxVencer')->name('getProxVencer');

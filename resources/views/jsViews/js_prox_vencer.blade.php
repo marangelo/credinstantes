@@ -24,14 +24,13 @@
         })
     function InitTable() {
 
-        var slCli   = $("#id_select_cliente option:selected").val();  
         var slZna   = $("#id_select_zona option:selected").val();  
+
         var dtEnd   = $("#dtEnd").val();
         var dtIni   = $("#dtIni").val(); 
 
 
 
-        slCli      = isValue(slCli,-1,true) 
         slZna      = isValue(slZna,-1,true) 
         dtEnd      = isValue(dtEnd,'N/D',true) 
         dtIni      = isValue(dtIni,'N/D',true) 
@@ -45,11 +44,7 @@
         dt_Ini_ = dt_Ini.format('YYYY-MM-DD');
         dt_End_ = dt_End.format('YYYY-MM-DD');
         
-        $("#lbl_titulo_reporte").text(lbl_titulo_reporte)
-
-
-
-        
+        $("#lbl_titulo_reporte").text(lbl_titulo_reporte)        
 
         $("#tbl_ingresos").DataTable({
             "responsive": true, 
@@ -71,13 +66,12 @@
             "search": "BUSCAR"
             },
             "ajax":{
-                "url": "getAbonos",
+                "url": "getProxVencer",
                 "type": 'POST',
                 'dataSrc': '',
                 "data": {                
                     dtIni   : dt_Ini_,
                     dtEnd   : dt_End_,
-                    IdCln   : slCli,
                     IdZna   : slZna,
                     _token  : "{{ csrf_token() }}" 
                 }
@@ -85,70 +79,24 @@
             buttons: [{extend: 'excelHtml5'}],
             'columns': [
                 
-                {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {
-                    
+                {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {                    
                     return '[ ' + row.id_abonoscreditos + ' ] - ' +row.Nombre + ' ' + row.apellido ;
                 }},
                 {
-                    "title": "INGRESO NETO",
-                    "data": "cuota_cobrada",
-                    render: $.fn.dataTable.render.number(',', '.', 2, '')
-                }, 
-                @if (Session::get('rol') == '1')  
-                {
-                    "title": "CAPITAL",
-                    "data": "pago_capital",
-                    render: $.fn.dataTable.render.number(',', '.', 2, '')
+                    "title": "FECHA. ULT. PAGO",
+                    "data": "fecha_ultimo_abono",
                 }, 
                 {
-                    "title": "INTERESES",
-                    "data": "pago_intereses",
+                    "title": "SALDO CREDITO",
+                    "data": "saldo",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
-                },                  
-                @endif
+                }, 
+               
             ],
-            "fnDrawCallback": function ( row, data, start, end, display ) {
-                var api = this.api(), data;
-                var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-                };
-                INGRESO = api
-                .column( 1 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-                INGRESO         = numeral(isValue(INGRESO,0,true)).format('0,00.00')
-                $('#id_lbl_ingreso').html(INGRESO);
-
-
-                @if (Session::get('rol') == '1')  
-                CAPITAL = api
-                .column( 2 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-                
-                INTERES = api
-                .column( 3 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-
-            
-                CAPITAL         = numeral(isValue(CAPITAL,0,true)).format('0,00.00')
-                INTERES         = numeral(isValue(INTERES,0,true)).format('0,00.00')
-                $('#id_lbl_capital').html(CAPITAL);
-                $('#id_lbl_interes').html(INTERES);
-                @endif
-                
-            
-            }
+            "columnDefs": [
+                {"className": "dt-right", "targets": 2 },
+                {"className": "dt-center", "targets": 1 }
+            ],
         })
 
         $("#tbl_ingresos_length").hide();
