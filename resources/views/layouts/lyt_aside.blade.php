@@ -163,6 +163,12 @@
                     <p>Arqueos</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Prox. Vencer</p>
+                  </a>
+                </li>
               </ul>
           </li>
           <li class="nav-header">FINANZAS</li>

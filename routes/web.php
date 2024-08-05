@@ -152,3 +152,5 @@ Route::post('RemoveIndicador', 'ConsolidadoController@RemoveIndicador')->name('R
 route::post('getInfoIndicador', 'ConsolidadoController@getInfoIndicador')->name('getInfoIndicador');
 Route::get('ExportConsolidado', 'ConsolidadoController@ExportConsolidado')->name('ExportConsolidado');
 Route::post('UpdateConsolidado', 'ConsolidadoController@UpdateConsolidado')->name('UpdateConsolidado');
+
+Route::get('ProxVencer', 'ProxVencerController@ProxVencer')->name('ProxVencer');
