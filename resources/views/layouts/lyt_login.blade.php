@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="{{asset('img/Logo.png')}}">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>CREDIN$TANTE | Log in</title>
+    <title>CREDIN$TANTE | LOG IN</title>
     
 
     <!-- Google Font: Source Sans Pro -->
