@@ -89,17 +89,16 @@
                   </div>
                 </div>
                 
-                <table id="tbl_ingresos" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>NOMBRE</th>
-                    <th>FECHA ULTIM ABONO</th>
-                    <th class="text-center">SALDO CREDITO</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  
-                  </tbody>
+                <table id="tbl_prox_vencer" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>NOMBRE</th>
+                            <th>ZONA</th>
+                            <th>FECHA ULTIM ABONO</th>
+                            <th class="text-center">SALDO CREDITO</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
                 </table>
               </div>
               <!-- /.card-body -->

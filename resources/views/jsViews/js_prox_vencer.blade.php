@@ -15,12 +15,12 @@
         })
 
         $('#id_txt_buscar').on('keyup', function() {   
-            var vTableArticulos = $('#tbl_ingresos').DataTable();     
+            var vTableArticulos = $('#tbl_prox_vencer').DataTable();     
             vTableArticulos.search(this.value).draw();
         });
     })
     $('.button_export_excel').click(() => {
-            $('#tbl_ingresos').DataTable().buttons(0,0).trigger()
+            $('#tbl_prox_vencer').DataTable().buttons(0,0).trigger()
         })
     function InitTable() {
 
@@ -46,7 +46,7 @@
         
         $("#lbl_titulo_reporte").text(lbl_titulo_reporte)        
 
-        $("#tbl_ingresos").DataTable({
+        $("#tbl_prox_vencer").DataTable({
             "responsive": true, 
             "lengthChange": false, 
             "destroy": true,
@@ -83,6 +83,10 @@
                     return '[ ' + row.id_abonoscreditos + ' ] - ' +row.Nombre + ' ' + row.apellido ;
                 }},
                 {
+                    "title": "ZONA",
+                    "data": "ZONA",
+                }, 
+                {
                     "title": "FECHA. ULT. PAGO",
                     "data": "fecha_ultimo_abono",
                 }, 
@@ -94,13 +98,13 @@
                
             ],
             "columnDefs": [
-                {"className": "dt-right", "targets": 2 },
-                {"className": "dt-center", "targets": 1 }
+                {"className": "dt-center", "targets": [1,2] },
+                {"className": "dt-right", "targets": 3 }
             ],
         })
 
-        $("#tbl_ingresos_length").hide();
-        $("#tbl_ingresos_filter").hide();
+        $("#tbl_prox_vencer_length").hide();
+        $("#tbl_prox_vencer_filter").hide();
     }
 
     

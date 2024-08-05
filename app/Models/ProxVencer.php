@@ -12,26 +12,30 @@ class ProxVencer extends Model {
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
+        $IdZna    = $request->input('IdZna');
         $array_abonos = array();
-    
 
-        $Creditos =  Credito::where('fecha_ultimo_abono', '>=', $dtIni)
-                        ->where('fecha_ultimo_abono', '<=', $dtEnd)
-                        ->where('saldo','>', 0)
-                        ->orderBy('fecha_ultimo_abono', 'ASC')
-                        ->get();
+        $Obj = Credito::whereBetween('fecha_ultimo_abono', [$dtIni, $dtEnd])->Where('activo',1);
+        
+        if($IdZna > 0){
+            $Obj->whereHas('Clientes', function ($query) use ($IdZna) {
+                $query->where('id_zona', $IdZna);
+            });
+        }
+
+        $Creditos = $Obj->get();
         
         foreach ($Creditos as $key => $a) {     
             
             $array_abonos[$key] = [
-                "id_abonoscreditos" => $a->id_creditos,
-                "fecha_ultimo_abono"       => $a->fecha_ultimo_abono,
-                "Nombre"            => strtoupper($a->Clientes->nombre),
-                "apellido"          => strtoupper($a->Clientes->apellidos),
-                "saldo"             => $a->saldo,
+                "id_abonoscreditos"     => $a->id_creditos,
+                "ZONA"                  => $a->Clientes->getZona->nombre_zona,
+                "fecha_ultimo_abono"    => date('d/m/Y', strtotime($a->fecha_ultimo_abono)),
+                "Nombre"                => strtoupper($a->Clientes->nombre),
+                "apellido"              => strtoupper($a->Clientes->apellidos),
+                "saldo"                 => $a->saldo,
             ];  
         }
-
 
         return $array_abonos;
     }

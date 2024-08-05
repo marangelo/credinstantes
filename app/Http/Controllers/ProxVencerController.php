@@ -15,7 +15,7 @@ class ProxVencerController extends Controller
 
     public function ProxVencer(){
         $Zonas       = Zonas::getZonas(); 
-        $Titulo      = "Ingresos Diarios";
+        $Titulo      = "PROX. A VENCER";
         return view('ProxVencer.Form', compact('Titulo','Zonas'));
 
     }
