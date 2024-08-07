@@ -94,7 +94,7 @@
                         <tr>
                             <th>NOMBRE</th>
                             <th>ZONA</th>
-                            <th>FECHA ULTIM ABONO</th>
+                            <th>VENCIMIENTO</th>
                             <th class="text-center">SALDO CREDITO</th>
                         </tr>
                     </thead>

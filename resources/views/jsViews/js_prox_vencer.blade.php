@@ -87,7 +87,7 @@
                     "data": "ZONA",
                 }, 
                 {
-                    "title": "FECHA. ULT. PAGO",
+                    "title": "VENCIMIENTO",
                     "data": "fecha_ultimo_abono",
                 }, 
                 {
