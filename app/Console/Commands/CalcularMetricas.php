@@ -11,6 +11,7 @@ use App\Models\GastosOperaciones;
 use App\Models\Credito;
 use App\Models\Pagos;
 use App\Models\Consolidado;
+use Illuminate\Support\Facades\DB;
 
 class CalcularMetricas extends Command
 {
@@ -176,6 +177,11 @@ class CalcularMetricas extends Command
                 ->whereNotIn('Concepto', ['util_reinvertidas', 'util_provicion', 'desembolso_mes', 'reinvercion_capital', 'efectivo_disp'])
                 ->delete();
         Consolidado::insert($array_consolidado);
+
+        DB::statement('CALL actualizar_tabla_abonos()');
+
+
+
 
     }
 }

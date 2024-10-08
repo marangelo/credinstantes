@@ -24,6 +24,7 @@ class ApiController extends Controller{
             $Estado = 1 ;
             $Estado = ($c->MORA == 'S') ? 2 : $Estado ;
             $Estado = ($c->VENCIDO == 'S') ? 3 : $Estado ;
+            
             $Creditos[$key] = [
                 'id_creditos'       => $c->ID_CREDITO,
                 'estado_credito'    => $Estado
