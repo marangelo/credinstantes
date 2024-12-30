@@ -120,5 +120,6 @@
 @yield('metodosjs')
 
 <script src="{{ asset('js/chart.js/Chart.min.js') }}"></script>
+<script src=" https://cdn.jsdelivr.net/npm/underscore@1.13.7/underscore-umd-min.js"></script>
 </body>
 </html>

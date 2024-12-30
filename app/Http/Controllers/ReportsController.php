@@ -15,6 +15,7 @@ use App\Models\Abono;
 use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\ReportsModels;
+use App\Models\Estados;
 use CodersFree\Date\Date;
 use App\Traits\CheckUserLock;
 
@@ -135,5 +136,38 @@ class ReportsController extends Controller
     {
         return Excel::download(new ExportPromotorMetricas, 'Promotor.xlsx');
     }
+
+
+    public function ViewHistorialPagos(Request $request)
+    {
+        $Titulo      = "Historial de PAgos";
+        $Zonas       = Zonas::getZonas();  
+        $Clientes    = Clientes::getClientes(0);  
+        return view('HistorialPagos.Home',compact('Titulo','Zonas','Clientes'));
+    }
+
+    public function getHistorialPagos(Request $request)
+    {
+        $response = ReportsModels::getHistorialPagos($request);
+        
+        return response()->json($response);
+    }
+
+    public function getCreditos($IdCliente)
+    {
+        $Cliente = Clientes::find($IdCliente);
+        $Credios_Cliente =  $Cliente->getCreditos;
+
+        $dta[] = array(
+            'Nombre'            => strtoupper($Cliente->nombre),
+            'Apellidos'         => strtoupper($Cliente->apellidos),            
+            "Estados_credito"   => Estados::all()->toArray(),
+            'Creditos'          => $Credios_Cliente
+        );
+
+        return response()->json($dta);
+    }
+
+    
 
 }

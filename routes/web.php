@@ -155,3 +155,9 @@ Route::post('UpdateConsolidado', 'ConsolidadoController@UpdateConsolidado')->nam
 
 Route::get('ProxVencer', 'ProxVencerController@ProxVencer')->name('ProxVencer');
 Route::post('getProxVencer', 'ProxVencerController@getProxVencer')->name('getProxVencer');
+
+
+
+Route::get('Historial', 'ReportsController@ViewHistorialPagos')->name('Historial');
+Route::post('getHistorialPagos', 'ReportsController@getHistorialPagos')->name('getHistorialPagos');
+Route::get('getCreditos/{ID}', 'ReportsController@getCreditos')->name('getCreditos');

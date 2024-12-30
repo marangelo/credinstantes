@@ -534,5 +534,32 @@ class ReportsModels extends Model {
         
         return $array_dashboard;
     }
+
+
+    public static function getHistorialPagos(Request $request)
+    {
+    
+        $IdZna          = $request->input('IdZna');
+
+        $array_clientes   = array();
+
+        $Clientes = Clientes::where('activo', 1)->when($IdZna > 0, function ($q) use ($IdZna) {
+            $q->where('id_zona', $IdZna);
+        })->get();
+        
+        
+        foreach ($Clientes as $key => $c) {
+            $array_clientes[$key] = [
+                "id_clientes"       => $c->id_clientes,
+                "Nombre"            => strtoupper($c->nombre),
+                "apellido"          => strtoupper($c->apellidos),
+                "Accion"            => '<button type="button" class="btn btn-primary btn-block btn-sm" onclick="ModalHistorico('.$c->id_clientes.')"><i class="fas fa-history"></i> </button>',
+            ];
+                
+        }
+
+
+        return $array_clientes;
+    }
     
 }

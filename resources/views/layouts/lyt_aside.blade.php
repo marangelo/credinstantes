@@ -170,7 +170,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
+                  <a href="{{route('Historial')}}" class="nav-link {{ (request()->is('Historial')) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
                     <p>Historial. Pagos</p>
                   </a>

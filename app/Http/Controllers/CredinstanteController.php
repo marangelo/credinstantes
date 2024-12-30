@@ -107,7 +107,7 @@ class CredinstanteController extends Controller
     {   
         $perfil_cliente = Clientes::find($id);  
         $DiasSemana     = DiasSemana::getDiasSemana();
-        $Promo       = Usuario::where('id_rol',4)->get(); 
+        $Promo          = Usuario::where('id_rol',4)->get(); 
         $Titulo         = "Perfil del Clientes";
 
         
