@@ -140,7 +140,7 @@ class ReportsController extends Controller
 
     public function ViewHistorialPagos(Request $request)
     {
-        $Titulo      = "Historial de PAgos";
+        $Titulo      = "Historial de Pagos";
         $Zonas       = Zonas::getZonas();  
         $Clientes    = Clientes::getClientes(0);  
         return view('HistorialPagos.Home',compact('Titulo','Zonas','Clientes'));
@@ -166,6 +166,13 @@ class ReportsController extends Controller
         );
 
         return response()->json($dta);
+    }
+    public function CreditoPrint($IdCredito)
+    {
+        $Titulo     = "Historial de Pagos";
+        $Credito    = Credito::find($IdCredito);
+        $Pagos      = Abono::getHistorico($IdCredito);
+        return view('HistorialPagos.Print',compact('Titulo','Credito','Pagos')); 
     }
 
     
