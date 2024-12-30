@@ -31,7 +31,7 @@
         <div class="row">
           <div class="col-12">
             <label>Zonas</label>
-              @if (request()->is('Activos/*'))
+              @if (request()->is('Activos/*') || request()->is('Inactivos/*'))
                 @if (Session::get('rol') == '1' || Session::get('rol') == '3')
                 <div class="form-group">
                   <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">

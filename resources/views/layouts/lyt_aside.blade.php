@@ -169,6 +169,18 @@
                     <p>Prox. Vencer</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
+                    <i class="fas fa-dollar-sign nav-icon"></i>
+                    <p>Historial. Pagos</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
+                    <i class="fas fa-dollar-sign nav-icon"></i>
+                    <p>Dispensa</p>
+                  </a>
+                </li>
               </ul>
           </li>
           <li class="nav-header">FINANZAS</li>
