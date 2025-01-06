@@ -163,3 +163,11 @@ Route::post('getHistorialPagos', 'ReportsController@getHistorialPagos')->name('g
 Route::get('getCreditos/{ID}', 'ReportsController@getCreditos')->name('getCreditos');
 Route::get('CreditoPrint/{ID}', 'ReportsController@CreditoPrint')->name('CreditoPrint');
 Route::get('PrintViewPDF/{ID}', 'ReportsController@PrintViewPDF')->name('PrintViewPDF');
+
+
+Route::get('Prospectos', 'ProspectosController@ProspectosView')->name('Prospectos');
+Route::post('getProspectos', 'ProspectosController@getProspectos')->name('getProspectos');
+Route::get('FormPospecto/{ID}', 'ProspectosController@FormPospecto')->name('FormPospecto');
+Route::post('SaveProspecto', 'ProspectosController@SaveProspecto')->name('SaveProspecto');
+Route::get('deleteProspecto/{ID}', 'ProspectosController@deleteProspecto')->name('deleteProspecto');
+

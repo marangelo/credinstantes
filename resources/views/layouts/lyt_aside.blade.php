@@ -169,12 +169,22 @@
                     <p>Prox. Vencer</p>
                   </a>
                 </li>
+                @if (in_array(Session::get('rol'), [1, 3]))
                 <li class="nav-item">
                   <a href="{{route('Historial')}}" class="nav-link {{ (request()->is('Historial')) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
                     <p>Historial. Pagos</p>
                   </a>
                 </li>
+                @endif
+
+                <li class="nav-item">
+                  <a href="{{route('Prospectos')}}" class="nav-link {{ (request()->is('Prospectos')) ? 'active' : '' }}" >
+                    <i class="fas fa-user nav-icon"></i>
+                    <p>Clientes Prospectos</p>
+                  </a>
+                </li>
+
                 <li class="nav-item">
                   <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
