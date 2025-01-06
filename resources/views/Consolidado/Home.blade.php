@@ -80,7 +80,7 @@
                           <td>1</td>
                           <td>{{$r['CONCEPTO']}}</td>
                           @foreach ($Consolidado['header_date'] as $k) 
-                            <td class="align-middle text-right">{{ $r[$k] }}</td>                                
+                            <td class="align-middle text-right">{{ isset($r[$k]) ? $r[$k] : ' - ' }}</td>                                
                           @endforeach
                         </tr>
                       @endforeach

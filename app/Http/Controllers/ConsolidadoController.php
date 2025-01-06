@@ -18,7 +18,9 @@ class ConsolidadoController extends Controller
 
         $year = $request->query('year');
     
-        $Consolidado = Consolidado::CalcConsolidado($year);        
+        $Consolidado = Consolidado::CalcConsolidado($year);      
+        
+        
         return view('Consolidado.Home', compact('Titulo', 'Consolidado', 'year'));
 
         

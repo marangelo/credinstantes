@@ -31,7 +31,7 @@ class Consolidado extends Model {
             $i = 0 ;
 
             $months = array(
-                //'Jan', 'Feb', 'Mar', 'Apr', 'May', 
+                'Jan', 'Feb', 'Mar', 'Apr', 'May', 
                 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
             );
             foreach($months as $m){
@@ -40,20 +40,21 @@ class Consolidado extends Model {
             }
         
             $Rows = \DB::select('CALL CalcConsolidado(?)', array($year));
-
+            
             foreach($Rows as $r){
                 $json_arrays['header_date_rows'][$i]['CONCEPTO'] = $r->Concepto;
 
                 foreach($json_arrays['header_date'] as $dtFecha => $valor){
                     
-                    $rows_in = date("M", strtotime($valor)) . ltrim(date("y", strtotime($valor)), '0');
-
+                    //$rows_in = date("M", strtotime($valor)) . ltrim(date("y", strtotime($valor)), '0');
+                    $rows_in = date("M", strtotime($valor)) . substr($valor, -2);
+                    
                     $json_arrays['header_date_rows'][$i][$rows_in] =  number_format($r->$rows_in,2)  ;
                     
                 }
                 $i++;
             }
-            
+           
 
             return $json_arrays;
         } catch (Exception $e) {
