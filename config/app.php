@@ -165,6 +165,7 @@ return [
         Mavinoo\Batch\BatchServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -178,6 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
 
     ],
 
@@ -234,6 +236,8 @@ return [
         'Date' => Jenssegers\Date\Date::class,
         'Batch' => Mavinoo\Batch\BatchFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

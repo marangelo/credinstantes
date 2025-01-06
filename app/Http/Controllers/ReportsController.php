@@ -175,6 +175,18 @@ class ReportsController extends Controller
         return view('HistorialPagos.Print',compact('Titulo','Credito','Pagos')); 
     }
 
+    public function PrintViewPDF($IdCredito) 
+    {
+        $Titulo     = "Historial de Pagos";
+        $Credito    = Credito::find($IdCredito);
+        $Pagos      = Abono::getHistorico($IdCredito);
+
+        $Nombre = strtoupper($Credito->Clientes->nombre . ' ' . $Credito->Clientes->apellidos). ' - ' . date('Y-m-d');
+
     
+        $pdf = \PDF::loadView('HistorialPagos.PrintView', compact('Titulo','Credito','Pagos'));
+        //return $pdf->stream('Historico de Pagos - ' . $Nombre . '.pdf');
+        return $pdf->download('Historico de Pagos - ' . $Nombre . '.pdf');
+    }
 
 }

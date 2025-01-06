@@ -162,3 +162,4 @@ Route::get('Historial', 'ReportsController@ViewHistorialPagos')->name('Historial
 Route::post('getHistorialPagos', 'ReportsController@getHistorialPagos')->name('getHistorialPagos');
 Route::get('getCreditos/{ID}', 'ReportsController@getCreditos')->name('getCreditos');
 Route::get('CreditoPrint/{ID}', 'ReportsController@CreditoPrint')->name('CreditoPrint');
+Route::get('PrintViewPDF/{ID}', 'ReportsController@PrintViewPDF')->name('PrintViewPDF');
