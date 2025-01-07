@@ -34,7 +34,7 @@ class Prospectos extends Model {
     }
     public function User()
     {
-        return $this->hasMany(Usuario::class, 'created_by','id');
+        return $this->hasOne(Usuario::class, 'id','created_by');
     }
 
     public static function getProspectos(Request $request)
@@ -50,6 +50,7 @@ class Prospectos extends Model {
         
         
         foreach ($Prospectos as $key => $c) {
+
             $array_prospectos[$key] = [
                 "id_clientes"           => $c->id_prospecto,
                 "Nombre"                => strtoupper($c->Nombres),
@@ -59,7 +60,7 @@ class Prospectos extends Model {
                 "Telefono"              => $c->Telefono,
                 "Monto_promedio"        => $c->Monto_promedio,
                 "Zona"                  => $c->getZona->nombre_zona,
-                "Usuario"               => '[P]',
+                "Usuario"               => $c->User->nombre,
                 "Fecha_registro"        => date('Y-m-d h:m:s', strtotime($c->created_at)),
                 "Accion"                => '
                 
