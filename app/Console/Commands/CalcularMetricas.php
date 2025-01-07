@@ -11,6 +11,7 @@ use App\Models\GastosOperaciones;
 use App\Models\Credito;
 use App\Models\Pagos;
 use App\Models\Consolidado;
+use App\Models\Abono;
 use Illuminate\Support\Facades\DB;
 
 class CalcularMetricas extends Command
@@ -35,6 +36,7 @@ class CalcularMetricas extends Command
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-d', strtotime($dtNow)). ' 23:59:59'; 
+       
 
         foreach ($array_zonas as $key => $z) {
                         
@@ -45,6 +47,9 @@ class CalcularMetricas extends Command
             $MoraAtrasada = PagosFechas::getMoraCalcHistory($Id_Zona,'atrasada',$D1, $D2);
             $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);            
             
+
+            
+
             $Dias = Pagos::selectRaw('SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                     ->whereBetween('FECHA_ABONO', [$D1, $D2])
                     ->where('activo', 1)
@@ -72,6 +77,9 @@ class CalcularMetricas extends Command
             //Clientes Nuevos y Renovados
             $ClientesRenovados      = Credito::ClientesRenovados($Id_Zona,$D1, $D2);
             $ClientesNuevos         = Credito::ClientesNuevos($Id_Zona,$D1, $D2);
+            $Dispensa               = Abono::Dispensa($D1, $D2);
+
+            
 
             if ( $ttCuotaCobrada > 0) {
                 $array_to_insert[$key] = [
@@ -154,6 +162,13 @@ class CalcularMetricas extends Command
                             'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "utilidad_bruta",
                             "Valor"     => $ttPagoIntereses
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
+                            "Concepto"  => "dispensa_aplicada",
+                            "Valor"     => $Dispensa
                         ]
                     ];
                     
