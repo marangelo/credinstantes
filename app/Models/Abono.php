@@ -562,4 +562,36 @@ class Abono extends Model
         $Dispensa = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])->sum('Descuento');
         return $Dispensa;
     }
+    Public static function getDataReporteDispensa(Request $request)
+    {
+        $dtIni    = $request->input('dtIni').' 00:00:00';
+        $dtEnd    = $request->input('dtEnd').' 23:59:59';
+        $IdZna    = $request->input('IdZna');
+        $array_abonos = array();
+
+        $Obj = Abono::whereBetween('fecha_cuota_secc1', [$dtIni, $dtEnd])->Where('Descuento', '>', 0)->Where('activo',1);
+        
+    
+        if ($IdZna > 0) {
+            $Obj->whereHas('credito.Clientes', function ($query) use ($IdZna) {
+                $query->where('id_zona', $IdZna);
+            });
+        }
+
+        $Creditos = $Obj->get();
+        
+        foreach ($Creditos as $key => $a) {     
+            
+            $array_abonos[$key] = [
+                "id_abonoscreditos"     => $a->id_abonoscreditos,
+                "ZONA"                  => $a->credito->Clientes->getZona->nombre_zona,
+                "fecha_ultimo_abono"    => date('d/m/Y', strtotime($a->fecha_cuota_secc1)),
+                "Nombre"                => strtoupper($a->credito->Clientes->nombre),
+                "apellido"              => strtoupper($a->credito->Clientes->apellidos),
+                "saldo"                 => $a->Descuento,
+            ];  
+        }
+
+        return $array_abonos;
+    }
 }

@@ -173,3 +173,6 @@ Route::get('deleteProspecto/{ID}', 'ProspectosController@deleteProspecto')->name
 Route::get('getInfoProspecto/{ID}', 'ProspectosController@getInfoProspecto')->name('getInfoProspecto');
 Route::post('SaveNewProspecto', 'ProspectosController@SaveNewProspecto')->name('SaveNewProspecto');
 
+Route::get('Dispensa', 'DispensaController@ViewDispensa')->name('Dispensa');
+Route::post('getDispensa', 'DispensaController@getDispensa')->name('getDispensa');
+

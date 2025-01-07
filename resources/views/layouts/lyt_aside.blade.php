@@ -186,7 +186,7 @@
                 </li>
 
                 <li class="nav-item">
-                  <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
+                  <a href="{{route('Dispensa')}}" class="nav-link {{ (request()->is('Dispensa')) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
                     <p>Dispensa</p>
                   </a>
