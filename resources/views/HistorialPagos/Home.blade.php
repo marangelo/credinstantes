@@ -39,20 +39,18 @@
               @csrf
                 <div class="row">
                   <div class="col-md-5">
-                    <label>Buscar</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                       </div>
-                      <input type="text" class="form-control" id="id_txt_buscar">
+                      <input type="text" class="form-control" id="id_txt_buscar " placeholder="Buscar por nombre o id" >
                     </div>
                   </div>
                  
                   <div class="col-md-5">
-                    <label>Zonas</label>
                     <div class="form-group">
                       <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                          <option value="-1"  selected="selected">Todos</option>
+                          <option value="-1"  selected="selected">Zonas</option>
                         @foreach ($Zonas as $z)
                           <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
                         @endforeach
@@ -61,13 +59,15 @@
                     </div>
                   </div>
                   <div class="col-md-2">
-                    <label>CULMINA</label>
-                    <div class="form-group">
-                      <div class="input-group date" id="dt-end" data-target-input="nearest">
-                          <button type="submit" class="btn btn-success button_export_excel"><i class="fa fa-file-excel"></i></button>
-                          <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>                          
-                      </div>
-                    </div>
+                    <div class="btn-group w-100">
+                        <button type="button" class="btn btn-primary" id="btn-buscar-abonos">
+                            <i class="fa fa-filter"></i> FILTRAR
+                        </button>
+                        
+                        <button type="button" class="btn btn-success button_export_excel" id="btn-export-gasto">
+                            <i class="fas fa-file-excel "></i> EXCEL
+                        </button>
+                    </div>                  
                   </div>
                 </div>
                 

@@ -64,7 +64,7 @@ class Prospectos extends Model {
                 "Fecha_registro"        => date('Y-m-d h:m:s', strtotime($c->created_at)),
                 "Accion"                => '
                 
-                <a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-success btn-block" ><i class="fas fa-money-check-alt"></i> </a>
+                <a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" ><i class="fas fa-money-check-alt"></i> </a>
                 <a href="FormPospecto/' . $c->id_prospecto.' " class="btn btn-primary btn-block" ><i class="fas fa-edit"></i> </a>
                 <a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>',
             ];
@@ -73,6 +73,11 @@ class Prospectos extends Model {
 
 
         return $array_prospectos;
+    }
+    public static function getInfoProspecto($IdProspecto)
+    {
+        $Prospecto = Prospectos::where('id_prospecto', $IdProspecto)->first();
+        return $Prospecto;
     }
     public static function SaveProspecto(Request $request)
     {
@@ -112,10 +117,10 @@ class Prospectos extends Model {
     }
     
 
-    public static function DeleteProspecto($IdProspecto)
+    public static function UpdateEstadoProspecto($IdProspecto,$Estado)
     {        
         $response = Prospectos::where('id_prospecto', $IdProspecto)->update([
-            'activo' => 0,
+            'activo' => $Estado,
             'updated_at' => date('Y-m-d h:m:s'),
         ]);
         return $response;

@@ -558,4 +558,8 @@ class Abono extends Model
             }
         }
     }
+    public static function Dispensa($D1, $D2){
+        $Dispensa = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])->sum('Descuento');
+        return $Dispensa;
+    }
 }

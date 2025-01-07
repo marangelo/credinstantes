@@ -38,41 +38,37 @@
               <div class="card-body">
               @csrf
                 <div class="row">
-                  <div class="col-md-5">
-                    <label>Buscar</label>
+                  <div class="col-md-6">
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                       </div>
-                      <input type="text" class="form-control" id="id_txt_buscar">
+                      <input type="text" class="form-control" id="id_txt_buscar" placeholder="Buscar cliente">
                     </div>
                   </div>
-                 
-                  <div class="col-md-5">
-                    <label>Zonas</label>
+                  <div class="col-md-3">
                     <div class="form-group">
                       <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                          <option value="-1"  selected="selected">Todos</option>
+                          <option value="-1"  selected="selected">Zonas</option>
                         @foreach ($Zonas as $z)
                           <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
                         @endforeach
-                      </select>
-                      
+                      </select>                      
                     </div>
                   </div>
-                  <div class="col-md-2">
-                    <label>Filtrar</label>
-                    <div class="form-group">
-                      <div class="input-group date" id="dt-end" data-target-input="nearest">
-                          <button type="submit" class="btn btn-success button_export_excel"><i class="fa fa-file-excel"></i></button>
+                  <div class="col-md-3">
+                    <div class="btn-group w-100">
+                          <button type="button" class="btn btn-primary" id="btn-buscar-abonos">
+                              <i class="fa fa-filter"></i> FILTRAR
+                          </button>
                           
-                          <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>        
-                          
-                          <a href="FormPospecto/0" class="btn btn-primary " id="btn_save_prospecto" > <i class="fas fa-user"></i>  NUEVO</a>
-                                          
+                          <button type="button" class="btn btn-success button_export_excel" id="btn-export-gasto">
+                              <i class="fas fa-file-excel "></i> EXCEL
+                          </button>
+                          <a href="FormPospecto/0" class="btn btn-warning">
+                              <i class="fas fa-user "></i> NUEVO 
+                          </a>
                       </div>
-                      
-                    </div>
                   </div>
                 </div>
                 
@@ -93,4 +89,242 @@
       <!-- /.container-fluid -->
     </section>
   </div>
+
+
+  <div class="modal fade" id="modal-xl">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Aperturar Credito para Prospecto</h4> <input type="hidden" name="id_credito" id="txtIdProspecto" value="0">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <div class="card card-warning">
+            
+              <!-- /.card-header -->
+              <div class="card-body">                  
+                  <div class="row">                    
+                    <div class="col-sm-4 col-md-4 col-xl-4">
+                      <div class="form-group">
+                          <label>Fecha Inicio</label>
+                          <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value="{{ date('d/m/y') }}"/>
+                              <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                              </div>
+                          </div>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Dia de Visita</label>
+                        <select class="form-control" id="slDiaVisita">
+                          @foreach ($DiasSemana as $d)
+                            <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                          @endforeach
+                        </select>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Promotor</label>
+                        <select class="form-control" id="slPromotor">
+                          @foreach ($Promo as $p)
+                            <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
+                          @endforeach
+                        </select>
+                      </div>                      
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-md-4 col-xl-3">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ...">
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-md-4 col-xl-3">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="txtApellido" class="form-control" placeholder="Apellido ...">
+                      </div>
+                    </div>
+                  
+                    <div class="col-sm-6 col-xl-3">
+
+                      <div class="form-group">
+                        <label>Telefono:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="txtTelefono" onkeypress='return isNumberKey(event)'>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-sm-6 col-xl-3">
+
+                      <div class="form-group">
+                        <label>Cedula:</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask>
+                        </div>
+                      </div>
+                      
+                    </div>
+
+                    <div class="col-sm-6">
+
+                      <div class="form-group">
+                        <label>Departamento</label>
+                        <select class="form-control" id="selMunicipio">
+                          @foreach ($Municipios as $m)
+                            <option value="{{$m->id_municipio}}"> {{strtoupper($m->nombre_municipio)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                        
+                    </div>
+
+                    <div class="col-sm-6">
+
+                      <div class="form-group">
+                        <label>Zonas</label>
+                        <select class="form-control" id="selZona">
+                          @foreach ($Zonas as $z)
+                            <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                      
+                    </div>
+                    
+                
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>DIRECCION</label>
+                        <textarea class="form-control" id="txtDireccion" rows="3" placeholder="Direcion ..."></textarea>
+                      </div>
+                    </div>
+                
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Monto</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Plazo</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Interes</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                            </div>
+                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>N° Cuotas</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Total</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Cuota</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Saldos</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Intereses </label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                      <div class="form-group">
+                        <label>Intereses por cuota </label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-danger" id="btn_save_credito">Crear Credito</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 @endsection

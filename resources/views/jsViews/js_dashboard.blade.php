@@ -126,6 +126,12 @@
             MoraVencida     = numeral(isValue(MoraVencida,0,true)).format('0,00.00');    
             $("#lblMoraVencida").text(MoraVencida)
             data[0]['MORA_VENCIDA'] = MoraVencida;
+
+            var DISPENSA	= dataset['DISPENSA'];     
+            DISPENSA     = numeral(isValue(DISPENSA,0,true)).format('0,00.00'); 
+            $("#lbl_dispensa").text(DISPENSA)
+
+            
         
             $.each(dataset.Data, function(i, item) {
                 vData.push(item);

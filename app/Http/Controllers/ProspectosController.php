@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Zonas;
 use App\Models\Prospectos;
+use App\Models\Municipios;
+use App\Models\DiasSemana;
+use App\Models\Usuario;
+use App\Models\Credito;
 
 
 class ProspectosController extends Controller
@@ -15,8 +19,11 @@ class ProspectosController extends Controller
 
     public function ProspectosView(){
         $Titulo      = "Clientes Prospectos";
-        $Zonas       = Zonas::getZonas();
-        return view('Clientes_Prospectos.Home', compact('Titulo','Zonas'));
+        $Municipios  = Municipios::getMunicipios();  
+        $DiasSemana  = DiasSemana::getDiasSemana();
+        $Zonas       = Zonas::getZonas();  
+        $Promo       = Usuario::where('activo','S')->get(); 
+        return view('Clientes_Prospectos.Home', compact('Titulo','Zonas','Municipios','DiasSemana','Promo'));
 
     }
 
@@ -42,11 +49,28 @@ class ProspectosController extends Controller
     }
     public function DeleteProspecto($IdProspecto)
     {
-        $response = Prospectos::DeleteProspecto($IdProspecto);        
+        $response = Prospectos::UpdateEstadoProspecto($IdProspecto,0);        
         
         if($response){
             return redirect()->route('Prospectos');
         }
+    }
+
+    public function getInfoProspecto($IdProspecto)
+    {
+        $response = Prospectos::getInfoProspecto($IdProspecto);
+        
+        return response()->json($response);
+    }
+    public function SaveNewProspecto(Request $request)
+    {
+        $IdProspecto           = $request->input('IdProspecto_');
+
+        Prospectos::UpdateEstadoProspecto($IdProspecto,2);  
+
+        $response = Credito::SaveNewCredito($request);
+        
+        return response()->json($response);
     }
 
 }

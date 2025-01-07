@@ -114,7 +114,7 @@
                         <label>Zonas</label>
                         <select class="form-control" id="selZona">
                             @foreach ($Zonas as $z)
-                                <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                                <option value="{{$z->id_zona}}" {{ (isset($Prospecto->id_zona) && $Prospecto->id_zona == $z->id_zona) ? 'selected' : '' }}> {{strtoupper($z->nombre_zona)}}</option>
                             @endforeach
                         </select>
                       </div>

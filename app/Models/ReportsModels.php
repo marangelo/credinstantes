@@ -260,6 +260,8 @@ class ReportsModels extends Model {
         $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
         $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
 
+        $Dispensa     = Abono::Dispensa($D1, $D2);
+
 
         if ($role == 2) {
             $Opt = Auth::User()->id_zona;
@@ -302,7 +304,8 @@ class ReportsModels extends Model {
             "MORA_ATRASADA"     => $MoraAtrasada,
             "MORA_VENCIDA"      => $MoraVencida,
             "clientes_activos"  => $Clientes->count(),
-            "label"             => $vLabel,
+            "DISPENSA"          => $Dispensa,
+            "label"             => $vLabel,            
             "Data"              => $vData
         ];
 

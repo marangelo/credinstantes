@@ -171,7 +171,7 @@
                 </li>
                 @if (in_array(Session::get('rol'), [1, 3]))
                 <li class="nav-item">
-                  <a href="{{route('Historial')}}" class="nav-link {{ (request()->is('Historial')) ? 'active' : '' }}" >
+                  <a href="{{route('Historial')}}" class="nav-link {{ (request()->is('Historial') || request()->is('CreditoPrint/*') ) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
                     <p>Historial. Pagos</p>
                   </a>
@@ -179,7 +179,7 @@
                 @endif
 
                 <li class="nav-item">
-                  <a href="{{route('Prospectos')}}" class="nav-link {{ (request()->is('Prospectos')) ? 'active' : '' }}" >
+                  <a href="{{route('Prospectos')}}"  class="nav-link {{ (request()->is('Prospectos') || request()->is('FormPospecto/*') ) ? 'active' : '' }}"  >
                     <i class="fas fa-user nav-icon"></i>
                     <p>Clientes Prospectos</p>
                   </a>

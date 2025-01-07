@@ -170,4 +170,6 @@ Route::post('getProspectos', 'ProspectosController@getProspectos')->name('getPro
 Route::get('FormPospecto/{ID}', 'ProspectosController@FormPospecto')->name('FormPospecto');
 Route::post('SaveProspecto', 'ProspectosController@SaveProspecto')->name('SaveProspecto');
 Route::get('deleteProspecto/{ID}', 'ProspectosController@deleteProspecto')->name('deleteProspecto');
+Route::get('getInfoProspecto/{ID}', 'ProspectosController@getInfoProspecto')->name('getInfoProspecto');
+Route::post('SaveNewProspecto', 'ProspectosController@SaveNewProspecto')->name('SaveNewProspecto');
 
