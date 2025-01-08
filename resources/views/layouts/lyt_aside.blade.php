@@ -78,50 +78,30 @@
                 @endif
               </ul>
           </li>
+         
+          <li class="nav-item menu-open">
+              <a href="#" class="nav-link {{ (request()->is('Solicitudes')) ? 'active' : '' }}">
+                <i class="nav-icon fas fa-table"></i>
+                  <p>Solicitudes<i class="fas fa-angle-left right"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('Solicitudes/Lista/Nuevos')}}" class="nav-link  ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Nuevos</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Renovaciones</p>
+                    </a>
+                </li>
+                
+              </ul>
+          </li>
           @if( Session::get('rol') == '1')
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Catalogos
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            
-            <ul class="nav nav-treeview">
-              
-             
-              
-              <li class="nav-item">
-                <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
-                  <i class="far fa-map nav-icon"></i>
-                  <p>Departamento</p>
-                </a>
-              </li>
-              <li class="nav-item" style="display:none">
-                <a href="{{ route('Departamento')}}" class="nav-link {{ (request()->is('Departamento')) ? 'active' : '' }} ">
-                  <i class="far fa-map nav-icon"></i>
-                  <p>Departamentos</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('DiasSemna')}}" class="nav-link {{ (request()->is('DiasSemna')) ? 'active' : '' }}">
-                  <i class="far fa-calendar-plus nav-icon"></i>
-                  <p>Dias de Semana</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('Zonas')}}" class="nav-link {{ (request()->is('Zonas')) ? 'active' : '' }}">
-                  <i class="far fa-calendar-plus nav-icon"></i>
-                  <p>Zonas</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-
-          @endif
-          @if( Session::get('rol') == '1')
-          <li class="nav-item menu-open">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
             
@@ -223,6 +203,48 @@
           @endif
           @endif
           <li class="nav-header">OPCIONES</li>
+          @if( Session::get('rol') == '1')
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Catalogos
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            
+            <ul class="nav nav-treeview">
+              
+             
+              
+              <li class="nav-item">
+                <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
+                  <i class="far fa-map nav-icon"></i>
+                  <p>Departamento</p>
+                </a>
+              </li>
+              <li class="nav-item" style="display:none">
+                <a href="{{ route('Departamento')}}" class="nav-link {{ (request()->is('Departamento')) ? 'active' : '' }} ">
+                  <i class="far fa-map nav-icon"></i>
+                  <p>Departamentos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('DiasSemna')}}" class="nav-link {{ (request()->is('DiasSemna')) ? 'active' : '' }}">
+                  <i class="far fa-calendar-plus nav-icon"></i>
+                  <p>Dias de Semana</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('Zonas')}}" class="nav-link {{ (request()->is('Zonas')) ? 'active' : '' }}">
+                  <i class="far fa-calendar-plus nav-icon"></i>
+                  <p>Zonas</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          @endif
           @if( Session::get('rol') == '3')
           <li class="nav-item ">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">

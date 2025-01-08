@@ -176,3 +176,12 @@ Route::post('SaveNewProspecto', 'ProspectosController@SaveNewProspecto')->name('
 Route::get('Dispensa', 'DispensaController@ViewDispensa')->name('Dispensa');
 Route::post('getDispensa', 'DispensaController@getDispensa')->name('getDispensa');
 
+
+Route::get('Nuevos', 'SolicitudesController@ViewNuevos')->name('Solicitudes/Lista/Nuevos');
+Route::get('Renovaciones', 'SolicitudesController@ViewRenovaciones')->name('Solicitudes/Lista/Renovaciones');
+
+Route::get('Formulario/{ID}', 'SolicitudesController@ViewForm')->name('Solicitudes/Formulario');
+
+
+Route::post('getSolicitudes', 'SolicitudesController@getSolicitudes')->name('getSolicitudes');
+
