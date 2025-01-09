@@ -68,10 +68,10 @@ class Solicitudes extends Model {
                                                     <i class="fas fa-folder"></i>
                                                 </button>
                                                 <div class="dropdown-menu" role="menu">
-                                                    <a href="#" class="dropdown-item">Documento 01</a>
-                                                    <a href="#" class="dropdown-item">Documento 02</a>
+                                                    <a href="PagareALaOrden" target="_blank" class="dropdown-item">Pagare A La Orden</a>
+                                                    <a href="SolicitudCredito" target="_blank"  class="dropdown-item">Solicitud de Credito</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a href="#" class="dropdown-item">Documento 03</a>
+                                                    <a href="Pagare" target="_blank"  class="dropdown-item">Pagare</a>
                                                     <a href="#" class="dropdown-item">Documento 04</a>
                                                 </div>
                                             </div>',

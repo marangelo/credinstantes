@@ -185,3 +185,7 @@ Route::get('Formulario/{ID}', 'SolicitudesController@ViewForm')->name('Solicitud
 
 Route::post('getSolicitudes', 'SolicitudesController@getSolicitudes')->name('getSolicitudes');
 
+
+Route::get('PagareALaOrden', 'FormatosController@PagareALaOrden')->name('PagareALaOrden');
+Route::get('SolicitudCredito', 'FormatosController@SolicitudCredito')->name('SolicitudCredito');
+Route::get('Pagare', 'FormatosController@Pagare')->name('Pagare');
