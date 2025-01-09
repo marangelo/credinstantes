@@ -77,9 +77,7 @@
         <p>Firmo este pagaré a la orden en la ciudad de __________________________, a los ______ días del mes de 
         __________________________ del año ______.</p>
         <p>
-            <strong>EL DEUDOR:</strong><br>
-            __________________________<br>
-            Cédula de identidad: __________________________<br>
+            <strong>EL DEUDOR:</strong><br>__________________________<br>Cédula de identidad: __________________________<br>
         </p>
     </div>
 </body>

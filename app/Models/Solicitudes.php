@@ -72,7 +72,6 @@ class Solicitudes extends Model {
                                                     <a href="SolicitudCredito" target="_blank"  class="dropdown-item">Solicitud de Credito</a>
                                                     <div class="dropdown-divider"></div>
                                                     <a href="Pagare" target="_blank"  class="dropdown-item">Pagare</a>
-                                                    <a href="#" class="dropdown-item">Documento 04</a>
                                                 </div>
                                             </div>',
             ];
