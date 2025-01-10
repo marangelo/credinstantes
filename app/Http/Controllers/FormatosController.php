@@ -25,10 +25,10 @@ class FormatosController extends Controller
        // return view('Formatos.Solicitud_Credito');
         //return view('Formatos.Garantias');
         
-        //$pdf = \PDF::loadView('Formatos.Solicitud_Credito');
-        //return $pdf->download('FormatoCliente.pdf');
-
+        $pdf = \PDF::loadView('Formatos.Solicitud_Credito');
         $pdf = \PDF::loadView('Formatos.Garantias');
+
+        return $pdf->download('FormatoCliente.pdf');        
         return $pdf->download('FormatoGarantias.pdf');
 
     }

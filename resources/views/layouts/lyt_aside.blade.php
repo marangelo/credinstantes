@@ -79,27 +79,7 @@
               </ul>
           </li>
          
-          <li class="nav-item menu-open">
-              <a href="#" class="nav-link {{ (request()->is('Solicitudes')) ? 'active' : '' }}">
-                <i class="nav-icon fas fa-table"></i>
-                  <p>Solicitudes<i class="fas fa-angle-left right"></i></p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ route('Solicitudes/Lista/Nuevos')}}" class="nav-link  ">
-                        <i class="fas fa-user nav-icon"></i>
-                        <p>Nuevos</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
-                        <i class="fas fa-user nav-icon"></i>
-                        <p>Renovaciones</p>
-                    </a>
-                </li>
-                
-              </ul>
-          </li>
+         
           @if( Session::get('rol') == '1')
           <li class="nav-item">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
@@ -173,6 +153,29 @@
                 </li>
               </ul>
           </li>
+          <li class="nav-header">MOVIMIENTOS</li>
+          <li class="nav-item menu-open">
+              <a href="#" class="nav-link {{ (request()->is('Solicitudes')) ? 'active' : '' }}">
+                <i class="nav-icon fas fa-table"></i>
+                  <p>Solicitudes<i class="fas fa-angle-left right"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('Solicitudes/Lista/Nuevos')}}" class="nav-link  ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Nuevos</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Renovaciones</p>
+                    </a>
+                </li>
+                
+              </ul>
+            </li>
+
           <li class="nav-header">FINANZAS</li>
           
           <li class="nav-item" >
