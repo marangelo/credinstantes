@@ -24,7 +24,8 @@
                     <h3><img src="{{ asset('img/logo-gris.jpg') }}" alt="Logo" class="mt-3" style="opacity: .8" width="70" height="80"></h3>
                     <h3>CREDIN$TANTE</h3>
                     <h3>JINOTEPE - CARAZO</h3>
-                    <h3>TELEF: 2533 - 6439</h3>
+                    <h4><strong>DE PALI 2C. SUR 20 VRS OESTE.</strong></h4>
+                    <h4>TELEF: 2533 - 6439</h4>
                     <h4>CEL: 8784 - 1877 Tigo</h4>
                     <h4><br></h4>
                 </div>
