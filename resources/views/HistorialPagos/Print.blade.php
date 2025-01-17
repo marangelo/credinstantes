@@ -57,6 +57,10 @@
                       <td> <strong><i class="fas fa-file-invoice-dollar mr-1"></i> MONTO APROBADO:</strong> C$  {{ number_format($Credito->monto_credito,2) }}</td>
                     </tr>
                     <tr>
+      <td ></td>
+      <td><strong><i class="fas fa-file-invoice-dollar mr-1"></i> CUOTA:</strong> <strong>C$  {{ number_format($Credito->cuota,2) }}</strong></td>
+    </tr>
+                    <tr>
                       <td> <strong><i class="fas fa-user mr-1"></i> CLIENTE:</strong> {{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}} </td>
                       <td> <strong><i class="fas fa-book mr-1"></i> ZONA: </strong> {{$Credito->Clientes->getZona->nombre_zona}}</td>
                     </tr>
@@ -65,7 +69,7 @@
                       <td> <strong><i class="fas fa-calendar mr-1"></i> FRECUENCIA DE PAGO:</strong> Semanal</td>
                     </tr>
                     <tr>
-                      <td> <strong><i class="fas fa-file-invoice-dollar mr-1"></i> INTERES A PAGAR:</strong> C$ 00.00</td>
+                      <td> <strong><i class="fas fa-file-invoice-dollar mr-1"></i> INTERES A PAGAR:</strong> C$ {{ number_format(( $Credito->numero_cuotas * $Credito->intereses_por_cuota ),2) }}</td>
                       <td> <strong><i class="fas fa-calendar mr-1"></i> FECHA DE VENCIMIENTO:</strong> {{ \Date::parse($Credito->fecha_ultimo_abono)->format('D, M d, Y')}}</td>
                     </tr>
                   </tbody>
@@ -84,9 +88,8 @@
                       <th>FECHA</th>
                       <th>CAPITAL</th>
                       <th>INTERES</th>
-                      <th>PENDIENTE</th>
-                      <th>CUOTA</th>
-                      <th>ABONO</th>
+                      <th>SALDO ANTERIOR</th>
+                      <th>SALDO</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -97,9 +100,8 @@
                             <td>{{$a['fecha_cuota']}}</td>
                             <td><span class="badge rounded-pill badge-soft-info text-success">C$ {{ number_format($a['pago_capital'],2) }} </span></td>
                             <td><span class="badge rounded-pill badge-soft-info text-warning">C$ {{ number_format($a['pago_intereses'],2) }}</span></td>                            
-                            <td><span class="badge rounded-pill badge-soft-info {{ $a['saldo_cuota'] > 0 ? 'text-danger' : '' }}">C$ {{ number_format($a['saldo_cuota'],2) }}</span></td>
-                            <td>{{ number_format($a['cuota_credito'],2) }}</td>
-                            <td>{{ number_format($a['cuota_cobrada'],2) }}</td>
+                            <td><span class="badge rounded-pill badge-soft-info {{ $a['saldo_cuota'] > 0 ? 'text-danger' : '' }}">C$ {{ number_format($a['saldo_anterior'],2) }}</span></td>
+                            <td>{{ number_format($a['saldo_actual'],2) }}</td>
                         </tr>
                         @endforeach
                         

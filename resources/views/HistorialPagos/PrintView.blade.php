@@ -63,6 +63,7 @@ table tr td:last-child {
   text-align: left;
   color: #999;
   border-bottom: 2px solid #ddd;
+  border-top: 2px solid #ddd;
   padding: 10px 0 15px 0;
   font-size: 0.75em;
   text-transform: uppercase;
@@ -73,11 +74,12 @@ table tr td:last-child {
 }
 
 .line-items-container td {
-  padding: 15px 0;
+  padding: 15px 0;  
+  border-bottom: 2px solid #ddd;
 }
 
 .line-items-container tbody tr:first-child td {
-  padding-top: 25px;
+  padding-top: 25px;  
 }
 
 .line-items-container.has-bottom-border tbody tr:last-child td {
@@ -181,6 +183,7 @@ table tr td:last-child {
 </style>
 <div class="page-container">
     Fecha de Imprecion: {{ \Carbon\Carbon::now()->format('d/m/Y') }}
+    <p>Impreso por: {{ Auth::user()->nombre }}</p>
 </div>
 
 <div class="logo-container">
@@ -188,7 +191,7 @@ table tr td:last-child {
     <thead>
         <tr>
         <th>Info. Credito</th>
-        <th> </th>
+        <th>CREDINSTANTE.</th>
         <th>Monto Aprobado</th>
         </tr>
     </thead>
@@ -196,10 +199,10 @@ table tr td:last-child {
         <tr>
         <td class="payment-info">
             <div>
-            Cliene No: <strong>{{$Credito->id_creditos}}</strong>
+            Cliente No: <strong>{{$Credito->Clientes->id_clientes}}</strong>
             </div>
             <div>
-            Credito No: <strong>120000547</strong>
+            Credito No: <strong>{{$Credito->id_creditos}}</strong>
             </div>
         </td>
         <td class="large">Estado de Cuenta</td>
@@ -211,11 +214,17 @@ table tr td:last-child {
 </div>
 
 <table class="invoice-info-container">
-    <tr >
-        <td rowspan="2" class="client-name">{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</td>
-        <td rowspan="2">MONTO APROBADO: <strong>C$  {{ number_format($Credito->monto_credito,2) }}</strong></td>
+    <tr>
+        <td  class="client-name">{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</td>
+        <td>MONTO APROBADO: <strong>C$  {{ number_format($Credito->monto_credito,2) }}</strong></td>
     </tr>
-    <tr></tr>
+    <tr>
+      <td ></td>
+      <td>CUOTA: <strong>C$  {{ number_format($Credito->cuota,2) }}</strong></td>
+    </tr>
+    
+    
+    
     <tr>
         <td>ZONA : <strong>{{$Credito->Clientes->getZona->nombre_zona}}</strong></td>
         <td>FRECUENCIA DE PAGO: <strong>Semanal</strong></td>
@@ -225,7 +234,7 @@ table tr td:last-child {
         <td>FECHA DE VENCIMIENTO : <strong>{{ \Date::parse($Credito->fecha_ultimo_abono)->format('D, M d, Y')}}</strong></td>
     </tr>
     <tr>
-        <td>INTERES A PAGAR: <strong>C$ 0.00</strong></td>
+        <td>INTERES A PAGAR: <strong>C$  {{ number_format(( $Credito->numero_cuotas * $Credito->intereses_por_cuota ),2) }}</strong></td>
         <td>FRECUENCIA DE IMPRECION: <strong>Fecha: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</strong></td>
     </tr>
 </table>
@@ -243,9 +252,8 @@ table tr td:last-child {
             <th class="heading-Description">FECHA</th>
             <th class="heading-price">CAPITAL</th>
             <th class="heading-price">INTERES</th>
-            <th class="heading-price">PENDIENTE</th>
-            <th class="heading-price">CUOTA</th>
-            <th class="heading-price">ABONO</th>
+            <th class="heading-price">SALDO ANTERIOR</th>
+            <th class="heading-price">SALDO</th>
         </tr>
     </thead>
     <tbody>
@@ -254,14 +262,14 @@ table tr td:last-child {
             <td class="bold">{{$a['id_abonoscreditos']}}</td>
             <td class="bold">{{$a['NumPago']}}</td>
             <td>{{$a['fecha_cuota']}}</td>
-            <td class="right">C$ {{ number_format($a['pago_capital'],2) }} </td>
-            <td class="right">C$ {{ number_format($a['pago_intereses'],2) }}</td>                            
-            <td class="right">C$ {{ number_format($a['saldo_cuota'],2) }}</td>
-            <td class="right">{{ number_format($a['cuota_credito'],2) }}</td>
-            <td class="right">{{ number_format($a['cuota_cobrada'],2) }}</td>
+            <td class="right">C$ {{ number_format($a['pago_capital'],2) }} </td>    
+            <td class="right">C$ {{ number_format($a['pago_intereses'],2) }} </td>                         
+            <td class="right">C$ {{ number_format($a['saldo_anterior'],2) }}</td>
+            <td class="right">{{ number_format($a['saldo_actual'],2) }}</td>
         </tr>
         @endforeach        
     </tbody>
+
  
 </table>
 
