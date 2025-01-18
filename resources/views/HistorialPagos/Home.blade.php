@@ -43,7 +43,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                       </div>
-                      <input type="text" class="form-control" id="id_txt_buscar " placeholder="Buscar por nombre o id" >
+                      <input type="text" class="form-control" id="id_txt_buscar" placeholder="Buscar por nombre o id" >
                     </div>
                   </div>
                  
