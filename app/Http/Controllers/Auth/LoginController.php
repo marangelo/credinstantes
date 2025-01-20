@@ -20,7 +20,7 @@ class LoginController extends Controller
 
         $role = Auth::User()->id_rol;
 
-        
+            
     
         switch ($role) {
             case '1':
@@ -33,6 +33,10 @@ class LoginController extends Controller
 
             case '3':
                 return 'Dashboard';
+            break;
+
+            case '5':
+                return 'Supervisor';
             break;
 
             default:

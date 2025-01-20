@@ -38,6 +38,9 @@ class RedirectIfAuthenticated
                 case '4':
                     return redirect('Promotor');
                 break;
+                case '5':
+                    return redirect('Supervisor');
+                break;
     
                 default:
                     return '/';

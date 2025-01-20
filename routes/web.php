@@ -189,3 +189,6 @@ Route::post('getSolicitudes', 'SolicitudesController@getSolicitudes')->name('get
 Route::get('PagareALaOrden', 'FormatosController@PagareALaOrden')->name('PagareALaOrden');
 Route::get('SolicitudCredito', 'FormatosController@SolicitudCredito')->name('SolicitudCredito');
 Route::get('Pagare', 'FormatosController@Pagare')->name('Pagare');
+
+
+Route::get('Supervisor', 'CredinstanteController@Supervisor')->name('Supervisor');

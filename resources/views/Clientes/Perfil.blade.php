@@ -48,7 +48,7 @@
                 <div class="card-tools">
                   
 
-                    @if(in_array(Session::get('rol'), array(1, 3)))
+                    @if(in_array(Session::get('rol'), array(1, 3, 5)))
                     <button type="button" class="btn btn-success" data-toggle="modal" id="btn_mdl_credito">
                         Nuevo
                       </button>
@@ -135,7 +135,7 @@
                                           @endif    
                                         </div>
                                         <div class="col-md-12 mt-1">
-                                          @if( Session::get('rol') == '1')
+                                          @if (in_array(Session::get('rol'), [1, 5]))
                                             @if($c->abonosCount() > 0)
                                               <button type="button" class="btn btn-info btn-block btn-sm " disabled> <i class="fas fa-edit"></i></button> 
                                             @else
@@ -145,7 +145,7 @@
                                         </div>  
                                         
                                         <div class="col-md-12 mt-1">
-                                          @if( Session::get('rol') == '1')
+                                          @if (in_array(Session::get('rol'), [1, 5]))
                                             <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmItem({{$c->id_creditos}})"><i class="fas fa-trash"></i> </button>
                                           @endif                                          
                                         </div>  
@@ -394,7 +394,7 @@
             <div id="lbl_cancelacion">
 
             
-            @if (Session::get('rol') == '1')
+            @if (in_array(Session::get('rol'), [1, 5]))
               <div class="form-group">
                 <label id="id_lbl_cuota">Descuento C$.:</label>
                   <div class="input-group mb-3">

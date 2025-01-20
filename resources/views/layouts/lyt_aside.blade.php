@@ -40,7 +40,8 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        @if( Session::get('rol') == '1' || Session::get('rol') == '2' || Session::get('rol') == '3')
+        @if (in_array(Session::get('rol'), [1, 2, 3, 5]))
+        
           <li class="nav-item">
             <a href="{{ route('Dashboard')}}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -80,7 +81,7 @@
           </li>
          
          
-          @if( Session::get('rol') == '1')
+          @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -129,7 +130,7 @@
                     <p>Prox. Vencer</p>
                   </a>
                 </li>
-                @if (in_array(Session::get('rol'), [1, 3]))
+                @if (in_array(Session::get('rol'), [1, 3, 5]))
                 <li class="nav-item">
                   <a href="{{route('Historial')}}" class="nav-link {{ (request()->is('Historial') || request()->is('CreditoPrint/*') ) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
@@ -198,7 +199,7 @@
               <p>Gst. Operativos</p>
             </a>
           </li>
-          @if( Session::get('rol') == '1')
+          @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item" >
             <a  href="{{route('Consolidado', ['year' => date('Y')])}}"  class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -208,7 +209,7 @@
           @endif
           @endif
           <li class="nav-header">OPCIONES</li>
-          @if( Session::get('rol') == '1')
+          @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
@@ -287,6 +288,12 @@
                     <p>Arqueos</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{route('Historial')}}" class="nav-link {{ (request()->is('Historial') || request()->is('CreditoPrint/*') ) ? 'active' : '' }}" >
+                    <i class="fas fa-dollar-sign nav-icon"></i>
+                    <p>Historial. Pagos</p>
+                  </a>
+                </li>
                 
               </ul>
               <li class="nav-header">FINANZAS</li>
@@ -312,7 +319,7 @@
           </li>
           @endif
           
-          @if( Session::get('rol') == '1')
+          @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item">
               <a href="{{ route('Usuarios')}}" class="nav-link {{ (request()->is('Usuarios')) ? 'active' : '' }}">
                   <i class="fas fa-users nav-icon"></i>

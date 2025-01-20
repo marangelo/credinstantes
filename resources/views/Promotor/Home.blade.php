@@ -1,13 +1,20 @@
 @extends('layouts.lyt_listas')
 @section('metodosjs')
+
+
+
 @include('jsViews.js_promotor')
+
 @endsection
 @section('content')
 <div class="wrapper">
 
-  <!-- Main Sidebar Container -->
+@if (Session::get('rol') == 5)
+    @include('layouts.lyt_main')
+@else
   @include('layouts.lyt_promotor')
- 
+@endif
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -16,12 +23,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">PROMOTOR</h1>
+            <h1 class="m-0">{{$Titulo}}</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">PROMOTOR</li>
+              <li class="breadcrumb-item active">{{$Titulo}}</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->

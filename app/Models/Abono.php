@@ -53,6 +53,7 @@ class Abono extends Model
                 'saldo_actual' => $abono->saldo_actual,
                 'activo' => $abono->activo,
                 'NumPago' => $abono->NumPago,
+                'Descuento' => $abono->Descuento,
             ];
 
         }

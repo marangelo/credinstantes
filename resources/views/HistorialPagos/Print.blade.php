@@ -88,6 +88,7 @@
                       <th>FECHA</th>
                       <th>CAPITAL</th>
                       <th>INTERES</th>
+                      <th>DISPENSA</th>
                       <th>SALDO ANTERIOR</th>
                       <th>SALDO</th>
                     </tr>
@@ -99,7 +100,8 @@
                             <td>{{$a['NumPago']}}</td>
                             <td>{{$a['fecha_cuota']}}</td>
                             <td><span class="badge rounded-pill badge-soft-info text-success">C$ {{ number_format($a['pago_capital'],2) }} </span></td>
-                            <td><span class="badge rounded-pill badge-soft-info text-warning">C$ {{ number_format($a['pago_intereses'],2) }}</span></td>                            
+                            <td><span class="badge rounded-pill badge-soft-info text-warning">C$ {{ number_format($a['pago_intereses'],2) }}</span></td>      
+                            <td><span class="badge rounded-pill badge-soft-info">C$ {{ number_format($a['Descuento'],2) }}</span></td>                      
                             <td><span class="badge rounded-pill badge-soft-info {{ $a['saldo_cuota'] > 0 ? 'text-danger' : '' }}">C$ {{ number_format($a['saldo_anterior'],2) }}</span></td>
                             <td>{{ number_format($a['saldo_actual'],2) }}</td>
                         </tr>

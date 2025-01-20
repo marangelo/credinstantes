@@ -32,7 +32,7 @@
           <div class="col-12">
             <label>Zonas</label>
               @if (request()->is('Activos/*') || request()->is('Inactivos/*'))
-                @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                @if (in_array(Session::get('rol'), [1, 3, 5]))
                 <div class="form-group">
                   <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
                       <option value="0"  selected="selected">Todos</option>
@@ -51,13 +51,13 @@
                 <h3 class="card-title">Listado de Clientes</h3>
                 
                 <div class="card-tools">  
-                  @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                  @if (in_array(Session::get('rol'), [1, 3, 5]))
                   <span class="badge badge-success"><span id="id_al_dia_count"></span> ACTIVOS</span>
                   <span class="badge badge-danger"><span id="id_al_mora_count"></span> MORA</span>
                   <span class="badge badge-warning"><span id="id_al_vencido_count"></span> VENCIDOS</span>
                   @endif
                   @if (request()->is('Activos/*'))
-                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                      @if (in_array(Session::get('rol'), [1, 3, 5]))
                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-xl">
                               NUEVO
                           </button>
@@ -78,7 +78,7 @@
                     <th>Direccion</th>    
                     <th>Saldo C$.</th>                
                     @if (request()->is('Activos/*'))
-                      @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                      @if (in_array(Session::get('rol'), [1, 3, 5]))
                         <th></th>
                       @endif
                     @endif
@@ -119,7 +119,7 @@
                         <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
                         <td>{{ number_format($c->getCreditos->sum('saldo'),2)}}</td>
                           @if (request()->is('Activos/*'))
-                          @if (Session::get('rol') == '1' || Session::get('rol') == '3')
+                          @if (in_array(Session::get('rol'), [1, 3, 5]))
                         <td>
                             <div class="card-tools text-center">  
                                 <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">

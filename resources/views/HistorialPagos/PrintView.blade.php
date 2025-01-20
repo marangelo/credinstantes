@@ -252,6 +252,7 @@ table tr td:last-child {
             <th class="heading-Description">FECHA</th>
             <th class="heading-price">CAPITAL</th>
             <th class="heading-price">INTERES</th>
+            <th class="heading-price">DISPENSA</th>
             <th class="heading-price">SALDO ANTERIOR</th>
             <th class="heading-price">SALDO</th>
         </tr>
@@ -263,7 +264,8 @@ table tr td:last-child {
             <td class="bold">{{$a['NumPago']}}</td>
             <td>{{$a['fecha_cuota']}}</td>
             <td class="right">C$ {{ number_format($a['pago_capital'],2) }} </td>    
-            <td class="right">C$ {{ number_format($a['pago_intereses'],2) }} </td>                         
+            <td class="right">C$ {{ number_format($a['pago_intereses'],2) }} </td>    
+            <td class="right">C$ {{ number_format($a['Descuento'],2) }} </td>                     
             <td class="right">C$ {{ number_format($a['saldo_anterior'],2) }}</td>
             <td class="right">{{ number_format($a['saldo_actual'],2) }}</td>
         </tr>

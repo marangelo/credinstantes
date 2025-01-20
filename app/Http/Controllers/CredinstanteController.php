@@ -381,6 +381,15 @@ class CredinstanteController extends Controller
         return view('Promotor.Home',compact('Titulo','Zonas'));
 
     }
+    public function Supervisor()
+    {         
+        $Titulo = "Supervisor";
+        
+        $Zonas  = Zonas::getZonas();  
+        
+        return view('Promotor.Home',compact('Titulo','Zonas'));
+
+    }
     public function Desembolsados()
     {         
         $Titulo = "DESEMBOLSADO";
