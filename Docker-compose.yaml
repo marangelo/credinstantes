@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  web_credinstante:
+    container_name: cn_credi_app
+    #image: kooldev/php:7.4-nginx-sqlsrv
+    image: gumadesarrollo/credinstante:1.6.30
+    restart: always
+    volumes:
+      - "./.env:/app/credinstantes/.env"
+    ports:
+      - "84:80"
+    environment:
+      - APP_NAME=credinstantes
+      - PHP_FPM_LISTEN=/run/php-fpm.sock
+      - NGINX_LISTEN=80
+      - NGINX_ROOT=/app/credinstantes/public
+      - NGINX_INDEX=index.php
+      - NGINX_CLIENT_MAX_BODY_SIZE=25M
+      - NGINX_PHP_FPM=unix:/run/php-fpm.sock
+      - NGINX_FASTCGI_READ_TIMEOUT=60s
+      - NGINX_FASTCGI_BUFFERS=8 8k
+      - NGINX_FASTCGI_BUFFER_SIZE=16k
+      - PHP_UPLOAD_MAX_FILESIZE=50M
+      - PHP_POST_MAX_SIZE=50M

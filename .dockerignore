@@ -1,0 +1,6 @@
+Docker/
+vendor/
+.env
+.idea/
+*.log
+storage/debugbar
