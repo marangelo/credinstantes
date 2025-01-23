@@ -34,7 +34,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="{{ asset('img/logo.png') }}" alt="Credinstante">
+        <img src="{{ asset('img/Logo.png') }}" alt="Credinstante">
         <div class="form-section">
             <p>ENTREGA: ____________________________</p>
             <p>DÍA DE VISITA: ____________________________</p>
