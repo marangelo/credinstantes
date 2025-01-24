@@ -76,6 +76,13 @@
                         <p>Recuperacion</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{route('Prospectos')}}"  class="nav-link {{ (request()->is('Prospectos') || request()->is('FormPospecto/*') ) ? 'active' : '' }}"  >
+                    <i class="fas fa-user nav-icon"></i>
+                    <p>Clientes Prospectos</p>
+                  </a>
+                </li>
+
                 @endif
               </ul>
           </li>
@@ -221,9 +228,6 @@
             </a>
             
             <ul class="nav nav-treeview">
-              
-             
-              
               <li class="nav-item">
                 <a href="{{ route('Municipios')}}" class="nav-link {{ (request()->is('Municipios')) ? 'active' : '' }}">
                   <i class="far fa-map nav-icon"></i>

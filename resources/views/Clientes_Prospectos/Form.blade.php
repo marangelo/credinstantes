@@ -40,7 +40,6 @@
                 <div class="row">                    
                   
                     <div class="col-sm-6">
-                      <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
                         <div class="input-group">
@@ -49,7 +48,6 @@
                           </div>
                           <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ..." value="{{ $Prospecto->Nombres ?? '' }}">
                         </div>
-                        
                       </div>
                     </div>
 
@@ -94,7 +92,7 @@
                       
                     </div>
 
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-sm-4 col-md-4">
 
                       <div class="form-group">
                         <label>Monto Promedio</label>
@@ -108,8 +106,7 @@
                         
                     </div>
 
-                    <div class="col-sm-6 col-md-6">
-
+                    <div class="col-sm-4 col-md-4">
                       <div class="form-group">
                         <label>Zonas</label>
                         <select class="form-control" id="selZona">
@@ -118,7 +115,18 @@
                             @endforeach
                         </select>
                       </div>
-                      
+                    </div>
+
+                    <div class="col-sm-4 col-md-4">
+                      <div class="form-group">
+                        <label>Giro Comercial</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input type="text" id="txtGiroComercial" class="form-control" placeholder="Nombre ..." value="{{ $Prospecto->Tipo_negocio ?? '' }}">
+                        </div>
+                      </div>
                     </div>
 
                     <div class="col-sm-12">

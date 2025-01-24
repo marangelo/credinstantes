@@ -305,6 +305,7 @@
                 {"title": "CEDULA","data": "Cedula"},
                 {"title": "DIRECCION","data": "Direccion"},
                 {"title": "TELEFONO","data": "Telefono"},
+                {"title": "GIRO COMERCIAL","data": "Tipo_negocio"},
                 {"title": "ZONA","data": "Zona"},
                 {"title": "FECHA","data": "Fecha_registro"},
                 {"title": "MONTO","data": "Monto_promedio", "render": function(data, type, row, meta) {

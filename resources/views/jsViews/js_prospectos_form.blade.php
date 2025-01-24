@@ -14,6 +14,7 @@
             var Dire_        = $("#txtDireccion").val();
             var Monto_       = $("#txtMonto").val();   
             var IdProspecto_ = $("#IdProspecto").val();
+            var TipoNegocio_ = $("#txtGiroComercial").val();
 
                 
             Nombre_         = isValue(Nombre_,'N/D',true)
@@ -24,6 +25,7 @@
             Monto_          = isValue(Monto_,'N/D',true)
             Zona_           = isValue(Zona_,'N/D',true)
             IdProspecto_    = isValue(IdProspecto_,'0',true)
+            TipoNegocio_    = isValue(TipoNegocio_,'N/D',true)
 
 
             if(Nombre_ === 'N/D' || Apellido_ ==='N/D'||Dire_ === 'N/D' || Zona_ ==='N/D'){
@@ -42,6 +44,7 @@
                     Tele_        : Tele_,
                     Dire_        : Dire_,
                     Monto_       : Monto_,     
+                    TipoNegocio_ : TipoNegocio_,
                     IdProspecto_ : IdProspecto_,             
                     _token       : "{{ csrf_token() }}" 
                 },
