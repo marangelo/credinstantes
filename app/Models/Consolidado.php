@@ -54,7 +54,6 @@ class Consolidado extends Model {
                 }
                 $i++;
             }
-           
 
             return $json_arrays;
         } catch (Exception $e) {

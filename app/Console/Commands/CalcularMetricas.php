@@ -36,7 +36,7 @@ class CalcularMetricas extends Command
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
         $D2     = date('Y-m-d', strtotime($dtNow)). ' 23:59:59'; 
-       
+
 
         foreach ($array_zonas as $key => $z) {
                         
