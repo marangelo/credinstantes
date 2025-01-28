@@ -57,10 +57,10 @@
                       <td> <strong><i class="fas fa-file-invoice-dollar mr-1"></i> MONTO APROBADO:</strong> C$  {{ number_format($Credito->monto_credito,2) }}</td>
                     </tr>
                     <tr>
-      <td ></td>
-      <td><strong><i class="fas fa-file-invoice-dollar mr-1"></i> CUOTA:</strong> <strong>C$  {{ number_format($Credito->cuota,2) }}</strong></td>
-    </tr>
-                    <tr>
+                      <td ><strong><i class="fas fa-calendar mr-1"></i> DESEMBOLSO:</strong> {{ \Date::parse($Credito->fecha_apertura)->format('D, M d, Y')}}</td>
+                      <td><strong><i class="fas fa-file-invoice-dollar mr-1"></i> CUOTA:</strong> <strong>C$  {{ number_format($Credito->cuota,2) }}</strong></td>
+                    </tr>
+                      <tr>
                       <td> <strong><i class="fas fa-user mr-1"></i> CLIENTE:</strong> {{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}} </td>
                       <td> <strong><i class="fas fa-book mr-1"></i> ZONA: </strong> {{$Credito->Clientes->getZona->nombre_zona}}</td>
                     </tr>

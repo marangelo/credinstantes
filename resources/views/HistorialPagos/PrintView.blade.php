@@ -219,7 +219,7 @@ table tr td:last-child {
         <td>MONTO APROBADO: <strong>C$  {{ number_format($Credito->monto_credito,2) }}</strong></td>
     </tr>
     <tr>
-      <td ></td>
+      <td >DESEMBOLSO : <strong>{{ \Date::parse($Credito->fecha_apertura)->format('D, M d, Y')}}</strong></td>
       <td>CUOTA: <strong>C$  {{ number_format($Credito->cuota,2) }}</strong></td>
     </tr>
     
