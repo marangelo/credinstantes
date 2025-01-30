@@ -140,8 +140,11 @@ class ReportsModels extends Model {
         
         $pago_capital = 0 ;
 
-        $user_home = Usuario::where('id_rol', 1)->pluck('id')->first();
-        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->whereIn('registrado_por', [$Cobra,$user_home])->Where('id_zona',$id_zona);   
+        $ByAdmin = Usuario::where('id_rol', 1)->where('activo', 'S')->pluck('id')->first();
+        $ByCaja  = Usuario::where('id_rol', 3)->where('activo', 'S')->pluck('id')->first();
+
+
+        $Obj =  Pagos::whereBetween('FECHA_ABONO', [$dtIni, $dtEnd])->whereIn('registrado_por', [$Cobra,$ByAdmin,$ByCaja])->Where('id_zona',$id_zona);   
 
         
         $pago_intereses = $Obj->sum( 'INTERES' );       
