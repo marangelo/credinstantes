@@ -76,12 +76,12 @@
                         <p>Recuperacion</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a href="{{route('Prospectos')}}"  class="nav-link {{ (request()->is('Prospectos') || request()->is('FormPospecto/*') ) ? 'active' : '' }}"  >
                     <i class="fas fa-user nav-icon"></i>
                     <p>Clientes Prospectos</p>
                   </a>
-                </li>
+                </li> -->
 
                 @endif
               </ul>
@@ -180,12 +180,12 @@
               </ul>
             </li> -->
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{route('Prospectos')}}"  class="nav-link {{ (request()->is('Prospectos') || request()->is('FormPospecto/*') ) ? 'active' : '' }}"  >
               <i class="fas fa-user nav-icon"></i>
               <p>Clientes Prospectos</p>
             </a>
-          </li>
+          </li> -->
 
           <li class="nav-header">FINANZAS</li>
           
