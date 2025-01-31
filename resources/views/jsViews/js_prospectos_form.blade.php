@@ -49,8 +49,8 @@
                     _token       : "{{ csrf_token() }}" 
                 },
                 async: true,
-                success: function(response) {
-                    if(response){
+                success: function(response) {                    
+                    if(!response.exists){
                         Swal.fire({
                         title: 'Correcto',
                         icon: 'success',
@@ -63,6 +63,8 @@
                                 location.reload();
                             }   
                         })
+                    }else{
+                        Swal.fire("Oops", response.message, "error");
                     }
                 },
                 error: function(response) {

@@ -8,6 +8,7 @@ use App\Models\Municipios;
 use App\Models\DiasSemana;
 use App\Models\Usuario;
 use App\Models\Credito;
+use App\Models\Clientes;
 
 
 class ProspectosController extends Controller
@@ -43,9 +44,28 @@ class ProspectosController extends Controller
     }
     public function SaveProspecto(Request $request)
     {
-        $response = Prospectos::SaveProspecto($request);
+        $cedula = $request->input('Cedula_');
+
+        // Check if the prospect exists in the Prospectos model
+        $prospecto = Prospectos::where('Cedula', $cedula)->first();
+
+        // If not found in Prospectos, check in the Clientes model
+        if (!$prospecto) {
+            $cliente = Clientes::where('Cedula', $cedula)->first();
+            if (!$cliente) {
+                // If not found in Clientes, proceed to save the prospect
+                $response = Prospectos::SaveProspecto($request);
+                //return response()->json($response);
+            } else {
+                return response()->json(['exists' => true, 'message' => 'Prospecto Encontrado como Clientes.']);
+            }
+        }
+
+        return response()->json(['exists' => $prospecto ? true : false, 'message' => $prospecto ? 'Prospecto encontrado.' : 'Registro Grabado Correctamente.']);
+
+
         
-        return response()->json($response);
+        //return response()->json($response);
     }
     public function DeleteProspecto($IdProspecto)
     {
