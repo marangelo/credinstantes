@@ -106,7 +106,7 @@
                   <tr>
                     <th>NOMBRE</th>
                     <th>CUOTA COBRADA</th>
-                    @if (Session::get('rol') == '1')  
+                    @if (in_array(Session::get('rol'), [1, 3]))
                     <th>PAGO A CAPITAL</th>
                     <th>PAGO A INTERES</th>
                     @endif
@@ -118,8 +118,8 @@
                 </table>
               </div>
               <div class="card-footer">
-                <div class="row">
-                  @if (Session::get('rol') == '1')  
+                <div class="row"> 
+                  @if (in_array(Session::get('rol'), [1, 3]))
                   <div class="col-sm-4 col-md-4">
                   @else 
                   <div class="col-sm-12 col-md-12">
@@ -129,7 +129,7 @@
                       <span class="description-text">TOTAL INGRESO BRUTO</span>
                     </div>
                   </div>
-                  @if (Session::get('rol') == '1')  
+                  @if (in_array(Session::get('rol'), [1, 3]))
                   <div class="col-sm-4 col-md-4">
                     <div class="description-block border-right">
                       <h5 class="description-header text-success" >C$ <span id="id_lbl_capital" ></span></h5>

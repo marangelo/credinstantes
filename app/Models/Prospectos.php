@@ -65,12 +65,13 @@ class Prospectos extends Model {
                 "Usuario"               => $c->User->nombre,
                 "Fecha_registro"        => date('Y-m-d h:m:s', strtotime($c->created_at)),
                 "Accion"                => '
-                
                 <a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" ><i class="fas fa-money-check-alt"></i> </a>
                 <a href="FormPospecto/' . $c->id_prospecto.' " class="btn btn-primary btn-block" ><i class="fas fa-edit"></i> </a>
                 <a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>',
             ];
-                
+            //Option: Removi la Opcion , par apoder agregar un credito
+            //<a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" ><i class="fas fa-money-check-alt"></i> </a>
+            
         }
 
 

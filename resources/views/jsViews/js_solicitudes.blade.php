@@ -152,6 +152,10 @@
                     "title": "DOCUMENTOS",
                     "data": "Accion"
                 }, 
+                {
+                    "title": "ACCION",
+                    "data": "Botones"
+                }, 
             ],
         })
 

@@ -94,7 +94,7 @@
                     "data": "cuota_cobrada",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 }, 
-                @if (Session::get('rol') == '1')  
+                @if (in_array(Session::get('rol'), [1, 3]))
                 {
                     "title": "CAPITAL",
                     "data": "pago_capital",
@@ -125,7 +125,7 @@
                 $('#id_lbl_ingreso').html(INGRESO);
 
 
-                @if (Session::get('rol') == '1')  
+                @if (in_array(Session::get('rol'), [1, 3]))
                 CAPITAL = api
                 .column( 2 )
                 .data()

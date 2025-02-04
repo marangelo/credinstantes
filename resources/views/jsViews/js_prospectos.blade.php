@@ -100,8 +100,9 @@
                     async: true,
                 success: function(response) {
                     if(response){
+                        console.log(response)
                         Swal.fire({
-                        title: 'Correcto',
+                        title: response.message,
                         icon: 'success',
                         showCancelButton: false,
                         confirmButtonColor: '#3085d6',
@@ -110,7 +111,9 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 location.reload();
-                            }   
+                            }else{
+                                location.reload();
+                            }
                         })
                     }
                 },

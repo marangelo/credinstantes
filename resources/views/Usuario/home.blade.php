@@ -16,7 +16,7 @@
       <form id="frm_login" method="POST" action="{{route('login')}}">
       @csrf
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Email" value="wilmer@credinstantes.com">
+          <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Email" value="wilber@credinstantes.com">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>

@@ -46,7 +46,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                           </div>
-                          <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ..." value="{{ $Prospecto->Nombres ?? '' }}">
+                          <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ..." value=" {{ $Prospecto->Nombres ?? '' }}">
                         </div>
                       </div>
                     </div>
@@ -72,7 +72,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input type="text" class="form-control" id="txtTelefono" onkeypress='return isNumberKey(event)' value="{{ $Prospecto->Telefono ?? '' }}">
+                          <input type="text" class="form-control" id="txtTelefono" onkeypress='return isNumberKey(event)' value="{{ $Prospecto->Telefono ?? '' }}" maxlength="8">
                         </div>
                       </div>
 

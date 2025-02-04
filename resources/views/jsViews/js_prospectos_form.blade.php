@@ -29,8 +29,6 @@
 
 
             if(Nombre_ === 'N/D' || Apellido_ ==='N/D'||Dire_ === 'N/D' || Zona_ ==='N/D'){
-
-                console.log(Nombre_ + ' ' + Apellido_ + ' ' + Dire_ + ' ' + Zona_);
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
                 $.ajax({

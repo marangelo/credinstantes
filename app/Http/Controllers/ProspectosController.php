@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use Auth;
+
 use Illuminate\Http\Request;
 use App\Models\Zonas;
 use App\Models\Prospectos;
@@ -9,6 +11,7 @@ use App\Models\DiasSemana;
 use App\Models\Usuario;
 use App\Models\Credito;
 use App\Models\Clientes;
+use App\Models\RequestsCredit;
 
 
 class ProspectosController extends Controller
@@ -19,6 +22,7 @@ class ProspectosController extends Controller
     }
 
     public function ProspectosView(){
+
         $Titulo      = "Clientes Prospectos";
         $Municipios  = Municipios::getMunicipios();  
         $DiasSemana  = DiasSemana::getDiasSemana();
@@ -45,23 +49,30 @@ class ProspectosController extends Controller
     public function SaveProspecto(Request $request)
     {
         $cedula = $request->input('Cedula_');
+        $IdPros = $request->input('IdProspecto_');
 
-        // Check if the prospect exists in the Prospectos model
-        $prospecto = Prospectos::where('Cedula', $cedula)->first();
 
-        // If not found in Prospectos, check in the Clientes model
-        if (!$prospecto) {
-            $cliente = Clientes::where('Cedula', $cedula)->first();
-            if (!$cliente) {
-                // If not found in Clientes, proceed to save the prospect
-                $response = Prospectos::SaveProspecto($request);
-                //return response()->json($response);
+        if ($IdPros > 0) {
+            $response = Prospectos::SaveProspecto($request);
+        } else {
+            // Check if the prospect exists in the Prospectos model
+            $prospecto = Prospectos::where('Cedula', $cedula)->where('activo', 1)->first();
+            
+            // If not found in Prospectos, check in the Clientes model
+            if (!$prospecto) {
+                $cliente = Clientes::where('Cedula', $cedula)->where('activo', 1)->first();
+                if (!$cliente) {
+                    // If not found in Clientes, proceed to save the prospect
+                    $response = Prospectos::SaveProspecto($request);
+                } else {
+                    return response()->json(['exists' => true, 'message' => 'Prospecto Encontrado como Clientes.']);
+                }
             } else {
-                return response()->json(['exists' => true, 'message' => 'Prospecto Encontrado como Clientes.']);
+                return response()->json(['exists' => true, 'message' => 'Prospecto encontrado.']);
             }
         }
-
-        return response()->json(['exists' => $prospecto ? true : false, 'message' => $prospecto ? 'Prospecto encontrado.' : 'Registro Grabado Correctamente.']);
+        
+        return response()->json(['exists' => false, 'message' => 'Registro Grabado Correctamente.']);
 
 
         
@@ -84,13 +95,65 @@ class ProspectosController extends Controller
     }
     public function SaveNewProspecto(Request $request)
     {
+
         $IdProspecto           = $request->input('IdProspecto_');
 
-        Prospectos::UpdateEstadoProspecto($IdProspecto,2);  
+        $request->validate([
+            'FechaOpen'    => 'required|date',
+            'DiaSemana_'   => 'required|string|max:20',
+            'Promotor_'    => 'required|string|max:100',
+            'Nombre_'      => 'required|string|max:50',
+            'Apellido_'    => 'required|string|max:50',
+            'Tele_'        => 'required|string|max:20',
+            'Cedula_'      => 'required|string|max:20',
+            'Municipio_'   => 'required|string|max:50',
+            'Zona_'        => 'required|string|max:100',
+            'Dire_'        => 'required|string',
+            'Monto_'       => 'required|numeric',
+            'Plato_'       => 'required|numeric',
+            'Interes_'     => 'required|numeric',
+            'Cuotas_'      => 'required|numeric',
+            'Total_'       => 'required|numeric',
+            'vlCuota'      => 'required|numeric',
+            'Saldos_'      => 'required|numeric',
+            'vlInteres'    => 'required|numeric',
+            'InteresesPorCuota' => 'required|numeric',
+        ]);
 
-        $response = Credito::SaveNewCredito($request);
+        $creditRequest = RequestsCredit::create([
+            'req_start_date'      => $request->FechaOpen,
+            'visit_day'           => $request->DiaSemana_,
+            'promoter'            => $request->Promotor_,
+            'first_name'          => $request->Nombre_,
+            'last_name'           => $request->Apellido_,
+            'phone'               => $request->Tele_,
+            'num_cedula'          => $request->Cedula_,
+            'id_department'       => $request->Municipio_,
+            'id_zone'             => $request->Zona_,
+            'client_address'      => $request->Dire_,
+            'monto'               => $request->Monto_,
+            'plazo'               => $request->Plato_,
+            'interes_porcent'     => $request->Interes_,
+            'num_cuotas'          => $request->Cuotas_,
+            'total'               => $request->Total_,
+            'cuota'               => $request->vlCuota,
+            'saldo'               => $request->Saldos_,
+            'interes_valor'       => $request->vlInteres,
+            'intereses_por_cuota' => $request->InteresesPorCuota,
+            'activo'              => 1,
+            'created_by'          => Auth::id(),
+        ]);
+
+        Prospectos::UpdateEstadoProspecto($IdProspecto,2);  
         
-        return response()->json($response);
+        return response()->json([
+            'message' => 'Solicitud de crédito registrada con éxito',
+            'data' => $creditRequest
+        ], 201);
+
+    
+
+        
     }
 
 }

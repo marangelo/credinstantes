@@ -95,7 +95,7 @@
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Aperturar Credito para Prospecto</h4> <input type="hidden" name="id_credito" id="txtIdProspecto" value="0">
+              <h4 class="modal-title">Nueva Solicitud para Prospecto</h4> <input type="hidden" name="id_credito" id="txtIdProspecto" value="0">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -160,7 +160,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input type="text" class="form-control" id="txtTelefono" onkeypress='return isNumberKey(event)'>
+                          <input type="text" class="form-control" id="txtTelefono" maxlength="8" onkeypress='return isNumberKey(event)' >
                         </div>
                       </div>
 
@@ -320,7 +320,7 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-danger" id="btn_save_credito">Crear Credito</button>
+              <button type="button" class="btn btn-danger" id="btn_save_credito">Crear Solicitud</button>
             </div>
           </div>
           <!-- /.modal-content -->

@@ -157,7 +157,7 @@
               </ul>
           </li>
           
-          <!-- <li class="nav-header">MOVIMIENTOS</li>
+          <li class="nav-header">MOVIMIENTOS</li>
           <li class="nav-item menu-open">
               <a href="#" class="nav-link {{ (request()->is('Solicitudes')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-table"></i>
@@ -170,15 +170,15 @@
                         <p>Nuevos</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Renovaciones</p>
                     </a>
-                </li>
+                </li> -->
                 
               </ul>
-            </li> -->
+            </li>
 
           <li class="nav-item">
             <a href="{{route('Prospectos')}}"  class="nav-link {{ (request()->is('Prospectos') || request()->is('FormPospecto/*') ) ? 'active' : '' }}"  >

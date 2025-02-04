@@ -51,7 +51,7 @@
                           <button type="button" class="btn btn-success button_export_excel" id="btn-export-gasto">
                               <i class="fas fa-file-excel "></i> EXCEL
                           </button>
-                          <a href="Formulario/{{$lblBtn}} " class="btn btn-warning">
+                          <a href="Formulario/0 " class="btn btn-warning">
                               <i class="fas fa-user "></i> {{$lblBtn}} 
                           </a>
                       </div>

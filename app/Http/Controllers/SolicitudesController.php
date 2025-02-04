@@ -7,6 +7,8 @@ use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Usuario;
 use App\Models\Municipios;
+use App\Models\RequestsCredit;
+use App\Models\Credito;
 
 class SolicitudesController extends Controller
 {
@@ -17,7 +19,7 @@ class SolicitudesController extends Controller
 
     public function ViewNuevos(){
         $Titulo      = "SOLICTUDES";
-        $lblBtn      = "NUEVA";
+        $lblBtn      = "NUEVAS";
         $Zonas       = Zonas::getZonas(); 
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Promo       = Usuario::where('activo','S')->get(); 
@@ -36,20 +38,39 @@ class SolicitudesController extends Controller
 
     }
 
-    public function ViewForm($Formulario){
+    public function ViewForm($IdReq){
+
+        $Request = ($IdReq > 0 ) ? RequestsCredit::find($IdReq) : [] ;
+        
         $Titulo      = "FORMULARIO";        
         $Zonas       = Zonas::getZonas(); 
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Promo       = Usuario::where('activo','S')->get(); 
         $Municipios  = Municipios::getMunicipios();  
-        return view('Solicitudes.Form', compact('Titulo', 'Zonas', 'DiasSemana', 'Promo', 'Municipios'));
+
+        return view('Solicitudes.Form', compact('Titulo', 'Zonas', 'DiasSemana', 'Promo', 'Municipios', 'Request'));
 
     }
     public function getSolicitudes(Request $request)
     {
-        $response = Solicitudes::getProspectos($request);
+        $response = RequestsCredit::getRequestsCredit($request);
         
         return response()->json($response);
+    }
+
+    public function UpRequestCredit(Request $request)
+    {
+
+        $IdProspecto           = $request->input('IdProspecto_'); 
+        
+        RequestsCredit::UpdateEstadoRequest($IdProspecto);  
+
+        $response = Credito::SaveNewCredito($request);      
+        
+        return response()->json([
+            'message' => 'Credito Guardado Correctamente.',
+        ], 201);
+
     }
     
 }

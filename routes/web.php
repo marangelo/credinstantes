@@ -192,3 +192,6 @@ Route::get('Pagare', 'FormatosController@Pagare')->name('Pagare');
 
 
 Route::get('Supervisor', 'CredinstanteController@Supervisor')->name('Supervisor');
+
+
+Route::post('UpRequestCredit', 'SolicitudesController@UpRequestCredit')->name('UpRequestCredit');
