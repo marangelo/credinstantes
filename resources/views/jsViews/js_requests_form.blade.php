@@ -3,6 +3,13 @@
     {
         $('[data-mask]').inputmask();
 
+        var btns_01 = $('#txtMonto,#txtPlazo,#txtInteres,#txtCuotas');
+        btns_01.on('keyup touchend', function(e) {
+            if (e.type === 'touchend' || isNumberKey(e)) {
+                Calc_Credito();
+            }
+        });
+
         $("#btn_save_prospecto").click(function(){
             var IdProspecto = $("#IdRequest").val(); 
 
@@ -107,6 +114,36 @@
         });
         
     })
+
+
+    function Calc_Credito(){
+        var Monto_     = $("#txtMonto").val();   
+        var Plato_     = $("#txtPlazo").val();   
+        var Interes_   = $("#txtInteres").val();
+        var Cuotas_    = $("#txtCuotas").val();
+
+        Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
+        Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
+        Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
+        Plato_         = numeral(isValue(Plato_,0,true)).format('0.00')
+
+        Total_         = ((Monto_ * (Interes_ / 100) * parseFloat(Plato_) ) + parseFloat(Monto_))
+
+        vlCuota        = Total_ / parseFloat(Cuotas_);
+        vlCuota        = numeral(isValue(vlCuota,0,true)).format('00.00')
+
+        vlInteres      = parseFloat(Total_) - parseFloat(Monto_)
+        vlInterePorCuota  = parseFloat(vlInteres) / parseFloat(Cuotas_)
+        vlInterePorCuota        = numeral(isValue(vlInterePorCuota,0,true)).format('0.00')
+
+        $("#txtTotal").val(Total_);
+        $("#txtVlCuota").val(vlCuota);
+        $("#txtIntereses").val(vlInteres);
+        $("#txtSaldos").val(Total_);
+        $("#txtInteresesPorCuota").val(vlInterePorCuota);
+    }
+
+
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
