@@ -11,40 +11,49 @@
             var vTableArticulos = $('#tbl_ingresos').DataTable();     
             vTableArticulos.search(this.value).draw();
         });
+        $("#btn_open_modal_renovacion").click(function(){
+
+            var valor = $("#lbl_titulo_reporte").text().replace(/ /g,'');
+            if(valor == 'RENOVAR'){
+                $('#modal-renovacion').modal('show');
+                ModalRenovacion();
+            }else{
+                window.location.href = "Formulario/0";                
+            }
+        })
+
+        $("#txt_search_renovaciones").on('keyup', function() {   
+            var vTableInactivos = $('#tbl_renovaciones').DataTable();     
+            vTableInactivos.search(this.value).draw();
+        });
 
     })
     $('.button_export_excel').click(() => {
         $('#tbl_ingresos').DataTable().buttons(0,0).trigger()
     })
-    function ModalHistorico(IdCliente){
-        
-        $("#lbl_id_cliente").html(IdCliente);
-        $('#modal-historico').modal('show');
+    function ModalRenovacion(){
+        $('#modal-renovacion').modal('show');
 
-        $.get( "getCreditos/" + IdCliente, function( data ) {
-            
-            initTable_historico('#tbl_creditos',data);
-
-            $("#lbl_nombre_cliente").html(data[0].Nombre + ' ' + data[0].Apellidos);
-
+        $.get( "getClientesInactivos", function( data ) {
+            initTable_historico('#tbl_renovaciones',data.Clientes_Inactivos);
         });
     }
 
-    function initTable_historico(id,InfoCreditos){
+    function initTable_historico(id,Clientes_Inactivos){
         
         var tabla = $(id).DataTable({
-            "data": InfoCreditos[0].Creditos,
+            "data": Clientes_Inactivos,
             "destroy": true,
             "info": false,
             responsive: true,
-            "bPaginate": false,
-            "searching": false,
+            "bPaginate": true,
+            "searching": true,
             "order": [
                 [0, "desc"]
             ],
             "lengthMenu": [
-                [5, -1],
-                [5, "Todo"]
+                [7, -1],
+                [7, "Todo"]
             ],
             "language": {
                 "zeroRecords": "NO HAY COINCIDENCIAS",
@@ -59,42 +68,19 @@
                 "search": "BUSCAR"
             },
             'columns':  [ 
-                {"title": "NUM","data": "id_creditos"},  
-                {"title": "ESTADO","data": "id_creditos", "render": function(data, type, row, meta) {
-                    const estilo = {
-                        '1' : 'bg-success',
-                        '2' : 'bg-danger',
-                        '3' : 'bg-warning'
-                    }
-                    const clase = estilo[row.estado_credito] || ''
-
-                    var nombre_estado = _.findWhere(InfoCreditos[0].Estados_credito, {id_estados: row.estado_credito }).nombre_estado;
-
-                    return `<span class="badge ${clase}">${nombre_estado}</span>`
-                }}, 
-                {"title": "FECHA INICIO","data": "id_creditos", "render": function(data, type, row, meta) {
-                    const dt = moment(row.fecha_apertura, 'YYYY/MM/DD HH:mm:ss').format('ddd, MMM DD, YYYY');  
-                    return `<span class="badge rounded-pill badge-soft-info ">`+ dt	  +`</span> `
-                }},
-                {"title": "FECHA FINAL","data": "id_creditos", "render": function(data, type, row, meta) {
-                    
-                    const dt = moment(row.fecha_ultimo_abono, 'YYYY/MM/DD HH:mm:ss').format('ddd, MMM DD, YYYY');
-
-                    return `<span class="badge rounded-pill badge-soft-info ">`+ dt +`</span> `
-                }},
-                {"title": "TOTAL","data": "total", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill badge-soft-info ">`+ numeral(row.total).format('0,00.00') +`</span> `                    
-                }},
-                {"title": "SALDO ","data": "saldo", "render": function(data, type, row, meta) {
-                    return `<span class="badge rounded-pill badge-soft-info text-success">C$  `+ numeral(row.saldo).format('0,00.00')  +`</span> `
-                }},
-                {"title": " - ","data": "id_creditos", "render": function(data, type, row, meta) {
-                    return `<a href="CreditoPrint/${row.id_creditos}" class="btn btn-success btn-block btn-sm" onclick=""><i class="fas fa-print"></i> </a> `
+                {"title": "NOMBRE","data": "nombre", "render": function(data, type, row, meta) {
+                    return row.nombre.toUpperCase() + ' ' + row.apellidos.toUpperCase();
+                }},  
+                
+                {"title": " - ","data": "id_clientes", "render": function(data, type, row, meta) {
+                    return `<a href="CreditoRenovacion/${row.id_clientes}" class="btn btn-success btn-block btn-sm" onclick=""><i class="fas fa-print"></i> </a> `
                 }},
 
             ],
         });
+
         $( id + "_length").hide();
+        $( id + "_filter").hide();
         
     }
 

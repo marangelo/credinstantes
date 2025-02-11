@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 >INFORMACION DEL FORMULARIO</h1>
+            <h1 >SOLICITUDE DE RENOVACION</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -57,7 +57,7 @@
                         <label>Promotor</label>
                         <select class="form-control" id="slPromotor">
                           @foreach ($Promo as $p)
-                            <option value="{{$p->id}}" {{ (isset($Request->promoter) && $Request->promoter == $p->id) ? 'selected' : '' }}> {{strtoupper($p->nombre)}}</option>
+                            <option value="{{$p->id}}" > {{strtoupper($p->nombre)}}</option>
                           @endforeach
                         </select>
                       </div>                      
@@ -66,14 +66,14 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ..." value="{{ $Request->first_name ?? '' }}">
+                        <input type="text" id="txtNombre" class="form-control" placeholder="Nombre ..." value="{{ $Cliente->nombre ?? '' }}">
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-md-4 col-xl-3">
                       <!-- text input -->
                       <div class="form-group">
                         <label>Apellido</label>
-                        <input type="text" id="txtApellido" class="form-control" placeholder="Apellido ..." value="{{ $Request->last_name ?? '' }}">
+                        <input type="text" id="txtApellido" class="form-control" placeholder="Apellido ..." value="{{ $Cliente->apellidos ?? '' }}">
                       </div>
                     </div>                  
                     <div class="col-sm-6 col-xl-3">
@@ -84,7 +84,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                           </div>
-                          <input type="text" class="form-control" id="txtTelefono" onkeypress='return isNumberKey(event)' value="{{ $Request->phone ?? '' }}" maxlength="8">
+                          <input type="text" class="form-control" id="txtTelefono" onkeypress='return isNumberKey(event)' value="{{ $Cliente->telefono ?? '' }}" maxlength="8">
                         </div>
                       </div>
 
@@ -97,7 +97,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-address-card"></i></i></span>
                           </div>
-                          <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask value="{{ $Request->num_cedula ?? '' }}">
+                          <input type="text" class="form-control" id="txtCedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask value="{{ $Cliente->cedula ?? '' }}">
                         </div>
                       </div>
                       
@@ -108,7 +108,7 @@
                         <label>Departamento</label>
                         <select class="form-control" id="selMunicipio">
                           @foreach ($Municipios as $m)
-                            <option value="{{$m->id_municipio}}" {{ (isset($Request->id_department) && $Request->id_department == $m->id_municipio) ? 'selected' : '' }}> {{strtoupper($m->nombre_municipio)}}</option>
+                            <option value="{{$m->id_municipio}}" {{ (isset($Cliente->id_municipio) && $Cliente->id_municipio == $m->id_municipio) ? 'selected' : '' }}> {{strtoupper($m->nombre_municipio)}}</option>
                           @endforeach
                         </select>
                       </div>
@@ -119,7 +119,7 @@
                         <label>Zonas</label>
                         <select class="form-control" id="selZona">
                           @foreach ($Zonas as $z)
-                            <option value="{{$z->id_zona}}" {{ (isset($Request->id_zone) && $Request->id_zone == $z->id_zona) ? 'selected' : '' }}> {{strtoupper($z->nombre_zona)}}</option>
+                            <option value="{{$z->id_zona}}" {{ (isset($Cliente->id_zona) && $Cliente->id_zona == $z->id_zona) ? 'selected' : '' }}> {{strtoupper($z->nombre_zona)}}</option>
                           @endforeach
                         </select>
                       </div>                      
@@ -127,7 +127,7 @@
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>DIRECCION</label>
-                        <textarea class="form-control" id="txtDireccion" rows="3" placeholder="Direcion ..." style="white-space: nowrap;">{{ $Request->client_address ?? '' }}</textarea>
+                        <textarea class="form-control" id="txtDireccion" rows="3" placeholder="Direcion ..." style="white-space: nowrap;">{{ $Cliente->direccion_domicilio ?? '' }}</textarea>
                       </div>
                     </div>                
                     <div class="col-sm-6 col-md-4 col-xl-4">
@@ -137,7 +137,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)' value="{{ $Request->monto ?? '' }}">
+                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'>
                           </div>
                         </div>
                     </div>
@@ -148,7 +148,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)' value="{{ $Request->plazo ?? '' }}">
+                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)' >
                           </div>
                       </div>
                     </div>
@@ -159,7 +159,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                             </div>
-                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)' value="{{ $Request->interes_porcent ?? '' }}">
+                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)' >
                           </div>
                       </div>
                     </div>
@@ -170,7 +170,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)' value="{{ $Request->num_cuotas ?? '' }}">
+                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)' >
                           </div>
                       </div>
                     </div>
@@ -181,7 +181,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->total ?? '' }}">
+                            <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled >
                           </div>
                         </div>
                     </div>
@@ -192,7 +192,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->cuota ?? '' }}">
+                            <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled >
                           </div>
                       </div>
                     </div>
@@ -203,7 +203,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->saldo ?? '' }}">
+                            <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled >
                           </div>
                       </div>
                     </div>
@@ -214,7 +214,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->interes_valor ?? '' }}">
+                            <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled >
                           </div>
                       </div>
                     </div>
@@ -225,14 +225,14 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->intereses_por_cuota ?? '' }}">
+                            <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled >
                           </div>
                       </div>
                     </div>
 
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <input type="hidden" name="IdRequest" id="IdRequest" value="{{ $Request->id_req ?? 0 }}" >
+                            <input type="hidden" name="IdRequest" id="IdRequest" value="0" >
                             <a href="#!" class="btn btn-danger btn-block" id="btn_save_prospecto" > <i class="fas fa-save"></i>  PROCESAR SOLICITUD</a>
                         </div>
                     </div>

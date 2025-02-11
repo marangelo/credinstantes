@@ -95,7 +95,8 @@
                         InteresesPorCuota:InteresesPorCuota,
                         Saldos_      : Saldos_,
                         FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
-                        _token  : "{{ csrf_token() }}" 
+                        _token       : "{{ csrf_token() }}" ,
+                        _Origin      : 'Prospecto'
                     },
                     async: true,
                 success: function(response) {

@@ -95,13 +95,13 @@
                           <i class="fas fa-user nav-icon"></i>
                           <p>Clientes Prospectos</p>
                         </a>
-                      </li>
-                <!-- <li class="nav-item">
-                    <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
-                        <i class="fas fa-user nav-icon"></i>
-                        <p>Renovaciones</p>
-                    </a>
-                </li> -->
+                        </li>
+                  <!-- <li class="nav-item">
+                      <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
+                          <i class="fas fa-user nav-icon"></i>
+                          <p>Renovaciones</p>
+                      </a>
+                  </li> -->
                 
               </ul>
             </li>
@@ -175,7 +175,6 @@
                 </li>
                 @endif
                 <!-- 
-
                 <li class="nav-item">
                   <a href="{{route('Dispensa')}}" class="nav-link {{ (request()->is('Dispensa')) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
@@ -199,12 +198,12 @@
                         <p>Nuevos</p>
                     </a>
                 </li>
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Renovaciones</p>
                     </a>
-                </li> -->
+                </li>
                 
               </ul>
             </li>

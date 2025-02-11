@@ -142,6 +142,7 @@ class ProspectosController extends Controller
             'intereses_por_cuota' => $request->InteresesPorCuota,
             'activo'              => 1,
             'created_by'          => Auth::id(),
+            'Origen'              => $request->_Origin,
         ]);
 
         Prospectos::UpdateEstadoProspecto($IdProspecto,2);  

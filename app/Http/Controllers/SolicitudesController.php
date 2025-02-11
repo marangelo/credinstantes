@@ -9,6 +9,7 @@ use App\Models\Usuario;
 use App\Models\Municipios;
 use App\Models\RequestsCredit;
 use App\Models\Credito;
+use App\Models\Clientes;
 
 class SolicitudesController extends Controller
 {
@@ -47,8 +48,24 @@ class SolicitudesController extends Controller
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Promo       = Usuario::where('activo','S')->get(); 
         $Municipios  = Municipios::getMunicipios();  
+        $Origin      = "Nueva";
 
-        return view('Solicitudes.Form', compact('Titulo', 'Zonas', 'DiasSemana', 'Promo', 'Municipios', 'Request'));
+        return view('Solicitudes.Form', compact('Titulo', 'Zonas', 'DiasSemana', 'Promo', 'Municipios', 'Request','Origin'));
+
+    }
+    public function ViewFormRenovaciones($IdReq){
+
+        $Cliente = ($IdReq > 0 ) ? Clientes::find($IdReq) : [] ;
+        
+        
+        $Titulo      = "SOLIC. RENOVACION";        
+        $Zonas       = Zonas::getZonas(); 
+        $DiasSemana  = DiasSemana::getDiasSemana();
+        $Promo       = Usuario::where('activo','S')->get(); 
+        $Municipios  = Municipios::getMunicipios();  
+        $Origin      = "Renovacion";
+
+        return view('Solicitudes.RequestRenovacion', compact('Titulo', 'Zonas', 'DiasSemana', 'Promo', 'Municipios', 'Cliente','Origin'));
 
     }
     public function getSolicitudes(Request $request)
@@ -71,6 +88,15 @@ class SolicitudesController extends Controller
             'message' => 'Credito Guardado Correctamente.',
         ], 201);
 
+    }
+
+    public function getClientesInactivos(Request $request)
+    {
+        $Clientes_Inactivos    = Clientes::getInactivos(0);  
+        return response()->json([
+            'message' => 'Clientes Inactivos.',
+            'Clientes_Inactivos' => $Clientes_Inactivos
+        ], 201);
     }
     
 }

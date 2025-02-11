@@ -16,7 +16,7 @@ class RequestsCredit extends Model
         'req_start_date', 'visit_day', 'promoter', 'first_name', 'last_name', 'phone',
         'num_cedula', 'id_department', 'id_zone', 'client_address', 'monto', 'plazo',
         'interes_porcent', 'num_cuotas', 'total', 'cuota', 'saldo', 'interes_valor',
-        'intereses_por_cuota','activo','created_by'
+        'intereses_por_cuota','activo','created_by','Origen'
     ];
 
     public function getZona()
@@ -54,7 +54,7 @@ class RequestsCredit extends Model
                 "Zona"                  => $c->getZona->nombre_zona,
                 "Usuario"               => $c->User->nombre,
                 "Fecha_registro"        => date('Y-m-d', strtotime($c->req_start_date)),
-                "Estado"                => '<span class="badge badge-warning"> <i class="far fa-clock"></i> Pendiente</span>',
+                "Estado"                => '<span class="badge badge-warning"> <i class="far fa-clock"></i> '.$c->Origen.'</span>',
                 "Accion"                => '<div class="btn-group w-100">
                                                 <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
                                                     <i class="fas fa-folder"></i>

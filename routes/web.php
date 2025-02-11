@@ -195,3 +195,5 @@ Route::get('Supervisor', 'CredinstanteController@Supervisor')->name('Supervisor'
 
 
 Route::post('UpRequestCredit', 'SolicitudesController@UpRequestCredit')->name('UpRequestCredit');
+Route::get('getClientesInactivos', 'SolicitudesController@getClientesInactivos')->name('getClientesInactivos');
+Route::get('CreditoRenovacion/{ID}', 'SolicitudesController@ViewFormRenovaciones')->name('CreditoRenovacion');

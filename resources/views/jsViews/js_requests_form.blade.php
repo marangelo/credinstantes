@@ -14,6 +14,7 @@
             var IdProspecto = $("#IdRequest").val(); 
 
             var var_Url = (IdProspecto > 0) ?  "../UpRequestCredit" : "../SaveNewProspecto";
+            var lbl_orig = $("#lbl_titulo_origen").html(); 
 
             var DateOPen      = $("#dtApertura").val(); 
             const fechaAnalizada = moment(DateOPen, 'YYYY/MM/DD');
@@ -78,7 +79,8 @@
                         InteresesPorCuota:InteresesPorCuota,
                         Saldos_      : Saldos_,
                         FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
-                        _token  : "{{ csrf_token() }}" 
+                        _token       : "{{ csrf_token() }}" ,
+                        _Origin      : lbl_orig
                     },
                     async: true,
                 success: function(response) {
