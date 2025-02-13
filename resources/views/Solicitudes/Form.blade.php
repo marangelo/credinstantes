@@ -240,10 +240,19 @@
                       </div>
                     </div>
 
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        <input type="hidden" name="IdRequest" id="IdRequest" value="{{ $Request->id_req ?? 0 }}" >
                         <div class="form-group">
-                            <input type="hidden" name="IdRequest" id="IdRequest" value="{{ $Request->id_req ?? 0 }}" >
-                            <a href="#!" class="btn btn-danger btn-block" id="btn_save_prospecto" > <i class="fas fa-save"></i>  PROCESAR SOLICITUD</a>
+                            
+                            <a href="#!" class="btn btn-success btn-block" id="btn_save_prospecto" > <i class="fas fa-save"></i>  PROCESAR</a>
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            
+                            <a href="#!" class="btn btn-danger btn-block" id="btn_remove_prospecto" > <i class="fas fa-window-close"></i>  CANCELAR</a>
+                            
                         </div>
                     </div>
                   </div>                

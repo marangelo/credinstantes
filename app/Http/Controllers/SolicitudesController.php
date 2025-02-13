@@ -98,5 +98,16 @@ class SolicitudesController extends Controller
             'Clientes_Inactivos' => $Clientes_Inactivos
         ], 201);
     }
+
+    public static function RemoverRequest(Request $request)
+    {
+        $IdRequest           = $request->input('IdRequest');
+
+        RequestsCredit::UpdateEstadoRequest($IdRequest);
+
+        return response()->json([
+            'message' => 'Registro Removido Correctamente.',
+        ], 201);
+    }
     
 }

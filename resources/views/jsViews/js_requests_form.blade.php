@@ -10,6 +10,59 @@
             }
         });
 
+        $("#btn_remove_prospecto").click(function(){
+            var Idrequest = $("#IdRequest").val();
+
+
+            Swal.fire({
+                title: '¿Estas Seguro de remover el registro  ?',
+                text: "¡Se removera la informacion permanentemente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si!',
+                target: document.getElementById('mdlMatPrima'),
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    $.ajax({
+                        url: "../RemoverRequest",
+                        data: {
+                            Idrequest  : Idrequest,
+                            _token  : "{{ csrf_token() }}" 
+                        },
+                        type: 'post',
+                        async: true,
+                        success: function(response) {
+                            if(response){
+                                Swal.fire({
+                                    title: response.message,
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'OK'
+                                    }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                        }
+                                    })
+                                }
+                            },
+                        error: function(response) {
+                            //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                        }
+                        }).done(function(data) {
+                            //CargarDatos(nMes,annio);
+                        });
+                    },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+                
+
+        
+        });
+
         $("#btn_save_prospecto").click(function(){
             var IdProspecto = $("#IdRequest").val(); 
 
