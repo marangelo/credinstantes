@@ -98,6 +98,28 @@ class ProspectosController extends Controller
 
         $IdProspecto           = $request->input('IdProspecto_');
 
+        $messages = [
+            'FechaOpen.required'    => 'La fecha de apertura.',
+            'DiaSemana_.required'   => 'El día de la semana.',
+            'Promotor_.required'    => 'El promotor.',
+            'Nombre_.required'      => 'El nombre.',
+            'Apellido_.required'    => 'El apellido.',
+            'Tele_.required'        => 'El teléfono.',
+            'Cedula_.required'      => 'La cédula.',
+            'Municipio_.required'   => 'El municipio.',
+            'Zona_.required'        => 'La zona.',
+            'Dire_.required'        => 'La dirección.',
+            'Monto_.required'       => 'El monto.',
+            'Plato_.required'       => 'El plazo.',
+            'Interes_.required'     => 'El interés.',
+            'Cuotas_.required'      => 'Las cuotas.',
+            'Total_.required'       => 'El total.',
+            'vlCuota.required'      => 'El valor de la cuota.',
+            'Saldos_.required'      => 'El saldo.',
+            'vlInteres.required'    => 'El valor de interés.',
+            'InteresesPorCuota.required' => 'El interés por cuota.',
+        ];
+
         $request->validate([
             'FechaOpen'    => 'required|date',
             'DiaSemana_'   => 'required|string|max:20',
@@ -118,7 +140,7 @@ class ProspectosController extends Controller
             'Saldos_'      => 'required|numeric',
             'vlInteres'    => 'required|numeric',
             'InteresesPorCuota' => 'required|numeric',
-        ]);
+        ], $messages);
 
         $creditRequest = RequestsCredit::create([
             'req_start_date'      => $request->FechaOpen,

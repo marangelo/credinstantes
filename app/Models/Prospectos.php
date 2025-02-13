@@ -52,6 +52,14 @@ class Prospectos extends Model {
         
         foreach ($Prospectos as $key => $c) {
 
+            $Acciones = '<a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" ><i class="fas fa-money-check-alt"></i> </a>';
+
+            if(in_array(Auth::User()->id_rol, [1,3])){
+                $Acciones .='<a href="FormPospecto/' . $c->id_prospecto.' " class="btn btn-primary btn-block" ><i class="fas fa-edit"></i> </a>';            
+                $Acciones .='<a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>';
+            }
+            
+
             $array_prospectos[$key] = [
                 "id_clientes"           => $c->id_prospecto,
                 "Nombre"                => strtoupper($c->Nombres),
@@ -64,10 +72,7 @@ class Prospectos extends Model {
                 "Zona"                  => $c->getZona->nombre_zona,
                 "Usuario"               => $c->User->nombre,
                 "Fecha_registro"        => date('Y-m-d h:m:s', strtotime($c->created_at)),
-                "Accion"                => '
-                <a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" ><i class="fas fa-money-check-alt"></i> </a>
-                <a href="FormPospecto/' . $c->id_prospecto.' " class="btn btn-primary btn-block" ><i class="fas fa-edit"></i> </a>
-                <a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>',
+                "Accion"                => $Acciones,
             ];
             //Option: Removi la Opcion , par apoder agregar un credito
             //<a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" ><i class="fas fa-money-check-alt"></i> </a>

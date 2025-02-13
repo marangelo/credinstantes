@@ -118,8 +118,21 @@
                         })
                     }
                 },
-                error: function(response) {
-                    Swal.fire("Oops", "No se ha podido guardar!", "error");
+                error: function(resp) {
+                    var reqs = JSON.parse(resp.responseText);
+                    
+                    let lista = '<ul style="color:white;text-align:left">';
+                    $.each(reqs.errors, function(key, value){
+                        lista += `<li>✅ ${value}</li>`;
+                    });
+                    lista += '</ul>';
+                    
+                    Swal.fire({
+                        title: "Estos Campos del Credito son Requeridos",
+                        html: lista,
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                    });
                 }
             }).done(function(data) {
                 //location.reload();
