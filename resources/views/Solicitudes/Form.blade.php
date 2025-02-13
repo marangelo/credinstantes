@@ -137,7 +137,9 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)' value="{{ $Request->monto ?? '' }}">
+                            <input type="text" id="txtMonto" class="form-control"  onkeypress='return isNumberKey(event)' value="{{ $Request->monto ?? '' }}" 
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'"
+                            >
                           </div>
                         </div>
                     </div>
@@ -148,7 +150,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)' value="{{ $Request->plazo ?? '' }}">
+                            <input type="text" id="txtPlazo" class="form-control"  value="{{ $Request->plazo ?? '' }}"
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                       </div>
                     </div>
@@ -159,7 +162,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                             </div>
-                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)' value="{{ $Request->interes_porcent ?? '' }}">
+                            <input type="text" id="txtInteres" class="form-control"  value="{{ $Request->interes_porcent ?? '' }}"
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                       </div>
                     </div>
@@ -170,7 +174,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)' value="{{ $Request->num_cuotas ?? '' }}">
+                            <input type="text" id="txtCuotas" class="form-control"  value="{{ $Request->num_cuotas ?? '' }}" 
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                       </div>
                     </div>
@@ -181,7 +186,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->total ?? '' }}">
+                            <input type="txt" id="txtTotal" class="form-control"  disabled value="{{ $Request->total ?? '' }}" 
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                         </div>
                     </div>
@@ -192,7 +198,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->cuota ?? '' }}">
+                            <input type="text" id="txtVlCuota" class="form-control" disabled value="{{ $Request->cuota ?? '' }}" 
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                       </div>
                     </div>
@@ -203,7 +210,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->saldo ?? '' }}">
+                            <input type="text" id="txtSaldos" class="form-control"  disabled value="{{ $Request->saldo ?? '' }}" 
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                       </div>
                     </div>
@@ -214,7 +222,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->interes_valor ?? '' }}">
+                            <input type="text" id="txtIntereses" class="form-control"  disabled value="{{ $Request->interes_valor ?? '' }}" 
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                       </div>
                     </div>
@@ -225,7 +234,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled value="{{ $Request->intereses_por_cuota ?? '' }}">
+                            <input type="text" id="txtInteresesPorCuota" class="form-control" disabled value="{{ $Request->intereses_por_cuota ?? '' }}" 
+                            data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
                           </div>
                       </div>
                     </div>

@@ -221,7 +221,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtMonto" class="form-control" placeholder="C$ 0.00"  onkeypress='return isNumberKey(event)'>
+                            <input type="text" id="txtMonto" class="form-control"  
+                            data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                         </div>
                     </div>
@@ -232,7 +233,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtPlazo" class="form-control" placeholder="Numero de Meses" onkeypress='return isNumberKey(event)'>
+                            <input type="text" id="txtPlazo" class="form-control" 
+                            data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                       </div>
                     </div>
@@ -243,7 +245,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                             </div>
-                            <input type="text" id="txtInteres" class="form-control" placeholder="0.00 %" onkeypress='return isNumberKey(event)'>
+                            <input type="text" id="txtInteres" class="form-control" 
+                            data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                       </div>
                     </div>
@@ -254,7 +257,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
-                            <input type="text" id="txtCuotas" class="form-control" placeholder="Numero de Cuotas" onkeypress='return isNumberKey(event)'>
+                            <input type="text" id="txtCuotas" class="form-control" 
+                            data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                       </div>
                     </div>
@@ -265,7 +269,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="txt" id="txtTotal" class="form-control" placeholder="C$ 0.00" disabled>
+                            <input type="txt" id="txtTotal" class="form-control" 
+                            disabled data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                         </div>
                     </div>
@@ -276,7 +281,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtVlCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                            <input type="text" id="txtVlCuota" class="form-control" 
+                            disabled data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                       </div>
                     </div>
@@ -287,7 +293,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtSaldos" class="form-control" placeholder="C$ 0.00" disabled>
+                            <input type="text" id="txtSaldos" class="form-control" 
+                            disabled data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                       </div>
                     </div>
@@ -298,7 +305,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtIntereses" class="form-control" placeholder="C$ 0.00" disabled>
+                            <input type="text" id="txtIntereses" class="form-control" 
+                            disabled data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                       </div>
                     </div>
@@ -309,7 +317,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtInteresesPorCuota" class="form-control" placeholder="C$ 0.00" disabled>
+                            <input type="text" id="txtInteresesPorCuota" class="form-control" 
+                            disabled data-mask data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'">
                           </div>
                       </div>
                     </div>

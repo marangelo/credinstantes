@@ -2,6 +2,9 @@
     $(document).ready(function () {
 
         InitTable();
+
+        $('[data-mask]').inputmask();
+        
         $('.select2').select2();
 
         $('#reservationdate').datetimepicker({
@@ -46,16 +49,16 @@
             var Dire_        = $("#txtDireccion").val();
 
 
-            var Monto_     = $("#txtMonto").val();   
-            var Plato_     = $("#txtPlazo").val();   
-            var Interes_   = $("#txtInteres").val();
-            var Cuotas_    = $("#txtCuotas").val();
+            var Monto_     = numeral($("#txtMonto").val()).format('0.00');   
+            var Plato_     = numeral($("#txtPlazo").val()).format('0.00');   
+            var Interes_   = numeral($("#txtInteres").val()).format('0.00');
+            var Cuotas_    = numeral($("#txtCuotas").val()).format('0.00');
 
-            var Total_     = $("#txtTotal").val();
-            var vlCuota    = $("#txtVlCuota").val();
-            var vlInteres  = $("#txtIntereses").val();
-            var InteresesPorCuota  = $("#txtInteresesPorCuota").val();
-            var Saldos_    = $("#txtSaldos").val();
+            var Total_     = numeral($("#txtTotal").val()).format('0.00');
+            var vlCuota    = numeral($("#txtVlCuota").val()).format('0.00');
+            var vlInteres  = numeral($("#txtIntereses").val()).format('0.00');
+            var InteresesPorCuota  = numeral($("#txtInteresesPorCuota").val()).format('0.00');
+            var Saldos_    = numeral($("#txtSaldos").val()).format('0.00');
 
             Promotor        = isValue(Promotor,0,true)
 
@@ -262,13 +265,17 @@
 
         $("#txtIdProspecto").val(IdProspecto);
 
-        $.get("getInfoProspecto/" + IdProspecto, function(p) {            
+        $.get("getInfoProspecto/" + IdProspecto, function(p) {    
+
+
+            var Monto_promedio = numeral(p.Monto_promedio).format('00.00');
+
             $("#txtNombre").val(p.Nombres);
             $("#txtApellido").val(p.Apellidos);
             $("#txtCedula").val(p.Cedula);
             $("#txtTelefono").val(p.Telefono);
             $("#txtDireccion").html(p.Direccion);
-            $("#txtMonto").val(p.Monto_promedio	);
+            $("#txtMonto").val(Monto_promedio);
         });
 
     

@@ -31,16 +31,16 @@
             var Dire_        = $("#txtDireccion").val();
 
 
-            var Monto_     = $("#txtMonto").val();   
-            var Plato_     = $("#txtPlazo").val();   
-            var Interes_   = $("#txtInteres").val();
-            var Cuotas_    = $("#txtCuotas").val();
+            var Monto_     = numeral($("#txtMonto").val()).format('0.00');   
+            var Plato_     = numeral($("#txtPlazo").val()).format('0.00');   
+            var Interes_   = numeral($("#txtInteres").val()).format('0.00');
+            var Cuotas_    = numeral($("#txtCuotas").val()).format('0.00');
 
-            var Total_     = $("#txtTotal").val();
-            var vlCuota    = $("#txtVlCuota").val();
-            var vlInteres  = $("#txtIntereses").val();
-            var InteresesPorCuota  = $("#txtInteresesPorCuota").val();
-            var Saldos_    = $("#txtSaldos").val();
+            var Total_     = numeral($("#txtTotal").val()).format('0.00');
+            var vlCuota    = numeral($("#txtVlCuota").val()).format('0.00');
+            var vlInteres  = numeral($("#txtIntereses").val()).format('0.00');
+            var InteresesPorCuota  = numeral($("#txtInteresesPorCuota").val()).format('0.00');
+            var Saldos_    = numeral($("#txtSaldos").val()).format('0.00');
 
             Promotor        = isValue(Promotor,0,true)
 
@@ -137,7 +137,7 @@
         var Interes_   = $("#txtInteres").val();
         var Cuotas_    = $("#txtCuotas").val();
 
-        Monto_         = numeral(isValue(Monto_,0,true)).format('0.00')
+        Monto_         = numeral(isValue(Monto_ ,0 ,true)).format('0.00')
         Cuotas_        = numeral(isValue(Cuotas_,0,true)).format('0.00')
         Interes_       = numeral(isValue(Interes_,0,true)).format('0.00')
         Plato_         = numeral(isValue(Plato_,0,true)).format('0.00')
