@@ -32,12 +32,23 @@ class RequestsCredit extends Model
     {
     
         $IdZna          = $request->input('IdZna');
+        $TypeForm       = $request->input('tyForm');
 
         $array_prospectos   = array();
 
-        $Prospectos = RequestsCredit::where('activo', 1)->when($IdZna > 0, function ($q) use ($IdZna) {
-            $q->where('id_zone', $IdZna);
-        })->get();
+        $Prospectos = RequestsCredit::where('activo', 1)
+            ->when($TypeForm == 'RENOVAR', function ($q) {
+                $q->where('Origen', 'Renovacion');
+            })
+            ->when($TypeForm != 'RENOVAR', function ($q) {
+                $q->where(function ($q2) {
+                    $q2->where('Origen', 'Nueva')->orWhere('Origen', 'Prospecto');
+                });
+            })
+            ->when($IdZna > 0, function ($q) use ($IdZna) {
+                $q->where('id_zone', $IdZna);
+            })
+            ->get();
 
         
         

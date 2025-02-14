@@ -101,9 +101,11 @@ class SolicitudesController extends Controller
 
     public static function RemoverRequest(Request $request)
     {
-        $IdRequest           = $request->input('IdRequest');
+        $IdRequest           = $request->input('Idrequest');
 
-        RequestsCredit::UpdateEstadoRequest($IdRequest);
+        $respuest = RequestsCredit::UpdateEstadoRequest($IdRequest);
+
+      
 
         return response()->json([
             'message' => 'Registro Removido Correctamente.',

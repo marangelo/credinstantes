@@ -1,6 +1,10 @@
 <script type="text/javascript"> 
     $(document).ready(function () 
     {
+        $('#reservationdate').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        
         $('[data-mask]').inputmask();
 
         var btns_01 = $('#txtMonto,#txtPlazo,#txtInteres,#txtCuotas');
@@ -44,7 +48,7 @@
                                     confirmButtonText: 'OK'
                                     }).then((result) => {
                                     if (result.isConfirmed) {
-                                        location.reload();
+                                        window.location.href = "{{ route('Solicitudes/Lista/Nuevos') }}";
                                         }
                                     })
                                 }
@@ -70,7 +74,9 @@
             var lbl_orig = $("#lbl_titulo_origen").html(); 
 
             var DateOPen      = $("#dtApertura").val(); 
-            const fechaAnalizada = moment(DateOPen, 'YYYY/MM/DD');
+            const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
+
+
 
             var DiaSemana_  = $("#slDiaVisita option:selected").val();  
             var Municipio_  = $("#selMunicipio option:selected").val();  
@@ -148,9 +154,9 @@
                         confirmButtonText: 'OK'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                location.reload();
+                                window.location.href = "{{ route('Solicitudes/Lista/Nuevos') }}";
                             }else{
-                                location.reload();
+                                window.location.href = "{{ route('Solicitudes/Lista/Nuevos') }}";
                             }
                         })
                     }

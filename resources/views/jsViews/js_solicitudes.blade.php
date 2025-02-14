@@ -1,10 +1,12 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        InitTable();
+        var type_form = $("#lbl_titulo_reporte").text().replace(/ /g,'');
+
+        InitTable(type_form);
     
         $("#btn-buscar-abonos").click(function(){
-            InitTable();
+            InitTable(type_form);
         })
 
         $('#id_txt_buscar').on('keyup', function() {   
@@ -13,8 +15,9 @@
         });
         $("#btn_open_modal_renovacion").click(function(){
 
-            var valor = $("#lbl_titulo_reporte").text().replace(/ /g,'');
-            if(valor == 'RENOVAR'){
+            
+
+            if(type_form == 'RENOVAR'){
                 $('#modal-renovacion').modal('show');
                 ModalRenovacion();
             }else{
@@ -84,7 +87,7 @@
         
     }
 
-    function InitTable() {
+    function InitTable(type_form) {
 
         var slZna   = $("#id_select_zona option:selected").val();  
         slZna       = isValue(slZna,-1,true) 
@@ -115,6 +118,7 @@
                 'dataSrc': '',
                 "data": {
                     IdZna   : slZna,
+                    tyForm  : type_form,
                     _token  : "{{ csrf_token() }}" 
                 }
             },

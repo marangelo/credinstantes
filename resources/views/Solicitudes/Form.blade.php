@@ -33,9 +33,12 @@
                 <div class="row">                    
                     <div class="col-sm-4 col-md-4 col-xl-4">
                       <div class="form-group">
-                          <label>Fecha Inicio</label>
+                          <label>Fecha Inicio </label>
                           <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value=" {{ $Request->req_start_date ?? date('d/m/y') }} "/>
+                              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" 
+
+                              value=" {{ isset($Request->req_start_date) ? date('d/m/Y', strtotime($Request->req_start_date)) :  date('d/m/Y') }} "
+                              />
                               <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                   <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                               </div>
@@ -145,7 +148,7 @@
                     </div>
                     <div class="col-sm-6 col-md-4 col-xl-4">
                       <div class="form-group">
-                        <label>Plazo</label>
+                        <label>Numero de Mes (Plazo) </label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
