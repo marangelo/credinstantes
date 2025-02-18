@@ -137,7 +137,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtMonto" class="form-control" data-mask data-inputmask="'alias': 'currency' , 'placeholder': '0.00'">
+                            <input type="text" id="txtMonto" class="form-control" data-mask data-inputmask="'alias': 'currency' ">
                           </div>
                         </div>
                     </div>

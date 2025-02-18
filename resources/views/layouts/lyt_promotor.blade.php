@@ -61,13 +61,13 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('Solicitudes/Lista/Nuevos')}}" class="nav-link  ">
+                    <a href="{{ route('Solicitudes/Lista/Nuevos')}}" class="nav-link {{ (request()->is('Nuevos')) ? 'active' : '' }} ">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Nuevos</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link ">
+                    <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link {{ (request()->is('Renovaciones')) ? 'active' : '' }}">
                         <i class="fas fa-user nav-icon"></i>
                         <p>Renovaciones</p>
                     </a>
