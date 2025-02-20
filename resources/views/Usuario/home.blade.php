@@ -6,7 +6,7 @@
   <div class="card card-outline card-success">
     <div class="card-header text-center">
       <div class="text-center mb-1">
-        <img class="profile-user-img img-fluid img-circle" src="{{ asset('img/logo.png') }}" alt="User profile picture">
+        <img class="profile-user-img img-fluid img-circle" src="{{ asset('img/Logo.png') }}" alt="User profile picture">
       </div>
       <a href="#" class="h1"><b>CREDIN$TANTE</b></a>
     </div>
