@@ -102,8 +102,8 @@ class Prospectos extends Model {
                     'Tipo_negocio'     => $request->input('TipoNegocio_'),
                     'activo'           => 1,
                     'created_by'       => Auth::id(),
-                    'created_at'           => date('Y-m-d h:m:s'),
-                    'updated_at'           => date('Y-m-d h:m:s'),
+                    'created_at'       => date('Y-m-d h:m:s'),
+                    'updated_at'       => date('Y-m-d h:m:s'),
                 ];
     
                 // Usa updateOrCreate para actualizar o insertar

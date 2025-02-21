@@ -57,7 +57,11 @@
                         <label>Promotor</label>
                         <select class="form-control" id="slPromotor">
                           @foreach ($Promo as $p)
-                            <option value="{{$p->id}}" > {{strtoupper($p->nombre)}}</option>
+                            <option 
+                              value="{{$p->id}}" {{ ( ( Auth::user()->id == $p->id) ) ? 'selected' : '' }} > 
+                              {{strtoupper($p->nombre)}}
+                            </option>
+                            
                           @endforeach
                         </select>
                       </div>                      
@@ -207,7 +211,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-xl-4">
+                    <div class="col-sm-6 col-md-4 col-xl-4 {{ (Session::get('rol') == 1) ? '' : 'invisible' }}" >
                       <div class="form-group">
                         <label>Intereses </label>
                           <div class="input-group mb-3">
@@ -218,7 +222,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-xl-4">
+                    <div class="col-sm-6 col-md-4 col-xl-4 {{ (Session::get('rol') == 1) ? '' : 'invisible' }}" >
                       <div class="form-group">
                         <label>Intereses por cuota </label>
                           <div class="input-group mb-3">

@@ -46,6 +46,8 @@ class ProspectosController extends Controller
         
         return view('Clientes_Prospectos.Form', compact('Titulo','Prospecto','Zonas'));
     }
+
+    
     public function SaveProspecto(Request $request)
     {
         $cedula = $request->input('Cedula_');

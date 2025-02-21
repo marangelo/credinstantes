@@ -57,11 +57,16 @@
                     </div>
                     <div class="col-sm-4 col-md-4 col-xl-4">
                       <div class="form-group">
-                        <label>Promotor</label>
+                        <label>Promotor  </label>
+
                         <select class="form-control" id="slPromotor">
+
                           @foreach ($Promo as $p)
-                            <option value="{{$p->id}}" {{ (isset($Request->promoter) && $Request->promoter == $p->id) ? 'selected' : '' }}> {{strtoupper($p->nombre)}}</option>
+                            <option 
+                              value="{{$p->id}}" {{ ( ( Auth::user()->id == $p->id) || (isset($Request->promoter) && $Request->promoter == $p->id)) ? 'selected' : '' }}> {{strtoupper($p->nombre)}} 
+                            </option>
                           @endforeach
+
                         </select>
                       </div>                      
                     </div>
@@ -206,7 +211,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-xl-4">
+                    <div class="col-sm-6 col-md-4 col-xl-4 ">
                       <div class="form-group">
                         <label>Saldos</label>
                           <div class="input-group mb-3">
@@ -218,31 +223,41 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-xl-4">
+                    <div class="col-sm-6 col-md-4 col-xl-4 {{ (Session::get('rol') == 1) ? '' : 'invisible' }}" >
                       <div class="form-group">
                         <label>Intereses </label>
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtIntereses" class="form-control"  disabled value="{{ $Request->interes_valor ?? '0.00' }}" 
-                            data-mask data-inputmask="'alias': 'currency' ">
-                          </div>
+                              <input 
+                                type="text" 
+                                id="txtIntereses" 
+                                class="form-control"  
+                                value="{{ $Request->interes_valor ?? '0.00' }}" 
+                                disabled
+                                data-mask data-inputmask="'alias': 'currency' ">
+                            </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-xl-4">
+                    <div class="col-sm-6 col-md-4 col-xl-4 {{ (Session::get('rol') == 1) ? '' : 'invisible' }}" >
                       <div class="form-group">
                         <label>Intereses por cuota </label>
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtInteresesPorCuota" class="form-control" disabled value="{{ $Request->intereses_por_cuota ?? '0.00' }}" 
-                            data-mask data-inputmask="'alias': 'currency' ">
+                              <input 
+                                type="text" 
+                                id="txtInteresesPorCuota" 
+                                class="form-control" 
+                                value="{{ $Request->intereses_por_cuota ?? '0.00' }}" 
+                                disabled 
+                                data-mask data-inputmask="'alias': 'currency' ">
                           </div>
                       </div>
                     </div>
-                    @if (in_array(Session::get('rol'), [1]))
+                    @if ( ( $Request->id_req ?? 0 ) == 0  || in_array(Session::get('rol'), [1])  )
                     <div class="col-sm-6">
                         <input type="hidden" name="IdRequest" id="IdRequest" value="{{ $Request->id_req ?? 0 }}" >
                         <div class="form-group">                            
