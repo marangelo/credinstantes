@@ -76,7 +76,7 @@
             var DateOPen      = $("#dtApertura").val(); 
             const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
 
-
+            var IdCiente_   = $("#id_Client").val();            
 
             var DiaSemana_  = $("#slDiaVisita option:selected").val();  
             var Municipio_  = $("#selMunicipio option:selected").val();  
@@ -110,6 +110,7 @@
             Cedula_         = isValue(Cedula_,'000-000000-00000',true)
             Tele_           = isValue(Tele_,'00-0000-0000',true)
             Dire_           = isValue(Dire_,'N/D',true)
+            IdCiente_       = isValue(IdCiente_,0,true)
 
             if(DiaSemana_ === 'N/D' || Municipio_ ==='N/D'||Nombre_ === 'N/D' || Apellido_ ==='N/D'){
                 Swal.fire("Oops", "Datos no Completos", "error");
@@ -139,7 +140,8 @@
                         Saldos_      : Saldos_,
                         FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
                         _token       : "{{ csrf_token() }}" ,
-                        _Origin      : lbl_orig
+                        _Origin      : lbl_orig,
+                        IdClientes     : IdCiente_
                     },
                     async: true,
                 success: function(response) {

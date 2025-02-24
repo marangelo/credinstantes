@@ -16,7 +16,7 @@ class RequestsCredit extends Model
         'req_start_date', 'visit_day', 'promoter', 'first_name', 'last_name', 'phone',
         'num_cedula', 'id_department', 'id_zone', 'client_address', 'monto', 'plazo',
         'interes_porcent', 'num_cuotas', 'total', 'cuota', 'saldo', 'interes_valor',
-        'intereses_por_cuota','activo','created_by','Origen'
+        'intereses_por_cuota','activo','created_by','Origen','id_cliente'
     ];
 
     public function getZona()

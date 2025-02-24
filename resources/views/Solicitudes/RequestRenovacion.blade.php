@@ -237,6 +237,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <input type="hidden" name="IdRequest" id="IdRequest" value="0" >
+                            <input type="hidden" name="name_id_Client" id="id_Client" value="{{ $Cliente->id_clientes ?? 0 }}" >
                             <a href="#!" class="btn btn-danger btn-block" id="btn_save_prospecto" > <i class="fas fa-save"></i>  PROCESAR SOLICITUD</a>
                         </div>
                     </div>

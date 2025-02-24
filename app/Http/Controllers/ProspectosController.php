@@ -167,6 +167,7 @@ class ProspectosController extends Controller
             'activo'              => 1,
             'created_by'          => Auth::id(),
             'Origen'              => $request->_Origin,
+            'id_cliente'          => $request->IdClientes	
         ]);
 
         Prospectos::UpdateEstadoProspecto($IdProspecto,2);  

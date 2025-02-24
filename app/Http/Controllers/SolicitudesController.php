@@ -79,10 +79,17 @@ class SolicitudesController extends Controller
     {
 
         $IdProspecto           = $request->input('IdProspecto_'); 
-        
+        $TypoSolicitud         = $request->input('_Origin'); 
+
+        if($TypoSolicitud === "Renovacion"){
+            $response = Credito::AddCredito($request);    
+        }else{
+            $response = Credito::SaveNewCredito($request);   
+        }
+    
         RequestsCredit::UpdateEstadoRequest($IdProspecto);  
 
-        $response = Credito::SaveNewCredito($request);      
+        
         
         return response()->json([
             'message' => 'Credito Guardado Correctamente.',

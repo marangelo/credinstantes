@@ -99,7 +99,8 @@
                         Saldos_      : Saldos_,
                         FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
                         _token       : "{{ csrf_token() }}" ,
-                        _Origin      : 'Prospecto'
+                        _Origin      : 'Prospecto',
+                        IdClientes     : 0
                     },
                     async: true,
                 success: function(response) {

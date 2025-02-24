@@ -16,7 +16,7 @@
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
               <li class="breadcrumb-item active">Solicitudes</li>
-              <li class="breadcrumb-item active"> <span id="lbl_titulo_origen"> {{$Origin}} </span> </li>
+              <li class="breadcrumb-item active"> <span id="lbl_titulo_origen"> {{$Request->Origen ?? $Origin}} </span> </li>
             </ol>
           </div>
         </div>
@@ -257,6 +257,7 @@
                           </div>
                       </div>
                     </div>
+                    <input type="hidden" name="name_id_Client" id="id_Client" value="{{ $Request->id_cliente ?? 0 }}" >
                     @if ( ( $Request->id_req ?? 0 ) == 0  || in_array(Session::get('rol'), [1])  )
                     <div class="col-sm-6">
                         <input type="hidden" name="IdRequest" id="IdRequest" value="{{ $Request->id_req ?? 0 }}" >
