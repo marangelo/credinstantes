@@ -9,6 +9,9 @@ use App\Models\Clientes;
 use Carbon\Carbon;
 use Mavinoo\Batch\Batch;
 
+use DateTime;
+use DateInterval;
+
 class ApiController extends Controller{
     public function CalcularEstados()
     {  
@@ -63,5 +66,33 @@ class ApiController extends Controller{
 
         return response()->json($ArrayClientes);
         
+    }
+
+    public function CalcularFeriados()
+    {
+        $FechaOpen             = '2025-12-04';
+        $Cuotas_               = 7;
+        $IdCredito             = 1;
+        $Fecha_abonos          = [];
+
+        $fecha = new DateTime($FechaOpen);
+
+        $year = date('Y');
+
+        for ($i = 1; $i <= $Cuotas_; $i++) {
+            $fecha->add(new DateInterval('P1W')); // Sumar una semana
+
+            $Fecha_pago = Credito::isHoliday($fecha);
+
+            
+            $Fecha_abonos[] = [
+                'id_creditos' => $IdCredito,
+                'numero_pago' => $i, 
+                'FechaPago' => $Fecha_pago
+            ];
+        }
+        
+
+        return response()->json($Fecha_abonos, 200);
     }
 }

@@ -191,15 +191,18 @@ class Credito extends Model
 
                 for ($i = 1; $i <= $Cuotas_; $i++) {
                     $fecha->add(new DateInterval('P1W')); 
+
+                    // Adjust the date if it falls on a holiday
+                    $Fecha_pago = Credito::isHoliday($fecha);
+
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
                         'numero_pago'  => $i, 
-                        'FechaPago'   => $fecha->format('Y-m-d')
+                        'FechaPago'   => $Fecha_pago
                     ];
                     
                 }
 
-               
                 
                 Credito::where('id_creditos',  $IdCredito)->update([
                     "fecha_ultimo_abono"    => $Fecha_abonos[$Cuotas_-1]['FechaPago']
@@ -338,10 +341,15 @@ class Credito extends Model
 
                 for ($i = 1; $i <= $Cuotas_; $i++) {
                     $fecha->add(new DateInterval('P1W')); 
+
+                    // Ajustar la fecha si cae en feriado
+                    $Fecha_pago = Credito::isHoliday($fecha);
+
+
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
                         'numero_pago'  => $i, 
-                        'FechaPago'   => $fecha->format('Y-m-d')
+                        'FechaPago'   => $Fecha_pago
                     ];
                     
                 }
@@ -374,4 +382,24 @@ class Credito extends Model
         }
         
     }
+    public static function isHoliday(DateTime $Date)
+    {
+        $Year_now = $Date->format('Y');
+        $Holidays = [];
+
+        for ($i = 0; $i < 3; $i++) {
+            $Holidays[] = "$Year_now-01-01";
+            $Holidays[] = "$Year_now-12-25";
+            $Year_now++;
+        }
+
+
+        while (in_array($Date->format('Y-m-d'), $Holidays)) {
+            // Add 1 Week
+            $Date->add(new DateInterval('P1W')); 
+        }
+
+        return $Date->format('Y-m-d');
+    }
+
 }

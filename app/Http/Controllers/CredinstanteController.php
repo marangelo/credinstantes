@@ -247,8 +247,6 @@ class CredinstanteController extends Controller
         return response()->json($response);
     }
 
-   
-
     public function SaveNewAbono(Request $request)
     {
 
