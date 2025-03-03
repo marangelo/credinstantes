@@ -223,7 +223,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-xl-4 {{ (Session::get('rol') == 1) ? '' : 'invisible' }}" >
+                    <div class="col-sm-6 col-md-4 col-xl-4 {{ in_array(Session::get('rol'), [1,3])? '' : 'invisible' }}" >
                       <div class="form-group">
                         <label>Intereses </label>
                           <div class="input-group mb-3">
@@ -240,7 +240,7 @@
                             </div>
                       </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-xl-4 {{ (Session::get('rol') == 1) ? '' : 'invisible' }}" >
+                    <div class="col-sm-6 col-md-4 col-xl-4 {{ in_array(Session::get('rol'), [1,3]) ? '' : 'invisible' }}" >
                       <div class="form-group">
                         <label>Intereses por cuota </label>
                           <div class="input-group mb-3">
@@ -258,7 +258,7 @@
                       </div>
                     </div>
                     <input type="hidden" name="name_id_Client" id="id_Client" value="{{ $Request->id_cliente ?? 0 }}" >
-                    @if ( ( $Request->id_req ?? 0 ) == 0  || in_array(Session::get('rol'), [1])  )
+                    @if ( ( $Request->id_req ?? 0 ) == 0  || in_array(Session::get('rol'), [1,3])  )
                     <div class="col-sm-6">
                         <input type="hidden" name="IdRequest" id="IdRequest" value="{{ $Request->id_req ?? 0 }}" >
                         <div class="form-group">                            
