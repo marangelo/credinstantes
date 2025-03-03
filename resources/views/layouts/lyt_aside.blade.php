@@ -103,12 +103,8 @@
                         <p>Clientes Prospectos</p>
                       </a>
                     </li>
-
-
-                 
-                
-              </ul>
-            </li>
+                  </ul>
+                </li>
                
 
                 @endif
@@ -327,6 +323,33 @@
                 </li>
                 
               </ul>
+              <li class="nav-header">MOVIMIENTOS</li>
+              <li class="nav-item menu-open">
+                  <a href="#" class="nav-link {{ (request()->is('Solicitudes')) ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-table"></i>
+                      <p>Solicitudes<i class="fas fa-angle-left right"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('Solicitudes/Lista/Nuevos')}}" class="nav-link {{ (request()->is('Nuevos')) ? 'active' : '' }} ">
+                            <i class="fas fa-user nav-icon"></i>
+                            <p>Nuevos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="{{ route('Solicitudes/Lista/Renovaciones')}}" class="nav-link {{ (request()->is('Renovaciones')) ? 'active' : '' }}">
+                            <i class="fas fa-user nav-icon"></i>
+                            <p>Renovaciones</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{route('Prospectos')}}"  class="nav-link {{ (request()->is('Prospectos') || request()->is('FormPospecto/*') ) ? 'active' : '' }}"  >
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>Clientes Prospectos</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
               <li class="nav-header">FINANZAS</li>
           
           <li class="nav-item" >
