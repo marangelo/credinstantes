@@ -50,29 +50,32 @@ class ProspectosController extends Controller
     
     public function SaveProspecto(Request $request)
     {
-        $cedula = $request->input('Cedula_');
-        $IdPros = $request->input('IdProspecto_');
+        //$cedula = $request->input('Cedula_');
+        //$IdPros = $request->input('IdProspecto_');
 
 
-        if ($IdPros > 0) {
-            $response = Prospectos::SaveProspecto($request);
-        } else {
-            // Check if the prospect exists in the Prospectos model
-            $prospecto = Prospectos::where('Cedula', $cedula)->where('activo', 1)->first();
+        // if ($IdPros > 0) {
+        //     $response = Prospectos::SaveProspecto($request);
+        // } else {
+        //     // Check if the prospect exists in the Prospectos model
+        //     $prospecto = Prospectos::where('Cedula', $cedula)->where('activo', 1)->first();
             
-            // If not found in Prospectos, check in the Clientes model
-            if (!$prospecto) {
-                $cliente = Clientes::where('Cedula', $cedula)->where('activo', 1)->first();
-                if (!$cliente) {
-                    // If not found in Clientes, proceed to save the prospect
-                    $response = Prospectos::SaveProspecto($request);
-                } else {
-                    return response()->json(['exists' => true, 'message' => 'Prospecto Encontrado como Clientes.']);
-                }
-            } else {
-                return response()->json(['exists' => true, 'message' => 'Prospecto encontrado.']);
-            }
-        }
+        //     // If not found in Prospectos, check in the Clientes model
+        //     if (!$prospecto) {
+        //         $cliente = Clientes::where('Cedula', $cedula)->where('activo', 1)->first();
+        //         if (!$cliente) {
+        //             // If not found in Clientes, proceed to save the prospect
+        //             $response = Prospectos::SaveProspecto($request);
+        //         } else {
+        //             return response()->json(['exists' => true, 'message' => 'Prospecto Encontrado como Clientes.']);
+        //         }
+        //     } else {
+        //         return response()->json(['exists' => true, 'message' => 'Prospecto encontrado.']);
+        //     }
+            
+        // }
+
+        $response = Prospectos::SaveProspecto($request);
         
         return response()->json(['exists' => false, 'message' => 'Registro Grabado Correctamente.']);
 

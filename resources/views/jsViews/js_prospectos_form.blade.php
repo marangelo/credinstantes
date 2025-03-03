@@ -20,7 +20,7 @@
             Nombre_         = isValue(Nombre_,'N/D',true)
             Apellido_       = isValue(Apellido_,'N/D',true)
             Cedula_         = isValue(Cedula_,'000-000000-00000',true)
-            Tele_           = isValue(Tele_,'00-0000-0000',true)
+            Tele_           = isValue(Tele_,0,true)
             Dire_           = isValue(Dire_,'N/D',true)
             Monto_          = isValue(Monto_,'N/D',true)
             Zona_           = isValue(Zona_,'N/D',true)
