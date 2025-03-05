@@ -7,7 +7,7 @@
         
         $('.select2').select2();
 
-        $('#reservationdate').datetimepicker({
+        $('#reservationdate,#dt-ini,#dt-end').datetimepicker({
             format: 'DD/MM/YYYY'
         });
       
@@ -286,8 +286,20 @@
     function InitTable() {
 
         var slZna   = $("#id_select_zona option:selected").val();  
-        slZna       = isValue(slZna,-1,true) 
+        var usr     = $("#id_select_user option:selected").val();
+       
 
+
+
+        slZna       = isValue(slZna,-1,true) 
+        usr         = isValue(usr,0,true) 
+
+        var dtEnd       = isValue($("#dtEnd").val(),'N/D',true) 
+        var dtIni       = isValue($("#dtIni").val(),'N/D',true) 
+
+        const dt_Ini = moment(dtIni, 'DD/MM/YYYY').format('YYYY-MM-DD');
+        const dt_End = moment(dtEnd, 'DD/MM/YYYY').format('YYYY-MM-DD');
+        
         var lbl_titulo_reporte = 'CLIENTES PROSPECTOS';
         
         $("#lbl_titulo_reporte").text(lbl_titulo_reporte)
@@ -318,6 +330,9 @@
                 'dataSrc': '',
                 "data": {
                     IdZna   : slZna,
+                    dtIni   : dt_Ini,
+                    dtEnd   : dt_End,
+                    IdUsr   : usr,
                     _token  : "{{ csrf_token() }}" 
                 }
             },

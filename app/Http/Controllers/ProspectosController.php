@@ -28,7 +28,8 @@ class ProspectosController extends Controller
         $DiasSemana  = DiasSemana::getDiasSemana();
         $Zonas       = Zonas::getZonas();  
         $Promo       = Usuario::where('activo','S')->get(); 
-        return view('Clientes_Prospectos.Home', compact('Titulo','Zonas','Municipios','DiasSemana','Promo'));
+        $Usuarios    = Usuario::where('activo','S')->whereNotIn('id_rol', [1])->get();
+        return view('Clientes_Prospectos.Home', compact('Titulo','Zonas','Municipios','DiasSemana','Promo','Usuarios'));
 
     }
 

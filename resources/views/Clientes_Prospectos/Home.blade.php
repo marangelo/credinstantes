@@ -49,13 +49,13 @@
                   <div class="col-md-3">
                     <div class="form-group">
                       <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                          <option value="-1"  selected="selected">Zonas</option>
+                          <option value="-1"  selected="selected">Todas las Zonas</option>
                         @foreach ($Zonas as $z)
                           <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
                         @endforeach
                       </select>                      
                     </div>
-                  </div>
+                  </div>                  
                   <div class="col-md-3">
                     <div class="btn-group w-100">
                           <button type="button" class="btn btn-primary" id="btn-buscar-abonos">
@@ -69,6 +69,39 @@
                               <i class="fas fa-user "></i> NUEVO 
                           </a>
                       </div>
+                  </div>
+                </div>
+
+                <div class="row" style="{{ in_array(Auth::User()->id_rol, [1,3]) ? '' : 'display:none' }}">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <select class="form-control select2" style="width: 100%;" id="id_select_user" name="IdUser">
+                          <option value="-1"  selected="selected">Todos los Usuarios</option>
+                        @foreach ($Usuarios as $usr)
+                          <option value="{{$usr->id}}"> {{strtoupper($usr->nombre) }} - [ {{ strtoupper($usr->RolName->descripcion)}}]</option>
+                        @endforeach
+                      </select>                      
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <div class="input-group date" id="dt-ini" data-target-input="nearest">
+                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('d/m/Y') }}"/>
+                          <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group date" id="dt-end" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" name="nmEnd" value="{{ date('d/m/Y') }}"/>
+                            <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
                   </div>
                 </div>
                 

@@ -42,12 +42,34 @@ class Prospectos extends Model {
     {
     
         $IdZna          = $request->input('IdZna');
+        $dtIni          = $request->input('dtIni');
+        $dtEnd          = $request->input('dtEnd');
+        $IdUsr          = $request->input('IdUsr');
+
 
         $array_prospectos   = array();
 
-        $Prospectos = Prospectos::where('activo', 1)->when($IdZna > 0, function ($q) use ($IdZna) {
+        $Objeto_Prospectos = Prospectos::where('activo', 1)->when($IdZna > 0, function ($q) use ($IdZna) {
             $q->where('id_zona', $IdZna);
-        })->get();
+        });
+
+        if(in_array(Auth::User()->id_rol, [1,3])){
+
+            $Objeto_Prospectos->when($dtIni, function ($q) use ($dtIni) {
+                $q->whereDate('created_at', '>=', $dtIni);
+            })
+            ->when($dtEnd, function ($q) use ($dtEnd) {
+                $q->whereDate('created_at', '<=', $dtEnd);
+            })
+            ->when($IdUsr > 0, function ($q) use ($IdUsr) {
+                $q->where('created_by', $IdUsr);
+            });
+            
+        }
+
+
+
+        $Prospectos = $Objeto_Prospectos->get();
         
         
         foreach ($Prospectos as $key => $c) {
