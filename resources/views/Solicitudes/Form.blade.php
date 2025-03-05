@@ -50,7 +50,7 @@
                         <label>Dia de Visita</label>
                         <select class="form-control" id="slDiaVisita">
                           @foreach ($DiasSemana as $d)
-                            <option value="{{$d->id_diassemana}}"> {{strtoupper($d->dia_semana)}}</option>
+                            <option value="{{$d->id_diassemana}}" {{ ( (isset($Request->visit_day) ? $Request->visit_day :  date('w') ) == $d->id_diassemana) ? 'selected' : '' }}> {{strtoupper($d->dia_semana)}} </option>
                           @endforeach
                         </select>
                       </div>                      
