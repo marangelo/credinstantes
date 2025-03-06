@@ -159,8 +159,12 @@
                     "data": "Sistema",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },  
-                {"title": "  ","data": "Id", "render": function(data, type, row, meta) {                    
-                    return `<div class="card-tools text-center">
+                {"title": "  ","data": "Id", "render": function(data, type, row, meta) {       
+                    
+                    
+                    @if (in_array(Session::get('rol'), [1]))
+
+                    var Bottones = `<div class="card-tools text-center">
                                 <a href="ShowDetalles/`+ row.Id +`" class="btn btn-success primary">
                                     <i class="far fa-edit"></i>
                                 </a>
@@ -171,6 +175,18 @@
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>` ;
+                    @else
+                    var Bottones = `<div class="card-tools text-center">
+                                <a href="ExportArqueo/`+ row.Id +`" class="btn btn-primary">
+                                    <i class="far fa-file-excel"></i>
+                                </a>
+                            </div>` ;
+                    @endif
+
+                    return Bottones;
+
+
+                    
                 }},      
             ],
         })
