@@ -270,12 +270,6 @@
                             <a href="#!" class="btn btn-danger btn-block" id="btn_remove_prospecto" > <i class="fas fa-window-close"></i>  CANCELAR</a>                            
                         </div>
                     </div>
-                    @else
-                    <div class="col-sm-12">
-                        <div class="form-group">                            
-                            <a href="#!" class="btn btn-danger btn-block" id="btn_remove_prospecto" > <i class="fas fa-window-close"></i>  CANCELAR</a>                            
-                        </div>
-                    </div>
                     @endif
 
 

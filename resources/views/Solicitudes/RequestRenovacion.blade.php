@@ -236,7 +236,7 @@
                           </div>
                       </div>
                     </div>
-
+                    @if ( ( $Request->id_req ?? 0 ) == 0  || in_array(Session::get('rol'), [1,3,5])  )
                     <div class="col-sm-12">
                         <div class="form-group">
                             <input type="hidden" name="IdRequest" id="IdRequest" value="0" >
@@ -244,6 +244,7 @@
                             <a href="#!" class="btn btn-danger btn-block" id="btn_save_prospecto" > <i class="fas fa-save"></i>  PROCESAR SOLICITUD</a>
                         </div>
                     </div>
+                    @endif
                   </div>                
               </div>
               </div>
