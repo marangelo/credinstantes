@@ -60,6 +60,7 @@
         </div>
         @endif
 
+        
         @switch(Session::get('rol'))
             @case(1)
             <div class="row">
@@ -280,6 +281,7 @@
                 <!-- /.info-box -->
               </div>
               </div>
+              @break
               @case(5)
               <div class="row">
                 <div class="col-12 col-sm-6 col-md-2">
