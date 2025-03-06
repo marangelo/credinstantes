@@ -208,7 +208,7 @@
             </li>
 
          
-
+          @if (in_array(Session::get('rol'), [1, 3]))
           <li class="nav-header">FINANZAS</li>
           
           <li class="nav-item" >
@@ -229,6 +229,7 @@
               <p>Gst. Operativos</p>
             </a>
           </li>
+          @endif
           @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item" >
             <a  href="{{route('Consolidado', ['year' => date('Y')])}}"  class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
@@ -373,7 +374,7 @@
           </li>
           @endif
           
-          @if (in_array(Session::get('rol'), [1, 5]))
+          @if (in_array(Session::get('rol'), [1, 3]))
           <li class="nav-item">
               <a href="{{ route('Usuarios')}}" class="nav-link {{ (request()->is('Usuarios')) ? 'active' : '' }}">
                   <i class="fas fa-users nav-icon"></i>
