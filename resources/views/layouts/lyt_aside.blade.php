@@ -241,7 +241,7 @@
           @endif
           <li class="nav-header">OPCIONES</li>
           <li class="nav-item">
-              <a href="{{ route('CatalogoClientes')}}" class="nav-link {{ (request()->is('CatalogoClientes')) ? 'active' : '' }}">
+              <a href="{{ route('CatalogoClientes')}}" class="nav-link {{ (request()->is('CatalogoClientes') || request()->is('FormClientes/*') ) ? 'active' : '' }}">
                   <i class="fas fa-users nav-icon"></i>
                   <p>Cat. Clientes</p>
               </a>

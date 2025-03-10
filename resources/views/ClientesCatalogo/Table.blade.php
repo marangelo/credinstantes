@@ -40,11 +40,11 @@
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
                             <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar" aria-label="Buscar">
-                            <div class="card-tools">
+                            <!-- <div class="card-tools">
                                 <button type="button" class="btn btn-success" id="btn-add-employee">
                                     <i class="fas fa-plus-circle "></i>
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                   </div>
@@ -70,7 +70,7 @@
                               <div class="user-block">
                                 <img class="img-circle img-bordered-sm" src="{{ asset('/img/user-01.png') }}" alt="user image">
                                 <span class="username"> <span class="text-green">[{{$e->id_clientes}}] |</span>
-                                    <a href="EditEmployee/{{$e->id_clientes}}"> {{ strtoupper($e->nombre) }} {{ strtoupper($e->apellidos) }} </a>                                 
+                                    <a href="FormClientes/{{$e->id_clientes}}"> {{ strtoupper($e->nombre) }} {{ strtoupper($e->apellidos) }} </a>                                 
                                 </span>
                                 <span class="description text-white">{{ strtoupper($e->direccion_domicilio) }}</span>
                               </div>
@@ -86,8 +86,8 @@
                             <td class="text-end">
                             @if(Auth::User()->id_rol == 1)
                             <div>
-                                <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="Editar({{$e->id_employee}})"><span class="text-500 fas fa-edit"></span></button>
-                                <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$e->id_employee}})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="Editar({{$e->id_clientes}})"><span class="text-500 fas fa-edit"></span></button>
+                                <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$e->id_clientes}})"><span class="text-500 fas fa-trash-alt"></span></button>
                             </div>
                             @endif
                             </td>

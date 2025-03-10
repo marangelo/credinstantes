@@ -21,4 +21,17 @@ class ControllerCatalogoClientes extends Controller
         
     }
 
+    public function FormClientes($id)
+    {
+        $Titulo = "Editar Cliente";
+        $Cliente = Clientes::where('id_clientes',$id)->first();  
+    
+        return view('ClientesCatalogo.FormClientes', compact('Cliente','Titulo'));
+    }
+    public function AddCliente()
+    {   
+        $Titulo = "Nuevo Cliente";
+        return view('ClientesCatalogo.FormClientes', compact('Titulo'));
+    }
+
 }

@@ -2,7 +2,7 @@
     $(document).ready(function () {
 
         $("#btn-add-employee").click(function(){
-            window.location.href = "AddEmployee" ;
+            window.location.href = "AddCliente" ;
         })
 
         $('#id_txt_buscar').on('keyup', function() {   
@@ -15,7 +15,7 @@
 
 
     function Editar(id) {
-        window.location ="EditEmployee/" + id
+        window.location ="FormClientes/" + id
     }
 
     function Remover(id){

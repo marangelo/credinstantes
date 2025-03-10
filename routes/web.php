@@ -202,4 +202,7 @@ Route::post('RemoverRequest', 'SolicitudesController@RemoverRequest')->name('Rem
 
 
 Route::get('CatalogoClientes', 'ControllerCatalogoClientes@ViewCatalogoClientes')->name('CatalogoClientes');
+Route::get('FormClientes/{id_cliente}', 'ControllerCatalogoClientes@FormClientes')->name('FormClientes');
+
+Route::get('AddCliente', 'ControllerCatalogoClientes@AddCliente')->name('AddCliente');
 
