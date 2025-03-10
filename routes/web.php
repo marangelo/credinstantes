@@ -200,3 +200,6 @@ Route::get('CreditoRenovacion/{ID}', 'SolicitudesController@ViewFormRenovaciones
 
 Route::post('RemoverRequest', 'SolicitudesController@RemoverRequest')->name('RemoverRequest');
 
+
+Route::get('CatalogoClientes', 'ControllerCatalogoClientes@ViewCatalogoClientes')->name('CatalogoClientes');
+

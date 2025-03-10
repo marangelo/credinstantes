@@ -240,6 +240,12 @@
           @endif
           @endif
           <li class="nav-header">OPCIONES</li>
+          <li class="nav-item">
+              <a href="{{ route('CatalogoClientes')}}" class="nav-link {{ (request()->is('CatalogoClientes')) ? 'active' : '' }}">
+                  <i class="fas fa-users nav-icon"></i>
+                  <p>Cat. Clientes</p>
+              </a>
+          </li>
           @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item">
             <a href="#" class="nav-link">
