@@ -33,21 +33,34 @@
               <div class="card-body">
               @csrf
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-8">
                     <div class="form-group">
                         <div class="input-group date" id="dt-end" data-target-input="nearest">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
                             <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar" aria-label="Buscar">
-                            <!-- <div class="card-tools">
-                                <button type="button" class="btn btn-success" id="btn-add-employee">
-                                    <i class="fas fa-plus-circle "></i>
-                                </button>
-                            </div> -->
                         </div>
                     </div>
                   </div>
+                  <div class="col-md-2">
+                    <div class="input-group">                      
+                      <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                          <option value="-1"  selected="selected">Todos</option>
+                          @foreach ($Zonas as $z)
+                            <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
+                          @endforeach
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="btn-group w-100">
+                          <button type="button" class="btn btn-primary" id="btn-buscar-abonos">
+                              <i class="fa fa-filter"></i> FILTRAR
+                          </button>
+                      </div>
+                  </div>
+                
                 </div>
                 
                 <div class="table-responsive scrollbar">

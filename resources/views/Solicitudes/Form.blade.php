@@ -235,7 +235,7 @@
                                       <div class="col-12">
                                           <div class="row">
                                               <div class="col-12">
-                                                  <label class="form-label" for="event-description">Barrio y Direccion</label>
+                                                  <label class="form-label" for="event-description">Nombre y Direccion</label>
                                                   <textarea class="form-control" rows="6" required="" name="direccion" >{{ $Employee->address ?? '' }}</textarea>
                                               </div>                                                
                                           </div>
