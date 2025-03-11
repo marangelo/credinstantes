@@ -14,6 +14,24 @@ class Clientes extends Model
     protected $table = "tbl_clientes";
     protected $primaryKey = 'id_clientes';
 
+    protected $fillable = [
+        'id_clientes','id_municipio','id_zona','nombre','apellidos','direccion_domicilio','cedula','telefono','activo','estado_civil','score'
+    ];
+    
+    public function getNegocio()
+    {
+        return $this->hasOne(ClientesNegocio::class, 'id_cliente', 'id_clientes');
+    }
+
+    public function getConyugue()
+    {
+        return $this->hasOne(ClientesConyugue::class, 'id_cliente', 'id_clientes');
+    }
+    public function getGarantias()
+    {
+        return $this->hasMany(ClientesGarantia::class, 'id_cliente', 'id_clientes');
+    }    
+
     public function getMunicipio()
     {
         return $this->hasOne(Municipios::class, 'id_municipio','id_municipio');
