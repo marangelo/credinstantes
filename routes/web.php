@@ -207,3 +207,5 @@ Route::get('FormClientes/{id_cliente}', 'ControllerCatalogoClientes@FormClientes
 Route::get('AddCliente', 'ControllerCatalogoClientes@AddCliente')->name('AddCliente');
 Route::post('UpdateCliente', 'ControllerCatalogoClientes@UpdateCliente')->name('UpdateCliente');
 Route::post('rmGarantia', 'ControllerCatalogoClientes@rmGarantia')->name('rmGarantia');
+Route::post('rmReferencia', 'ControllerCatalogoClientes@rmReferencia')->name('rmReferencia');
+Route::post('FiltrarClientes', 'ControllerCatalogoClientes@FiltrarClientes')->name('FiltrarClientes');

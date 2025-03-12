@@ -45,7 +45,7 @@
                   </div>
                   <div class="col-md-2">
                     <div class="input-group">                      
-                      <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                      <select class="form-control select2" style="width: 100%;" id="IdFilterByZone" name="IdZona">
                           <option value="-1"  selected="selected">Todos</option>
                           @foreach ($Zonas as $z)
                             <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona) }}</option>
@@ -55,7 +55,7 @@
                   </div>
                   <div class="col-md-2">
                     <div class="btn-group w-100">
-                          <button type="button" class="btn btn-primary" id="btn-buscar-abonos">
+                          <button type="button" class="btn btn-primary" id="btn_filter_clientes">
                               <i class="fa fa-filter"></i> FILTRAR
                           </button>
                       </div>
@@ -68,12 +68,12 @@
                     <thead>
                     <tr>
                         
-                        <th scope="col">Nombre y apellidos</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Ciclos</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Cedula</th>
-                        <th class="text-end" scope="col">Actions</th>
+                        <th scope="col">NOMBRE Y APELLIDOS</th>
+                        <th scope="col">ESTADO</th>
+                        <th scope="col">CICLOS</th>
+                        <th scope="col">TELEFONO</th>
+                        <th scope="col">CEDULA</th>
+                        <th class="text-end" scope="col">ACTIONES</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -97,10 +97,10 @@
                             <td class="text-nowrap">{{$e->telefono }}</td>
                             <td class="text-nowrap">{{$e->cedula }}</td>
                             <td class="text-end">
-                            @if(Auth::User()->id_rol == 1)
+                            @if (in_array(Session::get('rol'), [1, 3]))
                             <div>
-                                <button class="btn p-0 text-info" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onClick="Editar({{$e->id_clientes}})"><span class="text-500 fas fa-edit"></span></button>
-                                <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$e->id_clientes}})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                <button class="btn p-0 text-info" type="button" onClick="Editar({{$e->id_clientes}})"><span class="text-500 fas fa-edit"></span></button>
+                                <button class="btn p-0 text-red ms-2" type="button" onClick="Remover({{$e->id_clientes}})"><span class="text-500 fas fa-trash-alt"></span></button>
                             </div>
                             @endif
                             </td>

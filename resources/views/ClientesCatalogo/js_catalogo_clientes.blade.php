@@ -3,7 +3,7 @@
 
         $('[data-mask]').inputmask()
 
-        var table = $('#tbl_garantias').DataTable({
+        var table_garantias = $('#tbl_garantias').DataTable({
             "searching": false,
             "paging": false,
             "info": false,
@@ -15,7 +15,26 @@
                 "emptyTable": "No hay datos para mostrar"
             }
         })
-        var count = table.data().length;
+
+        var table_ref = $('#tbl_refencias').DataTable({
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "filter": false,
+            "columnDefs": [
+                { "targets": [5], "visible": false }
+            ],
+            "language": {
+                "emptyTable": "No hay datos para mostrar"
+            }
+        });
+
+
+        $("#btn_filter_clientes").click(function() {    
+            FiltrarCatClientes();
+        });
+
+        var count = table_garantias.data().length;
         $("#total_garantias").html(count);
         
 
@@ -39,8 +58,14 @@
 
         $("#btn_add_garantias").click(function(){
 
-            Add_Garantias(table);
+            Add_Garantias(table_garantias);
             
+        })
+
+        $("#btn_add_referencia").click(function(){
+
+            Add_Refencias(table_ref);
+
         })
     });
 
@@ -49,7 +74,10 @@
         window.location ="FormClientes/" + id
     }
 
-    function Remover(id){
+    function Remover(id, path){
+
+        var url_path = (path ==='ref') ? '../rmReferencia' : '../rmGarantia' ;
+
         Swal.fire({
             title: '¿Estas Seguro de remover el registro  ?' + id,
             text: "¡Se removera la informacion permanentemente!",
@@ -62,7 +90,7 @@
             showLoaderOnConfirm: true,
             preConfirm: () => {
                 $.ajax({
-                    url: "../rmGarantia",
+                    url: url_path,
                     data: {
                         id_  : id,
                         _token  : "{{ csrf_token() }}" 
@@ -170,17 +198,53 @@
         $("#total_garantias").html(count);
     }
 
+    function Add_Refencias(table) {
+
+        // Obtener los valores de los inputs
+        var nombre_red      = $("#id_nombre_ref").val();
+        var telefono_ref    = $("#id_telefono_ref").val();
+        var direccion_red   = $("#id_direcion_ref").val();
+
+        var count = table.data().length;
+
+        // Verificar que los campos no estén vacíos
+        if (!nombre_red || !telefono_ref || !direccion_red) {
+            alert("Todos los campos son obligatorios.");
+            return;
+        }
+
+        // Incrementar el contador
+        count = parseInt(count) + 1;    
+
+        // Agregar la fila a la tabla
+        var row = table.row.add([
+            count,
+            nombre_red,
+            telefono_ref,
+            direccion_red,
+            " - ",
+            "S"
+        ]).draw(false).node();
+
+        $("#id_nombre_ref, #id_telefono_ref, #id_direcion_ref").val("");
+
+    }
+
     function Save_Client(){
         
         var Info_general = {};
         var Info_negocio = {};
         var Info_conyugue = {};
         var Info_garantias = {};
+        var Info_referencias = {};
 
         var id_clientes = $("#id_clientes").html();
 
-        var table = $('#tbl_garantias').DataTable();
-        var rows  = table.rows().data().toArray();
+        var table_garantia = $('#tbl_garantias').DataTable();
+        var rows_garantia  = table_garantia.rows().data().toArray();
+
+        var tbl_referencias = $('#tbl_refencias').DataTable();
+        var rows_referencias  = tbl_referencias.rows().data().toArray();
 
         $.each($("#frm_info_cliente").serializeArray(), function (i, field) {
             Info_general[field.name] = field.value;
@@ -194,13 +258,24 @@
             Info_conyugue[field.name] = field.value;
         });
 
-        $.each(rows, function (i, field) {
+        $.each(rows_garantia, function (i, field) {
             if(field[6] == "S"){
                 Info_garantias[i] = {
                     "detalle_articulo"  : field[1],
                     "marca"             : field[2],
                     "color"             : field[3],
                     "valor_recomendado" : field[4]
+                };
+            }
+        });
+
+        $.each(rows_referencias, function (i, field) {
+            console.log(field);
+            if(field[5] == "S"){
+                Info_referencias[i] = {
+                    "nombre_ref"    : field[1],
+                    "telefono_ref"  : field[2],
+                    "direccion_ref" : field[3]
                 };
             }
         });
@@ -214,6 +289,7 @@
                 iNegocio    : Info_negocio,
                 iConyugue   : Info_conyugue,
                 iGarantias  : Info_garantias,
+                iReferencias: Info_referencias,
                 _token          : "{{ csrf_token() }}" 
             },
             success: function(response) {
@@ -234,6 +310,81 @@
 
 
     }
+
+    function FiltrarCatClientes(){
+            
+            var id_zona = $("#IdFilterByZone").val();
+    
+            $.ajax({
+                url: '../FiltrarClientes',
+                method: 'POST',
+                data:{
+                    id_zona : id_zona,
+                    _token  : "{{ csrf_token() }}" 
+                },
+                success: function(dta_Clientes) {
+                    TableFilterClientes(dta_Clientes);
+                    
+                },
+                error: function(xhr, status, error) {
+                }
+            });
+    }
+
+    function TableFilterClientes(LISTA_CLIENTES) {
+        $('#tbl_employee').DataTable({
+            "data": LISTA_CLIENTES,
+            "paging": true,
+            "destroy": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "lengthMenu": [
+                [7, -1],
+                [7, "Todo"]
+            ],
+            "order": [
+                [0, "asc"]
+            ],
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "-",
+                "search": "BUSCAR"
+            },
+            'columns': [
+                {"title": "NOMBRE Y APELLIDOS","data": "nombre", "render": function(data, type, row, meta) {  
+                    return `<div class="user-block">
+                                <img class="img-circle img-bordered-sm" src="{{ asset('/img/user-01.png') }}" alt="user image">
+                                <span class="username"> <span class="text-green">[ ` + row.id_clientes + ` ] |</span>
+                                    <a href="FormClientes/`+row.id_clientes+`"> ` + row.nombre.toUpperCase() +`  ` + row.apellidos.toUpperCase() + ` </a>                                 
+                                </span>
+                                <span class="description text-white">`+ row.direccion_domicilio.toUpperCase() +`</span>
+                            </div>`
+                }},
+                {"title": "ESTADO","data"   : "estado"},
+                {"title": "CICLOS","data"   : "ciclo"},
+                {"title": "TELEFONO","data"   : "telefono"},
+                {"title": "CEDULA","data"   : "cedula"},
+                {"title": "ACCION","data"   : "acciones"}
+            ],
+        });  
+
+        $("#tbl_employee_length").hide();
+        $("#tbl_employee_filter").hide();
+    }
+
+
+
 
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode

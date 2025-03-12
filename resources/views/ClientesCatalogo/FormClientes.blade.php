@@ -42,40 +42,120 @@
                             <div class="card-header p-0 pt-1">
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">General</a>
+                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">GENERAL</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Info. Negocio</a>
+                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">INFO. NEGOCIO</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Datos del Conyugue</a>
+                                    <a class="nav-link" 
+                                    id="ref-personales-tab" 
+                                    data-toggle="pill" 
+                                    href="#tabs-ref-personales" 
+                                    role="tab" 
+                                    aria-controls="custom-tabs-one-messages" 
+                                    aria-selected="false">
+                                    REF. PERSONALES
+                                </a>
+
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Detalles de Garantias</a>
+                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">DATOS DEL CONYUGUE</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">DETALLES DE GARANTIAS</a>
                                 </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
+                                    <div class="tab-pane fade" id="tabs-ref-personales" role="tabpanel" aria-labelledby="ref-personales-tab">
+                                        <div class="card-body p-0">
+                                            <div class="card">
+                                                <div class="card-header border-transparent">
+                                                    <form action="#!" method="post" id="frm_add_referencias">
+                                                        <div class="row gx-2">
+                                                            <div class="col-sm-6 col-md-3 mb-3">
+                                                                <label class="form-label" for="event-name">NOMBRE</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                                    <input class="form-control" type="text" name="nombre_ref" id="id_nombre_ref" placeholder="Nombre de la referencia" value="" />
+                                                                </div>                                                
+                                                            </div>                                                            
+                                                            <div class="col-sm-6 col-md-3 mb-3">
+                                                                <label class="form-label" for="event-name">TELEFONO</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                                    <input class="form-control" type="text" name="telefono_ref" id="id_telefono_ref" placeholder="Telefono de la referencia" onkeypress='return isNumberKey(event)' maxlength="8" value="" />
+                                                                </div>                                                
+                                                            </div>  
+                                                            <div class="col-sm-12 col-md-6 mb-3">
+                                                                <label class="form-label" for="event-name">DIRECCION</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                                    <input class="form-control" type="text" name="direcion_ref" id="id_direcion_ref" placeholder="Direccion de la referencia" value="" />
+                                                                    <span class="input-group-append">
+                                                                        <button type="button" class="btn btn-primary" id="btn_add_referencia"><i class="fas fa-plus"></i> Agregar</button>
+                                                                    </span>
+                                                                </div>                                                
+                                                            </div>                                                          
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover text-nowrap" id="tbl_refencias" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No.</th>
+                                                                    <th>NOMBRE</th>
+                                                                    <th>TELEFONO</th>
+                                                                    <th>DIRECCION</th>
+                                                                    <th></th>
+                                                                    <th>Nuevo</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach ($Cliente->getReferencias as $key => $ref)
+                                                            <tr>
+                                                                <td>{{ $key + 1 }}</td>
+                                                                <td>{{ $ref->nombre_ref }}</td>
+                                                                <td>{{ $ref->telefono_ref }}</td>
+                                                                <td>{{ $ref->direccion_ref }}</td>
+                                                                <td>
+                                                                    <div>
+                                                                        <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$ref->id_referencia}},'ref')"><span class="text-500 fas fa-trash-alt"></span></button>
+                                                                    </div>
+                                                                </td>
+                                                                <td>N</td>
+                                                            </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>            
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                         <form action="#!" method="post" id="frm_info_cliente">
                                             <div class="row gx-2">
-                                                <div class="col-sm-6 mb-3">
+                                                <div class="col-sm-6 col-md-4 mb-3">
                                                     <label class="form-label" for="event-name">Nombres</label>
                                                     <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
                                                         <input class="form-control" type="text" name="nombres" placeholder="Nombres de la persona" required="" value="{{ $Cliente->nombre ?? '' }}" />
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-6 mb-3">
+                                                <div class="col-sm-6 col-md-4 mb-3">
                                                     <label class="form-label" for="event-name">Apellidos</label>
                                                     <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
                                                         <input class="form-control" type="text" name="apellidos" placeholder="Apellidos de la persona" value="{{ $Cliente->apellidos ?? '' }}" />
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-sm-6 col-md-3 mb-3">
+                                                <div class="col-sm-6 col-md-4 mb-3">
                                                     <label class="form-label" for="event-name">Cedula</label>
                                                     <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
                                                         <input class="form-control" id="event-name" type="text" name="cedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value="{{ $Cliente->cedula ?? '' }}"/>
@@ -83,20 +163,33 @@
                                                 </div>
 
                                                 <div class="col-sm-6 col-md-3 mb-3">
-                                                    <label class="form-label" for="event-name">Telefono </label>
+                                                    <label class="form-label" for="event-name">Telefono: </label>
                                                     <div class="input-group"><span class="input-group-text "><span class="fas fa-phone-alt"></span></span>
                                                         <input class="form-control" id="event-name" type="text" name="telefono" onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Cliente->telefono ?? '' }}" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-6 col-md-3 mb-3">
-                                                    <label class="form-label" for="event-name">Municipio ( {{ $Cliente->id_municipio }} )</label>
+                                                    <label class="form-label" for="event-name">Departamento </label>
+                                                    <select class="custom-select" name="selectDepartamento" id="selectDepartamento">
+                                                        <option value="0">Seleccione un Departamento</option>
+                                                        @foreach ($Departamentos as $d)
+                                                            <option value="{{$d->id_departamento}}" {{ ($Cliente->id_departamento == $d->id_departamento) ? 'selected' : '' }}> 
+                                                                {{strtoupper($d->nombre_departamento)}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-sm-6 col-md-3 mb-3">
+                                                    <label class="form-label" for="event-name">Municipio </label>
                                                     <select class="custom-select" name="selectMunicipio" id="selectMunicipio">
                                                         <option value="0">Seleccione un municipio</option>
                                                         @foreach ($Municipios as $m)
-                                                            <option value="{{$m->id_municipio}}" {{ ($Cliente->id_municipio == $m->id_municipio) ? 'selected' : '' }}> {{strtoupper($m->nombre_municipio)}}</option>
+                                                            <option value="{{$m->id_municipio}}" {{ ($Cliente->id_municipio == $m->id_municipio) ? 'selected' : '' }}> 
+                                                                {{strtoupper($m->nombre_municipio)}}
+                                                            </option>
                                                         @endforeach
-
                                                     </select>
                                                 </div>
 
@@ -156,21 +249,21 @@
                                         <form action="#!" method="post" id="frm_info_conyugue">                                
                                             <div class="row gx-2">
                                                 <div class="col-sm-6 mb-3">
-                                                    <label class="form-label" for="event-name">Nombres</label>
+                                                    <label class="form-label" for="event-name">Nombres:</label>
                                                     <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
                                                         <input class="form-control" type="text" name="nombres_conyugue" placeholder="Nombres de la persona" required="" value="{{ $Cliente->getConyugue->nombres ?? '' }}" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-6 mb-3">
-                                                    <label class="form-label" for="event-name">Apellidos</label>
+                                                    <label class="form-label" for="event-name">Apellidos:</label>
                                                     <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
                                                         <input class="form-control" type="text" name="apellidos_conyugue" placeholder="Apellidos de la persona" required="" value="{{ $Cliente->getConyugue->apellidos ?? '' }}" />
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-sm-6 col-md-6 mb-3">
-                                                    <label class="form-label" for="event-name">Cedula</label>
+                                                    <label class="form-label" for="event-name">Cedula:</label>
                                                     <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
                                                         <input class="form-control" id="event-name" type="text" name="cedula_conyugue" placeholder="000-000000-0000A" 
                                                         data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value="{{ $Cliente->getConyugue->no_cedula ?? '' }}"/>
@@ -178,16 +271,16 @@
                                                 </div>
 
                                                 <div class="col-sm-6 col-md-6 mb-3">
-                                                    <label class="form-label" for="event-name">Telefono</label>
+                                                    <label class="form-label" for="event-name">Telefono:</label>
                                                     <div class="input-group"><span class="input-group-text "><span class="fas fa-phone-alt"></span></span>
-                                                        <input class="form-control" id="event-name" type="text" name="telefono_conyugue" placeholder="+505-0000-000" value="{{ $Cliente->getConyugue->telefono ?? '' }}" />
+                                                        <input class="form-control" id="event-name" type="text" name="telefono_conyugue" onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Cliente->getConyugue->telefono ?? '' }}" />
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-12">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <label class="form-label" for="event-description">Nombre y Direccion</label>
+                                                            <label class="form-label" for="event-description">Lugar de trabajo:</label>
                                                             <textarea class="form-control" rows="6" required="" name="direccion_conyugue" >{{ $Cliente->getConyugue->direccion_trabajo ?? '' }}</textarea>
                                                         </div>                                                
                                                     </div>
@@ -263,7 +356,7 @@
                                                                 <td>{{ $garantia->valor_recomendado }}</td>
                                                                 <td>
                                                                     <div>
-                                                                        <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$garantia->id_garantia}})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                                                        <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$garantia->id_garantia}},'gar')"><span class="text-500 fas fa-trash-alt"></span></button>
                                                                     </div>
                                                                 </td>
                                                                 <td>N</td>

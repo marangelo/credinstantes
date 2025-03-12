@@ -15,7 +15,7 @@ class Clientes extends Model
     protected $primaryKey = 'id_clientes';
 
     protected $fillable = [
-        'id_clientes','id_municipio','id_zona','nombre','apellidos','direccion_domicilio','cedula','telefono','activo','estado_civil','score'
+        'id_clientes','id_municipio','id_departamento','id_zona','nombre','apellidos','direccion_domicilio','cedula','telefono','activo','estado_civil','score'
     ];
     
     public function getNegocio()
@@ -31,6 +31,10 @@ class Clientes extends Model
     {
         return $this->hasMany(ClientesGarantia::class, 'id_cliente', 'id_clientes');
     }    
+    public function getReferencias()
+    {
+        return $this->hasMany(ClientesReferencias::class, 'id_cliente', 'id_clientes');
+    } 
 
     public function getMunicipio()
     {
