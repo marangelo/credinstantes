@@ -102,13 +102,13 @@
             <td colspan="2" class="section-title">INFORMACION DEL NEGOCIO</td>
         </tr>
         <tr>
-            <td colspan="2">Nombre del negocio: <strong>{{ $Credito->Clientes->getNegocio->nombre_negocio }}</strong></td>
+            <td colspan="2">Nombre del negocio: <strong>{{ $Credito->Clientes->getNegocio->nombre_negocio ?? '' }}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">Antigüedad del negocio: <strong>{{ $Credito->Clientes->getNegocio->antiguedad }}</strong></td>
+            <td colspan="2">Antigüedad del negocio: <strong>{{ $Credito->Clientes->getNegocio->antiguedad ?? ''}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">Dirección del negocio: <strong>{{ $Credito->Clientes->getNegocio->direccion }}</strong></td>
+            <td colspan="2">Dirección del negocio: <strong>{{ $Credito->Clientes->getNegocio->direccion ?? ''}}</strong></td>
         </tr>
     </table>
 
@@ -135,19 +135,19 @@
             <td colspan="2" class="section-title">Datos del Cónyuge</td>
         </tr>
         <tr>
-            <td colspan="2">Nombres: <strong>{{ $Credito->Clientes->getConyugue->nombres }}</strong> </td>
+            <td colspan="2">Nombres: <strong>{{ $Credito->Clientes->getConyugue->nombres ?? ''}}</strong> </td>
             
         </tr>
         <tr>
-            <td colspan="2">Apellidos: <strong>{{ $Credito->Clientes->getConyugue->apellidos }}</strong></td>
+            <td colspan="2">Apellidos: <strong>{{ $Credito->Clientes->getConyugue->apellidos ?? ''}}</strong></td>
             
         </tr>
-        <tr><td colspan="2">Cédula: <strong>{{ $Credito->Clientes->getConyugue->no_cedula }}</strong></td></tr>
+        <tr><td colspan="2">Cédula: <strong>{{ $Credito->Clientes->getConyugue->no_cedula ?? ''}}</strong></td></tr>
         <tr>
-            <td colspan="2">Teléfono: <strong>{{ $Credito->Clientes->getConyugue->telefono }}</strong></td>
+            <td colspan="2">Teléfono: <strong>{{ $Credito->Clientes->getConyugue->telefono?? ''}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">Lugar de trabajo: <strong>{{ $Credito->Clientes->getConyugue->direccion_trabajo }}</strong></td>
+            <td colspan="2">Lugar de trabajo: <strong>{{ $Credito->Clientes->getConyugue->direccion_trabajo ?? ''}}</strong></td>
         </tr>
     </table>
 
@@ -159,7 +159,7 @@
         <tr>
             <td colspan="4">
             Las garantías mobiliarias para garantizar el pago del crédito en ausencia u omisión total o parcial del mismo por parte
-            del deudor / fiador manifiesta el Sr (a) <u><strong>{{ strtoupper($Credito->Clientes->nombre) }} {{ strtoupper($Credito->Clientes->apellidos) }}</strong></u>.
+            del deudor / fiador manifiesta el Sr (a) <u><strong>{{ strtoupper($Credito->Clientes->nombre ?? '') }} {{ strtoupper($Credito->Clientes->apellidos ?? '') }}</strong></u>.
             Que por su voluntad constituye a favor de CREDINSTANTE las garantías mobiliarias en su calidad de titular de los
             bienes que se encuentran en su posesión y se detallan a continuación.
             </td>
