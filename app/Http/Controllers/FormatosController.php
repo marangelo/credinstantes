@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 
 use App\Models\ProxVencer;
 use App\Models\Zonas;
+use App\Models\Credito;
 
 class FormatosController extends Controller
 {
@@ -20,16 +21,23 @@ class FormatosController extends Controller
         return $pdf->download('PagarALaOrden.pdf');
 
     }
-    public function SolicitudCredito(){
+    public function SolicitudCredito(Request $request){
+
+        $ID = $request->input('id');
+
+        $Credito = Credito::find($ID);
+        
+        $pdf = \PDF::loadView('Formatos.Solicitud_Credito', compact('Credito'));
+        return $pdf->download('SolicitudCredito.pdf');
     
-       // return view('Formatos.Solicitud_Credito');
+        //return view('Formatos.Solicitud_Credito', compact('Credito'));
         //return view('Formatos.Garantias');
         
-        $pdf = \PDF::loadView('Formatos.Solicitud_Credito');
-        $pdf = \PDF::loadView('Formatos.Garantias');
+        
+        // $pdf = \PDF::loadView('Formatos.Garantias');
 
-        return $pdf->download('FormatoCliente.pdf');        
-        return $pdf->download('FormatoGarantias.pdf');
+        // return $pdf->download('FormatoCliente.pdf');        
+        // return $pdf->download('FormatoGarantias.pdf');
 
     }
     public function Pagare(){

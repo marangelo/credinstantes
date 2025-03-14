@@ -17,7 +17,7 @@
         }
         th, td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 3px;
             text-align: left;
         }
         th {
@@ -28,6 +28,7 @@
             font-weight: bold;
             text-transform: uppercase;
             padding: 5px;
+            text-align: center;
         }
         .header {
             text-align: center;
@@ -54,121 +55,195 @@
         <h3>Solicitud de crédito</h3>
     </div>
 
-    <p><strong>SUCURSAL:</strong> __________________________</p>
-    <p><strong>Nombre del oficial de crédito:</strong> __________________________</p>
 
     <table>
         <tr>
-            <td colspan="2" class="section-title">I. Datos Generales del Cliente</td>
-            <td>No. De cliente</td>
-            <td>Fecha</td>
+            <td colspan="4" class="section-title">DATOS GENERALES DEL CLIENTE</td>
         </tr>
         <tr>
-            <td colspan="4">
-                <strong>Ciclo del crédito solicitado:</strong> 
-                <label><input type="checkbox"> Semanal</label> 
-                <label><input type="checkbox"> Quincenal</label>
-            </td>
-        </tr>
-        <tr>
-            <td>Nombres</td>
-            <td>Apellidos</td>
-            <td>No cédula</td>
-            <td>Municipio</td>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <strong>Barrio y dirección:</strong> ____________________________________________
-            </td>
-        </tr>
-        <tr>
-            <td>Teléfono</td>
-            <td>Celular</td>
             <td colspan="2">
-                <strong>Sexo:</strong> 
-                <label><input type="checkbox"> F</label> 
-                <label><input type="checkbox"> M</label>
+                Ciclo del crédito solicitado: <strong>{{$Credito->Clientes->getCreditos->count()}}</strong>
+                
             </td>
+            <td colspan="2" style="text-align: right;">
+                Fecha: <strong>{{ date('d-m-Y', strtotime($Credito->fecha_apertura)) }}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">Nombres: <strong>{{$Credito->Clientes->nombre}}</strong> </td> 
+        </tr>
+        <tr>
+            <td colspan="4">Apellidos: <strong>{{$Credito->Clientes->apellidos}}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="4">No cédula: <strong>{{$Credito->Clientes->cedula}}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="4">Municipio: <strong>{{$Credito->Clientes->getMunicipio->nombre_municipio}}</strong> </td>
         </tr>
         <tr>
             <td colspan="4">
-                <strong>Estado civil:</strong> 
-                <label><input type="checkbox"> Soltero(a)</label> 
-                <label><input type="checkbox"> Casado(a)</label> 
-                <label><input type="checkbox"> Viudo(a)</label>
+                Dirección: <strong>{{$Credito->Clientes->direccion_domicilio}}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">Teléfono: <strong>{{$Credito->Clientes->telefono}}</strong></td>
+        </tr>
+        
+        <tr>
+            <td colspan="4">
+                Estado civil: <strong>{{$Credito->Clientes->estado_civil}}</strong>
             </td>
         </tr>
     </table>
 
     <table>
         <tr>
-            <td colspan="2" class="section-title">II. Información del Negocio</td>
+            <td colspan="2" class="section-title">INFORMACION DEL NEGOCIO</td>
         </tr>
         <tr>
-            <td>Dirección del negocio</td>
-            <td>Teléfono</td>
+            <td colspan="2">Nombre del negocio: <strong>{{ $Credito->Clientes->getNegocio->nombre_negocio }}</strong></td>
         </tr>
         <tr>
-            <td>
-                <strong>Propiedad:</strong> 
-                <label><input type="checkbox"> Propio</label> 
-                <label><input type="checkbox"> Familiar</label>
+            <td colspan="2">Antigüedad del negocio: <strong>{{ $Credito->Clientes->getNegocio->antiguedad }}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="2">Dirección del negocio: <strong>{{ $Credito->Clientes->getNegocio->direccion }}</strong></td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td colspan="3" class="section-title">Referencias Personales</td>
+        </tr>
+        <tr>
+            <th style="text-align: center;">NOMBRE</th>
+            <th style="text-align: center;">DIRECCION</th>
+            <th style="text-align: center;">TELEFONO</th>
+        </tr>
+        @foreach ($Credito->Clientes->getReferencias as $key => $ref)
+        <tr>
+            <td style="text-align: center;">{{ $ref->nombre_ref }}</td>
+            <td style="text-align: center;">{{ $ref->telefono_ref }}</td>
+            <td style="text-align: center;">{{ $ref->direccion_ref }}</td>
+        </tr>
+        @endforeach
+    </table>
+
+    <table>
+        <tr>
+            <td colspan="2" class="section-title">Datos del Cónyuge</td>
+        </tr>
+        <tr>
+            <td colspan="2">Nombres: <strong>{{ $Credito->Clientes->getConyugue->nombres }}</strong> </td>
+            
+        </tr>
+        <tr>
+            <td colspan="2">Apellidos: <strong>{{ $Credito->Clientes->getConyugue->apellidos }}</strong></td>
+            
+        </tr>
+        <tr><td colspan="2">Cédula: <strong>{{ $Credito->Clientes->getConyugue->no_cedula }}</strong></td></tr>
+        <tr>
+            <td colspan="2">Teléfono: <strong>{{ $Credito->Clientes->getConyugue->telefono }}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="2">Lugar de trabajo: <strong>{{ $Credito->Clientes->getConyugue->direccion_trabajo }}</strong></td>
+        </tr>
+    </table>
+
+
+    <table>
+        <tr>
+            <td colspan="4" class="section-title">DETALLE DE GARANTIAS.</td>
+        </tr>
+        <tr>
+            <td colspan="4">
+            Las garantías mobiliarias para garantizar el pago del crédito en ausencia u omisión total o parcial del mismo por parte
+            del deudor / fiador manifiesta el Sr (a) <u><strong>{{ strtoupper($Credito->Clientes->nombre) }} {{ strtoupper($Credito->Clientes->apellidos) }}</strong></u>.
+            Que por su voluntad constituye a favor de CREDINSTANTE las garantías mobiliarias en su calidad de titular de los
+            bienes que se encuentran en su posesión y se detallan a continuación.
             </td>
-            <td>Antigüedad</td>
-        </tr>
-    </table>
-
-    <table>
-        <tr>
-            <td colspan="3" class="section-title">III. Referencias Personales</td>
         </tr>
         <tr>
-            <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
+            <th style="text-align: center;">DETALLE DEL ARICULO</th>
+            <th style="text-align: center;">MARCA</th>
+            <th style="text-align: center;">COLOR</th>
+            <th style="text-align: center;">CALOR</th>
         </tr>
+        @foreach ($Credito->Clientes->getGarantias as $key => $garantia)
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align: center;">{{ $garantia->detalle_articulo }}</td>
+            <td style="text-align: center;">{{ $garantia->marca }}</td>
+            <td style="text-align: center;">{{ $garantia->color }}</td>
+            <td style="text-align: center;">{{ $garantia->valor_recomendado }}</td>
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
-
-    <table>
-        <tr>
-            <td colspan="2" class="section-title">IV. Datos del Cónyuge</td>
-        </tr>
-        <tr>
-            <td>Nombres y Apellidos</td>
-            <td>No de cédula</td>
-        </tr>
-        <tr>
-            <td colspan="2">Nombre y dirección donde trabaja</td>
-        </tr>
-        <tr>
-            <td colspan="2">Teléfono</td>
-        </tr>
+        @endforeach
     </table>
 
     <p class="signature">
-        Confieso que la información antes suministrada es verídica y autorizo a CREDINSTANTE o quien sea el acreedor del crédito para que informe o divulgue a TRANSUNION, S.A. cualquier información relevante para evaluar mi desempeño como deudor.
+        Confieso que la información antes suministrada, es verídica y expresamente autorizo a <strong>CREDINSTANTE</strong> o quien sea el
+        acreedor del crédito que solicito para que informen, reporten o divulguen a <strong>TRANSUNION, S.A</strong> o a cualquier otro buro toda
+        la información relevante para conocer mi desempeño como deudor, o para valorar el riesgo futuro para la concesión de
+        crédito.
     </p>
+
+
+
+    <table>
+        <tr>
+            <td colspan="2" class="section-title">solucitud de crédito</td>
+        </tr>
+        <tr>
+            <td colspan="2">Fecha: <strong>{{ date('d-m-Y', strtotime($Credito->fecha_apertura)) }}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="2">Monto:</td>
+            
+        </tr>
+        <tr>
+            <td colspan="2">Plazo:</td>
+        </tr>
+        <tr>
+            <td colspan="2"> Tasa de Interés:</td>
+        </tr>
+        <tr>
+            <td colspan="2">No de cuotas:</td>
+        </tr>
+        <tr>
+            <td colspan="2">Cuotas:</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="section-title">RESOLUCION DEL COMITÉ DE CREDITO</td>
+        </tr>
+        <tr>
+            <td colspan="2">Monto: <strong>{{ number_format($Credito->monto_credito,0) }}</strong></td>
+            
+        </tr>
+        <tr>
+            <td colspan="2">Plazo: <strong>{{ number_format($Credito->plazo,0) }}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="2">Tasa de Interés: <strong>{{ number_format($Credito->taza_interes,2) }}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="2">No de cuotas: <strong>{{ number_format($Credito->numero_cuotas,0) }}</strong></td> 
+        </tr>
+        <tr>
+            <td colspan="2">Cuotas: <strong>{{ number_format($Credito->cuota,0) }}</strong></td>
+        </tr>
+    </table>
+    
 
     <div class="signature">
         <table class="signature-table">
             <tr>
                 <td>
                     <p>________________________</p>
-                    <p>FIRMA DEL CLIENTE / FIADOR</p>
+                    <p>OFICIAL DECREDITO</p>
                 </td>
                 <td>
                     <p>________________________</p>
-                    <p>OFICIAL DE CRÉDITO</p>
+                    <p>COORDINADOR DE SUCURSAL</p>
                 </td>
             </tr>
         </table>

@@ -143,6 +143,22 @@
                                             @endif
                                           @endif                                          
                                         </div>  
+
+                                        <div class="col-md-12 mt-1">
+                                          @if (in_array(Session::get('rol'), [1, 5]))
+                                          <div class="btn-group w-100">
+                                                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                                    <i class="fas fa-folder"></i> Documentos
+                                                </button>
+                                                <div class="dropdown-menu" role="menu">
+                                                    <!-- <a href="{{route('PagareALaOrden', ['id' => $c->id_creditos])}}" target="_blank" class="dropdown-item">Pagare A La Orden</a> -->
+                                                    <a href="{{route('SolicitudCredito', ['id' => $c->id_creditos])}}" target="_blank"  class="dropdown-item">Solicitud de Credito</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <!-- <a href="{{route('Pagare', ['id' => $c->id_creditos])}}" target="_blank"  class="dropdown-item">Pagare</a> -->
+                                                </div>
+                                            </div>
+                                          @endif                                          
+                                        </div> 
                                         
                                         <div class="col-md-12 mt-1">
                                           @if (in_array(Session::get('rol'), [1, 5]))
