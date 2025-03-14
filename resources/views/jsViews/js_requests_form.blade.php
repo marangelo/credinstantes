@@ -4,8 +4,46 @@
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+
+        var table_garantias = $('#tbl_garantias').DataTable({
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "filter": false,
+            "columnDefs": [
+                { "targets": [6], "visible": false }
+            ],
+            "language": {
+                "emptyTable": "No hay datos para mostrar"
+            }
+        })
+
+        var table_ref = $('#tbl_refencias').DataTable({
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "filter": false,
+            "columnDefs": [
+                { "targets": [5], "visible": false }
+            ],
+            "language": {
+                "emptyTable": "No hay datos para mostrar"
+            }
+        });
         
         $('[data-mask]').inputmask();
+
+        $("#btn_add_garantias").click(function(){
+
+            Add_Garantias(table_garantias);
+
+        })
+
+        $("#btn_add_referencia").click(function(){
+
+            Add_Refencias(table_ref);
+
+        })
 
         var btns_01 = $('#txtMonto,#txtPlazo,#txtInteres,#txtCuotas');
         btns_01.on('keyup touchend', function(e) {
@@ -70,7 +108,19 @@
         $("#btn_save_prospecto").click(function(){
             var IdProspecto = $("#IdRequest").val(); 
 
+            var Info_negocio = {};
+            var Info_conyugue = {};
+            var Info_garantias = {};
+            var Info_referencias = {};
+
+            var table_garantia = $('#tbl_garantias').DataTable();
+            var rows_garantia  = table_garantia.rows().data().toArray();
+
+            var tbl_referencias = $('#tbl_refencias').DataTable();
+            var rows_referencias  = tbl_referencias.rows().data().toArray();
+
             var var_Url = (IdProspecto > 0) ?  "../UpRequestCredit" : "../SaveNewProspecto";
+            
             var lbl_orig = $("#lbl_titulo_origen").html(); 
 
             var DateOPen      = $("#dtApertura").val(); 
@@ -112,6 +162,40 @@
             Dire_           = isValue(Dire_,'N/D',true)
             IdCiente_       = isValue(IdCiente_,0,true)
 
+
+
+            if (lbl_orig != "Renovacion") {
+                $.each($("#frm_info_cliente_negocio").serializeArray(), function (i, field) {
+                    Info_negocio[field.name] = field.value;
+                });
+
+                $.each($("#frm_info_conyugue").serializeArray(), function (i, field) {
+                    Info_conyugue[field.name] = field.value;
+                });
+                
+                $.each(rows_garantia, function (i, field) {
+                    if(field[6] == "S"){
+                        Info_garantias[i] = {
+                            "detalle_articulo"  : field[1],
+                            "marca"             : field[2],
+                            "color"             : field[3],
+                            "valor_recomendado" : field[4]
+                        };
+                    }
+                });
+
+                $.each(rows_referencias, function (i, field) {
+                    if(field[5] == "S"){
+                        Info_referencias[i] = {
+                            "nombre_ref"    : field[1],
+                            "telefono_ref"  : field[2],
+                            "direccion_ref" : field[3]
+                        };
+                    }
+                });
+                
+            }
+
             if(DiaSemana_ === 'N/D' || Municipio_ ==='N/D'||Nombre_ === 'N/D' || Apellido_ ==='N/D'){
                 Swal.fire("Oops", "Datos no Completos", "error");
             }else{
@@ -141,12 +225,15 @@
                         FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
                         _token       : "{{ csrf_token() }}" ,
                         _Origin      : lbl_orig,
+                        iNegocio    : Info_negocio,
+                        iConyugue   : Info_conyugue,
+                        iGarantias  : Info_garantias,
+                        iReferencias: Info_referencias,
                         IdClientes     : IdCiente_
                     },
                     async: true,
                 success: function(response) {
                     if(response){
-                        console.log(response)
                         Swal.fire({
                         title: response.message,
                         icon: 'success',
@@ -190,7 +277,70 @@
         });
         
     })
+    function Add_Garantias(table) {
 
+            // Obtener los valores de los inputs
+        var detalles = $("#detalles").val();
+        var marca = $("#marca").val();
+        var color = $("#color").val();
+        var valor = $("#valor").val();
+        var count = $("#total_garantias").html();
+
+        // Verificar que los campos no estén vacíos
+        if (!detalles || !marca || !color || !valor) {
+            alert("Todos los campos son obligatorios.");
+            return;
+        }
+
+        // Incrementar el contador
+        count = parseInt(count) + 1;    
+
+        // Agregar la fila a la tabla
+        var row = table.row.add([
+            count,
+            detalles,
+            marca,
+            color,
+            valor,
+            " - ",
+            "S"
+        ]).draw(false).node();
+
+        $("#detalles, #marca, #color, #valor").val("");
+        $("#total_garantias").html(count);
+    }
+
+    function Add_Refencias(table) {
+
+        // Obtener los valores de los inputs
+        var nombre_red      = $("#id_nombre_ref").val();
+        var telefono_ref    = $("#id_telefono_ref").val();
+        var direccion_red   = $("#id_direcion_ref").val();
+
+        var count = table.data().length;
+
+        // Verificar que los campos no estén vacíos
+        if (!nombre_red || !telefono_ref || !direccion_red) {
+            alert("Todos los campos son obligatorios.");
+            return;
+        }
+
+        // Incrementar el contador
+        count = parseInt(count) + 1;    
+
+        // Agregar la fila a la tabla
+        var row = table.row.add([
+            count,
+            nombre_red,
+            telefono_ref,
+            direccion_red,
+            " - ",
+            "S"
+        ]).draw(false).node();
+
+        $("#id_nombre_ref, #id_telefono_ref, #id_direcion_ref").val("");
+
+    }
 
     function Calc_Credito(){
         var Monto_     = $("#txtMonto").val();   

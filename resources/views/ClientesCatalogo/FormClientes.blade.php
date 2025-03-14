@@ -41,30 +41,30 @@
                         <div class="card card-primary card-tabs">
                             <div class="card-header p-0 pt-1">
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">GENERAL</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">INFO. NEGOCIO</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" 
-                                    id="ref-personales-tab" 
-                                    data-toggle="pill" 
-                                    href="#tabs-ref-personales" 
-                                    role="tab" 
-                                    aria-controls="custom-tabs-one-messages" 
-                                    aria-selected="false">
-                                    REF. PERSONALES
-                                </a>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">GENERAL</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">INFO. NEGOCIO</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" 
+                                        id="ref-personales-tab" 
+                                        data-toggle="pill" 
+                                        href="#tabs-ref-personales" 
+                                        role="tab" 
+                                        aria-controls="custom-tabs-one-messages" 
+                                        aria-selected="false">
+                                        REF. PERSONALES
+                                    </a>
 
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">DATOS DEL CONYUGUE</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">DETALLES DE GARANTIAS</a>
-                                </li>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">DATOS DEL CONYUGUE</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">DETALLES DE GARANTIAS</a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="card-body">
@@ -215,6 +215,7 @@
                                             </div>
                                         </form>
                                     </div>
+
                                     <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
                                         <form action="#!" method="post" id="frm_info_cliente_negocio">
                                             <div class="row gx-2">
@@ -245,6 +246,7 @@
                                             </div>
                                         </form>
                                     </div>
+                                    
                                     <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">    
                                         <form action="#!" method="post" id="frm_info_conyugue">                                
                                             <div class="row gx-2">

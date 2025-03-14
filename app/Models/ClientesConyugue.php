@@ -12,6 +12,6 @@ class ClientesConyugue extends Model
     protected $primaryKey = 'id_conyuge';
 
     protected $fillable = [
-        'id_conyuge','id_cliente','nombres','apellidos','no_cedula','telefono','direccion_trabajo'
+        'id_conyuge','id_cliente','id_req','nombres','apellidos','no_cedula','telefono','direccion_trabajo'
     ];
 }

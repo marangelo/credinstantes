@@ -13,6 +13,11 @@ use App\Models\Credito;
 use App\Models\Clientes;
 use App\Models\RequestsCredit;
 
+USE App\Models\ClientesNegocio;
+USE App\Models\ClientesConyugue;
+USE App\Models\ClientesGarantia;
+USE App\Models\ClientesReferencias;
+
 
 class ProspectosController extends Controller
 {
@@ -104,6 +109,12 @@ class ProspectosController extends Controller
 
         $IdProspecto           = $request->input('IdProspecto_');
 
+
+        $iNegocio   = $request->input('iNegocio');
+        $iConyugue  = $request->input('iConyugue');
+        $iGarantias = $request->input('iGarantias');
+        $iReferencias = $request->input('iReferencias');
+
         $messages = [
             'FechaOpen.required'    => 'La fecha de apertura.',
             'DiaSemana_.required'   => 'El día de la semana.',
@@ -148,7 +159,7 @@ class ProspectosController extends Controller
             'InteresesPorCuota' => 'required|numeric',
         ], $messages);
 
-        $creditRequest = RequestsCredit::create([
+        $idInsertado = RequestsCredit::insertGetId([
             'req_start_date'      => $request->FechaOpen,
             'visit_day'           => $request->DiaSemana_,
             'promoter'            => $request->Promotor_,
@@ -174,11 +185,69 @@ class ProspectosController extends Controller
             'id_cliente'          => $request->IdClientes	
         ]);
 
+        if(isset($iNegocio) && $iNegocio != null) {
+            ClientesNegocio::updateOrCreate(
+                ['id_req' => $idInsertado],
+                [
+                    'nombre_negocio'    => $iNegocio['nombre_negocio'],
+                    'antiguedad'        => $iNegocio['Antiguedad_negocio'],
+                    'direccion'         => $iNegocio['direccion_negocio']              
+                ] 
+            );
+        }
+
+
+        if(isset($iConyugue) && $iConyugue != null) {
+            ClientesConyugue::updateOrCreate(
+                ['id_req' => $idInsertado],
+                [
+                    'nombres'            => $iConyugue['nombres_conyugue'],
+                    'apellidos'          => $iConyugue['apellidos_conyugue'],
+                    'no_cedula'          => $iConyugue['cedula_conyugue'],
+                    'telefono'           => $iConyugue['telefono_conyugue'],    
+                    'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
+                ] 
+            );
+        }
+
+        if(isset($iGarantias) && $iGarantias != null){
+            foreach ($iGarantias as $articulo) {
+                ClientesGarantia::updateOrCreate(
+                    [
+                        'detalle_articulo' => $articulo['detalle_articulo']
+
+                    ],
+                    [
+                        'id_req' => $idInsertado,
+                        'marca' => $articulo['marca'],
+                        'color' => $articulo['color'],
+                        'valor_recomendado' => $articulo['valor_recomendado']
+                    ]
+                );
+            }
+        }
+
+        if(isset($iReferencias) && $iReferencias != null){
+            foreach ($iReferencias as $ref) {
+                ClientesReferencias::updateOrCreate(
+                    [
+                        'nombre_ref' => $ref['nombre_ref']
+
+                    ],
+                    [
+                        'id_req' => $idInsertado,
+                        'direccion_ref' => $ref['direccion_ref'],
+                        'telefono_ref' => $ref['telefono_ref']
+                    ]
+                );
+            }
+        }
+
         Prospectos::UpdateEstadoProspecto($IdProspecto,2);  
         
         return response()->json([
             'message' => 'Solicitud de crédito registrada con éxito',
-            'data' => $creditRequest
+            'data' => $idInsertado
         ], 201);
 
     

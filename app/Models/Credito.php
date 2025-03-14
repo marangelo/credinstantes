@@ -151,6 +151,15 @@ class Credito extends Model
                 $InteresesPorCuota             = $request->input('InteresesPorCuota');
                 $FechaOpen             = $request->input('FechaOpen');
 
+                
+                $iNegocio   = $request->input('iNegocio');
+                $iConyugue  = $request->input('iConyugue');
+                $iGarantias = $request->input('iGarantias');
+                $iReferencias = $request->input('iReferencias');
+
+
+            
+
                 $fecha = new DateTime($FechaOpen);
                 $Fecha_abonos = [];
 
@@ -212,6 +221,69 @@ class Credito extends Model
 
                 //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
                 //Clientes::CheckStatus($IdCredito);
+
+
+                $IdProspecto           = $request->input('IdProspecto_'); 
+
+
+                ClientesNegocio::updateOrCreate(
+                    ['id_req' => $IdProspecto],
+                    [
+                        'id_cliente'        => $idInsertado,
+                        'nombre_negocio'    => $iNegocio['nombre_negocio'],
+                        'antiguedad'        => $iNegocio['Antiguedad_negocio'],
+                        'direccion'         => $iNegocio['direccion_negocio']              
+                    ] 
+                );
+                
+                ClientesConyugue::updateOrCreate(
+                    ['id_req' => $IdProspecto],
+                    [
+                        'id_cliente'        => $idInsertado,
+                        'nombres'            => $iConyugue['nombres_conyugue'],
+                        'apellidos'          => $iConyugue['apellidos_conyugue'],
+                        'no_cedula'          => $iConyugue['cedula_conyugue'],
+                        'telefono'           => $iConyugue['telefono_conyugue'],    
+                        'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
+                    ] 
+                );
+        
+                if(isset($iGarantias) && $iGarantias != null){
+                    foreach ($iGarantias as $articulo) {
+                        ClientesGarantia::updateOrCreate(
+                            [
+                                'detalle_articulo' => $articulo['detalle_articulo'],
+                                'id_req' => $IdProspecto
+        
+                            ],
+                            [
+                                'id_cliente' => $idInsertado,
+                                'marca' => $articulo['marca'],
+                                'color' => $articulo['color'],
+                                'valor_recomendado' => $articulo['valor_recomendado']
+                            ]
+                        );
+                    }
+                }
+        
+                if(isset($iReferencias) && $iReferencias != null){
+                    foreach ($iReferencias as $ref) {
+                        ClientesReferencias::updateOrCreate(
+                            [
+                                'nombre_ref' => $ref['nombre_ref'],
+                                'id_req' => $IdProspecto
+        
+                            ],
+                            [
+                                'id_cliente'    => $idInsertado,
+                                'direccion_ref' => $ref['direccion_ref'],
+                                'telefono_ref'  => $ref['telefono_ref']
+                            ]
+                        );
+                    }
+                }
+
+               
 
 
                 return $response;

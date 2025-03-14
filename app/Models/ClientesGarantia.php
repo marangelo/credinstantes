@@ -13,7 +13,7 @@ class ClientesGarantia extends Model
     protected $primaryKey = 'id_garantia';
 
     protected $fillable = [
-        'id_garantia','id_cliente','detalle_articulo','marca','color','valor_recomendado'
+        'id_garantia','id_cliente','id_req','detalle_articulo','marca','color','valor_recomendado'
     ];
 
     public static function rmGarantia(Request $request)

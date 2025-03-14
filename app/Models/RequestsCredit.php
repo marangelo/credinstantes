@@ -86,9 +86,34 @@ class RequestsCredit extends Model
         return $array_prospectos;
     }
 
+
+    
+    public function getNegocio()
+    {
+        return $this->hasOne(ClientesNegocio::class, 'id_req', 'id_req');
+    }
+
+    public function getConyugue()
+    {
+        return $this->hasOne(ClientesConyugue::class, 'id_req', 'id_req');
+    }
+    public function getGarantias()
+    {
+        return $this->hasMany(ClientesGarantia::class, 'id_req', 'id_req');
+    }    
+    public function getReferencias()
+    {
+        return $this->hasMany(ClientesReferencias::class, 'id_req', 'id_req');
+    } 
+
+
     public static function UpdateEstadoRequest($IdProspecto)
     {        
-        $response = RequestsCredit::where('id_req', $IdProspecto)->delete();
+        //$response = RequestsCredit::where('id_req', $IdProspecto)->delete();
+
+        $response = RequestsCredit::where('id_req', $IdProspecto)->update([
+            'activo' => 0
+        ]);
         return $response;
     }
 

@@ -270,7 +270,6 @@
         });
 
         $.each(rows_referencias, function (i, field) {
-            console.log(field);
             if(field[5] == "S"){
                 Info_referencias[i] = {
                     "nombre_ref"    : field[1],

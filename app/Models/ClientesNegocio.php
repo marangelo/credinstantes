@@ -12,6 +12,6 @@ class ClientesNegocio extends Model
     protected $primaryKey = 'id_negocio';
 
     protected $fillable = [
-        'id_negocio','id_cliente','nombre_negocio','antiguedad','direccion'
+        'id_negocio','id_cliente','id_req','nombre_negocio','antiguedad','direccion'
     ];
 }

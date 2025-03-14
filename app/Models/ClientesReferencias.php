@@ -13,7 +13,7 @@ class ClientesReferencias extends Model
     protected $primaryKey = 'id_referencia';
 
     protected $fillable = [
-        'id_referencia','id_cliente','nombre_ref','direccion_ref','telefono_ref'
+        'id_referencia','id_cliente','id_req','nombre_ref','direccion_ref','telefono_ref'
     ];
 
     public static function rmReferencia(Request $request)
