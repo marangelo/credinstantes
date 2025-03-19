@@ -51,11 +51,11 @@
     </div>
 
     <p>
-        @php $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(1)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre']; @endphp
+        @php $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre']; @endphp
         @php $estado_civil = $estados_civiles[$Credito->Clientes->estado_civil]; @endphp
         
         Yo <u><strong>{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</strong></u>, mayor de edad, <strong>( {{$estado_civil}} )</strong>, 
-        <strong>(________)</strong>, identificado con <strong>________________________</strong> número 
+        <strong>( <strong><u> Comerciante</u></strong> )</strong>, identificado con cedula número 
         <strong><u>{{$Credito->Clientes->cedula}}</u></strong>, y de este domicilio, actuando en nombre y representación propia, 
         en adelante denominado <strong>EL DEUDOR</strong>, por este <strong>PAGARÉ A LA ORDEN</strong>, me obligo a pagar a 
         <strong>CREDINSTANTE</strong>, o a su orden en esta ciudad, en sus oficinas principales o en cualquier otra de 
@@ -89,16 +89,18 @@
             días del mes de <strong><u>____{{ Date::parse($Credito->fecha_apertura)->format('F')}}____</u></strong> del año <strong><u>____{{date('Y', strtotime($Credito->fecha_apertura))}}____</u></strong>
         </p>
         
-        <div class="columns">
-            <div class="column">
-                <div class="info"><strong>EL DEUDOR:</strong> _______________________________________</span></div>
-                <div class="info"><strong>Cédula de identidad:</strong> __________________________________</span></div>
-            </div>
-            <div class="column">
-                <div class="info"><strong>Fiador:</strong> _______________________________________</span></div>
-                <div class="info"><strong>Cédula:</strong> _______________________________________</span></div>
-            </div>
-        </div>
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 50%;">
+                    <div class="info"><strong>EL DEUDOR:</strong> _______________________________________</span></div>
+                    <div class="info"><strong>Cédula de identidad:</strong> __________________________________</span></div>
+                </td>
+                <td style="width: 50%;">
+                    <div class="info"><strong>Fiador:</strong> _______________________________________</span></div>
+                    <div class="info"><strong>Cédula:</strong> _______________________________________</span></div>
+                </td>
+            </tr>
+        </table>
     </div>
 
 </body>

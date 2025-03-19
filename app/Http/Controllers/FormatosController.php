@@ -17,9 +17,10 @@ class FormatosController extends Controller
     public function PagareALaOrden(Request $request){
         $ID = $request->input('id');
         $Credito = Credito::find($ID);
-        return view('Formatos.PagarALaOrden', compact('Credito'));
-        // $pdf = \PDF::loadView('Formatos.PagarALaOrden');
-        // return $pdf->download('PagarALaOrden.pdf');
+        
+        $pdf = \PDF::loadView('Formatos.PagarALaOrden', compact('Credito'));
+        return $pdf->download('PagarALaOrden.pdf');
+        //return view('Formatos.PagarALaOrden', compact('Credito'));
 
     }
     public function SolicitudCredito(Request $request){
@@ -27,24 +28,16 @@ class FormatosController extends Controller
         $ID = $request->input('id');
 
         $Credito = Credito::find($ID);
-        
-        // $pdf = \PDF::loadView('Formatos.Solicitud_Credito', compact('Credito'));
-        // return $pdf->download('SolicitudCredito.pdf');
     
-        return view('Formatos.Solicitud_Credito', compact('Credito'));
-        //return view('Formatos.Garantias');
-        
-        
-        // $pdf = \PDF::loadView('Formatos.Garantias');
-
-        // return $pdf->download('FormatoCliente.pdf');        
-        // return $pdf->download('FormatoGarantias.pdf');
+        $pdf = \PDF::loadView('Formatos.Solicitud_Credito', compact('Credito'));
+        return $pdf->download('SolicitudCredito.pdf');
+        //return view('Formatos.Solicitud_Credito', compact('Credito'));
 
     }
-    public function Pagare(){
-            $Credito = Credito::find($ID);
-    
-            return view('Formatos.Pagare', compact('Credito'));
+    public function Pagare(Request $request){
+        $Credito = Credito::find($ID);
+
+        return view('Formatos.Pagare', compact('Credito'));
 
         // $pdf = \PDF::loadView('Formatos.Pagare');
         // return $pdf->download('FormatoPagare.pdf');

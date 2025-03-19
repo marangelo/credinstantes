@@ -233,6 +233,15 @@ class Credito extends Model
                 $IdProspecto           = $request->input('IdProspecto_'); 
 
 
+                RefResquestCredit::updateOrCreate(
+                    ['id_resquest' => $IdProspecto],
+                    [
+                        'id_resquest'   => $IdProspecto,
+                        'id_credit'     => $IdCredito
+                    ]
+                );
+
+
                 ClientesNegocio::updateOrCreate(
                     ['id_req' => $IdProspecto],
                     [
@@ -449,6 +458,14 @@ class Credito extends Model
                     'user_created'  => $Promotor_,
                     'id_clientes'   => $idInsertado
                 ]); 
+                $IdProspecto           = $request->input('IdProspecto_'); 
+                RefResquestCredit::updateOrCreate(
+                    ['id_resquest' => $IdProspecto],
+                    [
+                        'id_resquest'   => $IdProspecto,
+                        'id_credit'     => $IdCredito
+                    ]
+                );
                 
 
 

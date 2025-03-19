@@ -209,3 +209,6 @@ Route::post('UpdateCliente', 'ControllerCatalogoClientes@UpdateCliente')->name('
 Route::post('rmGarantia', 'ControllerCatalogoClientes@rmGarantia')->name('rmGarantia');
 Route::post('rmReferencia', 'ControllerCatalogoClientes@rmReferencia')->name('rmReferencia');
 Route::post('FiltrarClientes', 'ControllerCatalogoClientes@FiltrarClientes')->name('FiltrarClientes');
+
+
+

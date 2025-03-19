@@ -137,15 +137,8 @@
                     return numeral(row.Monto_promedio).format('0,00.00');
                 }},
                 {"title": "CREADO POR","data": "Usuario"},
-                {"title": "ESTADO","data": "Estado"},
-                {
-                    "title": "DOCUMENTOS",
-                    "data": "Accion"
-                }, 
-                {
-                    "title": "ACCION",
-                    "data": "Botones"
-                }, 
+                {"title": "ESTADO","data": "Estado"},                
+                {"title": "ACCION","data": "Botones"}, 
             ],
         })
 
