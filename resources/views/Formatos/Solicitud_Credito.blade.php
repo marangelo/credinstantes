@@ -31,8 +31,21 @@
             text-align: center;
         }
         .header {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .form-section {
+            flex-grow: 1;
+            margin-left: 20px;
+            text-align: center;
+        }
+        .form-section p {
+            margin: 5px 0;
         }
         .signature {
             margin-top: 10px;
@@ -51,9 +64,17 @@
 </head>
 <body>
     <div class="header">
-        <h2 style="color: blue;">CREDINSTANTE</h2>
-        <h3>Solicitud de crédito</h3>
+        
+        
     </div>
+    <div class="header">
+        <img src="{{ asset('img/Logo.png') }}" alt="Credinstante">
+        <div class="form-section">
+            <h2 style="color: blue;">CREDINSTANTE</h2>
+            <h3>Solicitud de crédito</h3>
+        </div>
+    </div>
+
 
 
     <table>
@@ -118,8 +139,8 @@
         </tr>
         <tr>
             <th style="text-align: center;">NOMBRE</th>
-            <th style="text-align: center;">DIRECCION</th>
             <th style="text-align: center;">TELEFONO</th>
+            <th style="text-align: center;">DIRECCION</th>
         </tr>
         @foreach ($Credito->Clientes->getReferencias as $key => $ref)
         <tr>
@@ -168,7 +189,7 @@
             <th style="text-align: center;">DETALLE DEL ARICULO</th>
             <th style="text-align: center;">MARCA</th>
             <th style="text-align: center;">COLOR</th>
-            <th style="text-align: center;">CALOR</th>
+            <th style="text-align: center;">VALOR</th>
         </tr>
         @foreach ($Credito->Clientes->getGarantias as $key => $garantia)
         <tr>
@@ -197,26 +218,26 @@
             <td colspan="2">Fecha: <strong>{{ date('d-m-Y', strtotime($Credito->fecha_apertura)) }}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">Monto:</td>
+            <td colspan="2">Monto: <strong>C$. {{number_format($Credito->getRefResquest->getRequest->monto,0)}}</strong></td>
             
         </tr>
         <tr>
-            <td colspan="2">Plazo:</td>
+            <td colspan="2">Plazo: <strong>{{number_format($Credito->getRefResquest->getRequest->plazo,0)}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2"> Tasa de Interés:</td>
+            <td colspan="2"> Tasa de Interés: <strong>{{number_format($Credito->getRefResquest->getRequest->interes_porcent,2)}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">No de cuotas:</td>
+            <td colspan="2">No de cuotas: <strong>{{number_format($Credito->getRefResquest->getRequest->num_cuotas,0)}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">Cuotas:</td>
+            <td colspan="2">Cuotas: <strong>C$. {{ number_format($Credito->getRefResquest->getRequest->cuota,2)}}</strong></td>
         </tr>
         <tr>
             <td colspan="2" class="section-title">RESOLUCION DEL COMITÉ DE CREDITO</td>
         </tr>
         <tr>
-            <td colspan="2">Monto: <strong>{{ number_format($Credito->monto_credito,0) }}</strong></td>
+            <td colspan="2">Monto: <strong>C$. {{ number_format($Credito->monto_credito,0) }}</strong></td>
             
         </tr>
         <tr>
@@ -229,7 +250,7 @@
             <td colspan="2">No de cuotas: <strong>{{ number_format($Credito->numero_cuotas,0) }}</strong></td> 
         </tr>
         <tr>
-            <td colspan="2">Cuotas: <strong>{{ number_format($Credito->cuota,0) }}</strong></td>
+            <td colspan="2">Cuotas: <strong>C$. {{ number_format($Credito->cuota,2) }}</strong></td>
         </tr>
     </table>
     

@@ -30,28 +30,38 @@
         .signature {
             margin-top: 30px;
         }
+        .section { margin-top: 20px; }
+        .signature-line { border-bottom: 1px solid black; width: 100px; display: inline-block; }
+        .info { margin-bottom: 10px; }
+        .flex { display: flex; justify-content: space-between; }
+        .columns { display: flex; justify-content: space-between; }
+        .column { width: 48%; }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="{{ asset('img/Logo.png') }}" alt="Credinstante">
         <div class="form-section">
-            <p>ENTREGA: ____________________________</p>
-            <p>DÍA DE VISITA: ____________________________</p>
-            <p>MONTO: ____________________________</p>
-            <p>VENCIMIENTO: ____________________________</p>
+            <p><strong>ENTREGA:</strong> {{ Date::parse($Credito->fecha_apertura)->format('l, j F  Y') }}</p>
+            <p><strong>MONTO: C$.</strong> {{ number_format($Credito->monto_credito,2) }} </p>
+            <p><strong>DÍA DE VISITA:</strong> {{$Credito->getDiasSemana->dia_semana}}</p>
+            <p><strong>DIRECCION:</strong> {{$Credito->Clientes->direccion_domicilio}}</p>
+            <p><strong>TELEFONO:</strong> {{$Credito->Clientes->telefono}}</p>
         </div>
     </div>
 
     <p>
-        Yo <strong>________________________</strong>, mayor de edad, <strong>(________)</strong>, 
+        @php $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(1)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre']; @endphp
+        @php $estado_civil = $estados_civiles[$Credito->Clientes->estado_civil]; @endphp
+        
+        Yo <u><strong>{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</strong></u>, mayor de edad, <strong>( {{$estado_civil}} )</strong>, 
         <strong>(________)</strong>, identificado con <strong>________________________</strong> número 
-        <strong>________________________</strong>, y de este domicilio, actuando en nombre y representación propia, 
+        <strong><u>{{$Credito->Clientes->cedula}}</u></strong>, y de este domicilio, actuando en nombre y representación propia, 
         en adelante denominado <strong>EL DEUDOR</strong>, por este <strong>PAGARÉ A LA ORDEN</strong>, me obligo a pagar a 
         <strong>CREDINSTANTE</strong>, o a su orden en esta ciudad, en sus oficinas principales o en cualquier otra de 
         sus sucursales o lugar donde sea designado, por su cuenta y riesgo y por igual valor recibido a mi satisfacción, 
-        la suma de <strong>________________________</strong> (__________), cantidad que pagaré en un plazo de 
-        <strong>________</strong> meses en <strong>________</strong> cuotas.
+        la suma de <strong><u>{{$Credito->numberToWords($Credito->monto_credito)}}</u></strong> ( <u><strong> C$ {{ number_format($Credito->monto_credito,2) }}</strong></u> ), cantidad que pagaré en un plazo de 
+        <strong>____<u>{{number_format($Credito->plazo,0)}}____</u></strong> meses en <strong>____<u>{{number_format($Credito->numero_cuotas,0)}}____</u></strong> cuotas.
     </p>
 
     <p>
@@ -73,12 +83,23 @@
         del préstamo o desembolso de fondos del solicitante a cuenta del crédito antes referido.
     </p>
 
-    <div class="signature">
-        <p>Firmo este pagaré a la orden en la ciudad de __________________________, a los ______ días del mes de 
-        __________________________ del año ______.</p>
+    <div class="container">
         <p>
-            <strong>EL DEUDOR:</strong><br>__________________________<br>Cédula de identidad: __________________________<br>
+            Firmo este pagaré a la orden en la ciudad de <strong><u>____{{ $Credito->Clientes->getZona->nombre_zona }}____</u></strong>, a los <strong><u>____{{date('d', strtotime($Credito->fecha_apertura))}}____</u></strong> 
+            días del mes de <strong><u>____{{ Date::parse($Credito->fecha_apertura)->format('F')}}____</u></strong> del año <strong><u>____{{date('Y', strtotime($Credito->fecha_apertura))}}____</u></strong>
         </p>
+        
+        <div class="columns">
+            <div class="column">
+                <div class="info"><strong>EL DEUDOR:</strong> _______________________________________</span></div>
+                <div class="info"><strong>Cédula de identidad:</strong> __________________________________</span></div>
+            </div>
+            <div class="column">
+                <div class="info"><strong>Fiador:</strong> _______________________________________</span></div>
+                <div class="info"><strong>Cédula:</strong> _______________________________________</span></div>
+            </div>
+        </div>
     </div>
+
 </body>
 </html>

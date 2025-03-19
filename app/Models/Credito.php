@@ -29,6 +29,10 @@ class Credito extends Model
     {
         return $this->hasMany(RefAbonos::class, 'id_creditos', 'id_creditos')->orderBy('numero_pago', 'desc')->limit(1);
     }
+
+    public function getDiasSemana(){
+        return $this->hasOne(DiasSemana::class, 'id_diassemana','id_diassemana');
+    }
     
     public function AbonoLogs()
     {
@@ -47,7 +51,10 @@ class Credito extends Model
         ->limit(1);
     }
 
-
+    public function getRefResquest()
+    {
+        return $this->hasOne(RefResquestCredit::class, 'id_credit','id_creditos');
+    }
     
     public function abonosCount()
     {
@@ -472,6 +479,49 @@ class Credito extends Model
         }
 
         return $Date->format('Y-m-d');
+    }
+
+    public static function numberToWords($numero) {
+        $unidades = array('', 'Uno', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis', 'Siete', 'Ocho', 'Nueve', 'Diez', 'Once', 'Doce', 'Trece', 'Catorce', 'Quince', 'Dieciséis', 'Diecisiete', 'Dieciocho', 'Diecinueve');
+        $decenas = array('', '', 'Veinte', 'Treinta', 'Cuarenta', 'Cincuenta', 'Sesenta', 'Setenta', 'Ochenta', 'Noventa');
+        $centenas = array('', 'Ciento', 'Doscientos', 'Trescientos', 'Cuatrocientos', 'Quinientos', 'Seiscientos', 'Setecientos', 'Ochocientos', 'Novecientos');
+     
+        if ($numero == 0) {
+            return 'cero';
+        }
+     
+        if ($numero < 0) {
+            return 'menos ' . numero_a_letras(abs($numero));
+        }
+     
+        $letras = '';
+     
+        if ($numero >= 1000) {
+            $parte_entera = floor($numero / 1000);
+            $letras .= Credito::numberToWords($parte_entera) . ' mil';
+            $resto = $numero - ($parte_entera * 1000);
+            if ($resto > 0) {
+                $letras .= ' ' . Credito::numberToWords($resto);
+            }
+        } else {
+            if ($numero < 20) {
+                $letras .= $unidades[$numero];
+            } elseif ($numero < 100) {
+                $letras .= $decenas[floor($numero / 10)];
+                $resto = $numero % 10;
+                if ($resto) {
+                    $letras .= ' y ' . $unidades[$resto];
+                }
+            } else {
+                $letras .= $centenas[floor($numero / 100)];
+                $resto = $numero % 100;
+                if ($resto) {
+                    $letras .= ' ' .Credito:: numberToWords($resto);
+                }
+            }
+        }
+     
+        return $letras;
     }
 
 }
