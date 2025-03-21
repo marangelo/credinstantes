@@ -220,20 +220,20 @@
             <td colspan="2">Fecha: <strong>{{ date('d-m-Y', strtotime($Credito->fecha_apertura)) }}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">Monto: <strong>C$. {{number_format($Credito->getRefResquest->getRequest->monto,0)}}</strong></td>
+            <td colspan="2">Monto: <strong>C$. {{number_format( ($Credito->getRefResquest->getRequest->monto ?? 0) ,0)}}</strong></td>
             
         </tr>
         <tr>
-            <td colspan="2">Plazo: <strong>{{number_format($Credito->getRefResquest->getRequest->plazo,0)}}</strong></td>
+            <td colspan="2">Plazo: <strong>{{number_format(($Credito->getRefResquest->getRequest->plazo ?? 0),0)}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2"> Tasa de Interés: <strong>{{number_format($Credito->getRefResquest->getRequest->interes_porcent,2)}}</strong></td>
+            <td colspan="2"> Tasa de Interés: <strong>{{number_format(( $Credito->getRefResquest->getRequest->interes_porcent ?? 0),2)}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">No de cuotas: <strong>{{number_format($Credito->getRefResquest->getRequest->num_cuotas,0)}}</strong></td>
+            <td colspan="2">No de cuotas: <strong>{{number_format( ($Credito->getRefResquest->getRequest->num_cuotas ?? 0),0)}}</strong></td>
         </tr>
         <tr>
-            <td colspan="2">Cuotas: <strong>C$. {{ number_format($Credito->getRefResquest->getRequest->cuota,2)}}</strong></td>
+            <td colspan="2">Cuotas: <strong>C$. {{ number_format( ($Credito->getRefResquest->getRequest->cuota ?? 0),2)}}</strong></td>
         </tr>
         <tr>
             <td colspan="2" class="section-title">RESOLUCION DEL COMITÉ DE CREDITO</td>
