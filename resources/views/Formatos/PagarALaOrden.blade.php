@@ -61,7 +61,7 @@
         <strong>CREDINSTANTE</strong>, o a su orden en esta ciudad, en sus oficinas principales o en cualquier otra de 
         sus sucursales o lugar donde sea designado, por su cuenta y riesgo y por igual valor recibido a mi satisfacción, 
         la suma de <strong><u>{{$Credito->numberToWords($Credito->monto_credito)}}</u></strong> ( <u><strong> C$ {{ number_format($Credito->monto_credito,2) }}</strong></u> ), cantidad que pagaré en un plazo de 
-        <strong>____<u>{{number_format($Credito->plazo,0)}}____</u></strong> meses en <strong>____<u>{{number_format($Credito->numero_cuotas,0)}}____</u></strong> cuotas.
+        <strong>____<u>{{number_format($Credito->plazo,2)}}____</u></strong> meses en <strong>____<u>{{number_format($Credito->numero_cuotas,0)}}____</u></strong> cuotas.
     </p>
 
     <p>
