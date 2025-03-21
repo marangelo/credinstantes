@@ -52,7 +52,7 @@
 
     <p>
         @php $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre']; @endphp
-        @php $estado_civil = $estados_civiles[$Credito->Clientes->estado_civil]; @endphp
+        @php $estado_civil = $estados_civiles[$Credito->Clientes->estado_civil] ?? 'N/D' ; @endphp
         
         Yo <u><strong>{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</strong></u>, mayor de edad, <strong>( {{$estado_civil}} )</strong>, 
         <strong>( <strong><u> Comerciante</u></strong> )</strong>, identificado con cedula número 

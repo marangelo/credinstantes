@@ -167,6 +167,7 @@ class ProspectosController extends Controller
             'last_name'           => $request->Apellido_,
             'phone'               => $request->Tele_,
             'num_cedula'          => $request->Cedula_,
+            'estado_civil'        => $request->EstadoCivil_,
             'id_department'       => $request->Municipio_,
             'id_zone'             => $request->Zona_,
             'client_address'      => $request->Dire_,

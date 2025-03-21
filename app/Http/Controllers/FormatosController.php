@@ -41,6 +41,8 @@ class FormatosController extends Controller
 
         // $pdf = \PDF::loadView('Formatos.Pagare');
         // return $pdf->download('FormatoPagare.pdf');
+
+        
     }
 
 }

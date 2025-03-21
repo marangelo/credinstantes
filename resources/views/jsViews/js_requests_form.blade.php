@@ -132,6 +132,7 @@
             var Municipio_  = $("#selMunicipio option:selected").val();  
             var Zona_       = $("#selZona option:selected").val();
             var Promotor    = $("#slPromotor option:selected").val();
+            var EstadoCivil = $("#selectEstadoCivil option:selected").val();
 
             var Nombre_      = $("#txtNombre").val();   
             var Apellido_    = $("#txtApellido").val();   
@@ -152,6 +153,7 @@
             var Saldos_    = numeral($("#txtSaldos").val()).format('0.00');
 
             Promotor        = isValue(Promotor,0,true)
+            EstadoCivil     = isValue(EstadoCivil,0,true)
 
             DiaSemana_      = isValue(DiaSemana_,'N/D',true)
             Municipio_      = isValue(Municipio_,'N/D',true)            
@@ -208,6 +210,7 @@
                         Municipio_   : Municipio_,
                         Zona_        : Zona_,
                         Promotor_    : Promotor,
+                        EstadoCivil_ : EstadoCivil,
                         Nombre_      : Nombre_,
                         Apellido_    : Apellido_ , 
                         Cedula_      : Cedula_,

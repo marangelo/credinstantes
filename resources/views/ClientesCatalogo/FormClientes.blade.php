@@ -201,7 +201,7 @@
                                                         <option value="2" {{ ($Cliente->estado_civil ?? '') == '2' ? 'selected' : '' }}>Casado(a)</option>
                                                         <option value="3" {{ ($Cliente->estado_civil ?? '') == '3' ? 'selected' : '' }}>Divorciado(a)</option>
                                                         <option value="4" {{ ($Cliente->estado_civil ?? '') == '4' ? 'selected' : '' }}>Viudo(a)</option>
-                                                        <option value="4" {{ ($Cliente->estado_civil ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
+                                                        <option value="5" {{ ($Cliente->estado_civil ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
                                                     </select>
                                                 </div>
                                                 

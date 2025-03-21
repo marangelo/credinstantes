@@ -146,7 +146,7 @@
                                     </div>
                                     
                                   </div>
-                                  <div class="col-sm-6">
+                                  <div class="col-sm-4">
 
                                     <div class="form-group">
                                       <label>Departamento</label>
@@ -158,7 +158,7 @@
                                     </div>
                                       
                                   </div>
-                                  <div class="col-sm-6">
+                                  <div class="col-sm-4">
                                     <div class="form-group">
                                       <label>Zonas</label>
                                       <select class="form-control" id="selZona">
@@ -167,7 +167,18 @@
                                         @endforeach
                                       </select>
                                     </div>                      
-                                  </div>                
+                                  </div>  
+                                  <div class="col-sm-4">
+                                    <label>Estado Civil</label>
+                                    <select class="custom-select" name="selectEstadoCivil" id="selectEstadoCivil">
+                                        <option value="0" {{ ($Request->estado_civil ?? '') == '0' ? 'selected' : '' }}>Seleccione un estado civil</option>
+                                        <option value="1" {{ ($Request->estado_civil ?? '') == '1' ? 'selected' : '' }}>Soltero(a)</option>
+                                        <option value="2" {{ ($Request->estado_civil ?? '') == '2' ? 'selected' : '' }}>Casado(a)</option>
+                                        <option value="3" {{ ($Request->estado_civil ?? '') == '3' ? 'selected' : '' }}>Divorciado(a)</option>
+                                        <option value="4" {{ ($Request->estado_civil ?? '') == '4' ? 'selected' : '' }}>Viudo(a)</option>
+                                        <option value="5" {{ ($Request->estado_civil ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
+                                    </select>
+                                  </div>              
                                   <div class="col-sm-12">
                                     <div class="form-group">
                                       <label>DIRECCION</label>

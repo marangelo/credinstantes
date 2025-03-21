@@ -114,7 +114,7 @@
         <tr>
             <td colspan="4">
                 @php $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre']; @endphp
-                @php $estado_civil = $estados_civiles[$Credito->Clientes->estado_civil]; @endphp
+                @php $estado_civil = $estados_civiles[$Credito->Clientes->estado_civil] ?? 'N/D' ; @endphp
                 Estado civil: <strong>{{$estado_civil}}</strong>
             </td>
         </tr>

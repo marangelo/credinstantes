@@ -140,6 +140,7 @@ class Credito extends Model
                 $direccion_domicilio    = $request->input('Dire_');
                 $cedula                 = $request->input('Cedula_');
                 $telefono               = $request->input('Tele_');
+                $Estado_Civil           = $request->input('EstadoCivil_');
                 $score                  = 100;
                 $activo                 = 1;
                 $Estado                 = 1;
@@ -181,6 +182,7 @@ class Credito extends Model
                     'id_zona'              => $Zona_,
                     'score'                => $score,
                     'activo'               => $activo,
+                    'estado_civil'         => $Estado_Civil
                 ];
                 $idInsertado = Clientes::insertGetId($datos_a_insertar);
 
