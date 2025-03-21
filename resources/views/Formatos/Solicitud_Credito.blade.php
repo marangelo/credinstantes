@@ -224,7 +224,7 @@
             
         </tr>
         <tr>
-            <td colspan="2">Plazo: <strong>{{number_format(($Credito->getRefResquest->getRequest->plazo ?? 0),0)}}</strong></td>
+            <td colspan="2">Plazo: <strong>{{number_format(($Credito->getRefResquest->getRequest->plazo ?? 0),2)}}</strong></td>
         </tr>
         <tr>
             <td colspan="2"> Tasa de Interés: <strong>{{number_format(( $Credito->getRefResquest->getRequest->interes_porcent ?? 0),2)}}</strong></td>
@@ -243,7 +243,7 @@
             
         </tr>
         <tr>
-            <td colspan="2">Plazo: <strong>{{ number_format($Credito->plazo,0) }}</strong></td>
+            <td colspan="2">Plazo: <strong>{{ number_format($Credito->plazo,2) }}</strong></td>
         </tr>
         <tr>
             <td colspan="2">Tasa de Interés: <strong>{{ number_format($Credito->taza_interes,2) }}</strong></td>
