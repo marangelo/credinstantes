@@ -85,7 +85,7 @@
                                                             <div class="col-sm-6 col-md-3 mb-3">
                                                                 <label class="form-label" for="event-name">TELEFONO</label>
                                                                 <div class="input-group">
-                                                                    <span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                                    <span class="input-group-text "><span class="fas fa-phone"></span></span>
                                                                     <input class="form-control" type="text" name="telefono_ref" id="id_telefono_ref" placeholder="Telefono de la referencia" onkeypress='return isNumberKey(event)' maxlength="8" value="" />
                                                                 </div>                                                
                                                             </div>  
@@ -124,6 +124,7 @@
                                                                 <td>{{ $ref->direccion_ref }}</td>
                                                                 <td>
                                                                     <div>
+                                                                        <button class="btn p-0 text-info" type="button" onClick="Editar_Referencias({{$ref}})"><span class="text-500 fas fa-edit"></span></button>
                                                                         <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$ref->id_referencia}},'ref')"><span class="text-500 fas fa-trash-alt"></span></button>
                                                                     </div>
                                                                 </td>
@@ -164,7 +165,7 @@
 
                                                 <div class="col-sm-6 col-md-3 mb-3">
                                                     <label class="form-label" for="event-name">Telefono: </label>
-                                                    <div class="input-group"><span class="input-group-text "><span class="fas fa-phone-alt"></span></span>
+                                                    <div class="input-group"><span class="input-group-text "><span class="fas fa-phone"></span></span>
                                                         <input class="form-control" id="event-name" type="text" name="telefono" onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Cliente->telefono ?? '' }}" />
                                                     </div>
                                                 </div>
@@ -380,6 +381,49 @@
                 </div>  
         </div>
     </section>
+        <div class="modal fade" id="modal_edit_referencias">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="user-block">
+                            <img class="img-circle" src="{{asset('img/nomina.png')}}" alt="User Image">
+                            <span class="username"><a href="#"> Editar referencia</a></span>
+                            <span class="description"># Ingrese informacion de la referencia</span>
+                            <input type="hidden" id="edit_id_referencia" value="0">
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">            
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="fs-0 " for="eventValDay">Nombre Completo: </label>                    
+                                <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
+                                    <input class="form-control" id="edit_nombre_ref" type="text">
+                                </div>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <label class="fs-0 " for="eventValDay">Telefono:</label>                    
+                                <div class="input-group"><span class="input-group-text "><span class="fas fa-phone"></span></span>
+                                    <input class="form-control" id="edit_telefono_ref" type="text" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Direccion:</label>
+                            <div class="input-group date">
+                            <textarea class="form-control" rows="3" id="edit_direcion_ref" ></textarea>
+                        </div>
 
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" id="btn_update_ref"><i class="fas fa-plus "></i> Editar</button>
+                </div>
+            </div>
+        </div>
+    
 </div>
 @endsection

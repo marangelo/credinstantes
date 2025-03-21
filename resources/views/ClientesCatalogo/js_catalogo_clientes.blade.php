@@ -66,7 +66,44 @@
 
             Add_Refencias(table_ref);
 
-        })
+        });
+
+        $("#btn_update_ref").click(function(){
+
+            var nombre_ref = $("#edit_nombre_ref").val();
+            var telefono_ref = $("#edit_telefono_ref").val();
+            var direccion_ref = $("#edit_direcion_ref").val();
+            var id_referencia = $("#edit_id_referencia").val();
+
+            $.ajax({
+                url: '../UpdateReferencia',
+                method: 'POST',
+                data: {
+                    id_referencia   : id_referencia,
+                    nombre_ref      : nombre_ref,
+                    telefono_ref    : telefono_ref,
+                    direccion_ref   : direccion_ref,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    Swal.fire({
+                        title: response.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                        }).then((result) => {
+                            location.reload();
+                            
+                        })
+                },
+                error: function(xhr, status, error) {
+                }
+            });
+
+
+        });
     });
 
 
@@ -309,6 +346,19 @@
 
 
     }
+
+    function Editar_Referencias(id_ref) {
+        var obj = document.querySelector('#modal_edit_referencias');
+        var modal = new window.bootstrap.Modal(obj);
+
+        $("#edit_id_referencia").val(id_ref.id_referencia);
+        $("#edit_nombre_ref").val(id_ref.nombre_ref);
+        $("#edit_telefono_ref").val(id_ref.telefono_ref);
+        $("#edit_direcion_ref").val(id_ref.direccion_ref);
+
+        modal.show();
+    }
+
 
     function FiltrarCatClientes(){
             

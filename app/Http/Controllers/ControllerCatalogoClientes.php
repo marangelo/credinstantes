@@ -171,13 +171,26 @@ class ControllerCatalogoClientes extends Controller
         }
 
         return response()->json(['message' => 'Informacion Actualizada Correctamente'], 200);
+    }
 
+    public function UpdateReferencia(Request $request)
+    {
+        $id_referencia  = $request->input('id_referencia');
+        $nombre_ref     = $request->input('nombre_ref');
+        $telefono_ref   = $request->input('telefono_ref');
+        $direccion_ref  = $request->input('direccion_ref');
 
-
-
-
-
-        
+        ClientesReferencias::updateOrCreate(
+            [
+                'id_referencia' => $id_referencia
+            ],
+            [
+                'nombre_ref'    => $nombre_ref,
+                'telefono_ref'  => $telefono_ref,
+                'direccion_ref' => $direccion_ref
+            ]
+        );
+        return response()->json(['message' => 'Informacion Actualizada Correctamente'], 200);
     }
 
 }
