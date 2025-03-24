@@ -331,7 +331,7 @@
             success: function(response) {
                 Swal.fire({
                     title: response.message,
-                    icon: 'success',
+                    icon: response.icon,
                     showCancelButton: false,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',

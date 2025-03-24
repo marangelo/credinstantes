@@ -97,12 +97,16 @@
                             <td class="text-nowrap">{{$e->telefono }}</td>
                             <td class="text-nowrap">{{$e->cedula }}</td>
                             <td class="text-end">
-                            @if (in_array(Session::get('rol'), [1, 3]))
+                            
                             <div>
+                                @if (in_array(Session::get('rol'), [1]))
                                 <button class="btn p-0 text-info" type="button" onClick="Editar({{$e->id_clientes}})"><span class="text-500 fas fa-edit"></span></button>
                                 <button class="btn p-0 text-red ms-2" type="button" onClick="Remover({{$e->id_clientes}})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                @else
+                                <button class="btn p-0 text-info" type="button" onClick="Editar({{$e->id_clientes}})"><span class="text-500 fas fa-edit"></span></button>
+                                @endif
                             </div>
-                            @endif
+                            
                             </td>
                         </tr>
                         @endforeach     

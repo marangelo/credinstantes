@@ -93,6 +93,8 @@ class ControllerCatalogoClientes extends Controller
     public function UpdateCliente(Request $request)
     {
 
+
+
         $id_cli     = $request->input('id_clientes');
 
         $iGeneral   = $request->input('iGeneral');
@@ -101,76 +103,97 @@ class ControllerCatalogoClientes extends Controller
         $iGarantias = $request->input('iGarantias');
         $iReferencias = $request->input('iReferencias');
 
-
-        Clientes::updateOrCreate(
-            ['id_clientes' => $id_cli],
-            [
-                'nombre'                => $iGeneral['nombres'],
-                'apellidos'             => $iGeneral['apellidos'],
-                'cedula'                => $iGeneral['cedula'],
-                'telefono'              => $iGeneral['telefono'],
-                'id_municipio'          => $iGeneral['selectMunicipio'],
-                'id_departamento'       => $iGeneral['selectDepartamento'],
-                'estado_civil'          => $iGeneral['selectEstadoCivil'],
-                'direccion_domicilio'   => $iGeneral['direccion'],
-                
-            ] 
-        );
-
-        ClientesNegocio::updateOrCreate(
-            ['id_cliente' => $id_cli],
-            [
-                'nombre_negocio'    => $iNegocio['nombre_negocio'],
-                'antiguedad'        => $iNegocio['Antiguedad_negocio'],
-                'direccion'         => $iNegocio['direccion_negocio']              
-            ] 
-        );
+        $lastCredito = Clientes::find($id_cli)->getCreditos[0]->saldo;
+        $lastCredito = number_format($lastCredito, 2, '.', '');
         
-        ClientesConyugue::updateOrCreate(
-            ['id_cliente' => $id_cli],
-            [
-                'nombres'            => $iConyugue['nombres_conyugue'],
-                'apellidos'          => $iConyugue['apellidos_conyugue'],
-                'no_cedula'          => $iConyugue['cedula_conyugue'],
-                'telefono'           => $iConyugue['telefono_conyugue'],    
-                'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
-            ] 
-        );
+        $Rol = Auth::user()->id_rol;
+       
 
-        if(isset($iGarantias) && $iGarantias != null){
-            foreach ($iGarantias as $articulo) {
-                ClientesGarantia::updateOrCreate(
-                    [
-                        'detalle_articulo' => $articulo['detalle_articulo']
 
-                    ],
-                    [
-                        'id_cliente' => $id_cli,
-                        'marca' => $articulo['marca'],
-                        'color' => $articulo['color'],
-                        'valor_recomendado' => $articulo['valor_recomendado']
-                    ]
-                );
+        if (($lastCredito > 0 && $lastCredito != null) && $Rol != 1) {
+            return response()->json([
+                'icon' => 'error',
+                'message' => 'Cliente tiene C$. '.$lastCredito.' saldo pendiente'], 
+                200);
+        } else {
+
+            Clientes::updateOrCreate(
+                ['id_clientes' => $id_cli],
+                [
+                    'nombre'                => $iGeneral['nombres'],
+                    'apellidos'             => $iGeneral['apellidos'],
+                    'cedula'                => $iGeneral['cedula'],
+                    'telefono'              => $iGeneral['telefono'],
+                    'id_municipio'          => $iGeneral['selectMunicipio'],
+                    'id_departamento'       => $iGeneral['selectDepartamento'],
+                    'estado_civil'          => $iGeneral['selectEstadoCivil'],
+                    'direccion_domicilio'   => $iGeneral['direccion'],
+                    
+                ] 
+            );
+    
+            ClientesNegocio::updateOrCreate(
+                ['id_cliente' => $id_cli],
+                [
+                    'nombre_negocio'    => $iNegocio['nombre_negocio'],
+                    'antiguedad'        => $iNegocio['Antiguedad_negocio'],
+                    'direccion'         => $iNegocio['direccion_negocio']              
+                ] 
+            );
+            
+            ClientesConyugue::updateOrCreate(
+                ['id_cliente' => $id_cli],
+                [
+                    'nombres'            => $iConyugue['nombres_conyugue'],
+                    'apellidos'          => $iConyugue['apellidos_conyugue'],
+                    'no_cedula'          => $iConyugue['cedula_conyugue'],
+                    'telefono'           => $iConyugue['telefono_conyugue'],    
+                    'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
+                ] 
+            );
+    
+            if(isset($iGarantias) && $iGarantias != null){
+                foreach ($iGarantias as $articulo) {
+                    ClientesGarantia::updateOrCreate(
+                        [
+                            'detalle_articulo' => $articulo['detalle_articulo']
+    
+                        ],
+                        [
+                            'id_cliente' => $id_cli,
+                            'marca' => $articulo['marca'],
+                            'color' => $articulo['color'],
+                            'valor_recomendado' => $articulo['valor_recomendado']
+                        ]
+                    );
+                }
             }
-        }
-
-        if(isset($iReferencias) && $iReferencias != null){
-            foreach ($iReferencias as $ref) {
-                ClientesReferencias::updateOrCreate(
-                    [
-                        'nombre_ref' => $ref['nombre_ref']
-
-                    ],
-                    [
-                        'id_cliente' => $id_cli,
-                        'direccion_ref' => $ref['direccion_ref'],
-                        'telefono_ref' => $ref['telefono_ref']
-                    ]
-                );
+    
+            if(isset($iReferencias) && $iReferencias != null){
+                foreach ($iReferencias as $ref) {
+                    ClientesReferencias::updateOrCreate(
+                        [
+                            'nombre_ref' => $ref['nombre_ref']
+    
+                        ],
+                        [
+                            'id_cliente' => $id_cli,
+                            'direccion_ref' => $ref['direccion_ref'],
+                            'telefono_ref' => $ref['telefono_ref']
+                        ]
+                    );
+                }
             }
+    
+            return response()->json([
+                'icon' => 'success',
+                'message' => 'Informacion Actualizada Correctamente'], 
+                200);
         }
+        
 
-        return response()->json(['message' => 'Informacion Actualizada Correctamente'], 200);
+
+        
     }
 
     public function UpdateReferencia(Request $request)
