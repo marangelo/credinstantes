@@ -102,6 +102,11 @@
                                 @if (in_array(Session::get('rol'), [1]))
                                 <button class="btn p-0 text-info" type="button" onClick="Editar({{$e->id_clientes}})"><span class="text-500 fas fa-edit"></span></button>
                                 <button class="btn p-0 text-red ms-2" type="button" onClick="Remover({{$e->id_clientes}})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                <button class="btn p-0 text-info" type="button" onClick=""> 
+                                  <i class="far fa-bell"></i>
+                                  <span class="badge badge-danger navbar-badge">1</span>
+                                </button>
+
                                 @else
                                 <button class="btn p-0 text-info" type="button" onClick="Editar({{$e->id_clientes}})"><span class="text-500 fas fa-edit"></span></button>
                                 @endif

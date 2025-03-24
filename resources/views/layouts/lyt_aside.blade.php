@@ -1,3 +1,4 @@
+
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-dark">
     <!-- Left navbar links -->
@@ -12,8 +13,46 @@
 
 
       <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown"></li>
+
+      
+
+      
+
       <li class="nav-item dropdown">
-       
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-danger navbar-badge">7</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+          
+            @for ($i = 0; $i < 7; $i++)
+            <a href="#" class="dropdown-item">
+            <div class="media">
+            <img src="{{ asset('img/user.png')}}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  ALBA LUZ SANDOVAL CUBILLO
+                  <span class="float-right text-sm text-primary"><i class="fas fa-edit"></i></span>
+                </h3>
+                <p class="text-sm">Solicitud de edicion de info...</p>
+                <span class="text-sm text-muted"><i class="far fa-clock mr-1"></i> IVIS VARGAS (PN) - 7:30 PM today</span>
+              </div>
+            </div>
+            </a>
+           
+            @endfor
+          
+          
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">Todas las Notificaciones</a>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{{route('logout')}}">
+          <i class="nav-icon fas fa-sign-out-alt"></i>
+        </a>
       </li>
       
       
