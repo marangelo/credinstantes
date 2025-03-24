@@ -141,80 +141,96 @@
                                     
                                     <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                         <form action="#!" method="post" id="frm_info_cliente">
-                                            <div class="row gx-2">
-                                                <div class="col-sm-6 col-md-4 mb-3">
-                                                    <label class="form-label" for="event-name">Nombres</label>
-                                                    <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                        <input class="form-control" type="text" name="nombres" placeholder="Nombres de la persona" required="" value="{{ $Cliente->nombre ?? '' }}" />
+
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <div class="card card-primary card-outline mt-3">
+                                                            <div class="card-body box-profile">
+                                                                <div class="text-center">
+                                                                <img 
+                                                                    class="profile-user-img img-fluid img-circle"
+                                                                    src="{{ asset('img/user-01.png')}}"
+                                                                    alt="User profile picture">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div class="row">                                                
+                                                            <div class="col-sm-6 col-md-4 mb-3">
+                                                                <label class="form-label" for="event-name">Nombres</label>
+                                                                <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                                    <input class="form-control" type="text" name="nombres" placeholder="Nombres de la persona" required="" value="{{ $Cliente->nombre ?? '' }}" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-6 col-md-4 mb-3">
+                                                                <label class="form-label" for="event-name">Apellidos</label>
+                                                                <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                                    <input class="form-control" type="text" name="apellidos" placeholder="Apellidos de la persona" value="{{ $Cliente->apellidos ?? '' }}" />
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-sm-6 col-md-4 mb-3">
+                                                                <label class="form-label" for="event-name">Cedula</label>
+                                                                <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
+                                                                    <input class="form-control" id="event-name" type="text" name="cedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value="{{ $Cliente->cedula ?? '' }}"/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-6 col-md-3 mb-3">
+                                                                <label class="form-label" for="event-name">Telefono: </label>
+                                                                <div class="input-group"><span class="input-group-text "><span class="fas fa-phone"></span></span>
+                                                                    <input class="form-control" id="event-name" type="text" name="telefono" onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Cliente->telefono ?? '' }}" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-6 col-md-3 mb-3">
+                                                                <label class="form-label" for="event-name">Departamento </label>
+                                                                <select class="custom-select" name="selectDepartamento" id="selectDepartamento">
+                                                                    <option value="0">Seleccione un Departamento</option>
+                                                                    @foreach ($Departamentos as $d)
+                                                                        <option value="{{$d->id_departamento}}" {{ ($Cliente->id_departamento == $d->id_departamento) ? 'selected' : '' }}> 
+                                                                            {{strtoupper($d->nombre_departamento)}}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-sm-6 col-md-3 mb-3">
+                                                                <label class="form-label" for="event-name">Municipio </label>
+                                                                <select class="custom-select" name="selectMunicipio" id="selectMunicipio">
+                                                                    <option value="0">Seleccione un municipio</option>
+                                                                    @foreach ($Municipios as $m)
+                                                                        <option value="{{$m->id_municipio}}" {{ ($Cliente->id_municipio == $m->id_municipio) ? 'selected' : '' }}> 
+                                                                            {{strtoupper($m->nombre_municipio)}}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-sm-6 col-md-3 mb-3">
+                                                                <label class="form-label" for="event-name">Estado Civil</label>
+                                                                <select class="custom-select" name="selectEstadoCivil" id="selectEstadoCivil">
+                                                                    <option value="0" {{ ($Cliente->estado_civil ?? '') == '0' ? 'selected' : '' }}>Seleccione un estado civil</option>
+                                                                    <option value="1" {{ ($Cliente->estado_civil ?? '') == '1' ? 'selected' : '' }}>Soltero(a)</option>
+                                                                    <option value="2" {{ ($Cliente->estado_civil ?? '') == '2' ? 'selected' : '' }}>Casado(a)</option>
+                                                                    <option value="3" {{ ($Cliente->estado_civil ?? '') == '3' ? 'selected' : '' }}>Divorciado(a)</option>
+                                                                    <option value="4" {{ ($Cliente->estado_civil ?? '') == '4' ? 'selected' : '' }}>Viudo(a)</option>
+                                                                    <option value="5" {{ ($Cliente->estado_civil ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <label class="form-label" for="event-description">Barrio y Direccion</label>
+                                                                <textarea class="form-control" rows="6" required="" name="direccion" >{{ $Cliente->direccion_domicilio ?? '' }}</textarea>
+                                                            </div>                                                
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-sm-6 col-md-4 mb-3">
-                                                    <label class="form-label" for="event-name">Apellidos</label>
-                                                    <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                        <input class="form-control" type="text" name="apellidos" placeholder="Apellidos de la persona" value="{{ $Cliente->apellidos ?? '' }}" />
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="col-sm-6 col-md-4 mb-3">
-                                                    <label class="form-label" for="event-name">Cedula</label>
-                                                    <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
-                                                        <input class="form-control" id="event-name" type="text" name="cedula" data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value="{{ $Cliente->cedula ?? '' }}"/>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6 col-md-3 mb-3">
-                                                    <label class="form-label" for="event-name">Telefono: </label>
-                                                    <div class="input-group"><span class="input-group-text "><span class="fas fa-phone"></span></span>
-                                                        <input class="form-control" id="event-name" type="text" name="telefono" onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Cliente->telefono ?? '' }}" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6 col-md-3 mb-3">
-                                                    <label class="form-label" for="event-name">Departamento </label>
-                                                    <select class="custom-select" name="selectDepartamento" id="selectDepartamento">
-                                                        <option value="0">Seleccione un Departamento</option>
-                                                        @foreach ($Departamentos as $d)
-                                                            <option value="{{$d->id_departamento}}" {{ ($Cliente->id_departamento == $d->id_departamento) ? 'selected' : '' }}> 
-                                                                {{strtoupper($d->nombre_departamento)}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-sm-6 col-md-3 mb-3">
-                                                    <label class="form-label" for="event-name">Municipio </label>
-                                                    <select class="custom-select" name="selectMunicipio" id="selectMunicipio">
-                                                        <option value="0">Seleccione un municipio</option>
-                                                        @foreach ($Municipios as $m)
-                                                            <option value="{{$m->id_municipio}}" {{ ($Cliente->id_municipio == $m->id_municipio) ? 'selected' : '' }}> 
-                                                                {{strtoupper($m->nombre_municipio)}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-sm-6 col-md-3 mb-3">
-                                                    <label class="form-label" for="event-name">Estado Civil</label>
-                                                    <select class="custom-select" name="selectEstadoCivil" id="selectEstadoCivil">
-                                                        <option value="0" {{ ($Cliente->estado_civil ?? '') == '0' ? 'selected' : '' }}>Seleccione un estado civil</option>
-                                                        <option value="1" {{ ($Cliente->estado_civil ?? '') == '1' ? 'selected' : '' }}>Soltero(a)</option>
-                                                        <option value="2" {{ ($Cliente->estado_civil ?? '') == '2' ? 'selected' : '' }}>Casado(a)</option>
-                                                        <option value="3" {{ ($Cliente->estado_civil ?? '') == '3' ? 'selected' : '' }}>Divorciado(a)</option>
-                                                        <option value="4" {{ ($Cliente->estado_civil ?? '') == '4' ? 'selected' : '' }}>Viudo(a)</option>
-                                                        <option value="5" {{ ($Cliente->estado_civil ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
-                                                    </select>
-                                                </div>
-                                                
-                                                <div class="col-12">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <label class="form-label" for="event-description">Barrio y Direccion</label>
-                                                            <textarea class="form-control" rows="6" required="" name="direccion" >{{ $Cliente->direccion_domicilio ?? '' }}</textarea>
-                                                        </div>                                                
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </form>
                                     </div>
 

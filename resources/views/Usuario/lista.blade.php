@@ -123,133 +123,148 @@
             <div class="card card-warning">
             
               <!-- /.card-header -->
-              <div class="card-body">                  
-                  <div class="row">
-                    <div class="col-md-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-2">
 
-                      <div class="form-group">
-                        <label>Nombre Completo:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                          </div>
-                          <input type="text" id="txtFullName" class="form-control" placeholder="Wilmer Ramos">
+                    <div class="card card-primary card-outline mt-3">
+                      <div class="card-body box-profile">
+                        <div class="text-center">
+                          <img 
+                            class="profile-user-img img-fluid img-circle"
+                            src="{{ asset('img/user-01.png')}}"
+                            alt="User profile picture">
                         </div>
                       </div>
-                      
-                    
                     </div>
-                    <div class="col-md-4">
-                      
-                      <div class="form-group">
-                        <label>Email:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-at"></i></span>
+
+                  </div>
+                  <div class="col-md-10">
+
+                    <div class="row" >
+                      <div class="col-md-4">
+
+                        <div class="form-group">
+                          <label>Nombre Completo:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" id="txtFullName" class="form-control" placeholder="Wilmer Ramos">
                           </div>
-                          <input type="text" id="txtUserName" class="form-control" placeholder="demo@demo.com">
                         </div>
-                      </div>
+                        
                       
+                      </div>
+
+                      <div class="col-md-4">
+                        
+                        <div class="form-group">
+                          <label>Email:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-at"></i></span>
+                            </div>
+                            <input type="text" id="txtUserName" class="form-control" placeholder="demo@demo.com">
+                          </div>
+                        </div>
+                        
+                        
+                      </div>
+
+                      <div class="col-md-4">
+                        
+                        <div class="form-group">
+                          <label>Telefono:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            </div>
+                            <input type="text" id="txtPhone" class="form-control" placeholder="" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
+                          </div>
+                        </div>
+                        
+                        
+                      </div>
+
+                      <div class="col-md-3">
+
+                        <div class="form-group">
+                          <label>Contraseña:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" id="txtPassWord_one" class="form-control"  >
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="col-md-3">
+
+                        <div class="form-group">
+                          <label>Confirme contraseña:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-key"></i></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="txtPassWord_two" >
+                          </div>
+                        </div>
+                        
+                      </div>
+
+                      <div class="col-md-3">
+
+                        <div class="form-group">
+                          <label>Permiso:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-user-shield"></i></i></span>
+                            </div>
+                            <select class="form-control" id="sclPrivi">
+                              @foreach ($Roles as $r)
+                                <option value="{{$r->id}}"> {{strtoupper($r->descripcion)}}</option>
+                              @endforeach                       
+                            </select>
+                          </div>
+                        </div>
+
+                      
+                      </div>
+
+                      <div class="col-md-3">
+
+                        <div class="form-group">
+                          <label>Zona:</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-user-shield"></i></i></span>
+                            </div>
+                            <select class="form-control" id="sclZona">
+                              @foreach ($Zonas as $z)
+                                <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                              @endforeach                       
+                            </select>
+                          </div>
+                        </div>
+
+                      
+                      </div>
                       
                     </div>
-                    <div class="col-md-4">
-                      
-                      <div class="form-group">
-                        <label>Telefono:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                          </div>
-                          <input type="text" id="txtPhone" class="form-control" placeholder="" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
-                        </div>
-                      </div>
-                      
-                      
+
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Comentarios</label>
+                      <textarea class="form-control" id="txtComentario" rows="3" placeholder="Algun comentario ? ..."></textarea>
                     </div>
                   </div>
-                  <div class="row">
-
-                    <div class="col-md-3">
-
-                      <div class="form-group">
-                        <label>Contraseña:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                          </div>
-                          <input type="password" id="txtPassWord_one" class="form-control"  >
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <div class="col-md-3">
-
-                      <div class="form-group">
-                        <label>Confirme contraseña:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key"></i></i></span>
-                          </div>
-                          <input type="password" class="form-control" id="txtPassWord_two" >
-                        </div>
-                      </div>
-                      
-                    </div>
-
-                    <div class="col-md-3">
-
-                      <div class="form-group">
-                        <label>Permiso:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user-shield"></i></i></span>
-                          </div>
-                          <select class="form-control" id="sclPrivi">
-                            @foreach ($Roles as $r)
-                              <option value="{{$r->id}}"> {{strtoupper($r->descripcion)}}</option>
-                            @endforeach                       
-                          </select>
-                        </div>
-                      </div>
-
-                    
-                    </div>
-
-                    <div class="col-md-3">
-
-                      <div class="form-group">
-                        <label>Zona:</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user-shield"></i></i></span>
-                          </div>
-                          <select class="form-control" id="sclZona">
-                            @foreach ($Zonas as $z)
-                              <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
-                            @endforeach                       
-                          </select>
-                        </div>
-                      </div>
-
-                    
-                    </div>
-                    
-                  </div>
-                  
-                  
-
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="form-group">
-                        <label>Comentarios</label>
-                        <textarea class="form-control" id="txtComentario" rows="3" placeholder="Algun comentario ? ..."></textarea>
-                      </div>
-                    </div>
-                  </div>
-
-                 
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
