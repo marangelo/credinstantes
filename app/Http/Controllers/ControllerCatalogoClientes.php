@@ -107,8 +107,6 @@ class ControllerCatalogoClientes extends Controller
         $lastCredito = number_format($lastCredito, 2, '.', '');
         
         $Rol = Auth::user()->id_rol;
-       
-
 
         if (($lastCredito > 0 && $lastCredito != null) && $Rol != 1) {
             return response()->json([
