@@ -143,31 +143,39 @@
                                         <form action="#!" method="post" id="frm_info_cliente">
 
                                                 <div class="row">
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-3">
                                                         <div class="card card-primary card-outline mt-3">
                                                             <div class="card-body box-profile">
-                                                                <div class="text-center">
-                                                                <img 
-                                                                    class="profile-user-img img-fluid img-circle"
-                                                                    src="{{ asset('img/user-01.png')}}"
-                                                                    alt="User profile picture">
+                                                                <div class="text-center ">
+                                                                    <img 
+                                                                        class="img-fluid" 
+                                                                        src="{{ $Cliente->foto ? asset('Fotos/Clientes/'.$Cliente->foto) : asset('Fotos/default.jpg')}}" 
+                                                                        id="img_perfil" 
+                                                                        alt="User profile picture" 
+                                                                        style="width: 250px; border-radius: 10px;">
+                                                                </div>
+                                                            
+                                                            <div class="custom-file mt-3">
+                                                                <label class="custom-file-label" for="customFile">Imagen a Cargar</label>
+                                                                <input type="file" class="custom-file-input" id="customFile"  
+                                                                onchange="UploadImg()" accept="image/*">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     </div>
-                                                    <div class="col-md-10">
+                                                    <div class="col-md-9">
                                                         <div class="row">                                                
                                                             <div class="col-sm-6 col-md-4 mb-3">
                                                                 <label class="form-label" for="event-name">Nombres</label>
                                                                 <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                                    <input class="form-control" type="text" name="nombres" placeholder="Nombres de la persona" required="" value="{{ $Cliente->nombre ?? '' }}" />
+                                                                    <input class="form-control" type="text" name="nombres" id="id_nombres" placeholder="Nombres de la persona" required="" value="{{ $Cliente->nombre ?? '' }}" />
                                                                 </div>
                                                             </div>
 
                                                             <div class="col-sm-6 col-md-4 mb-3">
                                                                 <label class="form-label" for="event-name">Apellidos</label>
                                                                 <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                                    <input class="form-control" type="text" name="apellidos" placeholder="Apellidos de la persona" value="{{ $Cliente->apellidos ?? '' }}" />
+                                                                    <input class="form-control" type="text" name="apellidos" id="id_apellidos" placeholder="Apellidos de la persona" value="{{ $Cliente->apellidos ?? '' }}" />
                                                                 </div>
                                                             </div>
                                                             
@@ -220,9 +228,7 @@
                                                                     <option value="5" {{ ($Cliente->estado_civil ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
                                                                 </select>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
+                                                            <div class="col-12">
                                                         <div class="row">
                                                             <div class="col-12">
                                                                 <label class="form-label" for="event-description">Barrio y Direccion</label>
@@ -230,6 +236,9 @@
                                                             </div>                                                
                                                         </div>
                                                     </div>
+                                                        </div>
+                                                    </div>
+                                                    
                                                 </div>
                                         </form>
                                     </div>

@@ -15,7 +15,7 @@ class Clientes extends Model
     protected $primaryKey = 'id_clientes';
 
     protected $fillable = [
-        'id_clientes','id_municipio','id_departamento','id_zona','nombre','apellidos','direccion_domicilio','cedula','telefono','activo','estado_civil','score'
+        'id_clientes','id_municipio','id_departamento','id_zona','nombre','apellidos','direccion_domicilio','cedula','telefono','activo','estado_civil','score','foto'
     ];
     
     public function getNegocio()

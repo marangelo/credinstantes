@@ -211,6 +211,7 @@ Route::post('rmReferencia', 'ControllerCatalogoClientes@rmReferencia')->name('rm
 Route::post('FiltrarClientes', 'ControllerCatalogoClientes@FiltrarClientes')->name('FiltrarClientes');
 
 Route::post('UpdateReferencia', 'ControllerCatalogoClientes@UpdateReferencia')->name('UpdateReferencia');
+Route::post('UploadImg', 'ControllerCatalogoClientes@UploadImg')->name('UploadImg');
 
 
 

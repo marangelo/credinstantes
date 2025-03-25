@@ -29,7 +29,6 @@
             }
         });
 
-
         $("#btn_filter_clientes").click(function() {    
             FiltrarCatClientes();
         });
@@ -106,7 +105,62 @@
         });
     });
 
+    async function UploadImg() {
+        const fileInput = document.getElementById("customFile");
 
+        if (!fileInput.files.length) {
+            Swal.fire("Error", "Por favor selecciona una imagen", "error");
+            return;
+        }
+
+        let formData = new FormData();        
+
+        var id_clientes     = $("#id_clientes").html();
+        var id_nombres      = $("#id_nombres").val();
+        var id_apellidos    = $("#id_apellidos").val();
+
+
+        formData.append("file", fileInput.files[0]);
+        formData.append("_token", "{{ csrf_token() }}");
+        formData.append("id_clientes", id_clientes);
+        formData.append("Nombres", id_nombres);
+        formData.append("Apellidos", id_apellidos);
+
+        Swal.fire({
+            title: "Subiendo imagen...",
+            text: "Por favor, espera mientras se sube la imagen.",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading(); 
+            }
+        });
+
+        try {
+            let response = await fetch("../UploadImg", {
+                method: "POST",
+                body: formData
+            });
+
+            let data = await response.json();
+
+            if (response.ok) {
+
+                $("#img_perfil").attr("src", data.file_path);
+
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "Imagen subida correctamente.",
+                    icon: "success",
+                    imageAlt: "Imagen subida"
+                });
+                
+            } else {
+                Swal.fire("Error", data.message, "error");
+            }
+        } catch (error) {
+            Swal.fire("Error", "Hubo un problema al subir la imagen", "error");
+        }
+    }
     function Editar(id) {
         window.location ="FormClientes/" + id
     }
@@ -282,10 +336,12 @@
 
         var tbl_referencias = $('#tbl_refencias').DataTable();
         var rows_referencias  = tbl_referencias.rows().data().toArray();
+        
 
         $.each($("#frm_info_cliente").serializeArray(), function (i, field) {
             Info_general[field.name] = field.value;
         });
+        
 
         $.each($("#frm_info_cliente_negocio").serializeArray(), function (i, field) {
             Info_negocio[field.name] = field.value;

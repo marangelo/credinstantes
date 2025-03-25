@@ -193,6 +193,48 @@ class ControllerCatalogoClientes extends Controller
 
         
     }
+    public function UploadImg(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $id_clientes = $request->input('id_clientes');
+            $Nombres = $request->input('Nombres');
+            $Apellidos = $request->input('Apellidos');
+
+            // Nombre del archivo
+            $name = $id_clientes . '_' . strtoupper(str_replace(' ', '_', $Nombres)) . '_' . strtoupper(str_replace(' ', '_', $Apellidos)) . '.' . $file->getClientOriginalExtension();            
+
+            //$name = $id_clientes . '_' . $file->getClientOriginalName(); // Evita nombres duplicados
+            $destinationPath = public_path('Fotos/Clientes'); // Ruta dentro de public
+
+            // Eliminar archivo anterior
+            if (file_exists($destinationPath . '/' . $name)) {
+                unlink($destinationPath . '/' . $name);
+            }            
+
+            // Asegurar que la carpeta existe
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // Mover el archivo a la carpeta deseada
+            $file->move($destinationPath, $name);
+
+            // Actualizar la base de datos
+            Clientes::updateOrCreate(
+                ['id_clientes' => $id_clientes],
+                ['foto' => $name]
+            );
+
+            return response()->json([
+                'message' => 'Foto actualizada',
+                'file_path' => asset('Fotos/Clientes/' . $name) 
+            ], 200);
+        }
+
+        return response()->json(['message' => 'No se recibió un archivo'], 400);
+    }
+
 
     public function UpdateReferencia(Request $request)
     {

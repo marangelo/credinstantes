@@ -119,7 +119,24 @@
 <!-- Page specific script -->
 @yield('metodosjs')
 
+<script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+
 <script src="{{ asset('js/chart.js/Chart.min.js') }}"></script>
 <script src=" https://cdn.jsdelivr.net/npm/underscore@1.13.7/underscore-umd-min.js"></script>
+<script>
+  //PERMITE MOSTRAR IMAGENES EN MODAL DE MANERA GLOBAL
+  $(document).on('click', '.img-fluid', function (e) {
+      Swal.fire({
+          showCloseButton: true,
+          showConfirmButton: false,
+          imageUrl: $(this).attr('src'),
+      })
+
+      $(".swal2-popup").css('width', '50%');
+  })
+  $(function () {
+    bsCustomFileInput.init();
+  });
+</script>
 </body>
 </html>
