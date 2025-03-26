@@ -108,7 +108,7 @@ class ControllerCatalogoClientes extends Controller
         
         $Rol = Auth::user()->id_rol;
 
-        if (($lastCredito > 0 && $lastCredito != null) && $Rol != 1) {
+        if (($lastCredito > 0 && $lastCredito != null) && ($Rol != 1 && $Rol != 3)) {
             return response()->json([
                 'icon' => 'error',
                 'message' => 'Cliente tiene C$. '.$lastCredito.' saldo pendiente'], 

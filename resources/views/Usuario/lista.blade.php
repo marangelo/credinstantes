@@ -125,21 +125,8 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <div class="row">
-                  <div class="col-md-2">
-
-                    <div class="card card-primary card-outline mt-3">
-                      <div class="card-body box-profile">
-                        <div class="text-center">
-                          <img 
-                            class="profile-user-img img-fluid img-circle"
-                            src="{{ asset('img/user-01.png')}}"
-                            alt="User profile picture">
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <div class="col-md-10">
+                  
+                  <div class="col-md-12">
 
                     <div class="row" >
                       <div class="col-md-4">
@@ -252,18 +239,20 @@
 
                       
                       </div>
+
+                      <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Comentarios</label>
+                      <textarea class="form-control" id="txtComentario" rows="4" placeholder="Algun comentario ? ..."></textarea>
+                    </div>
+                  </div>
                       
                     </div>
 
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Comentarios</label>
-                      <textarea class="form-control" id="txtComentario" rows="3" placeholder="Algun comentario ? ..."></textarea>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
               <!-- /.card-body -->
