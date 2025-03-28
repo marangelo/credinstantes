@@ -143,7 +143,7 @@
                                         <form action="#!" method="post" id="frm_info_cliente">
 
                                                 <div class="row">
-                                                    <div class="col-md-12" style="display:none;">
+                                                    <div class="col-md-3">
                                                         <div class="card card-primary card-outline mt-3">
                                                             <div class="card-body box-profile">
                                                                 <div class="text-center ">
@@ -163,7 +163,7 @@
                                                         </div>
                                                     </div>
                                                     </div>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-9">
                                                         <div class="row">                                                
                                                             <div class="col-sm-6 col-md-4 mb-3">
                                                                 <label class="form-label" for="event-name">Nombres</label>

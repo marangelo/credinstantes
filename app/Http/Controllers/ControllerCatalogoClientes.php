@@ -92,9 +92,6 @@ class ControllerCatalogoClientes extends Controller
 
     public function UpdateCliente(Request $request)
     {
-
-
-
         $id_cli     = $request->input('id_clientes');
 
         $iGeneral   = $request->input('iGeneral');
@@ -256,4 +253,5 @@ class ControllerCatalogoClientes extends Controller
         return response()->json(['message' => 'Informacion Actualizada Correctamente'], 200);
     }
 
+    
 }

@@ -15,7 +15,7 @@
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown"></li>
 
-      <li class="nav-item dropdown" style="display:none">
+      <li class="nav-item dropdown" >
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-danger navbar-badge">7</span>
