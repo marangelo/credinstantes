@@ -198,8 +198,8 @@
                                 cancelButtonColor: '#d33',
                                 confirmButtonText: 'OK'
                                 }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
+                                    if (result.isConfirmed) {
+                                        location.reload();
                                     }
                                 })
                             }
@@ -276,7 +276,7 @@
 
         // Agregar la fila a la tabla
         var row = table.row.add([
-            count,
+            0,
             detalles,
             marca,
             color,
@@ -393,7 +393,7 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'OK'
                     }).then((result) => {
-                        
+                        location.reload();
                     })
             },
             error: function(xhr, status, error) {

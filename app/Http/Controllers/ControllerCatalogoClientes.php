@@ -148,14 +148,11 @@ class ControllerCatalogoClientes extends Controller
             );
     
             if(isset($iGarantias) && $iGarantias != null){
-                foreach ($iGarantias as $articulo) {
-                    ClientesGarantia::updateOrCreate(
-                        [
-                            'detalle_articulo' => $articulo['detalle_articulo']
-    
-                        ],
+                foreach ($iGarantias as $articulo) {                 
+                    ClientesGarantia::create(
                         [
                             'id_cliente' => $id_cli,
+                            'detalle_articulo' => $articulo['detalle_articulo'],
                             'marca' => $articulo['marca'],
                             'color' => $articulo['color'],
                             'valor_recomendado' => $articulo['valor_recomendado']

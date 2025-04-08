@@ -385,7 +385,14 @@
                                                                 <td>{{ $garantia->valor_recomendado }}</td>
                                                                 <td>
                                                                     <div>
-                                                                        <button class="btn p-0 text-red ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remover" onClick="Remover({{$garantia->id_garantia}},'gar')"><span class="text-500 fas fa-trash-alt"></span></button>
+                                                                        <button 
+                                                                        class="btn p-0 text-red ms-2" 
+                                                                        type="button" data-bs-toggle="tooltip" 
+                                                                        data-bs-placement="top" 
+                                                                        title="Remover" 
+                                                                        onClick="Remover({{$garantia->id_garantia}},'gar')">
+                                                                            <span class="text-500 fas fa-trash-alt"></span>
+                                                                        </button>
                                                                     </div>
                                                                 </td>
                                                                 <td>N</td>
