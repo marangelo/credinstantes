@@ -36,7 +36,7 @@
         <div class="card card-secondary">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-10">
                 <div class="form-group">
                     <div class="input-group date" id="dt-end" data-target-input="nearest">
                         <div class="input-group-prepend">
@@ -46,6 +46,27 @@
                     </div>
                 </div>
               </div>
+              <div class="col-md-1">
+                <div class="btn-group w-100">
+                      <button type="button" class="btn btn-warning" id="btn_export_payroll">
+                        <i class="fas fa-file-excel"></i> Exportar
+                      </button>
+                  </div>
+              </div>
+              <div class="col-md-1">
+                <div class="btn-group w-100">
+                    @if(Auth::User()->id_rol == 1  && $Payrolls->payroll_status_id < 3)
+                      <button type="button" class="btn btn-success" id="btn_process_payroll">
+                          <i class="far fa-credit-card"></i> Procesar
+                      </button>
+                    @elseif(Auth::User()->id_rol == 3 && $Payrolls->payroll_status_id == 1)
+                      <button type="button" class="btn btn-primary" id="btn_process_payroll">
+                        <i class="fas fa-check"></i> Aprobar
+                      </button>
+                    @endif
+                  </div>
+              </div>
+            
             </div>
             <div class="table-responsive scrollbar">
               <table class="table table-striped border-bottom" id="tbl_payroll_details">
@@ -60,6 +81,7 @@
                   <th class="border-0 text-center">DIAS TRABADOS</th>
                   <th class="border-0 text-center">SALARIO QUINCENAL</th>
                   <th class="border-0 text-center">INSS LABORAL</th>
+                  <th class="border-0 text-center">DEDUCCIONES</th>
                   <th class="border-0 text-center">NETO A PAGAR</th>
                   <th class="border-0 text-center">FIRMA</th>
                   <th class="border-0 text-center">INSS PATRONAL</th>
@@ -98,6 +120,7 @@
                     <td class="align-middle text-center"> {{ number_format($p->dias_trabajados,2) }} </td>
                     <td class="align-middle text-center">C$. {{ number_format( $p->salario_quincenal,2)}} </td>
                     <td class="align-middle text-right">C$. {{ number_format($p->inss_laboral,2) }} </td>
+                    <td class="align-middle text-right">C$. {{ number_format($p->deducciones,2) }} </td>
                     <td class="align-middle text-right">C$. {{ number_format($NetoPagar,2) }} </td>
                     <td class="align-middle text-center"> - </td>
                     <td class="align-middle text-right">C$. {{ number_format($p->inss_patronal,2) }} </td>
@@ -115,7 +138,7 @@
                   <tfoot>
                     
                     <tr>
-                      <td class="border-0" colspan="9">SUB TOTAL.</td>
+                      <td class="border-0" colspan="10">SUB TOTAL.</td>
                       <td class="border-0 text-right">C$. <span id="neto_pagar_payroll">{{ number_format($ttNETO,2) }}</span></td>
                       <td class="border-0 text-center" colspan="2">  </td>
                       <td class="border-0 text-right">C$. {{ number_format($ttVACACIONES,2) }}</td>
@@ -125,25 +148,6 @@
                   </tfoot>
               </table>
             </div>
-          </div>
-          <div class="card-footer">
-            
-            <div class="text-right">
-              <a href="#" class="btn bg-warning" id="btn_export_payroll">
-                <i class="fas fa-file-excel"></i> Exportar
-              </a>
-              @if(Auth::User()->id_rol == 1  && $Payrolls->payroll_status_id < 3)
-                <a href="#" class="btn btn-success" id="btn_process_payroll">
-                  <i class="far fa-credit-card"></i> Procesar
-                </a>
-                @elseif(Auth::User()->id_rol == 3 && $Payrolls->payroll_status_id == 1)
-                <a href="#" class="btn btn-primary" id="btn_process_payroll">
-                  <i class="fas fa-check"></i> Aprobar
-                </a>
-              @endif
-            </div>
-            
-            
           </div>
         </div>
       </div>
@@ -173,14 +177,20 @@
                         </div>
                     </div>
 
-                  
                     <div class="col-md-6 mb-3">
                         <label class="fs-0 " for="eventValDay">DIAS TRABAJADOS: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-calendar"></span></span>
                             <input class="form-control" id="payroll_dias_trabajados" type="text" name="inatec" placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>
                     </div>
-                    
+
+                    <div class="col-md-12 mb-3">
+                        <label class="fs-0 " for="eventValDay">DEDUCIONES C$.: </label>                    
+                        <div class="input-group"><span class="input-group-text "><span class="fas fa-donate"></span></span>
+                            <input class="form-control" id="id_deducciones" type="text" name="nm_deducciones"  placeHolder="0.00" onkeypress='return isNumberKey(event)'>
+                        </div>
+                    </div>
+
                     <div class="col-md-6 mb-3">
                         <label class="fs-0 " for="eventValDay">INSS PATRONAL C$.: </label>                    
                         <div class="input-group"><span class="input-group-text "><span class="fas fa-donate"></span></span>
@@ -193,6 +203,8 @@
                             <input class="form-control" id="payroll_ir" type="text" placeHolder="0.00" onkeypress='return isNumberKey(event)'>
                         </div>
                     </div>
+
+                   
                         
                 </div>
             </div>

@@ -276,7 +276,7 @@ class Payroll extends Model {
         );
 
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:O3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:P3');
         $style = array(
             'font' => array(
             'name'      => 'Tahoma',
@@ -300,7 +300,7 @@ class Payroll extends Model {
                 )
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A1:O3')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:P3')->applyFromArray($style);
     
         $color_totales = array(                   
             'fill' => array(
@@ -320,14 +320,15 @@ class Payroll extends Model {
         ->setCellValue('G5',  'DIAS TRABAJADOS')
         ->setCellValue('H5',  'SALARIO QUINCENAL')
         ->setCellValue('I5',  'INSS LABORAL')
-        ->setCellValue('J5',  'NETO A PAGAR')
-        ->setCellValue('K5',  'FIRMA')
-        ->setCellValue('L5',  'INSS PATRONAL')
-        ->setCellValue('M5',  'VACACIONES')
-        ->setCellValue('N5',  'PROV. AGUINALDO')
-        ->setCellValue('O5',  'PROV. INDENMNIZACION');
+        ->setCellValue('J5',  'DEDUDUCCIONES')
+        ->setCellValue('K5',  'NETO A PAGAR')
+        ->setCellValue('L5',  'FIRMA')
+        ->setCellValue('M5',  'INSS PATRONAL')
+        ->setCellValue('N5',  'VACACIONES')
+        ->setCellValue('O5',  'PROV. AGUINALDO')
+        ->setCellValue('P5',  'PROV. INDENMNIZACION');
 
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:O5')->applyFromArray($color_totales);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:P5')->applyFromArray($color_totales);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
@@ -343,8 +344,9 @@ class Payroll extends Model {
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
         
-        $objPHPExcel->getActiveSheet()->getStyle('A5:O5')->applyFromArray($estiloTituloColumnas);      
+        $objPHPExcel->getActiveSheet()->getStyle('A5:P5')->applyFromArray($estiloTituloColumnas);      
 
         $i=6;
         
@@ -352,6 +354,10 @@ class Payroll extends Model {
         $ttAGUINALDO = 0;
         $ttINDENMNIZACION = 0;
         $ttNetoPagar = 0;   
+
+        $ttSalarioMensual = 0;
+        $ttSalarioQuincenal = 0;
+        $ttInssLaboral = 0;
 
         foreach ($Employes as $e ){
             $objPHPExcel->setActiveSheetIndex(0)
@@ -364,17 +370,22 @@ class Payroll extends Model {
             ->setCellValue('G'.$i,  $e->dias_trabajados)
             ->setCellValue('H'.$i,  $e->salario_quincenal)
             ->setCellValue('I'.$i,  $e->inss_laboral)
-            ->setCellValue('J'.$i,  $e->neto_pagar)
-            ->setCellValue('K'.$i,  ' ')
-            ->setCellValue('L'.$i,  $e->inss_patronal)
-            ->setCellValue('M'.$i,  $e->vacaciones)
-            ->setCellValue('N'.$i,  $e->aguinaldo)
-            ->setCellValue('O'.$i,  $e->indenmnizacion);
+            ->setCellValue('J'.$i,  $e->deducciones)
+            ->setCellValue('K'.$i,  $e->neto_pagar)
+            ->setCellValue('L'.$i,  ' ')
+            ->setCellValue('M'.$i,  $e->inss_patronal)
+            ->setCellValue('N'.$i,  $e->vacaciones)
+            ->setCellValue('O'.$i,  $e->aguinaldo)
+            ->setCellValue('P'.$i,  $e->indenmnizacion);
 
             $ttVACACIONES += $e->vacaciones;
             $ttAGUINALDO += $e->aguinaldo;
             $ttINDENMNIZACION += $e->indenmnizacion;
             $ttNetoPagar += $e->neto_pagar;
+
+            $ttSalarioMensual += $e->salario_mensual;
+            $ttSalarioQuincenal += $e->salario_quincenal;
+            $ttInssLaboral += $e->inss_laboral;
 
             $i++;
             
@@ -384,17 +395,22 @@ class Payroll extends Model {
         $objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode($formatCode);
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  '')
                 ->setCellValue('A'.$i,  'SUBTOTAL')
-                ->setCellValue('J'.$i,  number_format($ttNetoPagar,2,'.',''))
-                ->setCellValue('M'.$i,  number_format($ttVACACIONES,2,'.',''))
-                ->setCellValue('N'.$i,  number_format($ttAGUINALDO,2,'.',''))
-                ->setCellValue('O'.$i,  number_format($ttINDENMNIZACION,2,'.',''));
+                
+                ->setCellValue('F'.$i,  number_format($ttSalarioMensual,2,'.',''))
+                ->setCellValue('H'.$i,  number_format($ttSalarioQuincenal,2,'.',''))                
+                ->setCellValue('I'.$i,  number_format($ttInssLaboral,2,'.',''))
+
+                ->setCellValue('K'.$i,  number_format($ttNetoPagar,2,'.',''))
+                ->setCellValue('N'.$i,  number_format($ttVACACIONES,2,'.',''))
+                ->setCellValue('O'.$i,  number_format($ttAGUINALDO,2,'.',''))
+                ->setCellValue('P'.$i,  number_format($ttINDENMNIZACION,2,'.',''));
                 
         
-        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:O".$num_row);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:O6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:O6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:O'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:O'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:P".$num_row);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:P6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:P6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:P'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:P'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="NominaQuincenal.xlsx"');

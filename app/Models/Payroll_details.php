@@ -25,13 +25,14 @@ class Payroll_details extends Model {
                 $SalarioMensual     = $request->input('salario_mensual_');
                 $payroll_inss       = $request->input('payroll_inss_');
                 $payroll_ir         = $request->input('payroll_ir_');
+                $deducciones        = $request->input('deducciones_');
 
                 $SalarioQuiencenal  = ( $SalarioMensual / 30 ) * $DiasTrab;
 
                 $NetoPagar =  $SalarioQuiencenal;
                 
                 //RESTAR DEDUCCIONES DE LEY
-                $NetoPagar  = $NetoPagar - $payroll_inss;
+                $NetoPagar  = $NetoPagar -  ( $payroll_inss + $deducciones);
 
                 $Vacaciones = ( $SalarioQuiencenal / 15 ) * 2.5 ;
                 $Aguinaldo  = ( $SalarioQuiencenal / 12 ) ;
@@ -46,6 +47,7 @@ class Payroll_details extends Model {
                     'indenmnizacion'    => $Indenizacion,
                     'inss_laboral'      => $payroll_inss,
                     'inss_patronal'     => $payroll_ir,
+                    'deducciones'       => $deducciones,
                 ]);
                 
                 return $response;

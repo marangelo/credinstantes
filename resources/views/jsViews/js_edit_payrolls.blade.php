@@ -49,6 +49,7 @@
             var payroll_ir                  = $('#payroll_ir').val();
             var id_PayRoll_status           = $('#PayRoll_status').html();
             var PayRoll_type                = $('#PayRoll_type').html();
+            var deducciones                 = $('#id_deducciones').val();
 
             var data = {
                 payroll_dias_trabajados_     : payroll_dias_trabajados,
@@ -58,6 +59,7 @@
                 payroll_ir_                  : payroll_ir,
                 id_PayRoll_status_           : id_PayRoll_status,
                 PayRoll_type_                : PayRoll_type,
+                deducciones_                 : deducciones,
                 _token  : "{{ csrf_token() }}" 
             };
 
@@ -138,9 +140,6 @@
         var salarioQuincenal    = SalarioMensual / 2
         var inss                = numeral((salarioQuincenal * 0.07)).format('0.00')
         var ir                  = numeral((salarioQuincenal * 0.215)).format('0.00')
-
-        console.log(ir,inss)
-
 
 
         $('#id_txt_nombre_empleado').html(name);
