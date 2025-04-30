@@ -100,6 +100,12 @@
                         <p>Inactivos</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                <a href="{{route('ClientesNA')}}" class="nav-link {{ (request()->is('ClientesNA')) ? 'active' : '' }}" >
+                  <i class="nav-icon fas fa-user nav-icon"></i>
+                  <p>Clientes. N/A</p>
+                </a>
+              </li>
                 @if( Session::get('rol') == '2')
                 <li class="nav-item">
                     <a href="{{ route('RecuperacionCobro')}}" class="nav-link {{ (request()->is('RecuperacionCobro')) ? 'active' : '' }} ">

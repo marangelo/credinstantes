@@ -34,7 +34,10 @@
                 "search": "BUSCAR"
             },
             "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ],
-            columnDefs: [{ visible: false, targets: 0 }],
+            columnDefs: [
+                { visible: false, targets: 0 },
+                {"width": "13%","targets": [0,1,2,3,4,5,6]},
+            ],
             "drawCallback": function(settings) {
                 var api = this.api();
                 var rows = api.rows({ page: 'current' }).nodes();
@@ -450,7 +453,61 @@
         });
     }
 
+    function ArchivarCliente(c,p) {
+        Cliente_         = isValue(c,0,true);
 
+        var Path_Url = (p == 1) ? "../ArchivarClient" : "../UnArchivarClient" ;
+
+
+        Swal.fire({
+            title: '¿Estas Seguro ?',
+            text: "¡Se removera la informacion permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                $.ajax({
+                    url: Path_Url,
+                    data: {
+                        Cliente_   : Cliente_,
+                        _token  : "{{ csrf_token() }}" 
+                    },
+                    type: 'post',
+                    async: true,
+                    success: function(response) {
+                        if(response){
+                            Swal.fire({
+                                title: response.message ,
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'OK'
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                    }
+                                })
+                            }
+                        },
+                    error: function(response) {
+                        //Swal.fire("Oops", "No se ha podido guardar!", "error");
+                    }
+                    }).done(function(data) {
+                        //CargarDatos(nMes,annio);
+                        location.reload();
+                    });
+                },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
+        
+
+    }
+    
     
 
     function ChanceStatus(Credito) {

@@ -87,6 +87,9 @@ class Clientes extends Model
         
         $IdZona = Auth::User()->id_zona;
 
+        //CLIENTES QUE SE ESCAPA DEL SISTEMA EN GENERAL
+        $ClientesNA = ClientesNA::all()->pluck('id_cliente')->toArray();
+
         $e = 0;
         
         $Clientes = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->whereHas('getCreditos', function ($query) use ($e) {
@@ -102,6 +105,9 @@ class Clientes extends Model
             
         }
 
+        $Clientes->whereNotIn('id_clientes', $ClientesNA);
+        
+
     
         return $Clientes->get();
     }
@@ -111,12 +117,16 @@ class Clientes extends Model
         $e = 1;
         $role   = Auth::User()->id_rol;
 
+        //CLIENTES QUE SE ESCAPA DEL SISTEMA EN GENERAL
+        $ClientesNA = ClientesNA::all()->pluck('id_cliente')->toArray();
+
         //BUSCA LOS CREDITOS QUE TENGA SOLAMENTE CREDITOS INACTIVOS & NO TENGA ACTIVOS O VENCIDOS Y EN MORA
         $Clientes_Inactivos = Clientes::select('tbl_clientes.id_clientes')
         ->selectRaw('GROUP_CONCAT(tbl_creditos.estado_credito) as GROUP_CONCAT_CREDITOS')
         ->join('tbl_creditos', 'tbl_clientes.id_clientes', '=', 'tbl_creditos.id_clientes')
         ->where('tbl_creditos.activo', 1)
         ->where('tbl_creditos.activo', 1)
+        ->whereNotIn('tbl_clientes.id_clientes', $ClientesNA)
         ->groupBy('tbl_clientes.id_clientes', 'tbl_clientes.nombre', 'tbl_clientes.apellidos', 'tbl_clientes.activo')
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%1%'")
         ->havingRaw("GROUP_CONCAT(tbl_creditos.estado_credito) NOT LIKE '%2%'")
