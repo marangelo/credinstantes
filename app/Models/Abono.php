@@ -507,7 +507,8 @@ class Abono extends Model
         }
         
     }
-    public static function Bluid(Request $request){
+    public static function Bluid(Request $request)
+    {
         $Pagos = PagosFechas::all();
         $RefAbonos = [] ;
         foreach ($Pagos as $key => $p) {
@@ -560,7 +561,16 @@ class Abono extends Model
         }
     }
     public static function Dispensa($D1, $D2){
-        $Dispensa = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])->sum('Descuento');
+        
+        // CLIENTES ARCHIVADOS
+        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+        
+        $Dispensa = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])
+        ->whereHas('credito', function ($q) use ($ClientesArchivados) {
+            $q->whereNotIn('id_clientes', $ClientesArchivados);
+        })
+        ->sum('Descuento');
+
         return $Dispensa;
     }
     Public static function getDataReporteDispensa(Request $request)

@@ -76,9 +76,13 @@ class Credito extends Model
     }
     public static function Creditos($Zona,$D1, $D2)
     {
+        // CLIENTES ARCHIVADOS
+        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+
         return CreditosHistory::where('CREDITO_ACTIVO', 1)
                 ->whereDate('FECHA', '<=', $D2)
                 ->whereIn('ESTADO_CREDITO', [1, 2, 3])
+                ->whereNotIn('ID_CLIENTE', $ClientesArchivados)
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
                 })->get();        
@@ -96,8 +100,12 @@ class Credito extends Model
     }
     public static function Saldos_Cartera($Zona,$D1, $D2)
     {
+        // CLIENTES ARCHIVADOS
+        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+
         return CreditosHistory::where('CREDITO_ACTIVO', 1)
                 ->whereDate('FECHA', '<=', $D2)
+                ->whereNotIn('ID_CLIENTE', $ClientesArchivados)
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
                 })->sum('SALDO_CREDITO');        

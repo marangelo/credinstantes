@@ -73,7 +73,10 @@ class PagosFechas extends Model {
     }
     public static function getMora($Zona, $tipoMora,$D1, $D2)
     {
-        $Creditos = Credito::where('activo',1)->where('saldo','>',0);
+        // CLIENTES ARCHIVADOS
+        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+        
+        $Creditos = Credito::where('activo',1)->where('saldo','>',0)->whereNotIn('id_clientes',$ClientesArchivados);
         $fechaActual = now(); 
 
         $role   = Auth::User()->id_rol;

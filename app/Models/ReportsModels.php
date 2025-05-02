@@ -254,6 +254,9 @@ class ReportsModels extends Model {
         $ttPagoCapital      = 0;
         $ttPagoIntereses    = 0;
 
+        // CLIENTES ARCHIVADOS
+        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+
 
         $D1     = date('Y-m-01', strtotime($dt_end)). ' 00:00:00';
         $D2     = $dt_end . ' 23:59:59';
@@ -274,6 +277,7 @@ class ReportsModels extends Model {
                                     SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                 ->whereBetween('FECHA_ABONO', [$D1, $D2])
                 ->where('activo', 1)
+                ->whereNotIn('id_clientes', $ClientesArchivados)
                 ->when($Opt > -1, function ($query) use ($Opt) {
                     $query->where('id_zona', $Opt);
                 })
