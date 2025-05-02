@@ -396,8 +396,7 @@ class ReportsModels extends Model {
             $Represtamo = Reloan::whereBetween('date_reloan', [$D1, $D2])->get();
         }
         
-        foreach ($Represtamo as $rc) {
-            
+        foreach ($Represtamo as $rc) {            
             $ArrayReprestamo[$position_array] = [
                 'id_clientes'       => $rc->id_clientes,
                 'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,

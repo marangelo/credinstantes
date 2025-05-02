@@ -420,6 +420,8 @@ class CredinstanteController extends Controller
     }
     public function UpdateCredito(Request $request)
     {
+
+        
         $response = Credito::UpdateCredito($request);
         
         return response()->json($response);

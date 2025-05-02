@@ -21,6 +21,11 @@ class Credito extends Model
         return $this->hasOne(Clientes::class, 'id_clientes','id_clientes');
     }
 
+    public function getHistoryPagos()
+    {
+        return $this->hasOne(PagosFechas::class, 'ID_CREDITO','id_creditos');
+    }
+
     public function abonos()
     {
         return $this->hasMany(Abono::class, 'id_creditos', 'id_creditos')->where('activo',1)->orderBy('id_abonoscreditos', 'desc')->limit(1);
@@ -347,7 +352,7 @@ class Credito extends Model
                 ]);
 
                  //CALCULO PARA LA FECHA DE ABONOS
-                 for ($i = 1; $i <= $Cuotas_; $i++) {
+                for ($i = 1; $i <= $Cuotas_; $i++) {
                     $fecha->add(new DateInterval('P1W')); 
                     $Fecha_abonos[] = [
                         'id_creditos'    => $IdCredito,
@@ -468,7 +473,22 @@ class Credito extends Model
                     'user_created'  => $Promotor_,
                     'id_clientes'   => $idInsertado
                 ]); 
+
+                //VALIDAR CUANTOS DIAS TIENE EL CLIENTE DE INACTIVO SI ES MENOR DE 10 DIAS AGREGARLO A Clientes_rectivacion
+                $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);
+                if($DaysLastPayment <= 10){
+                    ClientesReactivacion::updateOrCreate(
+                        ['id_clientes' => $idInsertado],
+                        [
+                            'id_clientes' => $idInsertado,
+                            'fecha_reactivacion' => date('Y-m-d H:i:s',strtotime($FechaOpen)),
+                            'user_created' => Auth::id()
+                        ]
+                    );
+                }
+
                 $IdProspecto           = $request->input('IdProspecto_'); 
+                
                 RefResquestCredit::updateOrCreate(
                     ['id_resquest' => $IdProspecto],
                     [

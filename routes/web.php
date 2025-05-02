@@ -218,4 +218,8 @@ Route::post('ArchivarClient', 'ControllerClientesNA@ArchivarClient')->name('Arch
 Route::post('UnArchivarClient', 'ControllerClientesNA@UnArchivarClient')->name('UnArchivarClient');
 
 
+//solo de test
+Route::get('reactivacion', 'ClientesController@reactivacion')->name('reactivacion');
+
+
 
