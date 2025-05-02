@@ -46,6 +46,13 @@
             SALDOS_COLOCADOS     = numeral(isValue(SALDOS_COLOCADOS,0,true)).format('0,00.00');
             $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
 
+            var CALC_REACT = dataset['CALC_REACT'];
+            $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
+            
+
+            var COUNT_REACT = dataset['COUNT_REACT'];
+            $("#lblCountReact").text(COUNT_REACT);
+
             TableClientes(dataset['LISTA_CLIENTES']);
         
         

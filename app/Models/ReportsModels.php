@@ -386,6 +386,7 @@ class ReportsModels extends Model {
         $array_dashboard         = [];
         $ArrayClientesNuevos     = [] ;
         $ArrayReprestamo         = [] ;
+        $ArrayReactivaciones     = [] ;
         $Loadarray               = [] ;
         $position_array          = 0 ;
 
@@ -428,11 +429,31 @@ class ReportsModels extends Model {
 
         $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
 
+
+        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
+        $Count_Reactivacion    = $Clientes_Reactivacion->count();
+        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+
+        foreach ($Clientes_Reactivacion as $rc) {
+            $ArrayReactivaciones[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
+                'Origen'            => 'Reactivacion',
+            ];
+            $position_array++;
+        }
+
+
         $array_dashboard = [
             "CLIENTES_NUEVO"        => $Creditos->count(),
             "RE_PRESTAMOS"          => $Represtamo->count(),
             "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
-            "LISTA_CLIENTES"        =>array_merge($ArrayClientesNuevos , $ArrayReprestamo)
+            "LISTA_CLIENTES"        =>array_merge($ArrayClientesNuevos , $ArrayReprestamo),
+            'CALC_REACT'            => number_format($Monto_Reactivacion,2),
+            'COUNT_REACT'           => number_format($Count_Reactivacion,0),
+            
         ];
 
         

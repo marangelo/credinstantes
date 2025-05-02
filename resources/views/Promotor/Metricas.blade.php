@@ -84,8 +84,8 @@
             <div class="col-12 col-sm-6 col-md-3">
               <div class="info-box mb-3 bg-success">
                 <div class="info-box-content">
-                  <span class="info-box-text">Reactivaciones ( 4 )</span>
-                  <span class="info-box-number"><span id="lblReactivaciones"> C$ 0.00 </span></span>
+                  <span class="info-box-text">Reactivaciones ( <span id="lblCountReact">0</span> )</span>
+                  <span class="info-box-number"><span id="lblSaldosColocados"> C$ 0.00 </span></span>
                 </div>
               </div>
             </div>

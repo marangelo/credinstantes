@@ -482,6 +482,7 @@ class Credito extends Model
                         [
                             'id_clientes' => $idInsertado,
                             'fecha_reactivacion' => date('Y-m-d H:i:s',strtotime($FechaOpen)),
+                            'monto_reactivacion' => $Monto_,
                             'user_created' => Auth::id()
                         ]
                     );
