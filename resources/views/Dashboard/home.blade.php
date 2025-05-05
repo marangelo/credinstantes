@@ -93,7 +93,7 @@
                 <div class="info-box mb-3 bg-warning" >
 
                   <div class="info-box-content">
-                    <span class="info-box-text">UTILIDAD BRUTA</span>
+                    <span class="info-box-text">UTL. BRUTA</span>
                     <span class="info-box-number"><small>C$ </small><span id="lblInteres"></span></span>
                   </div>
                   <!-- /.info-box-content -->
@@ -105,7 +105,7 @@
                 <div class="info-box mb-3" style="background-color: #008000;" >
 
                   <div class="info-box-content">
-                    <span class="info-box-text">UTILIDAD NETA</span>
+                    <span class="info-box-text">UTL. NETA</span>
                     <span class="info-box-number"><small>C$ </small><span id="lbl_ultil_neta">C$ 0.00</span></span>
                   </div>
                   <!-- /.info-box-content -->
@@ -127,31 +127,34 @@
 
               <div class="col-12 col-sm-6 col-md-2">
                 <div class="info-box mb-3" style="background-color: #FFA0AB;">
-
                   <div class="info-box-content">
                     <span class="info-box-text">SALDO DE CARTERA</span>
                     <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
                   </div>
-                  <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box -->
               </div>
-              <!-- /.col -->
-            </div>
 
-              <div class="row">
-                <div class="col-6 col-sm-6 col-md-4">
+              <div class="col-12 col-sm-6 col-md-2">
+                <div class="info-box mb-3" style="background-color: #FFA0AB;">
+                  <div class="info-box-content">
+                    <span class="info-box-text">SALDO CAPITAL.</span>
+                    <span class="info-box-number"><small>C$ </small><span id="lbl_saldo_capital"> 0.00 </span></span>
+                  </div>
+                </div>
+              </div>
+
+       
+                <div class="col-6 col-sm-6 col-md-3">
                   <div class="info-box " style="background-color: #FF8000;">              
                     <div class="info-box-content ">
                       <span class=""> MORA ATRASADA </span>
                       <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
                       </span>
                     </div>
-                    <!-- /.info-box-content -->
-                  </div>
-                  <!-- /.info-box -->
+                  </div>                  
                 </div>
-                <div class="col-6 col-sm-6 col-md-4">
+                
+                <div class="col-6 col-sm-6 col-md-3">
                   <div class="info-box mb-3 bg-danger">
                     <div class="info-box-content">
                       <span class="info-box-text"> MORA VENCIDA </span>
@@ -160,6 +163,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="col-6 col-sm-6 col-md-4">
                   <div class="info-box mb-3 bg-success">
                     <div class="info-box-content">
@@ -169,6 +173,7 @@
                     </div>
                   </div>
                 </div>
+
               </div>
                 @break
         

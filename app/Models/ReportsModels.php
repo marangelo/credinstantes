@@ -286,7 +286,10 @@ class ReportsModels extends Model {
 
         
         $Saldos_Cartera = Credito::Saldos_Cartera($Opt,$D1, $D2);
+        $Saldos_Capital = Credito::Saldo_Capital($Opt,$D1, $D2);
         $Clientes       = Credito::Creditos($Opt,$D1, $D2);
+
+
 
         $GastosOperativos = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
 
@@ -308,6 +311,7 @@ class ReportsModels extends Model {
             "INTERESES"         => $ttPagoIntereses,
             "UTIL_NETA"         => $ttUtilidadNeta,
             "SALDOS_CARTERA"    => $Saldos_Cartera,
+            "SALDOS_CAPITAL"    => $Saldos_Capital,
             "MORA_ATRASADA"     => $MoraAtrasada,
             "MORA_VENCIDA"      => $MoraVencida,
             "clientes_activos"  => $Clientes->count(),
@@ -330,6 +334,7 @@ class ReportsModels extends Model {
         $vData              = [];
         $ttPagoCapital      = 0;
         $ttPagoIntereses    = 0;
+        $position_array          = 0 ;
 
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
@@ -366,13 +371,31 @@ class ReportsModels extends Model {
         $RePrestamo         = $Represtamo->sum('amount_reloan');
 
         $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') ;
-        
-        
+
+
+        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
+        $Count_Reactivacion    = $Clientes_Reactivacion->count();
+        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+
+        foreach ($Clientes_Reactivacion as $rc) {
+            $ArrayReactivaciones[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
+                'Origen'            => 'Reactivacion',
+            ];
+            $position_array++;
+        }
+
+
         $array_dashboard = [
             "CLIENTES_NUEVO"        => $Clientes_Nuevo,
             "RE_PRESTAMOS"          => $Reloan_count,
             "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
-            "LISTA_CLIENTES"        => Clientes::Clientes_promotor($Zona)
+            "LISTA_CLIENTES"        => Clientes::Clientes_promotor($Zona),
+            'CALC_REACT'            => number_format($Monto_Reactivacion,2),
+            'COUNT_REACT'           => number_format($Count_Reactivacion,0),
         ];
 
         return $array_dashboard;

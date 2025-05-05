@@ -40,6 +40,8 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
+
+
           <div class="col-md-4">
             <label>Zonas</label>
             <div class="form-group">
@@ -84,7 +86,9 @@
             </div>
           </div>
 
-          <div class="col-12 col-sm-6 col-md-4">
+
+
+          <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3 bg-info">
 
               <div class="info-box-content">
@@ -94,7 +98,7 @@
             </div>
           </div>
 
-          <div class="col-12 col-sm-6 col-md-4">
+          <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box " style="background-color: #FF8000;">              
               <div class="info-box-content ">
                 <span class="">REPRESTAMOS</span>
@@ -103,7 +107,7 @@
             </div>
           </div>
 
-          <div class="col-12 col-sm-6 col-md-4">
+          <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3 bg-danger">
               <div class="info-box-content">
                 <span class="info-box-text"> SALDOS COLOCADOS</span>
@@ -111,6 +115,16 @@
               </div>
             </div>
           </div>
+
+          <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3 bg-success">
+                <div class="info-box-content">
+                  <span class="info-box-text">Reactivaciones ( <span id="lblCountReact">1</span> )</span>
+                  <span class="info-box-number"><span id="lblReactivacionesValue"> C$ 1.00 </span></span>
+                </div>
+              </div>
+            </div>
+
         </div>
         <div class="card">
             

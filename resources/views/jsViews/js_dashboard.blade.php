@@ -131,6 +131,11 @@
             DISPENSA     = numeral(isValue(DISPENSA,0,true)).format('0,00.00'); 
             $("#lbl_dispensa").text(DISPENSA)
 
+
+            var SALDOS_CAPITAL = dataset['SALDOS_CAPITAL'];
+            SALDOS_CAPITAL     = numeral(isValue(SALDOS_CAPITAL,0,true)).format('0,00.00'); 
+            $("#lbl_saldo_capital").text(SALDOS_CAPITAL)
+
             
         
             $.each(dataset.Data, function(i, item) {

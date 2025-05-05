@@ -114,6 +114,16 @@ class Credito extends Model
                 ->when($Zona > -1, function ($query) use ($Zona) {
                     $query->where('ID_ZONA', $Zona);
                 })->sum('SALDO_CREDITO');        
+
+
+    }
+    public static function Saldo_Capital($Zona,$D1, $D2)
+    {
+        return Pagos::where('activo', 1)
+                ->whereBetween('FECHA_ABONO', [$D1, $D2])
+                ->when($Zona > -1, function ($query) use ($Zona) {
+                    $query->where('ID_ZONA', $Zona);
+                })->sum('CAPITAL');
     }
     public static function getCreditosActivos()
     {
@@ -466,13 +476,7 @@ class Credito extends Model
                  //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
                 //Clientes::CheckStatus($IdCredito);
 
-                Reloan::insert([
-                    'loan_id'       => $IdCredito,
-                    'date_reloan'   => $FechaOpen, 
-                    'amount_reloan' => $Monto_,
-                    'user_created'  => $Promotor_,
-                    'id_clientes'   => $idInsertado
-                ]); 
+                
 
                 //VALIDAR CUANTOS DIAS TIENE EL CLIENTE DE INACTIVO SI ES MENOR DE 10 DIAS AGREGARLO A Clientes_rectivacion
                 $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);
@@ -486,6 +490,14 @@ class Credito extends Model
                             'user_created' => Auth::id()
                         ]
                     );
+                } else {
+                    Reloan::insert([
+                        'loan_id'       => $IdCredito,
+                        'date_reloan'   => $FechaOpen, 
+                        'amount_reloan' => $Monto_,
+                        'user_created'  => $Promotor_,
+                        'id_clientes'   => $idInsertado
+                    ]); 
                 }
 
                 $IdProspecto           = $request->input('IdProspecto_'); 
