@@ -222,4 +222,10 @@ Route::post('UnArchivarClient', 'ControllerClientesNA@UnArchivarClient')->name('
 Route::get('reactivacion', 'ClientesController@reactivacion')->name('reactivacion');
 
 
+//ESTADISTICAS DE CREDITOS DESBOLSADOS PARA COBRADOR
+Route::get('ViewDesembolsados', 'CobradorController@ViewDesembolsados')->name('ViewDesembolsados');
+
+Route::post('getDesembolsados', 'CobradorController@getDesembolsados')->name('getDesembolsados');
+
+
 
