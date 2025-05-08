@@ -74,8 +74,11 @@
                 
                 {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {
                     
-                    return '[ ' + row.id_clientes + ' ] - ' +row.Nombre + ' ' + row.apellido ;
+                    return '[ ' + row.id_clientes + ' ] - ' +row.Nombre ;
                 }},
+                {"title": "DEPARTAMENTO","data": "Departamento"},
+                {"title": "ZONA","data": "Zona"},
+                {"title": "DIRECCION","data": "Direccion"},
                 {
                     "title": "FECHA",
                     "data": "Fecha"

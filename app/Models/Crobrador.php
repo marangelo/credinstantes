@@ -33,6 +33,10 @@ class Crobrador extends Model
                 'Fecha'             => \Date::parse($rc->date_reloan)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($rc->amount_reloan,2),
                 'Origen'            => 'RePrestamo',
+                'Departamento'      => $rc->Clientes->id_departamento,
+                'Zona'              => $rc->Clientes->id_zona,
+                'Direccion'         => $rc->Clientes->direccion_domicilio,
+                
             ];
             $Loadarray[$position_array] = $rc->loan_id;
             $position_array++;
@@ -46,7 +50,10 @@ class Crobrador extends Model
                 'Nombre'            => $c->Clientes->nombre . " " . $c->Clientes->apellidos,
                 'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($c->monto_credito,2),
-                'Origen'            => 'Nuevo',
+                'Origen'            => 'Nuevo',                
+                'Departamento'      => $rc->Clientes->id_departamento,
+                'Zona'              => $rc->Clientes->id_zona,
+                'Direccion'         => $rc->Clientes->direccion_domicilio,
             ];
             $position_array++;
         }
@@ -58,7 +65,10 @@ class Crobrador extends Model
                 'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
                 'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
-                'Origen'            => 'Reactivacion',
+                'Origen'            => 'Reactivacion',                
+                'Departamento'      => $rc->Clientes->id_departamento,
+                'Zona'              => $rc->Clientes->id_zona,
+                'Direccion'         => $rc->Clientes->direccion_domicilio,
             ];
             $position_array++;
         }

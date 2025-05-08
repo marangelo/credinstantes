@@ -38,55 +38,89 @@
               <div class="card-body">
               @csrf
                 <div class="row">
-                  <div class="col-md-8">
-                    <label>Buscar</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                      </div>
-                      <input type="text" class="form-control" id="id_txt_buscar">
-                    </div>
-                  </div>
-                  <div class="col-md-2">
-                    <label>INICIO</label>
-                    <div class="form-group">
-                      <div class="input-group date" id="dt-ini" data-target-input="nearest">
-                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('d/m/Y') }}"/>
-                          <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                          </div>
+                    <div class="col-md-4">
+                      <label>TIPO DE CREDITO</label>
+                      <div class="input-group">
+                      <select class="form-control " style="width: 100%;" id="IdFilterByType" >
+                          <option value="RePrestamo"> RePrestamo </option>
+                          <option value="Nuevo"> Nuevo </option>
+                          <option value="Reactivacion"> Reactivacion </option>
                           
+                      </select>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-2">
-                    <label>CULMINA</label>
-                    <div class="form-group">
-                      <div class="input-group date" id="dt-end" data-target-input="nearest">
-                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" name="nmEnd" value="{{ date('d/m/Y') }}"/>
-                          <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                          </div>
-                          <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>
 
-                          
+                    <div class="col-md-4">
+                      <label>INICIO</label>
+                      <div class="form-group">
+                        <div class="input-group date" id="dt-ini" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('d/m/Y') }}"/>
+                            <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>                          
+                        </div>
                       </div>
                     </div>
-                  </div>
+
+                    <div class="col-md-4">
+                      <label>CULMINA</label>
+                      <div class="form-group">
+                        <div class="input-group date" id="dt-end" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" name="nmEnd" value="{{ date('d/m/Y') }}"/>
+                            <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                            <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>
+
+                            
+                        </div>
+                      </div>
+                    </div>
+
+
+                  
+                    <div class="col-12 col-sm-6 col-md-3">
+                      <div class="info-box mb-3 bg-info">
+
+                        <div class="info-box-content">
+                          <span class="info-box-text">CLIENTES NUEVOS</span>
+                          <span class="info-box-number"><span id="lblClientesNuevos">0</span></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                      <div class="info-box " style="background-color: #FF8000;">              
+                        <div class="info-box-content ">
+                          <span class="">REPRESTAMOS</span>
+                          <span class="info-box-number"><span id="lblRePrestamo" > 0.00</span></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                      <div class="info-box mb-3 bg-success">
+                        <div class="info-box-content">
+                          <span class="info-box-text">Reactivaciones ( <span id="lblCountReact">1</span> )</span>
+                          <span class="info-box-number"><span id="lblReactivacionesValue"> C$ 1.00 </span></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                      <div class="info-box mb-3 bg-danger">
+                        <div class="info-box-content">
+                          <span class="info-box-text"> SALDOS COLOCADOS</span>
+                          <span class="info-box-number"><small>C$ </small><span id="lblSaldosColocados"> 0.00</span></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    
                 </div>
                 
                 <table id="tbl_ingresos" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>NOMBRE</th>
-                    <th>CUOTA COBRADA</th>
-                    <th>PAGO A CAPITAL</th>
-                    <th>PAGO A INTERES</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  
-                  </tbody>
+                 
                 </table>
               </div>
               <!-- /.card-body -->

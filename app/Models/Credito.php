@@ -480,7 +480,7 @@ class Credito extends Model
 
                 //VALIDAR CUANTOS DIAS TIENE EL CLIENTE DE INACTIVO SI ES MENOR DE 10 DIAS AGREGARLO A Clientes_rectivacion
                 $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);
-                if($DaysLastPayment <= 10){
+                if($DaysLastPayment > 0 && $DaysLastPayment <= 10){
                     ClientesReactivacion::updateOrCreate(
                         ['id_clientes' => $idInsertado],
                         [
