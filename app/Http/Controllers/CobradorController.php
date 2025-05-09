@@ -33,6 +33,6 @@ class CobradorController extends Controller
     {
         $response = Crobrador::getDesembolsados($request);
         
-        return response()->json($response);
+        return $response;
     }
 }

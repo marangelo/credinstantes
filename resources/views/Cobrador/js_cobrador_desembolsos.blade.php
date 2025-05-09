@@ -62,16 +62,24 @@
             "ajax":{
                 "url": "getDesembolsados",
                 "type": 'POST',
-                'dataSrc': '',
+                dataSrc: function(json) {
+
+                    $("#lblClientesNuevos").text(json.CLIENTES_NUEVOS);
+                    $("#lblRePrestamo").text(json.REPRESTAMOS);
+                    $("#lblReactivacionesValue").text(json.REACTIVACIONES);
+                    $("#lblSaldosColocados").text(json.SALDOS_COLOCADOS);
+                    $("#lblCountReact").text(json.CountReact);
+
+                    return json.dtClientes; 
+                },
                 "data": {                
                     dtIni   : dt_Ini_,
                     dtEnd   : dt_End_,
                     _token  : "{{ csrf_token() }}" 
                 }
             },
-            buttons: [{extend: 'excelHtml5'}],
-            'columns': [
-                
+        buttons: [{extend: 'excelHtml5'}],
+            'columns': [                
                 {"title": "NOMBRE","data": "Nombre", "render": function(data, type, row, meta) {
                     
                     return '[ ' + row.id_clientes + ' ] - ' +row.Nombre ;
@@ -93,6 +101,11 @@
                     "data": "Origen"
                 },
             ],
+            "createdRow": function (row, data, dataIndex) {              
+                
+            },
+            "footerCallback": function (row, data, start, end, display) {
+            }
         })
 
         $("#tbl_ingresos_length").hide();

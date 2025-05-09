@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Auth;
 class Crobrador extends Model
 {
- 
-
     public static function getDesembolsados( Request $request)
     {
         
@@ -22,6 +20,7 @@ class Crobrador extends Model
         $ArrayReprestamo         = [] ;
         $ArrayReactivaciones     = [] ;
         $Loadarray               = [] ;
+        $Metricas                = [] ;
         $position_array          = 0 ;
 
         
@@ -73,9 +72,22 @@ class Crobrador extends Model
             $position_array++;
         }
 
+        $CountClientesNuevos    = 88;
+        $ValueReprestamo        = 11;
+        $ValueReactivaciones    = 22;
+        $ValueSaldosColocados   = 33;
+        $CountReact             = 9999;
+
         $array_merge = array_merge($ArrayClientesNuevos ,$ArrayReprestamo, $ArrayReactivaciones);
 
-        return $array_merge;
+        return [
+            'CLIENTES_NUEVOS'   => $CountClientesNuevos,
+            'REPRESTAMOS'       => $ValueReprestamo,
+            'REACTIVACIONES'    => $ValueReactivaciones,
+            'SALDOS_COLOCADOS'  => $ValueSaldosColocados,
+            'dtClientes'        => $array_merge,
+            'CountReact'     => $CountReact,
+        ];
     }
 
 }
