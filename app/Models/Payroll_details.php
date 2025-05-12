@@ -34,7 +34,9 @@ class Payroll_details extends Model {
                 //RESTAR DEDUCCIONES DE LEY
                 $NetoPagar  = $NetoPagar -  ( $payroll_inss + $deducciones);
 
-                $Vacaciones = ( $SalarioQuiencenal / 15 ) * 2.5 ;
+                //$Vacaciones = ( $SalarioQuiencenal / 15 ) * 2.5 ;
+                
+                $Vacaciones = ( $SalarioQuiencenal / 12 ) / 2 ;                
                 $Aguinaldo  = ( $SalarioQuiencenal / 12 ) ;
                 $Indenizacion = ( $SalarioQuiencenal / 12 ) ;
             
@@ -82,13 +84,14 @@ class Payroll_details extends Model {
         if ($request->ajax()) {
             try {
                 $NumRow             = $request->input('payroll_num_row_');
-                $Comisiones           = $request->input('comisiones_');                
+                $Comisiones         = $request->input('comisiones_');                
 
-                $NetoPagar =  $Comisiones;
+                $NetoPagar      =  $Comisiones;
 
-                $Vacaciones = ( $NetoPagar / 30 ) * 2.5 ;
-                $Aguinaldo  = ( $NetoPagar / 12 ) ;
-                $Indenizacion = ( $NetoPagar / 12 ) ;
+                //$Vacaciones     = ( $NetoPagar / 30 ) * 2.5 ;
+                $Vacaciones     = ( $NetoPagar / 12 ) ;                
+                $Aguinaldo      = ( $NetoPagar / 12 ) ;
+                $Indenizacion   = ( $NetoPagar / 12 ) ;
             
                 $response =  Payroll_details::where('id_payroll_details',  $NumRow)->update([
                     'comision'          => $Comisiones,

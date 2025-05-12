@@ -86,7 +86,7 @@ class Crobrador extends Model
             'REACTIVACIONES'    => $ValueReactivaciones,
             'SALDOS_COLOCADOS'  => $ValueSaldosColocados,
             'dtClientes'        => $array_merge,
-            'CountReact'     => $CountReact,
+            'CountReact'        => $CountReact,
         ];
     }
 
