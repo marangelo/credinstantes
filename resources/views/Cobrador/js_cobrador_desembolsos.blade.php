@@ -66,7 +66,7 @@
 
                     $("#lblClientesNuevos").text(json.CLIENTES_NUEVOS);
                     $("#lblRePrestamo").text(json.REPRESTAMOS);
-                    $("#lblReactivacionesValue").text(json.REACTIVACIONES);
+                    $("#lblReactivacionesValue").text(json.CALC_REACT);
                     $("#lblSaldosColocados").text(json.SALDOS_COLOCADOS);
                     $("#lblCountReact").text(json.CountReact);
 

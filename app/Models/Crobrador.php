@@ -12,8 +12,9 @@ class Crobrador extends Model
         $dtIni         = $request->input('dtIni');
         $dtEnd         = $request->input('dtEnd');
 
-        $D1     = date('Y-m-01', strtotime($dtIni)). ' 00:00:00';
-        $D2     = date('Y-m-t', strtotime($dtEnd)). ' 23:59:59';    
+        $D1     = date('Y-m-d', strtotime($dtIni)). ' 00:00:00';
+        $D2     = date('Y-m-d', strtotime($dtEnd)). ' 23:59:59';    
+
         $Cobra  = Auth::id();
         
         $ArrayClientesNuevos     = [] ;
@@ -32,8 +33,8 @@ class Crobrador extends Model
                 'Fecha'             => \Date::parse($rc->date_reloan)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($rc->amount_reloan,2),
                 'Origen'            => 'RePrestamo',
-                'Departamento'      => $rc->Clientes->id_departamento,
-                'Zona'              => $rc->Clientes->id_zona,
+                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento,
+                'Zona'              => $rc->Clientes->getZona->nombre_zona,
                 'Direccion'         => $rc->Clientes->direccion_domicilio,
                 
             ];
@@ -50,14 +51,21 @@ class Crobrador extends Model
                 'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($c->monto_credito,2),
                 'Origen'            => 'Nuevo',                
-                'Departamento'      => $rc->Clientes->id_departamento,
-                'Zona'              => $rc->Clientes->id_zona,
+                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento,
+                'Zona'              => $rc->Clientes->getZona->nombre_zona,
                 'Direccion'         => $rc->Clientes->direccion_domicilio,
             ];
             $position_array++;
         }
 
+
+        $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
+
         $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Cobra)->get();
+        $Count_Reactivacion    = $Clientes_Reactivacion->count();
+        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+
+
         foreach ($Clientes_Reactivacion as $rc) {
             $ArrayReactivaciones[$position_array] = [
                 'id_clientes'       => $rc->id_clientes,
@@ -65,18 +73,18 @@ class Crobrador extends Model
                 'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
                 'Origen'            => 'Reactivacion',                
-                'Departamento'      => $rc->Clientes->id_departamento,
-                'Zona'              => $rc->Clientes->id_zona,
+                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento,
+                'Zona'              => $rc->Clientes->getZona->nombre_zona,
                 'Direccion'         => $rc->Clientes->direccion_domicilio,
             ];
             $position_array++;
         }
 
-        $CountClientesNuevos    = 88;
-        $ValueReprestamo        = 11;
-        $ValueReactivaciones    = 22;
-        $ValueSaldosColocados   = 33;
-        $CountReact             = 9999;
+        $CountClientesNuevos    = count($ArrayClientesNuevos);
+        $ValueReprestamo        = count($ArrayReprestamo);
+        $ValueReactivaciones    = number_format($Monto_Reactivacion,2);
+        $ValueSaldosColocados   = number_format($SALDOS_COLOCADOS,2);
+        $CountReact             = $Count_Reactivacion;
 
         $array_merge = array_merge($ArrayClientesNuevos ,$ArrayReprestamo, $ArrayReactivaciones);
 

@@ -40,6 +40,10 @@ class Clientes extends Model
     {
         return $this->hasOne(Municipios::class, 'id_municipio','id_municipio');
     }
+     public function getDepartamento()
+    {
+        return $this->hasOne(Departamentos::class, 'id_departamento','id_departamento');
+    }
     public function getZona()
     {
         return $this->hasOne(Zonas::class, 'id_zona','id_zona')->where('activo',1);
