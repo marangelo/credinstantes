@@ -66,6 +66,8 @@ class Crobrador extends Model
         $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
 
 
+
+
         foreach ($Clientes_Reactivacion as $rc) {
             $ArrayReactivaciones[$position_array] = [
                 'id_clientes'       => $rc->id_clientes,
@@ -80,6 +82,7 @@ class Crobrador extends Model
             $position_array++;
         }
 
+
         $CountClientesNuevos    = count($ArrayClientesNuevos);
         $ValueReprestamo        = count($ArrayReprestamo);
         $ValueReactivaciones    = number_format($Monto_Reactivacion,2);
@@ -91,10 +94,10 @@ class Crobrador extends Model
         return [
             'CLIENTES_NUEVOS'   => $CountClientesNuevos,
             'REPRESTAMOS'       => $ValueReprestamo,
-            'REACTIVACIONES'    => $ValueReactivaciones,
             'SALDOS_COLOCADOS'  => $ValueSaldosColocados,
             'dtClientes'        => $array_merge,
             'CountReact'        => $CountReact,
+            'CALC_REACT'        => $ValueReactivaciones,
         ];
     }
 

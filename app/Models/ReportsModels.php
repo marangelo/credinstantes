@@ -457,6 +457,7 @@ class ReportsModels extends Model {
         $Count_Reactivacion    = $Clientes_Reactivacion->count();
         $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
 
+
         foreach ($Clientes_Reactivacion as $rc) {
             $ArrayReactivaciones[$position_array] = [
                 'id_clientes'       => $rc->id_clientes,

@@ -14,10 +14,11 @@
             InitTable();
         })
 
-        $('#id_txt_buscar').on('keyup', function() {   
+    
+        $("#IdFilterByType").change(function(){
             var vTableArticulos = $('#tbl_ingresos').DataTable();     
-            vTableArticulos.search(this.value).draw();
-        });
+            vTableArticulos.search(this.value).draw();            
+        })
     })
 
     function InitTable() {
@@ -66,9 +67,10 @@
 
                     $("#lblClientesNuevos").text(json.CLIENTES_NUEVOS);
                     $("#lblRePrestamo").text(json.REPRESTAMOS);
-                    $("#lblReactivacionesValue").text(json.CALC_REACT);
                     $("#lblSaldosColocados").text(json.SALDOS_COLOCADOS);
+                    
                     $("#lblCountReact").text(json.CountReact);
+                    $("#lblReactivacionesValue").text(json.CALC_REACT);
 
                     return json.dtClientes; 
                 },
