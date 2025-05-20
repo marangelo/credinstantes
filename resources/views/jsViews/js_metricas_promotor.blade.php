@@ -47,11 +47,11 @@
             $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
 
             var CALC_REACT = dataset['CALC_REACT'];
-            $("#lblSaldosColocados").text(SALDOS_COLOCADOS);
-            
-
             var COUNT_REACT = dataset['COUNT_REACT'];
+
+            
             $("#lblCountReact").text(COUNT_REACT);
+            $("#lblValueReact").text(CALC_REACT);
 
             TableClientes(dataset['LISTA_CLIENTES']);
         

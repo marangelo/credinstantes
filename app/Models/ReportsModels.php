@@ -453,10 +453,12 @@ class ReportsModels extends Model {
         $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
 
 
-        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Prom)->get();
+        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
         $Count_Reactivacion    = $Clientes_Reactivacion->count();
         $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
 
+
+      
 
         foreach ($Clientes_Reactivacion as $rc) {
             $ArrayReactivaciones[$position_array] = [
@@ -474,7 +476,7 @@ class ReportsModels extends Model {
             "CLIENTES_NUEVO"        => $Creditos->count(),
             "RE_PRESTAMOS"          => $Represtamo->count(),
             "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
-            "LISTA_CLIENTES"        =>array_merge($ArrayClientesNuevos , $ArrayReprestamo),
+            "LISTA_CLIENTES"        =>array_merge($ArrayClientesNuevos , $ArrayReprestamo, $ArrayReactivaciones),
             'CALC_REACT'            => number_format($Monto_Reactivacion,2),
             'COUNT_REACT'           => number_format($Count_Reactivacion,0),
             

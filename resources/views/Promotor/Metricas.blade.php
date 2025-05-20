@@ -76,7 +76,7 @@
               <div class="info-box mb-3 bg-danger">
                 <div class="info-box-content">
                   <span class="info-box-text"> SALDOS COLOCADOS</span>
-                  <span class="info-box-number"><small>C$ </small><span id="lblSaldosColocados"> 0.00</span></span>
+                  <span class="info-box-number"><small>C$. </small><span id="lblSaldosColocados"> 0.00</span></span>
                 </div>
               </div>
             </div>
@@ -85,7 +85,7 @@
               <div class="info-box mb-3 bg-success">
                 <div class="info-box-content">
                   <span class="info-box-text">Reactivaciones ( <span id="lblCountReact">0</span> )</span>
-                  <span class="info-box-number"><span id="lblSaldosColocados"> C$ 0.00 </span></span>
+                  <span class="info-box-number"> <small>C$. </small><span id="lblValueReact"> 0.00 </span></span>
                 </div>
               </div>
             </div>
