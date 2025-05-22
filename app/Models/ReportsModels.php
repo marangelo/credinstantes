@@ -577,13 +577,6 @@ class ReportsModels extends Model {
             $array_dashboard = array_merge($array_dashboard, $Metricas);
         }
 
-        //MUESTRA LA METRICAS ACTUALES , PARA QUE TENGA REGISTRO ACTUAL
-        $MoraAtrasada = PagosFechas::getMora($Zona,'atrasada',$D1, $D2);
-        $MoraVencida  = PagosFechas::getMora($Zona,'vencida',$D1, $D2);
-
-        $array_dashboard["MORA_ATRASADA"]       = $MoraAtrasada;
-        $array_dashboard["MORA_VENCIDA"]        = $MoraVencida;       
-
         $array_dashboard["label"]       = $vLabel;
         $array_dashboard["Data"]        = $vData;
         

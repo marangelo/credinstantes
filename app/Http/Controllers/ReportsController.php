@@ -16,6 +16,7 @@ use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\ReportsModels;
 use App\Models\Estados;
+use App\Models\PagosFechas;
 use CodersFree\Date\Date;
 use App\Traits\CheckUserLock;
 
@@ -96,6 +97,17 @@ class ReportsController extends Controller
         } else {
             $response = ReportsModels::getMetricasHistory($Opt, $Fecha);
         }
+
+        
+        $D1     = date('Y-m-01', strtotime($Fecha)). ' 00:00:00';
+        $D2     = $Fecha . ' 23:59:59';
+
+        $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
+        $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
+
+        $response["MORA_ATRASADA"]       = $MoraAtrasada;
+        $response["MORA_VENCIDA"]        = $MoraVencida;    
+        
 
         //$response = ReportsModels::getDashboard($Opt, $Fecha);
         
