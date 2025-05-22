@@ -88,7 +88,7 @@
                   <p>Clientes<i class="fas fa-angle-left right"></i></p>
               </a>
               <ul class="nav nav-treeview">
-                @if (in_array(Session::get('rol'), [1, 2]))
+                @if (in_array(Session::get('rol'), [2]))
                 <li class="nav-item">
                   <a href="{{route('ViewDesembolsados')}}" class="nav-link {{ (request()->is('ViewDesembolsados')) ? 'active' : '' }}" >
                     <i class="fas fa-user nav-icon"></i><p>Des. Gestor</p>
