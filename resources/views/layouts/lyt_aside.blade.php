@@ -107,12 +107,14 @@
                         <p>Inactivos</p>
                     </a>
                 </li>
+                @if (in_array(Session::get('rol'), [1]))
                 <li class="nav-item">
-                <a href="{{route('ClientesNA')}}" class="nav-link {{ (request()->is('ClientesNA')) ? 'active' : '' }}" >
-                  <i class="nav-icon fas fa-user nav-icon"></i>
-                  <p>Clientes. N/A</p>
-                </a>
-              </li>
+                  <a href="{{route('ClientesNA')}}" class="nav-link {{ (request()->is('ClientesNA')) ? 'active' : '' }}" >
+                    <i class="nav-icon fas fa-user nav-icon"></i>
+                    <p>Clientes. N/A</p>
+                  </a>
+                </li>
+                @endif
                 @if( Session::get('rol') == '2')
                 <li class="nav-item">
                     <a href="{{ route('RecuperacionCobro')}}" class="nav-link {{ (request()->is('RecuperacionCobro')) ? 'active' : '' }} ">

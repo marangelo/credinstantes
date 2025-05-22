@@ -359,7 +359,15 @@ class Clientes extends Model
 
         //CALCULADO EN BASE A ULTIMA FECHA REGISTRADA EN EL CREDITO COMO FECHA DE CULMINACION
         $Creditos = Credito::where('id_clientes', $IdCl)->orderBy('id_creditos', 'desc')->first();
-        $UltmPago = (isset($Creditos->fecha_culmina)) ? (int) \Carbon\Carbon::parse($Creditos->fecha_culmina)->diffInDays(\Carbon\Carbon::now()) : 0;
+        $UltmFecha = (isset($Creditos->fecha_culmina) && $Creditos->fecha_culmina !== null) ? $Creditos->fecha_culmina : $Creditos->fecha_ultimo_abono;
+        $UltmPago = (int) \Carbon\Carbon::parse($UltmFecha)->diffInDays(\Carbon\Carbon::now());
+
+
+        
+
+
+
+        
         
         return $UltmPago;
     }

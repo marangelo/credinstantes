@@ -54,7 +54,7 @@
                       <label>INICIO</label>
                       <div class="form-group">
                         <div class="input-group date" id="dt-ini" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('d/m/Y') }}"/>
+                            <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('01/m/Y') }}"/>
                             <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>                          

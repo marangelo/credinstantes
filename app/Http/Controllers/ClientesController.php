@@ -11,4 +11,11 @@ class ClientesController extends Controller
     {
         $this->middleware('auth');
     }
+
+    public function reactivacion(Request $request)
+    {
+        $DaysLastPayment = Clientes::getDaysLastPayment(199);   
+
+        dd($DaysLastPayment);
+    }
 }

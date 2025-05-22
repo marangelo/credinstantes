@@ -93,21 +93,11 @@ class ReportsController extends Controller
         $Fecha = $request->input('dt_ini');
 
         if ($Fecha >= date('Y-m-d')) {
+            
             $response = ReportsModels::getDashboard($Opt, $Fecha);
         } else {
             $response = ReportsModels::getMetricasHistory($Opt, $Fecha);
         }
-
-        
-        $D1     = date('Y-m-01', strtotime($Fecha)). ' 00:00:00';
-        $D2     = $Fecha . ' 23:59:59';
-
-        $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
-        $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
-
-        $response["MORA_ATRASADA"]       = $MoraAtrasada;
-        $response["MORA_VENCIDA"]        = $MoraVencida;    
-        
 
         //$response = ReportsModels::getDashboard($Opt, $Fecha);
         

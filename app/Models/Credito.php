@@ -481,8 +481,10 @@ class Credito extends Model
                 //Clientes::CheckStatus($IdCredito);
 
                 
-                $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);                
+                $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);    
+                
                 if($DaysLastPayment >= 10){
+
                     ClientesReactivacion::updateOrCreate(
                         ['id_clientes' => $idInsertado],
                         [
