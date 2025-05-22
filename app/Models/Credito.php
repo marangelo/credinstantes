@@ -119,11 +119,15 @@ class Credito extends Model
     }
     public static function Saldo_Capital($Zona,$D1, $D2)
     {
-        return Pagos::where('activo', 1)
-                ->whereBetween('FECHA_ABONO', [$D1, $D2])
-                ->when($Zona > -1, function ($query) use ($Zona) {
-                    $query->where('ID_ZONA', $Zona);
-                })->sum('CAPITAL');
+        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+
+        return CreditosHistory::where('CREDITO_ACTIVO', 1)
+        ->whereDate('FECHA', '<=', $D2)
+        ->whereNotIn('ID_CLIENTE', $ClientesArchivados)
+        ->where('SALDO_CREDITO', '>', 0)
+        ->when($Zona > -1, function ($query) use ($Zona) {
+            $query->where('ID_ZONA', $Zona);
+        })->sum('PAGO_CAPITAL');    
     }
     public static function getCreditosActivos()
     {
