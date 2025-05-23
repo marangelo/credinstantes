@@ -482,10 +482,6 @@ class Credito extends Model
 
                 
                 $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);    
-
-
-                
-                
                 if($DaysLastPayment >= 10){
                     ClientesReactivacion::insert([
                         'id_clientes' => $idInsertado,

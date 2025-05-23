@@ -21,6 +21,7 @@ class Crobrador extends Model
         $ArrayReprestamo         = [] ;
         $ArrayReactivaciones     = [] ;
         $Loadarray               = [] ;
+        $NotInReactivacion       = [] ;
         $Metricas                = [] ;
         $position_array          = 0 ;
 
@@ -42,8 +43,30 @@ class Crobrador extends Model
             $position_array++;
         }
 
-        $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->where('asignado',$Cobra)->get();     
     
+
+        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Cobra)->get();
+        $Count_Reactivacion    = $Clientes_Reactivacion->count();
+        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+
+        foreach ($Clientes_Reactivacion as $rc) {
+            $ArrayReactivaciones[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
+                'Origen'            => 'Reactivacion',                
+                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento ?? 'N/D',
+                'Zona'              => $rc->Clientes->getZona->nombre_zona,
+                'Direccion'         => $rc->Clientes->direccion_domicilio,
+            ];
+            
+            $NotInReactivacion[$position_array] = $rc->Id_credito;
+
+            $position_array++;
+        }
+
+        $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->where('asignado',$Cobra)->get();         
         foreach ($Creditos as $c) {
             $ArrayClientesNuevos[$position_array] = [
                 'id_clientes'       => $c->id_clientes,
@@ -58,30 +81,7 @@ class Crobrador extends Model
             $position_array++;
         }
 
-
         $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
-
-        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Cobra)->get();
-        $Count_Reactivacion    = $Clientes_Reactivacion->count();
-        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
-
-
-
-
-        foreach ($Clientes_Reactivacion as $rc) {
-            $ArrayReactivaciones[$position_array] = [
-                'id_clientes'       => $rc->id_clientes,
-                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
-                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
-                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
-                'Origen'            => 'Reactivacion',                
-                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento ?? 'N/D',
-                'Zona'              => $rc->Clientes->getZona->nombre_zona,
-                'Direccion'         => $rc->Clientes->direccion_domicilio,
-            ];
-            $position_array++;
-        }
-
 
         $CountClientesNuevos    = count($ArrayClientesNuevos);
         $ValueReprestamo        = count($ArrayReprestamo);
