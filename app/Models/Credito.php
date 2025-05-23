@@ -482,19 +482,18 @@ class Credito extends Model
 
                 
                 $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);    
+
+
+                
                 
                 if($DaysLastPayment >= 10){
-
-                    ClientesReactivacion::updateOrCreate(
-                        ['id_clientes' => $idInsertado],
-                        [
-                            'id_clientes' => $idInsertado,
-                            'Id_credito' => $IdCredito,
-                            'fecha_reactivacion' => date('Y-m-d H:i:s',strtotime($FechaOpen)),
-                            'monto_reactivacion' => $Monto_,
-                            'user_created' => Auth::id()
-                        ]
-                    );
+                    ClientesReactivacion::insert([
+                        'id_clientes' => $idInsertado,
+                        'Id_credito' => $IdCredito,
+                        'fecha_reactivacion' => date('Y-m-d H:i:s',strtotime($FechaOpen)),
+                        'monto_reactivacion' => $Monto_,
+                        'user_created' => $Promotor_,
+                    ]);
                 } else {
                     Reloan::insert([
                         'loan_id'       => $IdCredito,

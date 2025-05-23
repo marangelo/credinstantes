@@ -33,7 +33,7 @@ class Crobrador extends Model
                 'Fecha'             => \Date::parse($rc->date_reloan)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($rc->amount_reloan,2),
                 'Origen'            => 'RePrestamo',
-                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento ?? '',
+                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento ?? 'N/D',
                 'Zona'              => $rc->Clientes->getZona->nombre_zona,
                 'Direccion'         => $rc->Clientes->direccion_domicilio,
                 
@@ -51,7 +51,7 @@ class Crobrador extends Model
                 'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($c->monto_credito,2),
                 'Origen'            => 'Nuevo',                
-                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento ?? '',
+                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento ?? 'N/D',
                 'Zona'              => $rc->Clientes->getZona->nombre_zona,
                 'Direccion'         => $rc->Clientes->direccion_domicilio,
             ];
@@ -75,7 +75,7 @@ class Crobrador extends Model
                 'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
                 'Origen'            => 'Reactivacion',                
-                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento,
+                'Departamento'      => $rc->Clientes->getDepartamento->nombre_departamento ?? 'N/D',
                 'Zona'              => $rc->Clientes->getZona->nombre_zona,
                 'Direccion'         => $rc->Clientes->direccion_domicilio,
             ];
