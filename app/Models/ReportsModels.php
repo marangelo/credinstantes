@@ -411,6 +411,7 @@ class ReportsModels extends Model {
         $ArrayReprestamo         = [] ;
         $ArrayReactivaciones     = [] ;
         $Loadarray               = [] ;
+        $NotInReactivacion       = [] ;
         $position_array          = 0 ;
 
         
@@ -433,11 +434,29 @@ class ReportsModels extends Model {
         }
 
 
-        if ($Prom > 0) {
-            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->where('asignado',$Prom)->get();
-        }else{
-            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $Loadarray)->get();
+        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
+        $Count_Reactivacion    = $Clientes_Reactivacion->count();
+        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+        foreach ($Clientes_Reactivacion as $rc) {
+            $ArrayReactivaciones[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
+                'Origen'            => 'Reactivacion',
+            ];
+            $NotInReactivacion[$position_array] = $rc->Id_credito;
+            $position_array++;
         }
+
+
+        if ($Prom > 0) {
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->where('asignado',$Prom)->get();
+        }else{
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->get();
+        }
+
+        
         
         foreach ($Creditos as $c) {
             $ArrayClientesNuevos[$position_array] = [
@@ -452,31 +471,13 @@ class ReportsModels extends Model {
 
         $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
 
-
-        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
-        $Count_Reactivacion    = $Clientes_Reactivacion->count();
-        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
-
-
-      
-
-        foreach ($Clientes_Reactivacion as $rc) {
-            $ArrayReactivaciones[$position_array] = [
-                'id_clientes'       => $rc->id_clientes,
-                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
-                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
-                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
-                'Origen'            => 'Reactivacion',
-            ];
-            $position_array++;
-        }
-
+        $array_merge = array_merge($ArrayClientesNuevos ,$ArrayReprestamo, $ArrayReactivaciones);
 
         $array_dashboard = [
             "CLIENTES_NUEVO"        => $Creditos->count(),
             "RE_PRESTAMOS"          => $Represtamo->count(),
             "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
-            "LISTA_CLIENTES"        =>array_merge($ArrayClientesNuevos , $ArrayReprestamo, $ArrayReactivaciones),
+            "LISTA_CLIENTES"        => $array_merge,
             'CALC_REACT'            => number_format($Monto_Reactivacion,2),
             'COUNT_REACT'           => number_format($Count_Reactivacion,0),
             
