@@ -434,7 +434,15 @@ class ReportsModels extends Model {
         }
 
 
-        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
+
+
+        if ($Prom > 0) {
+            $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Prom)->get();
+        }else{
+            $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
+        }
+
+
         $Count_Reactivacion    = $Clientes_Reactivacion->count();
         $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
 
