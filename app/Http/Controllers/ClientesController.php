@@ -14,7 +14,7 @@ class ClientesController extends Controller
 
     public function reactivacion(Request $request)
     {
-        $DaysLastPayment = Clientes::getDaysLastPayment(49); 
+        $DaysLastPayment = Clientes::getDaysLastPayment(269); 
         
 
         if($DaysLastPayment >= 10){

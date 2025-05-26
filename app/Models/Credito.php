@@ -432,6 +432,9 @@ class Credito extends Model
                 $InteresesPorCuota             = $request->input('InteresesPorCuota');
                 $FechaOpen             = $request->input('FechaOpen');
 
+
+                $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);    
+
                 $fecha = new DateTime($FechaOpen);
                 $Fecha_abonos = [];
 
@@ -478,12 +481,10 @@ class Credito extends Model
                 $response = RefAbonos::insert($Fecha_abonos); 
 
                  //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
-                //Clientes::CheckStatus($IdCredito);
-
-                
-                $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);    
+                //Clientes::CheckStatus($IdCredito);            
                 
                 if($DaysLastPayment >= 10){
+
                     ClientesReactivacion::insert([
                         'id_clientes' => $idInsertado,
                         'Id_credito' => $IdCredito,
@@ -491,7 +492,10 @@ class Credito extends Model
                         'monto_reactivacion' => $Monto_,
                         'user_created' => $Promotor_,
                     ]);
-                } else {
+
+                } 
+
+                if($DaysLastPayment < 10){
                     Reloan::insert([
                         'loan_id'       => $IdCredito,
                         'date_reloan'   => $FechaOpen, 
