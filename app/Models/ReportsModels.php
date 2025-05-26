@@ -437,10 +437,12 @@ class ReportsModels extends Model {
         $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
         $Count_Reactivacion    = $Clientes_Reactivacion->count();
         $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+
+
         foreach ($Clientes_Reactivacion as $rc) {
             $ArrayReactivaciones[$position_array] = [
                 'id_clientes'       => $rc->id_clientes,
-                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos . " (".$rc->Clientes->id_clientes.")",
                 'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
                 'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
                 'Origen'            => 'Reactivacion',

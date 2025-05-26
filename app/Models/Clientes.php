@@ -347,22 +347,8 @@ class Clientes extends Model
 
     public static function getDaysLastPayment($IdCl)
     {
-
-        //CALCULADO EN BASE A ULTIMA FECHA REGISTRADA EN EL ULTIMO PAGO 
-        // $Cliente = Clientes::where('id_clientes', $IdCl)->with(['getCreditos' => function($q) {
-        //     $q->orderBy('id_creditos', 'desc')->with(['getHistoryPagos' => function($q2) {
-        //         $q2->orderBy('FECHA_ABONO', 'desc')->first();
-        //     }])->first();
-        // }])->first();
-        //$UltimoPago  = $UltimoPago ? (int) \Carbon\Carbon::parse($UltimoPago[0]['getHistoryPagos']['FECHA_ABONO'])->diffInDays(\Carbon\Carbon::now()) : 0;
-
-
-        //CALCULADO EN BASE A ULTIMA FECHA REGISTRADA EN EL CREDITO COMO FECHA DE CULMINACION
-        $Creditos = Credito::where('id_clientes', $IdCl)->orderBy('id_creditos', 'desc')->first();
-        $UltmFecha = (isset($Creditos->fecha_culmina) && $Creditos->fecha_culmina !== null) ? $Creditos->fecha_culmina : $Creditos->fecha_ultimo_abono;
-        $UltmPago = (int) \Carbon\Carbon::parse($UltmFecha)->diffInDays(\Carbon\Carbon::now());     
-        
-        return $UltmPago;
+        $Creditos = DaysLastPayment::where('id_clientes', $IdCl)->first();        
+        return $Creditos->dias_desde_ultimo_abono;
     }
     
 
