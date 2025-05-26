@@ -65,6 +65,7 @@ class CalcularMetricas extends Command
                 $ttPagoIntereses    += $dia->INTERES; 
             }
             $Saldos_Cartera = Credito::Saldos_Cartera($Id_Zona,$D1, $D2);
+            $Saldos_Capital = Credito::Saldo_Capital($Id_Zona,$D1, $D2);
             $Clientes       = Credito::Creditos($Id_Zona,$D1, $D2);           
             
 
@@ -88,6 +89,7 @@ class CalcularMetricas extends Command
                     "INTERESES"         => $ttPagoIntereses,
                     "UTIL_NETA"         => $ttUtilidadNeta,
                     "SALDOS_CARTERA"    => $Saldos_Cartera,
+                    "SALDOS_CAPITAL"    => $Saldos_Capital,
                     "MORA_ATRASADA"     => $MoraAtrasada,
                     "MORA_VENCIDA"      => $MoraVencida,                    
                     'Zona_id'           => $Id_Zona,
@@ -127,6 +129,13 @@ class CalcularMetricas extends Command
                             'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "saldo_cartera",
                             "Valor"     => $Saldos_Cartera
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
+                            "Concepto"  => "saldo_capital",
+                            "Valor"     => $Saldos_Capital
                         ],
                         [
                             "Fecha"     => $dtNow,
@@ -191,6 +200,7 @@ class CalcularMetricas extends Command
                 ->where('num_year', date('Y'))
                 ->whereNotIn('Concepto', ['util_reinvertidas', 'util_provicion', 'desembolso_mes', 'reinvercion_capital', 'efectivo_disp'])
                 ->delete();
+                
         Consolidado::insert($array_consolidado);
 
         DB::statement('CALL actualizar_tabla_abonos()');
