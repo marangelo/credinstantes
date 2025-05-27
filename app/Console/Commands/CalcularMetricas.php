@@ -45,10 +45,7 @@ class CalcularMetricas extends Command
             $ttPagoIntereses    = 0;
 
             $MoraAtrasada = PagosFechas::getMoraCalcHistory($Id_Zona,'atrasada',$D1, $D2);
-            $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);            
-            
-
-            
+            $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);     
 
             $Dias = Pagos::selectRaw('SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                     ->whereBetween('FECHA_ABONO', [$D1, $D2])
@@ -183,9 +180,6 @@ class CalcularMetricas extends Command
                     
 
                 }
-                
-
-
             }
         }
 
