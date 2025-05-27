@@ -220,12 +220,19 @@ Route::post('UnArchivarClient', 'ControllerClientesNA@UnArchivarClient')->name('
 
 //solo de test
 Route::get('reactivacion', 'ClientesController@reactivacion')->name('reactivacion');
+Route::get('Holiday', 'ClientesController@Holiday')->name('Holiday');
 
 
 //ESTADISTICAS DE CREDITOS DESBOLSADOS PARA COBRADOR
 Route::get('ViewDesembolsados', 'CobradorController@ViewDesembolsados')->name('ViewDesembolsados');
-
 Route::post('getDesembolsados', 'CobradorController@getDesembolsados')->name('getDesembolsados');
 
+//RUTAS PARA HOLIDAYS
+Route::get('Feriados', 'HolidaysController@UIHoliDays')->name('Feriados');
+Route::post('HolidaysList', 'HolidaysController@HolidaysList')->name('HolidaysList');
+Route::post('HolidaysEdit', 'HolidaysController@HolidaysEdit')->name('HolidaysEdit');
+Route::post('HolidaysDelete', 'HolidaysController@HolidaysDelete')->name('HolidaysDelete');
+Route::post('HolidaysSave', 'HolidaysController@HolidaysSave')->name('HolidaysSave');
+Route::get('UpdateHoliday/{id}', 'HolidaysController@UpdateHoliday')->name('UpdateHoliday');
 
 

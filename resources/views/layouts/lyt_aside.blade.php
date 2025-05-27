@@ -323,8 +323,15 @@
               </li>
               <li class="nav-item">
                 <a href="{{ route('Zonas')}}" class="nav-link {{ (request()->is('Zonas')) ? 'active' : '' }}">
-                  <i class="far fa-calendar-plus nav-icon"></i>
+                  <i class="far fa-map nav-icon"></i>
                   <p>Zonas</p>
+                </a>
+              </li>
+
+              <li>
+                <a href="{{ route('Feriados')}}" class="nav-link {{ (request()->is('Feriados')) ? 'active' : '' }}">
+                  <i class="far fa-calendar-plus nav-icon"></i>
+                  <p>Feriados</p>
                 </a>
               </li>
             </ul>

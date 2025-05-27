@@ -529,14 +529,15 @@ class Credito extends Model
     public static function isHoliday(DateTime $Date)
     {
         $Year_now = $Date->format('Y');
+
         $Holidays = [];
 
-        for ($i = 0; $i < 3; $i++) {
-            $Holidays[] = "$Year_now-01-01";
-            $Holidays[] = "$Year_now-12-25";
-            $Year_now++;
-        }
+        $ini = $Year_now . "-01-01";
+        $end = ( $Year_now + 1) . "-12-31";
 
+        $Holidays = Holidays::whereBetween('date_holiday', [$ini, $end])
+            ->pluck('date_holiday')
+            ->toArray();
 
         while (in_array($Date->format('Y-m-d'), $Holidays)) {
             // Add 1 Week
