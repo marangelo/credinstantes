@@ -47,8 +47,8 @@
                           <button type="button" class="btn btn-primary" id="btn_filtrar_feriados">
                               <i class="fa fa-filter"></i> FILTRAR
                           </button>
-                             
-                          <button type="button" class="btn btn-success button_export_excel" id="btn-UpdateHoliday">
+                          
+                          <button type="button" class="btn btn-success" id="btn-UpdateHoliday">
                               <i class="fas fa-sync-alt "></i> ACTUALIZAR
                           </button>
 

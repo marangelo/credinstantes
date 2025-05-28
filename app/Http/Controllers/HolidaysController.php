@@ -84,7 +84,41 @@ class HolidaysController extends Controller
     }
     public function UpdateHoliday($nYear)
     {
-      dd($nYear);
+        $ini = $nYear . "-01-01";
+        $end = $nYear . "-12-31";
+        $HolidaysNew = [];
+
+        $Holidays = Holidays::whereBetween('date_holiday', [$ini, $end])->get();
+
+        foreach ($Holidays as $h) {
+            $fecha = new \DateTime($h->date_holiday);
+            $fecha->modify('+1 year');
+
+            $HolidaysNew[] = [
+                'date_holiday' => $fecha->format('Y-m-d'),
+                'Description'  => $h->Description,
+                'created_by'   => Auth::id(),
+                'created_at'   => now(),
+                'updated_at'   => now(),
+            ];
+        }
+
+        $ini = date('Y-m-d', strtotime($ini . '+1 year'));
+        $end = date('Y-m-d', strtotime($end . '+1 year'));        
+        
+        Holidays::whereBetween('date_holiday', [$ini, $end])->delete();
+        Holidays::insert($HolidaysNew); 
+        
+        $nYear_new =($nYear + 1);
+
+
+        
+
+        return response()->json([
+            'success' => true, 
+            'year' => $nYear_new,
+            'message' => 'Feriados Creados correctamente.',
+        ]);
     }
 
 

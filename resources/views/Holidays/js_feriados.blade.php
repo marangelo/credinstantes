@@ -197,14 +197,16 @@
 
     function UpdateHoliday() {
 
+        var year_feriados = {};
+        $("#id_feriado_year option").each(function(){
+            year_feriados[$(this).val()] = $(this).text();
+        });
+
+
         Swal.fire({
             title: "El Año a actualizar ",
             input: "select",
-            inputOptions: {
-                '2025': '2025',
-                'user2': 'User 2',
-                'user3': 'User 3'
-            },
+            inputOptions: year_feriados,
             inputAttributes: {
                 autocapitalize: "off"
             },
@@ -223,14 +225,20 @@
                     Swal.showValidationMessage(`Request failed: ${error}`);
                 }
             },
-            allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                title: `${result.value.login}'s avatar`,
-                imageUrl: result.value.avatar_url
-                });
-            }
+                    icon: 'success',
+                    text: `Nuevos feriados del ${result.value.year} Cread correctamente.`,
+                    title: `${result.value.message}`,
+                    showConfirmButton: true,
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });0
+            }0
             });
     }
 
