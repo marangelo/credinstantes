@@ -56,6 +56,7 @@ class Consolidado extends Model {
             }
 
             return $json_arrays;
+
         } catch (Exception $e) {
             return $e->getMessage();
         }

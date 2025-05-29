@@ -12,6 +12,7 @@ use App\Models\Credito;
 use App\Models\Pagos;
 use App\Models\Consolidado;
 use App\Models\Abono;
+use App\Models\ReportsModels;
 use Illuminate\Support\Facades\DB;
 
 class CalcularMetricas extends Command
@@ -45,7 +46,9 @@ class CalcularMetricas extends Command
             $ttPagoIntereses    = 0;
 
             $MoraAtrasada = PagosFechas::getMoraCalcHistory($Id_Zona,'atrasada',$D1, $D2);
-            $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);     
+            $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);    
+            $SaldosColocados = ReportsModels::getMetricasPromotor($Id_Zona);
+
 
             $Dias = Pagos::selectRaw('SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                     ->whereBetween('FECHA_ABONO', [$D1, $D2])
@@ -175,7 +178,22 @@ class CalcularMetricas extends Command
                             'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "dispensa_aplicada",
                             "Valor"     => $Dispensa
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
+                            "Concepto"  => "desembolso_mes",
+                            "Valor"     => $SaldosColocados['SALDOS_COLOCADOS']
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
+                            "Concepto"  => "utilidad_neta",
+                            "Valor"     => $ttUtilidadNeta
                         ]
+
                     ];
                     
 
@@ -192,7 +210,7 @@ class CalcularMetricas extends Command
         // ELIMINA REGISTROS ALMACENADOS DE FECHA Y GUARDADO DE INFORMACION
         Consolidado::where('num_month', date('m'))
                 ->where('num_year', date('Y'))
-                ->whereNotIn('Concepto', ['util_reinvertidas', 'util_provicion', 'desembolso_mes', 'reinvercion_capital', 'efectivo_disp'])
+                ->whereNotIn('Concepto', ['util_reinvertidas', 'util_provicion', 'reinvercion_capital', 'efectivo_disp'])
                 ->delete();
                 
         Consolidado::insert($array_consolidado);

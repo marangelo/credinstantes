@@ -69,9 +69,9 @@
                       <tr class="bg-primary text-white dark__bg-1000">
                         <th></th>
                         <th class="border-0">COMPARATIVO DEL MES</th>
-                        @foreach ($Consolidado['header_date'] as $k) 
-                          <th class="border-0 text-center">{{$k}}</th>
-                        @endforeach
+                          @foreach ($Consolidado['header_date'] as $k) 
+                            <th class="border-0 text-center">{{$k}}</th>
+                          @endforeach
                       </tr>
                     </thead>
                     <tbody>
@@ -79,9 +79,9 @@
                         <tr>
                           <td>1</td>
                           <td>{{$r['CONCEPTO']}}</td>
-                          @foreach ($Consolidado['header_date'] as $k) 
-                            <td class="align-middle text-right">{{ isset($r[$k]) ? $r[$k] : ' - ' }}</td>                                
-                          @endforeach
+                            @foreach ($Consolidado['header_date'] as $k) 
+                              <td class="align-middle text-right">{{ isset($r[$k]) ? $r[$k] : ' - ' }}</td>                                
+                            @endforeach
                         </tr>
                       @endforeach
                     </tbody>
