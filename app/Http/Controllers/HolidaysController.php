@@ -112,8 +112,6 @@ class HolidaysController extends Controller
         $nYear_new =($nYear + 1);
 
 
-        
-
         return response()->json([
             'success' => true, 
             'year' => $nYear_new,
