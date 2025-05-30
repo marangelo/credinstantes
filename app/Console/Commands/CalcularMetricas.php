@@ -13,6 +13,7 @@ use App\Models\Pagos;
 use App\Models\Consolidado;
 use App\Models\Abono;
 use App\Models\ReportsModels;
+use App\Models\ClientesReactivacion;
 use Illuminate\Support\Facades\DB;
 
 class CalcularMetricas extends Command
@@ -69,7 +70,8 @@ class CalcularMetricas extends Command
             $Clientes       = Credito::Creditos($Id_Zona,$D1, $D2);           
             
 
-            $GastosOperativos = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
+            $GastosOperativos   = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
+            $Reactivaciones     = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->sum('monto_reactivacion');
 
             $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
 
@@ -192,6 +194,13 @@ class CalcularMetricas extends Command
                             'num_year'  => date('Y', strtotime($dtNow)),
                             "Concepto"  => "utilidad_neta",
                             "Valor"     => $ttUtilidadNeta
+                        ],
+                        [
+                            "Fecha"     => $dtNow,
+                            'num_month' => date('m', strtotime($dtNow)),
+                            'num_year'  => date('Y', strtotime($dtNow)),
+                            "Concepto"  => "reactivaciones",
+                            "Valor"     => $Reactivaciones
                         ]
 
                     ];
