@@ -82,7 +82,9 @@
                         <th></th>
                       @endif
                     @else
-                      <th></th>
+                      @if (in_array(Session::get('rol'), [1]))
+                      <th> -</th>
+                      @endif
                     @endif
                     
                   </tr>
@@ -120,33 +122,33 @@
                         </td>
                         <td>{{ strtoupper($c->direccion_domicilio) }}  </td>  
                         <td>{{ number_format($c->getCreditos->sum('saldo'),2)}}</td>
-                          @if (request()->is('Activos/*'))
-                          
+                          @if (request()->is('Activos/*'))                          
                             @if (in_array(Session::get('rol'), [1, 3, 5]))
                             <td>
                                 <div class="card-tools text-center">  
-                                    <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
-                                        <i class="fas fa-pencil-alt">
-                                        </i>
-                                        Editar
-                                    </a>
-                                    @if (Session::get('rol') == '1')  
-                                    <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
-                                        <i class="fas fa-trash">
-                                        </i>
-                                        Remover
-                                    </a>
-                                    <a class="btn btn-danger btn-sm" href="#" onclick="ArchivarCliente({{$c->id_clientes}}, 1 )">
-                                        <i class="fas fa-archive">
-                                        </i>
-                                        Archivar
-                                    </a>
-                                    @endif
+                                      <a class="btn btn-primary btn-sm" href="#"  onclick="eCliente({{$c}})">
+                                          <i class="fas fa-pencil-alt">
+                                          </i>
+                                          Editar
+                                      </a>
+                                      @if (Session::get('rol') == '1')  
+                                      <a class="btn btn-danger btn-sm" href="#" onclick="rmItem({{$c->id_clientes}})">
+                                          <i class="fas fa-trash">
+                                          </i>
+                                          Remover
+                                      </a>
+                                      <a class="btn btn-danger btn-sm" href="#" onclick="ArchivarCliente({{$c->id_clientes}}, 1 )">
+                                          <i class="fas fa-archive">
+                                          </i>
+                                          Archivar
+                                      </a>
+                                      @endif
                                   </div>
                               </td>
                             @endif
                           @else
                             @if (in_array(Session::get('rol'), [1]))
+
                             <td>
                                 <div class="card-tools text-center">  
                                   <a class="btn btn-danger btn-sm" href="#" onclick="ArchivarCliente({{$c->id_clientes}}, 1)">
@@ -156,6 +158,7 @@
                                     </a>
                                   </div>
                               </td>
+                            
                             @endif
                           @endif
 
