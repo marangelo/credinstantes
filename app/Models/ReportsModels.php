@@ -482,6 +482,8 @@ class ReportsModels extends Model {
 
         $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
 
+        $SALDOS_COLOCADOS = $SALDOS_COLOCADOS + $Monto_Reactivacion;
+
         $array_merge = array_merge($ArrayClientesNuevos ,$ArrayReprestamo, $ArrayReactivaciones);
 
         $array_dashboard = [
@@ -489,7 +491,6 @@ class ReportsModels extends Model {
             "RE_PRESTAMOS"          => $Represtamo->count(),
             "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
             "LISTA_CLIENTES"        => $array_merge,
-            'CALC_REACT'            => number_format($Monto_Reactivacion,2),
             'COUNT_REACT'           => number_format($Count_Reactivacion,0),
             
         ];

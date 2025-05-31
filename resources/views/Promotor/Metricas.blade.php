@@ -73,6 +73,15 @@
             </div>
 
             <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3 bg-success">
+                <div class="info-box-content">
+                  <span class="info-box-text">Reactivaciones </span>
+                  <span class="info-box-number"> <span id="lblCountReact"> 0.00 </span></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-3">
               <div class="info-box mb-3 bg-danger">
                 <div class="info-box-content">
                   <span class="info-box-text"> SALDOS COLOCADOS</span>
@@ -81,14 +90,7 @@
               </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-md-3">
-              <div class="info-box mb-3 bg-success">
-                <div class="info-box-content">
-                  <span class="info-box-text">Reactivaciones ( <span id="lblCountReact">0</span> )</span>
-                  <span class="info-box-number"> <small>C$. </small><span id="lblValueReact"> 0.00 </span></span>
-                </div>
-              </div>
-            </div>
+            
 
           </div>
         <div class="card">
