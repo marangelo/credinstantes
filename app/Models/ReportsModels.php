@@ -335,6 +335,7 @@ class ReportsModels extends Model {
         $ttPagoCapital      = 0;
         $ttPagoIntereses    = 0;
         $position_array          = 0 ;
+        $NotInReactivacion       = [] ;
 
         $dtNow  = date('Y-m-d');
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
@@ -343,8 +344,24 @@ class ReportsModels extends Model {
         $role   = Auth::User()->id_rol;
         $Prom   = Auth::id();
 
-        $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2]);
-        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2]);
+        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Prom)->get();
+        $Count_Reactivacion    = $Clientes_Reactivacion->count();
+        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+
+        foreach ($Clientes_Reactivacion as $rc) {
+            $ArrayReactivaciones[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
+                'Origen'            => 'Reactivacion',
+            ];
+            $NotInReactivacion[$position_array] = $rc->Id_credito;
+            $position_array++;
+        }
+
+        $Creditos   = Credito::where('asignado',$Prom)->whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', $NotInReactivacion);
+        $Represtamo = Reloan::where('user_created',$Prom)->whereBetween('date_reloan', [$D1, $D2])->whereNotIn('loan_id', $NotInReactivacion);
         
         if ($Zona > 0) {            
             $Creditos->Where(function($query) use ($Zona) {
@@ -371,22 +388,6 @@ class ReportsModels extends Model {
         $RePrestamo         = $Represtamo->sum('amount_reloan');
 
         $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') ;
-
-
-        $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Prom)->get();
-        $Count_Reactivacion    = $Clientes_Reactivacion->count();
-        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
-
-        foreach ($Clientes_Reactivacion as $rc) {
-            $ArrayReactivaciones[$position_array] = [
-                'id_clientes'       => $rc->id_clientes,
-                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
-                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
-                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
-                'Origen'            => 'Reactivacion',
-            ];
-            $position_array++;
-        }
 
 
         $array_dashboard = [
