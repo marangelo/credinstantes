@@ -71,7 +71,8 @@ class CalcularMetricas extends Command
             
 
             $GastosOperativos   = GastosOperaciones::whereBetween('fecha_gasto', [$D1, $D2])->where('activo', 1)->sum('monto');
-            $Reactivaciones     = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->sum('monto_reactivacion');
+            
+            $Reactivaciones     = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->count();
 
             $ttCuotaCobrada     = $ttPagoCapital + $ttPagoIntereses;
 
