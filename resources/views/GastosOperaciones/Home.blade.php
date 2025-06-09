@@ -46,7 +46,6 @@
                       <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar" aria-label="Buscar">
                     </div>
                   </div>
-                 
                   <div class="col-md-3">
                     <div class="form-group">
                       <div class="input-group date" id="dt-ini" data-target-input="nearest">
@@ -54,8 +53,6 @@
                           <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
-                          
-                        
                       </div>
                     </div>
                   </div>

@@ -16,13 +16,20 @@ class ControllerClientesNA extends Controller
         $this->middleware('auth');
     }
     
-    public function ViewClientesNA()
+    public function ViewClientesNA($IdZona)
     {         
         $Titulo     = "Catalogo de Clientes No Activos";
 
-        $ClientesNA = ClientesNA::all()->pluck('id_cliente')->toArray();
-        $Clientes   = Clientes::whereIn('id_clientes', $ClientesNA)->get();
-        return view('ClientesNA.Table', compact('Titulo', 'Clientes'));
+        $ClientesNA = ClientesNA::all()->pluck('id_cliente')->toArray();        
+        $Zonas       = Zonas::getZonas(); 
+
+        $Clientes   = Clientes::whereIn('id_clientes', $ClientesNA)
+                            ->when($IdZona > -1, function ($query) use ($IdZona) {
+                                $query->where('id_zona', $IdZona);
+                            })->get();
+
+        
+        return view('ClientesNA.Table', compact('Titulo', 'Clientes', 'Zonas', 'IdZona'));
     }
     public function ArchivarClient(Request $request)
     {         

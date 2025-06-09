@@ -51,14 +51,12 @@ class ReportsController extends Controller
     }
     public function Abonos()
     {           
-        $Clientes    = Clientes::getClientes(0);  
-        $Zonas       = Zonas::getZonas(); 
-        $Titulo      = "Ingresos Diarios";
+        $Clientes   = Clientes::getClientes(0);  
+        $Zonas      = Zonas::getZonas(); 
+        $Titulo     = "Ingresos Diarios";
 
-        $userRole = Auth::user()->id_rol;
-
+        $userRole   = Auth::user()->id_rol;
         $isDisabled = ($userRole == 3) ? "disabled" : "" ;
-
 
         return view('Reports.Abonos', compact('Clientes','Titulo','Zonas','isDisabled'));
         

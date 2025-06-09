@@ -10,6 +10,15 @@
 
         initTable('#tbl_clienes_na');
 
+        $('.button_export_excel').click(() => {
+            $('#tbl_clienes_na').DataTable().buttons(0,0).trigger()
+        })
+
+        $("#btn-filter-cliente-na").click(function(){
+            var select_status     = $('#id_select_zona').val();            
+            window.location.href = "../ClientesNA/"+select_status;
+        })
+
 
     });
 
@@ -89,6 +98,7 @@
             [7, -1],
             [7, "Todo"]
         ],
+        buttons: [{extend: 'excelHtml5'}],
         "language": {
             "zeroRecords": "NO HAY COINCIDENCIAS",
             "paginate": {

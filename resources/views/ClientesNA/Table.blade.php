@@ -33,7 +33,8 @@
               <div class="card-body">
               @csrf
                 <div class="row">
-                  <div class="col-md-12">
+
+                  <div class="col-md-7">
                     <div class="form-group">
                         <div class="input-group date" id="dt-end" data-target-input="nearest">
                             <div class="input-group-prepend">
@@ -43,9 +44,29 @@
                         </div>
                     </div>
                   </div>
-                 
-                
-                </div>
+
+                  <div class="col-md-3">
+                      <div class="form-group">
+                        <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
+                            <option value="-1"  selected="selected">Zonas...</option>
+                            @foreach ($Zonas as $z)
+                              <option value="{{$z->id_zona}}" {{ ($IdZona == $z->id_zona) ? 'selected' : '' }}> {{strtoupper($z->nombre_zona) }}</option>
+                            @endforeach
+                        </select>
+                      </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="btn-group w-100">
+
+                          <button type="button" class="btn btn-primary" id="btn-filter-cliente-na">
+                              <i class="fa fa-filter"></i> FILTRAR
+                          </button>
+
+                          <button type="button" class="btn btn-success button_export_excel" id="btn-export-gasto">
+                              <i class="fas fa-file-excel "></i> EXCEL
+                          </button>
+                      </div>
+                  </div>
                 
                 <div class="table-responsive scrollbar">
                 <table class="table table-hover table-striped overflow-hidden"  id="tbl_clienes_na">
@@ -67,7 +88,7 @@
                               <div class="user-block">
                                 <img class="img-circle img-bordered-sm" src="{{ asset('/img/user-01.png') }}" alt="user image">
                                 <span class="username"> <span class="text-green">[{{$e->id_clientes}}] |</span>
-                                    <a href="FormClientes/{{$e->id_clientes}}"> {{ strtoupper($e->nombre) }} {{ strtoupper($e->apellidos) }} </a>                                 
+                                    <a href="../FormClientes/{{$e->id_clientes}}"> {{ strtoupper($e->nombre) }} {{ strtoupper($e->apellidos) }} </a>                                 
                                 </span>
                                 <span class="description text-white">{{ strtoupper($e->direccion_domicilio) }}</span>
                               </div>

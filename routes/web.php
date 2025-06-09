@@ -213,7 +213,7 @@ Route::post('FiltrarClientes', 'ControllerCatalogoClientes@FiltrarClientes')->na
 Route::post('UpdateReferencia', 'ControllerCatalogoClientes@UpdateReferencia')->name('UpdateReferencia');
 Route::post('UploadImg', 'ControllerCatalogoClientes@UploadImg')->name('UploadImg');
 
-Route::get('ClientesNA', 'ControllerClientesNA@ViewClientesNA')->name('ClientesNA');
+Route::get('ClientesNA/{idZona}', 'ControllerClientesNA@ViewClientesNA')->name('ClientesNA/{idZona}');
 Route::post('ArchivarClient', 'ControllerClientesNA@ArchivarClient')->name('ArchivarClient');
 Route::post('UnArchivarClient', 'ControllerClientesNA@UnArchivarClient')->name('UnArchivarClient');
 
