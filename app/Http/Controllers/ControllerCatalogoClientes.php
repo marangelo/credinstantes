@@ -99,6 +99,7 @@ class ControllerCatalogoClientes extends Controller
         $iConyugue  = $request->input('iConyugue');
         $iGarantias = $request->input('iGarantias');
         $iReferencias = $request->input('iReferencias');
+        $iFiador     = $request->input('iFiador');
 
         $lastCredito = Clientes::find($id_cli)->getCreditos[0]->saldo;
         $lastCredito = number_format($lastCredito, 2, '.', '');
@@ -137,6 +138,16 @@ class ControllerCatalogoClientes extends Controller
             );
             
             ClientesConyugue::updateOrCreate(
+                ['id_cliente' => $id_cli],
+                [
+                    'nombres'            => $iConyugue['nombres_conyugue'],
+                    'apellidos'          => $iConyugue['apellidos_conyugue'],
+                    'no_cedula'          => $iConyugue['cedula_conyugue'],
+                    'telefono'           => $iConyugue['telefono_conyugue'],    
+                    'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
+                ] 
+            );
+            ClientesFiador::updateOrCreate(
                 ['id_cliente' => $id_cli],
                 [
                     'nombres'            => $iConyugue['nombres_conyugue'],

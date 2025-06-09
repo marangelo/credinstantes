@@ -413,7 +413,7 @@
                                     </div>
 
                                     <div class="tab-pane fade" id="custom-tabs-fiador" role="tabpanel" aria-labelledby="ref-fiador-tab">
-                                        <form action="#!" method="post" id="frm_info_conyugue">                                
+                                        <form action="#!" method="post" id="frm_info_fiador">                                
                                             <div class="row gx-2">
                                                 <div class="col-sm-6 mb-3">
                                                     <label class="form-label" for="event-name">Nombres:</label>
