@@ -20,6 +20,8 @@ use App\Models\PagosFechas;
 use CodersFree\Date\Date;
 use App\Traits\CheckUserLock;
 
+use Auth;
+
 class ReportsController extends Controller 
 {
     use CheckUserLock; 
@@ -52,7 +54,13 @@ class ReportsController extends Controller
         $Clientes    = Clientes::getClientes(0);  
         $Zonas       = Zonas::getZonas(); 
         $Titulo      = "Ingresos Diarios";
-        return view('Reports.Abonos', compact('Clientes','Titulo','Zonas'));
+
+        $userRole = Auth::user()->id_rol;
+
+        $isDisabled = ($userRole == 3) ? "disabled" : "" ;
+
+
+        return view('Reports.Abonos', compact('Clientes','Titulo','Zonas','isDisabled'));
         
     }
     public function Morosidad()

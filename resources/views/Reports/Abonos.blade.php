@@ -75,7 +75,7 @@
                     <label>INICIO</label>
                     <div class="form-group">
                       <div class="input-group date" id="dt-ini" data-target-input="nearest">
-                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('d/m/Y') }}"/>
+                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-ini" id="dtIni" name="nmIni" value="{{ date('d/m/Y') }}" {{ $isDisabled }}  />
                           <div class="input-group-append" data-target="#dt-ini" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
@@ -89,13 +89,11 @@
                     <label>CULMINA</label>
                     <div class="form-group">
                       <div class="input-group date" id="dt-end" data-target-input="nearest">
-                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" name="nmEnd" value="{{ date('d/m/Y') }}"/>
+                          <input type="text" class="form-control datetimepicker-input" data-target="#dt-end" id="dtEnd" name="nmEnd" value="{{ date('d/m/Y') }}" {{ $isDisabled }}  />
                           <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
                           <div class="input-group-text"  id="btn-buscar-abonos"><i class="fa fa-filter" ></i></div>
-
-                          
                       </div>
                     </div>
                   </div>
