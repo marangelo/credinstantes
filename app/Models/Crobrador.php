@@ -83,9 +83,10 @@ class Crobrador extends Model
 
         $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
 
+        $SALDOS_COLOCADOS =  $SALDOS_COLOCADOS + $Monto_Reactivacion;
+
         $CountClientesNuevos    = count($ArrayClientesNuevos);
         $ValueReprestamo        = count($ArrayReprestamo);
-        $ValueReactivaciones    = number_format($Monto_Reactivacion,2);
         $ValueSaldosColocados   = number_format($SALDOS_COLOCADOS,2);
         $CountReact             = $Count_Reactivacion;
 
@@ -97,7 +98,6 @@ class Crobrador extends Model
             'SALDOS_COLOCADOS'  => $ValueSaldosColocados,
             'dtClientes'        => $array_merge,
             'CountReact'        => $CountReact,
-            'CALC_REACT'        => $ValueReactivaciones,
         ];
     }
 

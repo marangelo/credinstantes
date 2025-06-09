@@ -70,7 +70,6 @@
                     $("#lblSaldosColocados").text(json.SALDOS_COLOCADOS);
                     
                     $("#lblCountReact").text(json.CountReact);
-                    $("#lblReactivacionesValue").text(json.CALC_REACT);
 
                     return json.dtClientes; 
                 },

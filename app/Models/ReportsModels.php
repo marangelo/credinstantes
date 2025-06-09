@@ -387,7 +387,7 @@ class ReportsModels extends Model {
         
         $RePrestamo         = $Represtamo->sum('amount_reloan');
 
-        $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') ;
+        $SALDOS_COLOCADOS   = $Creditos->sum('monto_credito') + $Monto_Reactivacion;
 
 
         $array_dashboard = [
@@ -395,7 +395,6 @@ class ReportsModels extends Model {
             "RE_PRESTAMOS"          => $Reloan_count,
             "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
             "LISTA_CLIENTES"        => Clientes::Clientes_promotor($Zona),
-            'CALC_REACT'            => number_format($Monto_Reactivacion,2),
             'COUNT_REACT'           => number_format($Count_Reactivacion,0),
         ];
 
