@@ -112,6 +112,7 @@
             var Info_conyugue = {};
             var Info_garantias = {};
             var Info_referencias = {};
+            var Info_fiador = {};
 
             var table_garantia = $('#tbl_garantias').DataTable();
             var rows_garantia  = table_garantia.rows().data().toArray();
@@ -174,6 +175,10 @@
                 $.each($("#frm_info_conyugue").serializeArray(), function (i, field) {
                     Info_conyugue[field.name] = field.value;
                 });
+
+                $.each($("#frm_info_fiador").serializeArray(), function (i, field) {
+                    Info_fiador[field.name] = field.value;
+                });
                 
                 $.each(rows_garantia, function (i, field) {
                     if(field[6] == "S"){
@@ -232,6 +237,7 @@
                         iConyugue   : Info_conyugue,
                         iGarantias  : Info_garantias,
                         iReferencias: Info_referencias,
+                        iFiador     : Info_fiador,
                         IdClientes     : IdCiente_
                     },
                     async: true,

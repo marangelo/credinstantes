@@ -418,19 +418,19 @@
                               </div>
 
                               <div class="tab-pane fade" id="custom-tabs-fiador" role="tabpanel" aria-labelledby="ref-fiador-tab">
-                                  <form action="#!" method="post" id="frm_info_conyugue">                                
+                                  <form action="#!" method="post" id="frm_info_fiador">                                
                                     <div class="row gx-2">
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label" for="event-name">Nombres:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                <input class="form-control" type="text" name="nombres_fiador" placeholder="Nombres de la persona" required="" value="" />
+                                                <input class="form-control" type="text" name="nombres_fiador" placeholder="Nombres de la persona" required="" value="{{ $Cliente->getFiador->nombre_fiador ?? '' }}"  />
                                             </div>
                                         </div>
 
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label" for="event-name">Apellidos:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                <input class="form-control" type="text" name="apellidos_fiador" placeholder="Apellidos de la persona" required="" value="" />
+                                                <input class="form-control" type="text" name="apellidos_fiador" placeholder="Apellidos de la persona" required="" value="{{ $Cliente->getFiador->apellidos_fiador ?? '' }}" />
                                             </div>
                                         </div>
                                         
@@ -438,26 +438,26 @@
                                             <label class="form-label" for="event-name">Cedula:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
                                                 <input class="form-control" id="event-name" type="text" name="cedula_fiador" placeholder="000-000000-0000A" 
-                                                data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value=""/>
+                                                data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value="{{ $Cliente->getFiador->Cedula_fiador ?? '' }}"/>
                                             </div>
                                         </div>
 
                                         <div class="col-sm-6 col-md-4 mb-3">
                                             <label class="form-label" for="event-name">Estado Civil</label>
                                             <select class="custom-select" name="selectEstadoCivil" id="selectEstadoCivil">
-                                                <option value="0" {{ ($Cliente->estado_civil ?? '') == '0' ? 'selected' : '' }}>Seleccione un estado civil</option>
-                                                <option value="1" {{ ($Cliente->estado_civil ?? '') == '1' ? 'selected' : '' }}>Soltero(a)</option>
-                                                <option value="2" {{ ($Cliente->estado_civil ?? '') == '2' ? 'selected' : '' }}>Casado(a)</option>
-                                                <option value="3" {{ ($Cliente->estado_civil ?? '') == '3' ? 'selected' : '' }}>Divorciado(a)</option>
-                                                <option value="4" {{ ($Cliente->estado_civil ?? '') == '4' ? 'selected' : '' }}>Viudo(a)</option>
-                                                <option value="5" {{ ($Cliente->estado_civil ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
+                                                <option value="0" {{ ($Cliente->getFiador->estado_civil_fiador ?? '') == '0' ? 'selected' : '' }}>Seleccione un estado civil</option>
+                                                <option value="1" {{ ($Cliente->getFiador->estado_civil_fiador ?? '') == '1' ? 'selected' : '' }}>Soltero(a)</option>
+                                                <option value="2" {{ ($Cliente->getFiador->estado_civil_fiador ?? '') == '2' ? 'selected' : '' }}>Casado(a)</option>
+                                                <option value="3" {{ ($Cliente->getFiador->estado_civil_fiador ?? '') == '3' ? 'selected' : '' }}>Divorciado(a)</option>
+                                                <option value="4" {{ ($Cliente->getFiador->estado_civil_fiador ?? '') == '4' ? 'selected' : '' }}>Viudo(a)</option>
+                                                <option value="5" {{ ($Cliente->getFiador->estado_civil_fiador ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
                                             </select>
                                         </div>
 
                                         <div class="col-sm-6 col-md-4 mb-3">
                                             <label class="form-label" for="event-name">Teléfono:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-phone-alt"></span></span>
-                                                <input class="form-control" id="event-name" type="text" name="telefono_fiador" onkeypress='return isNumberKey(event)' maxlength="8" value="" />
+                                                <input class="form-control" id="event-name" type="text" name="telefono_fiador" onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Cliente->getFiador->Telefono_fiador ?? '' }}" />
                                             </div>
                                         </div>
 
@@ -465,7 +465,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label class="form-label" for="event-description">Dirección  de domilio:</label>
-                                                    <textarea class="form-control" rows="6" required="" name="dir_domicilio_fiador" ></textarea>
+                                                    <textarea class="form-control" rows="6" required="" name="dir_domicilio_fiador" >{{ trim(str_replace(array("\r\n", "\r", "\n", " ", "\t"), '', $Cliente->getFiador->dir_domicilio_fiador ?? '')) }}</textarea>
                                                 </div>                                                
                                             </div>
                                         </div>
@@ -474,7 +474,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label class="form-label" for="event-description">Lugar de trabajo:</label>
-                                                    <textarea class="form-control" rows="6" required="" name="dir_trabajo_fiador" ></textarea>
+                                                    <textarea class="form-control" rows="6" required="" name="dir_trabajo_fiador" >{{ trim(str_replace(array("\r\n", "\r", "\n", " ", "\t"), '', $Cliente->getFiador->dir_trabajo_fiador ?? '')) }}</textarea>
                                                 </div>                                                
                                             </div>
                                         </div>
