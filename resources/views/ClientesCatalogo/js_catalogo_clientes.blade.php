@@ -356,7 +356,6 @@
             Info_fiador[field.name] = field.value;
         });
 
-        console.log(Info_fiador);
 
         $.each(rows_garantia, function (i, field) {
             if(field[6] == "S"){

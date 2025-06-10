@@ -12,6 +12,7 @@ use App\Models\ClientesConyugue;
 use App\Models\ClientesGarantia;
 use App\Models\ClientesReferencias;
 use App\Models\Departamentos;
+use App\Models\ClientesFiador;
 
 class ControllerCatalogoClientes extends Controller
 {
@@ -150,11 +151,13 @@ class ControllerCatalogoClientes extends Controller
             ClientesFiador::updateOrCreate(
                 ['id_cliente' => $id_cli],
                 [
-                    'nombres'            => $iConyugue['nombres_conyugue'],
-                    'apellidos'          => $iConyugue['apellidos_conyugue'],
-                    'no_cedula'          => $iConyugue['cedula_conyugue'],
-                    'telefono'           => $iConyugue['telefono_conyugue'],    
-                    'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
+                    'nombre_fiador'         => $iFiador['nombres_fiador'],
+                    'apellidos_fiador'      => $iFiador['apellidos_fiador'],
+                    'Cedula_fiador'         => $iFiador['cedula_fiador'],
+                    'estado_civil_fiador'   => $iFiador['selectEstadoCivil'],    
+                    'Telefono_fiador'       => $iFiador['telefono_fiador'],
+                    'dir_domicilio_fiador'  => $iFiador['dir_domicilio_fiador'],
+                    'dir_trabajo_fiador'    => $iFiador['dir_trabajo_fiador']
                 ] 
             );
     
