@@ -49,11 +49,60 @@
         initTable('#tbl_employee');
 
 
-        $("#btn_guardar_info_cliente").click(function(){
+        $("#btn_guardar_info_cliente").click(function(e) {
+            const nombre = $('#id_nombres_fiador').val().trim();
 
-            Save_Client();
-            
-        })
+            if (nombre) {
+                const campos = [
+                    '#id_apellidos_fiador',
+                    '#id_cedula_fiador',
+                    '#selectEstadoCivil',
+                    '#id_telefono_fiador',
+                    '#id_dir_domicilio_fiador',
+                    '#67'
+                ];
+
+                const camposIncompletos = campos.filter(selector => {
+                    const campo = $(selector);
+                    const vacio = !campo.val().trim();
+                    campo.css('border', vacio ? '2px solid red' : '');
+                    return vacio;
+                });
+
+                if (camposIncompletos.length > 0) {
+                    e.preventDefault();
+                    return swal.fire({
+                        title: 'Campos incompletos',
+                        text: 'Por favor, completa todos los campos obligatorios.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                }else{
+                    swal.fire({
+                        title: 'Guardando información del fiador...',
+                        text: 'Por favor, espera mientras se guarda la información.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading();
+                            Save_Client();
+                        }
+                    })
+                    
+                }
+            }else{
+                swal.fire({
+                        title: 'Guardando información del fiador...',
+                        text: 'Por favor, espera mientras se guarda la información.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading();
+                            Save_Client();
+                        }
+                    })
+                
+            }
+        });
+
 
         $("#btn_add_garantias").click(function(){
 

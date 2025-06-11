@@ -425,21 +425,21 @@
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label" for="event-name">Nombres:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                <input class="form-control" type="text" name="nombres_fiador" placeholder="Nombres de la persona" required="" value="{{ $Request->getFiador->nombre_fiador ?? '' }}" />
+                                                <input class="form-control" type="text" name="nombres_fiador" id="id_nombres_fiador" placeholder="Nombres de la persona" required="" value="{{ $Request->getFiador->nombre_fiador ?? '' }}" />
                                             </div>
                                         </div>
 
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label" for="event-name">Apellidos:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
-                                                <input class="form-control" type="text" name="apellidos_fiador" placeholder="Apellidos de la persona" required="" value="{{ $Request->getFiador->apellidos_fiador ?? '' }}" />
+                                                <input class="form-control" type="text" name="apellidos_fiador" id="id_apellidos_fiador" placeholder="Apellidos de la persona" required="" value="{{ $Request->getFiador->apellidos_fiador ?? '' }}" />
                                             </div>
                                         </div>
                                         
                                         <div class="col-sm-6 col-md-4 mb-3">
                                             <label class="form-label" for="event-name">Cedula:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
-                                                <input class="form-control" id="event-name" type="text" name="cedula_fiador" placeholder="000-000000-0000A" 
+                                                <input class="form-control" type="text" name="cedula_fiador" id="id_cedula_fiador" placeholder="000-000000-0000A" 
                                                 data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value="{{ $Request->getFiador->Cedula_fiador ?? '' }}"/>
                                             </div>
                                         </div>
@@ -459,7 +459,7 @@
                                         <div class="col-sm-6 col-md-4 mb-3">
                                             <label class="form-label" for="event-name">Teléfono:</label>
                                             <div class="input-group"><span class="input-group-text "><span class="fas fa-phone-alt"></span></span>
-                                                <input class="form-control" id="event-name" type="text" name="telefono_fiador" onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Request->getFiador->Telefono_fiador ?? '' }}" />
+                                                <input class="form-control" type="text" name="telefono_fiador" id="id_telefono_fiador"  onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Request->getFiador->Telefono_fiador ?? '' }}" />
                                             </div>
                                         </div>
 
@@ -467,7 +467,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label class="form-label" for="event-description">Dirección  de domilio:</label>
-                                                    <textarea class="form-control" rows="6" required="" name="dir_domicilio_fiador" >{{ $Request->getFiador->dir_domicilio_fiador ?? '' }}</textarea>
+                                                    <textarea class="form-control" rows="6" required="" name="dir_domicilio_fiador" id="id_dir_domicilio_fiador">{{ $Request->getFiador->dir_domicilio_fiador ?? '' }}</textarea>
                                                 </div>                                                
                                             </div>
                                         </div>
@@ -476,7 +476,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label class="form-label" for="event-description">Lugar de trabajo:</label>
-                                                    <textarea class="form-control" rows="6" required="" name="dir_trabajo_fiador" >{{ $Request->getFiador->dir_trabajo_fiador ?? '' }}</textarea>
+                                                    <textarea class="form-control" rows="6" required="" name="dir_trabajo_fiador" id="id_dir_trabajo_fiador" >{{ $Request->getFiador->dir_trabajo_fiador ?? '' }}</textarea>
                                                 </div>                                                
                                             </div>
                                         </div>

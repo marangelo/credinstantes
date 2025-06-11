@@ -105,185 +105,60 @@
         
         });
 
-        $("#btn_save_prospecto").click(function(){
-            var IdProspecto = $("#IdRequest").val(); 
+        $("#btn_save_prospecto").click(function(e) {
+            const nombre = $('#id_nombres_fiador').val().trim();
 
-            var Info_negocio = {};
-            var Info_conyugue = {};
-            var Info_garantias = {};
-            var Info_referencias = {};
-            var Info_fiador = {};
+            if (nombre) {
+                const campos = [
+                    '#id_apellidos_fiador',
+                    '#id_cedula_fiador',
+                    '#selectEstadoCivil',
+                    '#id_telefono_fiador',
+                    '#id_dir_domicilio_fiador',
+                    '#id_dir_trabajo_fiador'
+                ];
 
-            var table_garantia = $('#tbl_garantias').DataTable();
-            var rows_garantia  = table_garantia.rows().data().toArray();
-
-            var tbl_referencias = $('#tbl_refencias').DataTable();
-            var rows_referencias  = tbl_referencias.rows().data().toArray();
-
-            var var_Url = (IdProspecto > 0) ?  "../UpRequestCredit" : "../SaveNewProspecto";
-            
-            var lbl_orig = $("#lbl_titulo_origen").html(); 
-
-            var DateOPen      = $("#dtApertura").val(); 
-            const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
-
-            var IdCiente_   = $("#id_Client").val();            
-
-            var DiaSemana_  = $("#slDiaVisita option:selected").val();  
-            var Municipio_  = $("#selMunicipio option:selected").val();  
-            var Zona_       = $("#selZona option:selected").val();
-            var Promotor    = $("#slPromotor option:selected").val();
-            var EstadoCivil = $("#selectEstadoCivil option:selected").val();
-
-            var Nombre_      = $("#txtNombre").val();   
-            var Apellido_    = $("#txtApellido").val();   
-            var Cedula_      = $("#txtCedula").val();
-            var Tele_        = $("#txtTelefono").val();
-            var Dire_        = $("#txtDireccion").val();
-
-
-            var Monto_     = numeral($("#txtMonto").val()).format('0.00');   
-            var Plato_     = numeral($("#txtPlazo").val()).format('0.00');   
-            var Interes_   = numeral($("#txtInteres").val()).format('0.00');
-            var Cuotas_    = numeral($("#txtCuotas").val()).format('0.00');
-
-            var Total_     = numeral($("#txtTotal").val()).format('0.00');
-            var vlCuota    = numeral($("#txtVlCuota").val()).format('0.00');
-            var vlInteres  = numeral($("#txtIntereses").val()).format('0.00');
-            var InteresesPorCuota  = numeral($("#txtInteresesPorCuota").val()).format('0.00');
-            var Saldos_    = numeral($("#txtSaldos").val()).format('0.00');
-
-            Promotor        = isValue(Promotor,0,true)
-            EstadoCivil     = isValue(EstadoCivil,0,true)
-
-            DiaSemana_      = isValue(DiaSemana_,'N/D',true)
-            Municipio_      = isValue(Municipio_,'N/D',true)            
-            Nombre_         = isValue(Nombre_,'N/D',true)
-            Apellido_       = isValue(Apellido_,'N/D',true)
-            Cedula_         = isValue(Cedula_,'000-000000-00000',true)
-            Tele_           = isValue(Tele_,'00-0000-0000',true)
-            Dire_           = isValue(Dire_,'N/D',true)
-            IdCiente_       = isValue(IdCiente_,0,true)
-
-
-
-            if (lbl_orig != "Renovacion") {
-                $.each($("#frm_info_cliente_negocio").serializeArray(), function (i, field) {
-                    Info_negocio[field.name] = field.value;
+                const camposIncompletos = campos.filter(selector => {
+                    const campo = $(selector);
+                    const vacio = !campo.val().trim();
+                    campo.css('border', vacio ? '2px solid red' : '');
+                    return vacio;
                 });
 
-                $.each($("#frm_info_conyugue").serializeArray(), function (i, field) {
-                    Info_conyugue[field.name] = field.value;
-                });
-
-                $.each($("#frm_info_fiador").serializeArray(), function (i, field) {
-                    Info_fiador[field.name] = field.value;
-                });
-                
-                $.each(rows_garantia, function (i, field) {
-                    if(field[6] == "S"){
-                        Info_garantias[i] = {
-                            "detalle_articulo"  : field[1],
-                            "marca"             : field[2],
-                            "color"             : field[3],
-                            "valor_recomendado" : field[4]
-                        };
-                    }
-                });
-
-                $.each(rows_referencias, function (i, field) {
-                    if(field[5] == "S"){
-                        Info_referencias[i] = {
-                            "nombre_ref"    : field[1],
-                            "telefono_ref"  : field[2],
-                            "direccion_ref" : field[3]
-                        };
-                    }
-                });
-                
-            }
-
-            if(DiaSemana_ === 'N/D' || Municipio_ ==='N/D'||Nombre_ === 'N/D' || Apellido_ ==='N/D'){
-                Swal.fire("Oops", "Datos no Completos", "error");
-            }else{
-                $.ajax({
-                    url: var_Url,
-                    type: 'post',
-                    data: {
-                        IdProspecto_  : IdProspecto,
-                        DiaSemana_   : DiaSemana_,
-                        Municipio_   : Municipio_,
-                        Zona_        : Zona_,
-                        Promotor_    : Promotor,
-                        EstadoCivil_ : EstadoCivil,
-                        Nombre_      : Nombre_,
-                        Apellido_    : Apellido_ , 
-                        Cedula_      : Cedula_,
-                        Tele_        : Tele_,
-                        Dire_        : Dire_,
-                        Monto_       : Monto_,  
-                        Plato_       : Plato_,  
-                        Interes_     : Interes_,
-                        Cuotas_      : Cuotas_,
-                        Total_       : Total_,
-                        vlCuota      : vlCuota,
-                        vlInteres    : vlInteres,
-                        InteresesPorCuota:InteresesPorCuota,
-                        Saldos_      : Saldos_,
-                        FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
-                        _token       : "{{ csrf_token() }}" ,
-                        _Origin      : lbl_orig,
-                        iNegocio    : Info_negocio,
-                        iConyugue   : Info_conyugue,
-                        iGarantias  : Info_garantias,
-                        iReferencias: Info_referencias,
-                        iFiador     : Info_fiador,
-                        IdClientes     : IdCiente_
-                    },
-                    async: true,
-                success: function(response) {
-                    if(response){
-                        Swal.fire({
-                        title: response.message,
-                        icon: 'success',
-                        showCancelButton: false,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
+                if (camposIncompletos.length > 0) {
+                    e.preventDefault();
+                    return swal.fire({
+                        title: 'Campos incompletos',
+                        text: 'Por favor, completa todos los campos obligatorios.',
+                        icon: 'warning',
                         confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = "{{ route('Solicitudes/Lista/Nuevos') }}";
-                            }else{
-                                window.location.href = "{{ route('Solicitudes/Lista/Nuevos') }}";
-                            }
-                        })
-                    }
-                },
-                error: function(resp) {
-                    var reqs = JSON.parse(resp.responseText);
-                    
-                    let lista = '<ul style="color:white;text-align:left">';
-                    $.each(reqs.errors, function(key, value){
-                        lista += `<li>✅ ${value}</li>`;
                     });
-                    lista += '</ul>';
+                }else{
+                    swal.fire({
+                        title: 'Guardando información del fiador...',
+                        text: 'Por favor, espera mientras se guarda la información.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading();
+                            SaveRequest();
+                        }
+                    })
                     
-                    Swal.fire({
-                        title: "Estos Campos del Credito son Requeridos",
-                        html: lista,
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                    });
                 }
-            }).done(function(data) {
-                //location.reload();
-            });
-
+            }else{
+                swal.fire({
+                        title: 'Guardando información del fiador...',
+                        text: 'Por favor, espera mientras se guarda la información.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading();
+                            SaveRequest();
+                        }
+                    })
                 
             }
-
-
         });
+
         
     })
     function Add_Garantias(table) {
@@ -376,6 +251,184 @@
         $("#txtIntereses").val(vlInteres);
         $("#txtSaldos").val(Total_);
         $("#txtInteresesPorCuota").val(vlInterePorCuota);
+    }
+
+    function SaveRequest(){
+        var IdProspecto = $("#IdRequest").val(); 
+
+        var Info_negocio = {};
+        var Info_conyugue = {};
+        var Info_garantias = {};
+        var Info_referencias = {};
+        var Info_fiador = {};
+
+        var table_garantia = $('#tbl_garantias').DataTable();
+        var rows_garantia  = table_garantia.rows().data().toArray();
+
+        var tbl_referencias = $('#tbl_refencias').DataTable();
+        var rows_referencias  = tbl_referencias.rows().data().toArray();
+
+        var var_Url = (IdProspecto > 0) ?  "../UpRequestCredit" : "../SaveNewProspecto";
+        
+        var lbl_orig = $("#lbl_titulo_origen").html(); 
+
+        var DateOPen      = $("#dtApertura").val(); 
+        const fechaAnalizada = moment(DateOPen, 'DD/MM/YYYY');
+
+        var IdCiente_   = $("#id_Client").val();            
+
+        var DiaSemana_  = $("#slDiaVisita option:selected").val();  
+        var Municipio_  = $("#selMunicipio option:selected").val();  
+        var Zona_       = $("#selZona option:selected").val();
+        var Promotor    = $("#slPromotor option:selected").val();
+        var EstadoCivil = $("#selectEstadoCivil option:selected").val();
+
+        var Nombre_      = $("#txtNombre").val();   
+        var Apellido_    = $("#txtApellido").val();   
+        var Cedula_      = $("#txtCedula").val();
+        var Tele_        = $("#txtTelefono").val();
+        var Dire_        = $("#txtDireccion").val();
+
+
+        var Monto_     = numeral($("#txtMonto").val()).format('0.00');   
+        var Plato_     = numeral($("#txtPlazo").val()).format('0.00');   
+        var Interes_   = numeral($("#txtInteres").val()).format('0.00');
+        var Cuotas_    = numeral($("#txtCuotas").val()).format('0.00');
+
+        var Total_     = numeral($("#txtTotal").val()).format('0.00');
+        var vlCuota    = numeral($("#txtVlCuota").val()).format('0.00');
+        var vlInteres  = numeral($("#txtIntereses").val()).format('0.00');
+        var InteresesPorCuota  = numeral($("#txtInteresesPorCuota").val()).format('0.00');
+        var Saldos_    = numeral($("#txtSaldos").val()).format('0.00');
+
+        Promotor        = isValue(Promotor,0,true)
+        EstadoCivil     = isValue(EstadoCivil,0,true)
+
+        DiaSemana_      = isValue(DiaSemana_,'N/D',true)
+        Municipio_      = isValue(Municipio_,'N/D',true)            
+        Nombre_         = isValue(Nombre_,'N/D',true)
+        Apellido_       = isValue(Apellido_,'N/D',true)
+        Cedula_         = isValue(Cedula_,'000-000000-00000',true)
+        Tele_           = isValue(Tele_,'00-0000-0000',true)
+        Dire_           = isValue(Dire_,'N/D',true)
+        IdCiente_       = isValue(IdCiente_,0,true)
+
+
+
+        if (lbl_orig != "Renovacion") {
+            $.each($("#frm_info_cliente_negocio").serializeArray(), function (i, field) {
+                Info_negocio[field.name] = field.value;
+            });
+
+            $.each($("#frm_info_conyugue").serializeArray(), function (i, field) {
+                Info_conyugue[field.name] = field.value;
+            });
+
+            $.each($("#frm_info_fiador").serializeArray(), function (i, field) {
+                Info_fiador[field.name] = field.value;
+            });
+            
+            $.each(rows_garantia, function (i, field) {
+                if(field[6] == "S"){
+                    Info_garantias[i] = {
+                        "detalle_articulo"  : field[1],
+                        "marca"             : field[2],
+                        "color"             : field[3],
+                        "valor_recomendado" : field[4]
+                    };
+                }
+            });
+
+            $.each(rows_referencias, function (i, field) {
+                if(field[5] == "S"){
+                    Info_referencias[i] = {
+                        "nombre_ref"    : field[1],
+                        "telefono_ref"  : field[2],
+                        "direccion_ref" : field[3]
+                    };
+                }
+            });
+            
+        }
+
+        if(DiaSemana_ === 'N/D' || Municipio_ ==='N/D'||Nombre_ === 'N/D' || Apellido_ ==='N/D'){
+            Swal.fire("Oops", "Datos no Completos", "error");
+        }else{
+            $.ajax({
+                url: var_Url,
+                type: 'post',
+                data: {
+                    IdProspecto_  : IdProspecto,
+                    DiaSemana_   : DiaSemana_,
+                    Municipio_   : Municipio_,
+                    Zona_        : Zona_,
+                    Promotor_    : Promotor,
+                    EstadoCivil_ : EstadoCivil,
+                    Nombre_      : Nombre_,
+                    Apellido_    : Apellido_ , 
+                    Cedula_      : Cedula_,
+                    Tele_        : Tele_,
+                    Dire_        : Dire_,
+                    Monto_       : Monto_,  
+                    Plato_       : Plato_,  
+                    Interes_     : Interes_,
+                    Cuotas_      : Cuotas_,
+                    Total_       : Total_,
+                    vlCuota      : vlCuota,
+                    vlInteres    : vlInteres,
+                    InteresesPorCuota:InteresesPorCuota,
+                    Saldos_      : Saldos_,
+                    FechaOpen    : fechaAnalizada.format('YYYY-MM-DD'),
+                    _token       : "{{ csrf_token() }}" ,
+                    _Origin      : lbl_orig,
+                    iNegocio    : Info_negocio,
+                    iConyugue   : Info_conyugue,
+                    iGarantias  : Info_garantias,
+                    iReferencias: Info_referencias,
+                    iFiador     : Info_fiador,
+                    IdClientes     : IdCiente_
+                },
+                async: true,
+            success: function(response) {
+                if(response){
+                    Swal.fire({
+                    title: response.message,
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "{{ route('Solicitudes/Lista/Nuevos') }}";
+                        }else{
+                            window.location.href = "{{ route('Solicitudes/Lista/Nuevos') }}";
+                        }
+                    })
+                }
+            },
+            error: function(resp) {
+                var reqs = JSON.parse(resp.responseText);
+                
+                let lista = '<ul style="color:white;text-align:left">';
+                $.each(reqs.errors, function(key, value){
+                    lista += `<li>✅ ${value}</li>`;
+                });
+                lista += '</ul>';
+                
+                Swal.fire({
+                    title: "Estos Campos del Credito son Requeridos",
+                    html: lista,
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                });
+            }
+        }).done(function(data) {
+            //location.reload();
+        });
+
+            
+        }
     }
 
 
