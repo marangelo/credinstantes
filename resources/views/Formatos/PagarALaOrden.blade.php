@@ -57,7 +57,7 @@
             $estado_civil_fiador = $Credito->Clientes->getFiador ? $estados_civiles[$Credito->Clientes->getFiador->estado_civil_fiador] ?? 'N/D' : 'N/D';
             $FiadorNombre = $Credito->Clientes->getFiador->nombre_fiador ?? ' - ';
             $FiadorApellido = $Credito->Clientes->getFiador->apellidos_fiador ?? ' - ';
-            $FiadorOcupacion = 'OCUPACION FIADOR';
+            $FiadorOcupacion = '____________________';
             $FiadorCedula = $Credito->Clientes->getFiador->Cedula_fiador ?? ' - ';
         @endphp
         
