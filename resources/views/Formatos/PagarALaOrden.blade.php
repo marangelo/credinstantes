@@ -54,15 +54,11 @@
         @php
             $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre'];
             $estado_civil_deudor = $estados_civiles[$Credito->Clientes->estado_civil] ?? 'N/D';
-            
-
-            $estado_civil_fiador = $estados_civiles[$Credito->Clientes->getFiador->estado_civil_fiador] ?? 'N/D';
+            $estado_civil_fiador = $Credito->Clientes->getFiador ? $estados_civiles[$Credito->Clientes->getFiador->estado_civil_fiador] ?? 'N/D' : 'N/D';
             $FiadorNombre = $Credito->Clientes->getFiador->nombre_fiador ?? ' - ';
             $FiadorApellido = $Credito->Clientes->getFiador->apellidos_fiador ?? ' - ';
             $FiadorOcupacion = 'OCUPACION FIADOR';
             $FiadorCedula = $Credito->Clientes->getFiador->Cedula_fiador ?? ' - ';
-
-
         @endphp
         
         Yo <u><strong>{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</strong></u>, mayor de edad, <strong>( {{$estado_civil_deudor}} )</strong>, 
