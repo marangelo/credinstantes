@@ -12,6 +12,7 @@ use App\Models\ClientesConyugue;
 use App\Models\ClientesGarantia;
 use App\Models\ClientesReferencias;
 use App\Models\Departamentos;
+use App\Models\ClientesFiador;
 
 class ControllerCatalogoClientes extends Controller
 {
@@ -99,6 +100,7 @@ class ControllerCatalogoClientes extends Controller
         $iConyugue  = $request->input('iConyugue');
         $iGarantias = $request->input('iGarantias');
         $iReferencias = $request->input('iReferencias');
+        $iFiador     = $request->input('iFiador');
 
         $lastCredito = Clientes::find($id_cli)->getCreditos[0]->saldo;
         $lastCredito = number_format($lastCredito, 2, '.', '');
@@ -144,6 +146,18 @@ class ControllerCatalogoClientes extends Controller
                     'no_cedula'          => $iConyugue['cedula_conyugue'],
                     'telefono'           => $iConyugue['telefono_conyugue'],    
                     'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
+                ] 
+            );
+            ClientesFiador::updateOrCreate(
+                ['id_cliente' => $id_cli],
+                [
+                    'nombre_fiador'         => $iFiador['nombres_fiador'],
+                    'apellidos_fiador'      => $iFiador['apellidos_fiador'],
+                    'Cedula_fiador'         => $iFiador['cedula_fiador'],
+                    'estado_civil_fiador'   => $iFiador['selectEstadoCivil'],    
+                    'Telefono_fiador'       => $iFiador['telefono_fiador'],
+                    'dir_domicilio_fiador'  => $iFiador['dir_domicilio_fiador'],
+                    'dir_trabajo_fiador'    => $iFiador['dir_trabajo_fiador']
                 ] 
             );
     

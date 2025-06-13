@@ -97,6 +97,10 @@ class RequestsCredit extends Model
     {
         return $this->hasOne(ClientesConyugue::class, 'id_req', 'id_req');
     }
+    public function getFiador()
+    {
+        return $this->hasOne(ClientesFiador::class, 'id_req', 'id_req');
+    }
     public function getGarantias()
     {
         return $this->hasMany(ClientesGarantia::class, 'id_req', 'id_req');

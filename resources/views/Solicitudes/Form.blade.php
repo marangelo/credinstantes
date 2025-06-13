@@ -99,6 +99,9 @@
                               <li class="nav-item">
                                   <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">DETALLES DE GARANTIAS</a>
                               </li>
+                              <li class="nav-item">
+                                  <a class="nav-link" id="custom-tabs-fiador-tab" data-toggle="pill" href="#custom-tabs-fiador" role="tab" aria-controls="custom-tabs-fiador" aria-selected="false">DETALLES DE FIADOR</a>
+                              </li>
                           </ul>
                         </div>
                         <div class="card-body">
@@ -414,6 +417,71 @@
                                       </div>
                                   </div>
                                       
+                              </div>
+
+                              <div class="tab-pane fade" id="custom-tabs-fiador" role="tabpanel" aria-labelledby="ref-fiador-tab">
+                                  <form action="#!" method="post" id="frm_info_fiador">                                
+                                    <div class="row gx-2">
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label" for="event-name">Nombres:</label>
+                                            <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                <input class="form-control" type="text" name="nombres_fiador" id="id_nombres_fiador" placeholder="Nombres de la persona" required="" value="{{ $Request->getFiador->nombre_fiador ?? '' }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label" for="event-name">Apellidos:</label>
+                                            <div class="input-group"><span class="input-group-text "><span class="fas fa-user"></span></span>
+                                                <input class="form-control" type="text" name="apellidos_fiador" id="id_apellidos_fiador" placeholder="Apellidos de la persona" required="" value="{{ $Request->getFiador->apellidos_fiador ?? '' }}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-sm-6 col-md-4 mb-3">
+                                            <label class="form-label" for="event-name">Cedula:</label>
+                                            <div class="input-group"><span class="input-group-text "><span class="far fa-address-card"></span></span>
+                                                <input class="form-control" type="text" name="cedula_fiador" id="id_cedula_fiador" placeholder="000-000000-0000A" 
+                                                data-inputmask="'mask': ['999-999999-9999A']" data-mask required="" value="{{ $Request->getFiador->Cedula_fiador ?? '' }}"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-4 mb-3">
+                                            <label class="form-label" for="event-name">Estado Civil</label>
+                                            <select class="custom-select" name="selectEstadoCivil" id="selectEstadoCivil">
+                                                <option value="0" {{ ($Request->getFiador->estado_civil_fiador ?? '') == '0' ? 'selected' : '' }}>Seleccione un estado civil </option>
+                                                <option value="1" {{ ($Request->getFiador->estado_civil_fiador ?? '') == '1' ? 'selected' : '' }}>Soltero(a)</option>
+                                                <option value="2" {{ ($Request->getFiador->estado_civil_fiador ?? '') == '2' ? 'selected' : '' }}>Casado(a)</option>
+                                                <option value="3" {{ ($Request->getFiador->estado_civil_fiador ?? '') == '3' ? 'selected' : '' }}>Divorciado(a)</option>
+                                                <option value="4" {{ ($Request->getFiador->estado_civil_fiador ?? '') == '4' ? 'selected' : '' }}>Viudo(a)</option>
+                                                <option value="5" {{ ($Request->getFiador->estado_civil_fiador ?? '') == '5' ? 'selected' : '' }}>Union Libre</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-4 mb-3">
+                                            <label class="form-label" for="event-name">Teléfono:</label>
+                                            <div class="input-group"><span class="input-group-text "><span class="fas fa-phone-alt"></span></span>
+                                                <input class="form-control" type="text" name="telefono_fiador" id="id_telefono_fiador"  onkeypress='return isNumberKey(event)' maxlength="8" value="{{ $Request->getFiador->Telefono_fiador ?? '' }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label class="form-label" for="event-description">Dirección  de domilio:</label>
+                                                    <textarea class="form-control" rows="6" required="" name="dir_domicilio_fiador" id="id_dir_domicilio_fiador">{{ $Request->getFiador->dir_domicilio_fiador ?? '' }}</textarea>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label class="form-label" for="event-description">Lugar de trabajo:</label>
+                                                    <textarea class="form-control" rows="6" required="" name="dir_trabajo_fiador" id="id_dir_trabajo_fiador" >{{ $Request->getFiador->dir_trabajo_fiador ?? '' }}</textarea>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                               </div>
                               
                             </div>

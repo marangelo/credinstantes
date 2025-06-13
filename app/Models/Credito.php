@@ -187,10 +187,11 @@ class Credito extends Model
                 $FechaOpen             = $request->input('FechaOpen');
 
                 
-                $iNegocio   = $request->input('iNegocio');
-                $iConyugue  = $request->input('iConyugue');
-                $iGarantias = $request->input('iGarantias');
-                $iReferencias = $request->input('iReferencias');
+                $iNegocio       = $request->input('iNegocio');
+                $iConyugue      = $request->input('iConyugue');
+                $iGarantias     = $request->input('iGarantias');
+                $iReferencias   = $request->input('iReferencias');
+                $iFiador        = $request->input('iFiador');
 
 
             
@@ -292,7 +293,21 @@ class Credito extends Model
                         'direccion_trabajo'  => $iConyugue['direccion_conyugue']     
                     ] 
                 );
-        
+                
+                ClientesFiador::updateOrCreate(
+                    ['id_req' => $IdProspecto],
+                    [
+                        'id_cliente'            => $idInsertado,
+                        'nombre_fiador'         => $iFiador['nombres_fiador'],
+                        'apellidos_fiador'      => $iFiador['apellidos_fiador'],
+                        'Cedula_fiador'         => $iFiador['cedula_fiador'],
+                        'estado_civil_fiador'   => $iFiador['selectEstadoCivil'],
+                        'Telefono_fiador'       => $iFiador['telefono_fiador'],    
+                        'dir_domicilio_fiador'  => $iFiador['dir_domicilio_fiador'],
+                        'dir_trabajo_fiador'    => $iFiador['dir_trabajo_fiador' ]
+                    ] 
+                );
+                
                 if(isset($iGarantias) && $iGarantias != null){
                     foreach ($iGarantias as $articulo) {
                         ClientesGarantia::updateOrCreate(
@@ -327,8 +342,7 @@ class Credito extends Model
                         );
                     }
                 }
-
-               
+                
 
 
                 return $response;

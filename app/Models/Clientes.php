@@ -27,6 +27,10 @@ class Clientes extends Model
     {
         return $this->hasOne(ClientesConyugue::class, 'id_cliente', 'id_clientes');
     }
+    public function getFiador()
+    {
+        return $this->hasOne(ClientesFiador::class, 'id_cliente', 'id_clientes');
+    }
     public function getGarantias()
     {
         return $this->hasMany(ClientesGarantia::class, 'id_cliente', 'id_clientes');

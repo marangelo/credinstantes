@@ -51,57 +51,72 @@
     </div>
 
     <p>
-        @php $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre']; @endphp
-        @php $estado_civil = $estados_civiles[$Credito->Clientes->estado_civil] ?? 'N/D' ; @endphp
+        @php
+            $estados_civiles = ['N/D', 'Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)', 'Unión libre'];
+            $estado_civil_deudor = $estados_civiles[$Credito->Clientes->estado_civil] ?? 'N/D';
+            $estado_civil_fiador = $Credito->Clientes->getFiador ? $estados_civiles[$Credito->Clientes->getFiador->estado_civil_fiador] ?? 'N/D' : 'N/D';
+            $FiadorNombre = $Credito->Clientes->getFiador->nombre_fiador ?? ' - ';
+            $FiadorApellido = $Credito->Clientes->getFiador->apellidos_fiador ?? ' - ';
+            $FiadorOcupacion = 'OCUPACION FIADOR';
+            $FiadorCedula = $Credito->Clientes->getFiador->Cedula_fiador ?? ' - ';
+        @endphp
         
-        Yo <u><strong>{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</strong></u>, mayor de edad, <strong>( {{$estado_civil}} )</strong>, 
-        <strong>( <strong><u> Comerciante</u></strong> )</strong>, identificado con cedula número 
+        Yo <u><strong>{{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</strong></u>, mayor de edad, <strong>( {{$estado_civil_deudor}} )</strong>, 
+        <strong>( <u>Comerciante</u> )</strong>, identificado con cédula número 
         <strong><u>{{$Credito->Clientes->cedula}}</u></strong>, y de este domicilio, actuando en nombre y representación propia, 
-        en adelante denominado <strong>EL DEUDOR</strong>, por este <strong>PAGARÉ A LA ORDEN</strong>, me obligo a pagar a 
+        en adelante denominado <strong>EL DEUDOR</strong>, por este <strong>PAGARÉ A LA ORDEN</strong>, y yo 
+        <u><strong>{{$FiadorNombre}} {{$FiadorApellido}}</strong></u>, mayor de edad, <strong>( {{$estado_civil_fiador}} )</strong>, 
+        <strong>( <u>{{$FiadorOcupacion}}</u> )</strong>, identificado con cédula número 
+        <strong><u>{{$FiadorCedula}}</u></strong>, y de este domicilio, actuando en nombre y representación propia, 
+        en adelante denominado <strong>EL FIADOR</strong>, por este <strong>PAGARÉ A LA ORDEN</strong> me obligo a pagar a 
         <strong>CREDINSTANTE</strong>, o a su orden en esta ciudad, en sus oficinas principales o en cualquier otra de 
         sus sucursales o lugar donde sea designado, por su cuenta y riesgo y por igual valor recibido a mi satisfacción, 
-        la suma de <strong><u>{{$Credito->numberToWords($Credito->monto_credito)}}</u></strong> ( <u><strong> C$ {{ number_format($Credito->monto_credito,2) }}</strong></u> ), cantidad que pagaré en un plazo de 
-        <strong>____<u>{{number_format($Credito->plazo,2)}}____</u></strong> meses en <strong>____<u>{{number_format($Credito->numero_cuotas,0)}}____</u></strong> cuotas.
+        la suma de <strong><u>{{$Credito->numberToWords($Credito->monto_credito)}}</u></strong> 
+        ( <u><strong>C$ {{ number_format($Credito->monto_credito,2) }}</strong></u> ), cantidad que pagaré en un plazo de 
+        <strong>____<u>{{ number_format($Credito->plazo,2) }}____</u></strong> meses en 
+        <strong>____<u>{{ number_format($Credito->numero_cuotas,0) }}____</u></strong> cuotas.
     </p>
 
     <p>
         Las fechas de pago de cada cuota y el monto de las mismas son establecidas en el calendario de pago (plan) de pagos 
-        que se emite de forma simultánea a este pagaré, y que es firmado y rubricado por mí en calidad de DEUDOR.
+        que se emite de forma simultánea a este pagaré, y que es firmado y rubricado por mí en calidad de DEUDOR / FIADOR.
     </p>
 
     <p>
         Sobre la suma recibida en este acto, en nombre propio reconozco desde la fecha hasta su efectivo pago, 
-        una tasa de interés fija del <strong>________%</strong> mensual sobre saldo. En caso de mora, 
+        una tasa de interés fija del <strong>________</strong> por ciento mensual sobre saldo. En caso de mora, 
         <strong>EL DEUDOR</strong> se obliga a pagar a <strong>CREDINSTANTE</strong> un interés moratorio adicional del 
-        <strong>________%</strong> de la tasa de interés corriente pactada, sobre el saldo deudor hasta el total y efectivo 
+        <strong>________(         %)</strong> de la tasa de interés corriente pactada, sobre el saldo deudor hasta el total y efectivo 
         pago de todo lo adeudado.
     </p>
 
     <p>
-        El presente pagaré avala como causal, se considera parte integrante e indivisible de la solicitud de crédito antes 
-        relacionado y, por tanto, como una sola unidad jurídica, y tiene como fin la comprobación del otorgamiento efectivo 
-        del préstamo o desembolso de fondos del solicitante a cuenta del crédito antes referido.
+        El presente pagaré a la orden casual, se considera parte integrante e indivisible de la solicitud de crédito antes 
+        relacionado y, por tanto, como una sola unidad jurídica, y tiene por objeto la comprobación del otorgamiento efectivo 
+        del préstamo o desembolso de fondos del suscrito a cuenta del crédito antes referido.
     </p>
 
     <div class="container">
         <p>
-            Firmo este pagaré a la orden en la ciudad de <strong><u>____{{ $Credito->Clientes->getZona->nombre_zona }}____</u></strong>, a los <strong><u>____{{date('d', strtotime($Credito->fecha_apertura))}}____</u></strong> 
-            días del mes de <strong><u>____{{ Date::parse($Credito->fecha_apertura)->format('F')}}____</u></strong> del año <strong><u>____{{date('Y', strtotime($Credito->fecha_apertura))}}____</u></strong>
+            Firmo este pagaré a la orden en la ciudad de <strong><u>____{{ $Credito->Clientes->getZona->nombre_zona }}____</u></strong>, 
+            a los <strong><u>____{{ date('d', strtotime($Credito->fecha_apertura)) }}____</u></strong> 
+            días del mes de <strong><u>____{{ Date::parse($Credito->fecha_apertura)->format('F') }}____</u></strong> 
+            del año <strong><u>____{{ date('Y', strtotime($Credito->fecha_apertura)) }}____</u></strong>
         </p>
         
         <table style="width: 100%;">
             <tr>
                 <td style="width: 50%;">
-                    <div class="info"><strong>EL DEUDOR:</strong> _______________________________________</span></div>
-                    <div class="info"><strong>Cédula de identidad:</strong> __________________________________</span></div>
+                    <div class="info"><strong>EL DEUDOR:</strong> {{$Credito->Clientes->nombre}} {{$Credito->Clientes->apellidos}}</div>
+                    <div class="info"><strong>Cédula de identidad:</strong> {{$Credito->Clientes->cedula}}</div>
                 </td>
                 <td style="width: 50%;">
-                    <div class="info"><strong>Fiador:</strong> _______________________________________</span></div>
-                    <div class="info"><strong>Cédula:</strong> _______________________________________</span></div>
+                    <div class="info"><strong>Fiador:</strong> {{$FiadorNombre}} {{$FiadorApellido}}</div>
+                    <div class="info"><strong>Cédula:</strong> {{$FiadorCedula}}</div>
                 </td>
             </tr>
         </table>
     </div>
-
 </body>
+
 </html>

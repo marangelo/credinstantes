@@ -82,7 +82,6 @@ class SolicitudesController extends Controller
         $TypoSolicitud         = $request->input('_Origin'); 
 
         if($TypoSolicitud === "Renovacion"){
-
             $response = Credito::AddCredito($request);    
         }else{
             $response = Credito::SaveNewCredito($request);   
