@@ -59,7 +59,7 @@
                     '#selectEstadoCivil',
                     '#id_telefono_fiador',
                     '#id_dir_domicilio_fiador',
-                    '#67'
+                    '#id_dir_trabajo_fiador'
                 ];
 
                 const camposIncompletos = campos.filter(selector => {

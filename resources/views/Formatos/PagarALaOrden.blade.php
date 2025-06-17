@@ -65,8 +65,7 @@
         <strong>( <u>Comerciante</u> )</strong>, identificado con cédula número 
         <strong><u>{{$Credito->Clientes->cedula}}</u></strong>, y de este domicilio, actuando en nombre y representación propia, 
         en adelante denominado <strong>EL DEUDOR</strong>, por este <strong>PAGARÉ A LA ORDEN</strong>, y yo 
-        <u><strong>{{$FiadorNombre}} {{$FiadorApellido}}</strong></u>, mayor de edad, <strong>( {{$estado_civil_fiador}} )</strong>, 
-        <strong>( <u>{{$FiadorOcupacion}}</u> )</strong>, identificado con cédula número 
+        <u><strong>{{$FiadorNombre}} {{$FiadorApellido}}</strong></u>, mayor de edad, <strong>( {{$estado_civil_fiador}} )</strong>, identificado con cédula número 
         <strong><u>{{$FiadorCedula}}</u></strong>, y de este domicilio, actuando en nombre y representación propia, 
         en adelante denominado <strong>EL FIADOR</strong>, por este <strong>PAGARÉ A LA ORDEN</strong> me obligo a pagar a 
         <strong>CREDINSTANTE</strong>, o a su orden en esta ciudad, en sus oficinas principales o en cualquier otra de 
