@@ -102,7 +102,10 @@ class ControllerCatalogoClientes extends Controller
         $iReferencias = $request->input('iReferencias');
         $iFiador     = $request->input('iFiador');
 
-        $lastCredito = Clientes::find($id_cli)->getCreditos[0]->saldo;
+        $cliente = Clientes::find($id_cli);
+        $lastCredito = $cliente && isset($cliente->getCreditos[0]) ? $cliente->getCreditos[0]->saldo : 0;
+
+    
         $lastCredito = number_format($lastCredito, 2, '.', '');
         
         $Rol = Auth::user()->id_rol;
