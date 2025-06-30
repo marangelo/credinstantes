@@ -461,9 +461,9 @@ class ReportsModels extends Model {
 
 
         if ($Prom > 0) {
-            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->where('asignado',$Prom)->get();
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->where('activo','1')->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->where('asignado',$Prom)->get();
         }else{
-            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->get();
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->where('activo','1')->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->get();
         }
 
         
