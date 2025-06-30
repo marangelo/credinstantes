@@ -398,7 +398,7 @@ class CredinstanteController extends Controller
     public function MetricasPromotor()
     {         
         $Titulo = "Promotor";
-        $Promo       = Usuario::WhereIn('id_rol',[4,2])->where('activo','S')->get();  
+        $Promo  = Usuario::WhereIn('id_rol',[1,2,4])->where('activo','S')->whereNotIn('id',[32])->get();  
         
         return view('Promotor.Metricas',compact('Titulo','Promo'));
 
