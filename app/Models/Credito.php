@@ -98,10 +98,20 @@ class Credito extends Model
     }
     public static function ClientesNuevos($Zona,$D1, $D2)
     {
-        $Reloan = Reloan::whereBetween('date_reloan', [$D1,$D2])->get()->toArray();
+        // CLIENTES QUE FUERON REPRESTAMO
+        $RePrestamos = Reloan::whereBetween('date_reloan', [$D1, $D2])->pluck('loan_id')->toArray();
+        
+        // CLIENTES QUE FUERON REACTIVADOS
+        $Reactivados = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1,$D2])->pluck('Id_credito')->toArray();
+
+        // CLIENTES UNICOS QUE FUERON REACTIVADOS O REPRESTAMO
+        $ClientesExcluidos = array_merge($Reactivados, $RePrestamos);        
+
         $NewClients = CreditosHistory::whereBetween('FECHA', [$D1,$D2]);
 
-        return $NewClients->whereNotIn('ID_CREDITO', array_column($Reloan, 'loan_id'))->count();
+        $CountClients = $NewClients->whereNotIn('ID_CREDITO', $ClientesExcluidos)->count();
+
+        return $CountClients;
     }
     public static function Saldos_Cartera($Zona,$D1, $D2)
     {
