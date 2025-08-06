@@ -74,9 +74,12 @@
                 "CREDITOS_ACTIVOS" : "",
                 "SALDO_CARTERA": "",
                 "MORA_ATRASADA" : "",
-                "MORA_VENCIDA" : ""
+                "MORA_VENCIDA" : "",
+                "DISPENSA" : "",
+                "SALDOS_CAPITAL" : ""
+                
                 }
-                ];
+            ];
         
 
             var Ingreso = dataset['INGRESO'];
@@ -129,12 +132,14 @@
 
             var DISPENSA	= dataset['DISPENSA'];     
             DISPENSA     = numeral(isValue(DISPENSA,0,true)).format('0,00.00'); 
+            data[0]['DISPENSA'] = DISPENSA;
             $("#lbl_dispensa").text(DISPENSA)
 
 
             var SALDOS_CAPITAL = dataset['SALDOS_CAPITAL'];
             SALDOS_CAPITAL     = numeral(isValue(SALDOS_CAPITAL,0,true)).format('0,00.00'); 
             $("#lbl_saldo_capital").text(SALDOS_CAPITAL)
+            data[0]['SALDOS_CAPITAL'] = SALDOS_CAPITAL;
 
             
         
@@ -214,6 +219,9 @@
     }
 
     function tbMetricas(ARRAY_METRICAS) {
+
+        console.log(ARRAY_METRICAS);
+
         if ( $.fn.DataTable.isDataTable('#tbl_metrias_home') ) {
         var dataTable = $('#tbl_metrias_home').DataTable();
         dataTable.clear().destroy();
@@ -253,6 +261,8 @@
                 {"title": "SALDO DE CARTERA","data"   : "SALDO_CARTERA"},
                 {"title": "MORA ATRASADA","data"   : "MORA_ATRASADA"},
                 {"title": "MORA VENCIDA","data"   : "MORA_VENCIDA"},
+                {"title": "DISPENSA","data"   : "DISPENSA"},
+                {"title": "SALDOS CAPITAL","data"   : "SALDOS_CAPITAL"},
             ],
         });  
         $("#tbl_metrias_home_length").hide();

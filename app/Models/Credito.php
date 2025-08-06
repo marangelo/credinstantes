@@ -111,6 +111,8 @@ class Credito extends Model
 
         $CountClients = $NewClients->whereNotIn('ID_CREDITO', $ClientesExcluidos)->count();
 
+        //dd("Represtamos: ".count($RePrestamos)." - Reactivados: ".count($Reactivados)." - Excluidos: ".count($ClientesExcluidos)." - Total: ".$CountClients);
+
         return $CountClients;
     }
     public static function Saldos_Cartera($Zona,$D1, $D2)

@@ -93,12 +93,13 @@ class CalcularMetricas extends Command
                     "UTIL_NETA"         => $ttUtilidadNeta,
                     "SALDOS_CARTERA"    => $Saldos_Cartera,
                     "SALDOS_CAPITAL"    => $Saldos_Capital,
+                    "DISPENSA"          => $Dispensa,
                     "MORA_ATRASADA"     => $MoraAtrasada,
                     "MORA_VENCIDA"      => $MoraVencida,                    
                     'Zona_id'           => $Id_Zona,
                     'rol_id'            => $Id_Rol,
                     'Fecha'             => $dtNow,
-                    "clientes_activos"      => $Clientes->count(),
+                    "clientes_activos"  => $Clientes->count(),
                 ];
 
                 if ($Id_Zona < 0) {
