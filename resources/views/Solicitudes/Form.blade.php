@@ -59,14 +59,13 @@
                       <div class="form-group">
                         <label>Promotor  </label>
 
-                        <select class="form-control" id="slPromotor">
-
-                          @foreach ($Promo as $p)
-                            <option 
-                              value="{{$p->id}}" {{ ( ( Auth::user()->id == $p->id) || (isset($Request->promoter) && $Request->promoter == $p->id)) ? 'selected' : '' }}> {{strtoupper($p->nombre)}} 
-                            </option>
-                          @endforeach
-
+                        <@php $selectedPromotor = old('promoter', $Request->promoter ?? Auth::user()->id); @endphp
+                        <select class="form-control" id="slPromotor" name="promoter">
+                            @foreach ($Promo as $p)
+                                <option value="{{ $p->id }}" {{ (string)$selectedPromotor === (string)$p->id ? 'selected' : '' }}>
+                                    {{ strtoupper($p->nombre) }}
+                                </option>
+                            @endforeach
                         </select>
                       </div>                      
                     </div>
