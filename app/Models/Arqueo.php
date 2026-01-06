@@ -42,8 +42,7 @@ class Arqueo extends Model {
                 $response = Arqueo::where('id_arqueo',$Arqueo)->update([
                     "fecha_arqueo"          => $Fecha,
                     "deposito_dia"          => $Deposit,
-                    "deposito_tranferencia" => $Tranfe,
-                    "gasto_operacion"       => $Gastos,
+                    "deposito_tranferencia" => $Tranfe,                    
                     "comentario"            => $Commit,
                     "Sistema"               => $ttSYS
                 ]);

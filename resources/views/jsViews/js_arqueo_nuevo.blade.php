@@ -12,10 +12,11 @@
         timer: 3000
     });
 
+    $('.select2').select2()
+
     $(document).ready(function () {
 
         InitTable();
-       
         $('#dt-arqueo').datetimepicker({
             format: 'DD/MM/YYYY',
             defaultDate: new Date()
@@ -51,10 +52,6 @@
             }).done(function(data) {
             });
         })
-
-        
-    
-        
 
         $('#tbl_moneda_nio ').on('click', "td", function() {
             var dtaRow = var_tbl_moneda_nio.row(this).data();
@@ -179,13 +176,12 @@
             var txt_tranferencia    = $("#txt_deposito_tranferencia").val();
             var total_SYS           = $('#id_total_sistema').val();
 
-            var txt_gastos          = $("#txt_gastos").val();
+            
             var txt_commit          = $("#id_commit").val();
 
             dtIni_                  = moment(dtIni, 'DD/MM/YYYY');
             txt_deposito_dia_       = numeral(isValue(txt_deposito_dia,0,true)).format('0.00')
             txt_tranferencia_       = numeral(isValue(txt_tranferencia,0,true)).format('0.00')
-            txt_gastos_             = numeral(isValue(txt_gastos,0,true)).format('0.00')
             total_SYS_             = numeral(isValue(total_SYS,0,true)).format('0.00')
 
             $.ajax({
@@ -195,7 +191,6 @@
                     Fecha   : dtIni_.format('YYYY-MM-DD'),
                     Deposit : txt_deposito_dia_,
                     Tranfe  : txt_tranferencia_,
-                    Gastos  : txt_gastos_,
                     Commit  : txt_commit,
                     ttSYS   : total_SYS_,
                     _token  : "{{ csrf_token() }}" 
@@ -216,8 +211,135 @@
             });
         })
 
+
+        $("#btn_add_recuperacion").on("click", function() {
+            var lbl = $("#lbl_deposito_dia").html();
+            mostrarSoloTab(
+                'custom-content-desembolso-tab',
+                'custom-content-desembolso'
+            );
+            InitDataTable(
+                [
+                    { "data": "id", "title": "ID" },
+                    { "data": "nombre_cliente", "title": "Nombre" },
+                    { "data": "monto", "title": "Monto" },
+                    { "data": "accion", "title": "Accion" }
+                ]
+            );
+            OpenModal(lbl);            
+        })
+        
+        $("#btn_dep_transfer").on("click", function() {
+            var lbl = $("#lbl_deposito_tranferencia").html();
+            mostrarSoloTab(
+                'custom-content-transferencias-tab',
+                'custom-content-transferencias'
+            );
+
+            InitDataTable(
+                [
+                    { "data": "id", "title": "ID" },
+                    { "data": "cuenta_bancaria", "title": "Cuenta Bancaria" },
+                    { "data": "monto", "title": "Monto" },
+                    { "data": "referencias", "title": "Referencias" },
+                    { "data": "accion", "title": "Accion" }
+                ]
+            );
+            OpenModal(lbl);            
+        })
+
+        $("#btn_dep_cliente").on("click", function() {
+            var lbl = $("#lbl_gastos").html();
+            mostrarSoloTab(
+                'custom-content-depositos-tab',
+                'custom-content-depositos'
+            );
+            InitDataTable(
+                [
+                    { "data": "id", "title": "ID" },
+                    { "data": "FECHA", "title": "FECHA DEPOSITO" },
+                    { "data": "nombre_cliente", "title": "Nombre" },
+                    { "data": "cuenta_bancaria", "title": "Cuenta Bancaria" },
+                    { "data": "monto", "title": "Monto" },
+                    { "data": "referencias", "title": "Referencias" },
+                    { "data": "accion", "title": "Accion" }
+                ]
+            );
+
+            OpenModal(lbl);            
+        })
+
+        $('#mdl-form-extra-lg').on('hidden.bs.modal', function () {
+            $('#custom-content-below-tab .nav-item').show();
+        });
+
+        
+
         
     })
+
+
+    function InitDataTable(columns)
+    {
+        $("#tbl_deposiciones").DataTable({
+            "lengthChange": false, 
+            "destroy": true,
+            "autoWidth": false,
+            "info": false,
+            "paging": false,
+            "searching": false,
+            "order": [[0, 'desc']],
+            "language": {
+            "zeroRecords": "NO HAY COINCIDENCIAS",
+            "paginate": {
+                "first": "Primera",
+                "last": "Última ",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+            
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "<table class='table table-striped table-bordered'><thead><tr><th colspan='3'>NO HAY COINCIDENCIAS</th></tr></thead></table>",
+            "search": "BUSCAR"
+            },
+            "columns": columns
+        });
+    }
+
+    function OpenModal(Titulos) 
+    {
+        $('.modal-title').html(Titulos);
+        $('#mdl-form-extra-lg').modal('show');
+    }
+
+    
+
+    function mostrarSoloTab(tabId, paneId) {
+        // 1. Ocultar todas las pestañas
+        $('#custom-content-below-tab .nav-item').hide();
+
+        // 2. Reset tabs
+        $('#custom-content-below-tab .nav-link')
+            .removeClass('active')
+            .attr('aria-selected', 'false');
+
+        // 3. Reset panes
+        $('.tab-pane')
+            .removeClass('show active');
+
+        // 4. Mostrar y activar tab
+        $('#' + tabId)
+            .closest('.nav-item')
+            .show();
+
+        $('#' + tabId)
+            .addClass('active')
+            .attr('aria-selected', 'true');
+
+        // 5. Mostrar y activar pane
+        $('#' + paneId)
+            .addClass('show active');
+    }
 
     function UpdateTotal() {
 

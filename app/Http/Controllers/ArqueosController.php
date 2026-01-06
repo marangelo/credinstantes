@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Arqueo;
 use App\Models\Zonas;
+use App\Models\Clientes;
+use App\Models\BancoCuentas;
 use App\Exports\ExportArqueo;
 use App\Traits\CheckUserLock;
 
@@ -33,8 +35,10 @@ class ArqueosController extends Controller
         $Titulo     = "Arqueo Nuevo";
         $Arqueo     = Arqueo::find($ID); 
         $Cobrado    = Arqueo::Cobrado($ID);
+        $Clientes   = Clientes::getClientes(0);
+        $Cuentas    = BancoCuentas::getBancoCuentas();
     
-        return view('Arqueos.Nuevo', compact('Titulo','Arqueo','Cobrado'));
+        return view('Arqueos.Nuevo', compact('Titulo','Arqueo','Cobrado','Clientes','Cuentas'));
     }
 
     public function UpdateRecuperado(Request $request)
