@@ -7,10 +7,6 @@
 @section('content')
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      
-    </section>
 
     <!-- Main content -->
     <section class="content">
@@ -18,7 +14,7 @@
         <div class="row">
           <div class="col-12">
             <!-- /.card -->
-            <small class="badge badge-info mb-1"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
+            <small class="badge badge-info mb-2"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
             <div class="card">
               <div class="card-header" >
               <h3 class="card-title">{{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / {{strtoupper ( (empty($Arqueo->getZona->UsuarioCobrador->nombre)) ? 'N/D' : $Arqueo->getZona->UsuarioCobrador->nombre ) }}</h3>

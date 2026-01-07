@@ -24,9 +24,9 @@
                     <div class="tab-pane fade show active" id="custom-content-desembolso" role="tabpanel" aria-labelledby="custom-content-desembolso-tab">                    
                     
                         <div class="row mt-3"> 
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="form-group">                      
-                                    <label>NOMBRE DEL CLIENTE </label>                      
+                                    <label>CLIENTE. </label>                      
                                     <select class="form-control select2" style="width: 100%;">
                                         @foreach($Clientes as $Cliente)
                                         <option value="{{$Cliente->id_clientes}}">{{$Cliente->nombre}} {{$Cliente->apellidos}} </option>
@@ -34,13 +34,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <label>MONTO. </label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-success"> C$. </span>
+                                        <span class="input-group-text bg-light"> C$. </span>
                                     </div>
                                     <input type="text" class="form-control" id="00000" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
+                                <div class="input-group">                          
+                                    <button type="button" class="btn btn-block bg-gradient-info">Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +55,7 @@
                     <div class="tab-pane fade" id="custom-content-transferencias" role="tabpanel" aria-labelledby="custom-content-transferencias-tab">
                         
                         <div class="row mt-3"> 
-                            <div class="col-md-4">
+                            <div class="col-md-7">
                                 <div class="form-group">                      
                                     <label>CUENTAS PAR DEPT.</label>                      
                                     <select class="form-control select2" style="width: 100%;">
@@ -59,18 +65,22 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label>MONTO. </label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-success"> C$. </span>
+                                        <span class="input-group-text bg-light"> C$. </span>
                                     </div>
                                     <input type="text" class="form-control" id="00000" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
                                 </div>
                             </div>
-
-                            <div class="col-md-4">
-                                <label>REFERENCIAS. </label>
+                            <div class="col-md-2">
+                                <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
+                                <div class="input-group">                          
+                                    <button type="button" class="btn btn-block bg-gradient-info">Guardar</button>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
                                 <div class="input-group">                            
                                     <input type="text" class="form-control" id="IdLorem" placeholder="Referencias " >
                                 </div>
@@ -82,21 +92,9 @@
 
                         <div class="row mt-3 mb-3"> 
 
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>FECHA DEL DEPOSITO</label>
-                                    <div class="input-group date" id="dtAbono" data-target-input="nearest">
-                                        <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IdFechaGasto" value="{{ date('d/m/y') }}"/>
-                                    </div>
-                                </div> 
-                            </div>
-
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <div class="form-group">                      
-                                <label>NOMBRE DEL CLIENTE.</label>                      
+                                <label>CLIENTE.</label>                      
                                 <select class="form-control select2" style="width: 100%;">
                                     @foreach($Clientes as $Cliente)
                                     <option value="{{$Cliente->id_clientes}}">{{$Cliente->nombre}} {{$Cliente->apellidos}} </option>
@@ -105,7 +103,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <div class="form-group">                      
                                 <label>CUENTAS BANCARIA.</label>                      
                                 <select class="form-control select2" style="width: 100%;">
@@ -117,21 +115,39 @@
                             </div>
 
                             <div class="col-md-2">
-                                <label>MONTO DEPOSITADO. </label>
+                                <label>MONTO DEPT. </label>
                                 <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text bg-success"> C$. </span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-light"> C$. </span>
+                                    </div>
+                                    <input type="text" class="form-control" id="00000" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
                                 </div>
-                                <input type="text" class="form-control" id="00000" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
+                            </div>
+                            <div class="col-md-2">
+                                <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
+                                <div class="input-group">                          
+                                    <button type="button" class="btn btn-block bg-gradient-info">Guardar</button>
                                 </div>
                             </div>
 
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div class="input-group date" id="dtAbono" data-target-input="nearest">
+                                        <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IdFechaGasto" value="{{ date('d/m/y') }}"/>
+                                    </div>
+                                </div> 
+                            </div>
+
                             <div class="col-md-10">
-                                <label>REFERENCIAS. </label>
                                 <div class="input-group">                          
                                     <input type="text" class="form-control" id="IdLorem" placeholder="Referencias " >
                                 </div>
                             </div>
+
+                            
 
                         </div>
                     </div>
@@ -142,8 +158,8 @@
 
             
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>
-                <button type="button" class="btn btn-primary">GUARDAR</button>
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>
+                <button type="button" class="btn btn-primary">GUARDAR</button> -->
             </div>
         </div>
     </div>

@@ -26,6 +26,7 @@ class Arqueo extends Model {
     {
         return $this->hasOne(Zonas::class, 'id_zona','id_zona');
     }
+
     public static function UpdateArqueo(Request $request)
     {
         if ($request->ajax()) {
@@ -578,6 +579,71 @@ class Arqueo extends Model {
                 return response()->json($mensaje);
             }
         }
+    }
+
+    public static function getDesembolso(Request $request)
+    {
+        $ID         = $request->input('Arqueo');
+
+        $Desembolso = ArqueoDesembolso::where('id_arqueo', $ID)->get();
+
+        $data  = array();
+        
+        foreach ($Desembolso as $a) {
+            $data[] = [
+                "id"              => $a->id_desembolsos,
+                "nombre_cliente"  => strtoupper($a->getCliente->nombre . " " . $a->getCliente->apellidos),
+                "monto"           => $a->monto,
+                "accion"    => '<button class="btn btn-sm btn-danger" onclick="Remove(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
+            ];
+        }
+        return response()->json([
+            "data" => $data
+        ]);
+
+    }
+    public static function getTransferencias(Request $request)
+    {
+        $ID         = $request->input('Arqueo');
+
+        $Transferencias = ArqueoTransferencia::where('id_arqueo', $ID)->get();
+
+        $data  = array();
+        foreach ($Transferencias as $a) {
+            $data[] = [
+                "id"        => $a->id_tranferencia,
+                "cuenta"    => $a->BancoCuentas->Banco->banco.' '.$a->BancoCuentas->moneda.' '.$a->BancoCuentas->cuenta,
+                "monto"     => $a->monto,
+                "refe"      => $a->referencia,
+                "accion"    => '<button class="btn btn-sm btn-danger" onclick="Remove(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
+            ];
+        }
+        return response()->json([
+            "data" => $data
+        ]);
+
+    }
+    public static function getDepositos(Request $request)
+    {
+        $ID         = $request->input('Arqueo');
+
+        $Depositos = ArqueoDeposito::where('id_arqueo', $ID)->get();
+        $data  = array();
+        foreach ($Depositos as $a) {
+            $data[] = [
+                "id"        => $a->id_deposito,
+                "FECHA"     => $a->fecha_deposito,
+                "nombre_cliente"   =>strtoupper($a->Cliente->nombre . " " . $a->Cliente->apellidos),
+                "cuenta_bancaria"    => $a->Cuenta->Banco->banco.' '.$a->Cuenta->moneda.' '.$a->Cuenta->cuenta,
+                "monto"     => $a->monto,
+                "referencias"      => $a->refe,
+                "accion"    => '<button class="btn btn-sm btn-danger" onclick="Remove(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
+            ];
+        }
+
+        return response()->json([
+            "data" => $data
+        ]);
     }
 
 }

@@ -212,61 +212,74 @@
         })
 
 
-        $("#btn_add_recuperacion").on("click", function() {
-            var lbl = $("#lbl_deposito_dia").html();
-            mostrarSoloTab(
-                'custom-content-desembolso-tab',
-                'custom-content-desembolso'
-            );
-            InitDataTable(
+        $("#btn_add_recuperacion").on("click", function() 
+        {
+            var lbl = $("#lbl_deposito_dia").html();    
+            var IdArqueo = $("#id_moneda").text();      
+            getData(
+                '../getDesembolso',
+                IdArqueo, 
+                lbl,
                 [
                     { "data": "id", "title": "ID" },
-                    { "data": "nombre_cliente", "title": "Nombre" },
-                    { "data": "monto", "title": "Monto" },
-                    { "data": "accion", "title": "Accion" }
+                    { "data": "nombre_cliente", "title": "CLIENTE" },
+                    { "data": "monto", "title": "MONTO C$." , render: $.fn.dataTable.render.number( ',', '.', 2  ) },
+                    { "data": "accion", "title": " - " }
+                ],
+                [
+                    'custom-content-desembolso-tab',
+                    'custom-content-desembolso'
                 ]
             );
-            OpenModal(lbl);            
         })
         
-        $("#btn_dep_transfer").on("click", function() {
-            var lbl = $("#lbl_deposito_tranferencia").html();
-            mostrarSoloTab(
-                'custom-content-transferencias-tab',
-                'custom-content-transferencias'
-            );
-
-            InitDataTable(
+        $("#btn_dep_transfer").on("click", function() 
+        {
+            var lbl = $("#lbl_deposito_tranferencia").html();            
+            var IdArqueo = $("#id_moneda").text();      
+            getData(
+                '../getTransferencias',
+                IdArqueo, 
+                lbl,
                 [
                     { "data": "id", "title": "ID" },
-                    { "data": "cuenta_bancaria", "title": "Cuenta Bancaria" },
-                    { "data": "monto", "title": "Monto" },
-                    { "data": "referencias", "title": "Referencias" },
-                    { "data": "accion", "title": "Accion" }
+                    { "data": "cuenta", "title": "CUENTA" },
+                    { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+                    { "data": "refe", "title": "REFERENCIA" },
+                    { "data": "accion", "title": " - " }
+                ],
+                [
+                    'custom-content-transferencias-tab',
+                    'custom-content-transferencias'
                 ]
             );
-            OpenModal(lbl);            
         })
 
-        $("#btn_dep_cliente").on("click", function() {
+        $("#btn_dep_cliente").on("click", function() 
+        {
             var lbl = $("#lbl_gastos").html();
-            mostrarSoloTab(
-                'custom-content-depositos-tab',
-                'custom-content-depositos'
-            );
-            InitDataTable(
+            var IdArqueo = $("#id_moneda").text();
+            getData(
+                '../getDepositos',
+                IdArqueo, 
+                lbl,
                 [
                     { "data": "id", "title": "ID" },
-                    { "data": "FECHA", "title": "FECHA DEPOSITO" },
-                    { "data": "nombre_cliente", "title": "Nombre" },
-                    { "data": "cuenta_bancaria", "title": "Cuenta Bancaria" },
-                    { "data": "monto", "title": "Monto" },
-                    { "data": "referencias", "title": "Referencias" },
-                    { "data": "accion", "title": "Accion" }
+                    { "data": "FECHA", "title": "FECHA DEPOSITO", render: function(data,type,row){
+                        return moment(data).format('D MMM YYYY hh:mm A');
+                    } },
+                    { "data": "nombre_cliente", "title": "CLIENTE" },
+                    { "data": "cuenta_bancaria", "title": "CUENTA" },
+                    { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2   ) },
+                    { "data": "referencias", "title": "REFERENCIA" },
+                    { "data": "accion", "title": " - " }
+                ],
+                [
+                    'custom-content-depositos-tab',
+                    'custom-content-depositos'
                 ]
             );
 
-            OpenModal(lbl);            
         })
 
         $('#mdl-form-extra-lg').on('hidden.bs.modal', function () {
@@ -278,33 +291,81 @@
         
     })
 
+    async function getData(Path,Arqueo, lbl, columns, callback = null) {
+        try {
+            const response = await fetch(Path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ 
+                    Arqueo     : Arqueo
+                })
+            });
 
-    function InitDataTable(columns)
-    {
+            const result = await response.json();
+
+            mostrarSoloTab(callback);
+
+            InitDataTable(
+                columns,
+                result.original.data
+            );
+
+            OpenModal(lbl); 
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    function InitDataTable(columns, data = []) {
+
+        // destruir si existe
+        if ($.fn.DataTable.isDataTable('#tbl_deposiciones')) {
+            $('#tbl_deposiciones').DataTable().destroy();
+        }
+
+        // reconstruir thead
+        let thead = "<thead><tr>";
+        columns.forEach(col => {
+            thead += `<th>${col.title || ''}</th>`;
+        });
+
+        thead += "</tr></thead>";
+        $("#tbl_deposiciones").html(thead + "<tbody></tbody>");
+
         $("#tbl_deposiciones").DataTable({
-            "lengthChange": false, 
-            "destroy": true,
-            "autoWidth": false,
-            "info": false,
-            "paging": false,
-            "searching": false,
-            "order": [[0, 'desc']],
-            "language": {
-            "zeroRecords": "NO HAY COINCIDENCIAS",
-            "paginate": {
-                "first": "Primera",
-                "last": "Última ",
-                "next": "Siguiente",
-                "previous": "Anterior"
+            destroy: true,
+            data: data,
+            columns: columns,
+            autoWidth: false,
+            lengthChange: false,
+            info: false,
+            paging: false,
+            searching: false,
+            ordering: columns.length > 0, // evita error si no hay columnas
+            order: columns.length > 0 ? [[0, 'asc']] : [],
+            language: {
+                zeroRecords: "NO HAY COINCIDENCIAS",
+                emptyTable: "NO HAY COINCIDENCIAS",
+                paginate: {
+                    first: "Primera",
+                    last: "Última",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
             },
-            
-            "lengthMenu": "MOSTRAR _MENU_",
-            "emptyTable": "<table class='table table-striped table-bordered'><thead><tr><th colspan='3'>NO HAY COINCIDENCIAS</th></tr></thead></table>",
-            "search": "BUSCAR"
-            },
-            "columns": columns
+            columnDefs: columns.length > 0 ? [
+                { targets: 0, visible: false }
+            ] : []
         });
     }
+
+
+
 
     function OpenModal(Titulos) 
     {
@@ -314,7 +375,11 @@
 
     
 
-    function mostrarSoloTab(tabId, paneId) {
+    function mostrarSoloTab(ArrayTabPane) {
+        
+        var tabId = ArrayTabPane[0];
+        var paneId = ArrayTabPane[1];
+
         // 1. Ocultar todas las pestañas
         $('#custom-content-below-tab .nav-item').hide();
 
