@@ -49,13 +49,15 @@ class Arqueo extends Model {
                 $Gastos     = $request->input('Gastos');
                 $Commit     = $request->input('Commit');
                 $ttSYS      = $request->input('ttSYS');
+                $Gastos     = $request->input('Gastos');
 
                 $response = Arqueo::where('id_arqueo',$Arqueo)->update([
                     "fecha_arqueo"          => $Fecha,
                     "deposito_dia"          => $Deposit,
                     "deposito_tranferencia" => $Tranfe,                    
                     "comentario"            => $Commit,
-                    "Sistema"               => $ttSYS
+                    "Sistema"               => $ttSYS,
+                    "gasto_operacion"       => $Gastos
                 ]);
 
                 return $response;   
@@ -109,9 +111,6 @@ class Arqueo extends Model {
         $Desembolso  = $Arqueo->Desembolso;
         $Tranferencia = $Arqueo->Transferencia;
 
-        //dd($Desembolso);
-
-        
 
         $estiloTituloColumnas = array(
             'font' => array(
@@ -299,8 +298,8 @@ class Arqueo extends Model {
                 $i = $i + 2 ; 
 
 
-                // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A34',  'COMENTARIO:');
-                // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',  $Arqueo->comentario); 
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A34',  'COMENTARIO:');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',  $Arqueo->comentario); 
                 $objPHPExcel->getActiveSheet()->mergeCells('A35:D36');
                 $style = array(
                     'alignment' => array(
@@ -334,7 +333,8 @@ class Arqueo extends Model {
                 $objPHPExcel->getActiveSheet()->mergeCells('C'.$f.':D'.$f); 
 
 
-                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A7:D31");
+                //ESTE CONTROLA EL FORMATO DE CELDA QUE TIENE, SE LE TENDRA QUE PASAR DINAMICAMENTE DONDE TERMINA
+                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A7:D34");
                 //$objPHPExcel->getActiveSheet()->getStyle("B7:D".($i-1))->applyFromArray($right);
                 $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
                 $objPHPExcel->getActiveSheet()->getStyle('C5:D5')->getNumberFormat()->setFormatCode($formatCode);

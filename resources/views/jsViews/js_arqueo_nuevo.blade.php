@@ -168,8 +168,7 @@
             })
         })
 
-        $("#bt_save_arqueo").click(function(){
-            
+        $("#bt_save_arqueo").click(function(){            
             var IdArqueo = $("#id_moneda").text();
 
             var dtIni               = $("#dtIni").val();
@@ -177,12 +176,13 @@
             var txt_tranferencia    = $("#txt_deposito_tranferencia").val();
             var total_SYS           = $('#id_total_sistema').val();
 
-            
+            var txt_gastos          = $("#txt_gastos").val();
             var txt_commit          = $("#id_commit").val();
 
             dtIni_                  = moment(dtIni, 'DD/MM/YYYY');
             txt_deposito_dia_       = numeral(isValue(txt_deposito_dia,0,true)).format('0.00')
             txt_tranferencia_       = numeral(isValue(txt_tranferencia,0,true)).format('0.00')
+            txt_gastos_             = numeral(isValue(txt_gastos,0,true)).format('0.00')
             total_SYS_             = numeral(isValue(total_SYS,0,true)).format('0.00')
 
             $.ajax({
@@ -192,6 +192,7 @@
                     Fecha   : dtIni_.format('YYYY-MM-DD'),
                     Deposit : txt_deposito_dia_,
                     Tranfe  : txt_tranferencia_,
+                    Gastos  : txt_gastos_,
                     Commit  : txt_commit,
                     ttSYS   : total_SYS_,
                     _token  : "{{ csrf_token() }}" 
@@ -211,6 +212,9 @@
             }).done(function(data) {
             });
         })
+
+        
+
 
         $("#btn_save_desembolso").on("click", function() 
         {
