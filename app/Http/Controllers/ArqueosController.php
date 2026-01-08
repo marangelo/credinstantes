@@ -120,5 +120,15 @@ class ArqueosController extends Controller
         $response = Arqueo::getDepositos($request);
         return response()->json($response);
     }
+    public function SaveDeposito(Request $request)
+    {
+        $response = Arqueo::SaveDeposito($request);
+        return response()->json($response);
+    }
+    public function DownDeposito(Request $request)
+    {
+        $response = Arqueo::DownDeposito($request);
+        return response()->json($response);
+    }
 
 }

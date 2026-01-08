@@ -123,6 +123,8 @@ Route::post('SaveTransferencia', 'ArqueosController@SaveTransferencia')->name('S
 Route::post('DownTransferencia', 'ArqueosController@DownTransferencia')->name('DownTransferencia');
 
 Route::post('getDepositos', 'ArqueosController@getDepositos')->name('getDepositos');
+Route::post('SaveDeposito', 'ArqueosController@SaveDeposito')->name('SaveDeposito');
+Route::post('DownDeposito', 'ArqueosController@DownDeposito')->name('DownDeposito');
 
 
 

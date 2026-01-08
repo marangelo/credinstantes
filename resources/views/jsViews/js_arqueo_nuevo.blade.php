@@ -246,20 +246,23 @@
 
         $("#btn_save_deposito").on("click", function() 
         {
+            var lbl = $("#lbl_gastos").html();
+            var IdArqueo = $("#id_moneda").text();
+
             var data = {
                 Path: "../SaveDeposito",
                 Arqueo: $("#id_moneda").text(),
-                cliente: $("#id_select_cliente_deposito").val(),
-                cuenta: $("#id_select_cuenta_deposito").val(),
-                monto: $("#txt_deposito_monto").val(),
-                referencia: $("#txt_referencia_deposito").val(),
-                fecha: $("#fecha_deposito").val()
+                SelectCliente: $("#id_select_cliente_deposito").val(),
+                SelectCuenta: $("#id_select_cuenta_deposito").val(),
+                Monto: $("#txt_deposito_monto").val(),
+                Referencia: $("#txt_referencia_deposito").val(),
+                FechaDeposito: $("#fecha_deposito").val()
             };
+
             UpTransacciones(data);
+            
+            InitDataDepositos( IdArqueo, lbl);
         })
-
-        
-
 
         $("#btn_add_recuperacion").on("click", function() 
         {
@@ -281,26 +284,8 @@
         {
             var lbl = $("#lbl_gastos").html();
             var IdArqueo = $("#id_moneda").text();
-            getData(
-                '../getDepositos',
-                IdArqueo, 
-                lbl,
-                [
-                    { "data": "id", "title": "ID" },
-                    { "data": "FECHA", "title": "FECHA DEPOSITO", render: function(data,type,row){
-                        return moment(data).format('D MMM YYYY hh:mm A');
-                    } },
-                    { "data": "nombre_cliente", "title": "CLIENTE" },
-                    { "data": "cuenta_bancaria", "title": "CUENTA" },
-                    { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2   ) },
-                    { "data": "referencias", "title": "REFERENCIA" },
-                    { "data": "accion", "title": " - " }
-                ],
-                [
-                    'custom-content-depositos-tab',
-                    'custom-content-depositos'
-                ]
-            );
+            InitDataDepositos( IdArqueo, lbl);
+            
 
         })
 
@@ -313,43 +298,7 @@
         
     })
 
-    function InitDataDesembolso( IdArqueo, lbl) 
-    {
-        getData(
-            '../getDesembolso',
-            IdArqueo, 
-            lbl,
-            [
-                { "data": "id", "title": "ID" },
-                { "data": "nombre_cliente", "title": "CLIENTE" },
-                { "data": "monto", "title": "MONTO C$." , render: $.fn.dataTable.render.number( ',', '.', 2  ) },
-                { "data": "accion", "title": " - " }
-            ],
-            [
-                'custom-content-desembolso-tab',
-                'custom-content-desembolso'
-            ]
-        );
-    }
-    function InitDataTransferencias( IdArqueo, lbl) 
-    {
-        getData(
-            '../getTransferencias',
-            IdArqueo, 
-            lbl,
-            [
-                { "data": "id", "title": "ID" },
-                { "data": "cuenta", "title": "CUENTA" },
-                { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
-                { "data": "refe", "title": "REFERENCIA" },
-                { "data": "accion", "title": " - " }
-            ],
-            [
-                'custom-content-transferencias-tab',
-                'custom-content-transferencias'
-            ]
-        );
-    }
+    
 
     async function UpTransacciones(data) {
         try {
@@ -391,6 +340,18 @@
             var IdArqueo = $("#id_moneda").text();      
 
             InitDataTransferencias(IdArqueo, lbl);
+        } catch (error) {
+            console.error("Error al eliminar desembolso:", error);
+        }
+    }
+    async function removeDeposito(IdTransaccion) {
+        try {
+            await DownTransacciones(IdTransaccion, "../DownDeposito");
+
+            var lbl = $("#lbl_gastos").html();
+            var IdArqueo = $("#id_moneda").text();     
+
+            InitDataDepositos(IdArqueo, lbl);
         } catch (error) {
             console.error("Error al eliminar desembolso:", error);
         }
@@ -462,6 +423,49 @@
             [
                 'custom-content-desembolso-tab',
                 'custom-content-desembolso'
+            ]
+        );
+    }
+    function InitDataTransferencias( IdArqueo, lbl) 
+    {
+        getData(
+            '../getTransferencias',
+            IdArqueo, 
+            lbl,
+            [
+                { "data": "id", "title": "ID" },
+                { "data": "cuenta", "title": "CUENTA" },
+                { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+                { "data": "refe", "title": "REFERENCIA" },
+                { "data": "accion", "title": " - " }
+            ],
+            [
+                'custom-content-transferencias-tab',
+                'custom-content-transferencias'
+            ]
+        );
+    }
+
+    function InitDataDepositos( IdArqueo, lbl) 
+    {
+        getData(
+            '../getDepositos',
+            IdArqueo, 
+            lbl,
+            [
+                { "data": "id", "title": "ID" },
+                { "data": "FECHA", "title": "FECHA DEPOSITO", render: function(data,type,row){
+                    return moment(data).format('D MMM YYYY hh:mm A');
+                } },
+                { "data": "nombre_cliente", "title": "CLIENTE" },
+                { "data": "cuenta_bancaria", "title": "CUENTA" },
+                { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2   ) },
+                { "data": "referencias", "title": "REFERENCIA" },
+                { "data": "accion", "title": " - " }
+            ],
+            [
+                'custom-content-depositos-tab',
+                'custom-content-depositos'
             ]
         );
     }

@@ -725,13 +725,62 @@ class Arqueo extends Model {
                 "cuenta_bancaria"    => $a->Cuenta->Banco->banco.' '.$a->Cuenta->moneda.' '.$a->Cuenta->cuenta,
                 "monto"     => $a->monto,
                 "referencias"      => $a->refe,
-                "accion"    => '<button class="btn btn-sm btn-danger" onclick="Remove(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
+                "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDeposito(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
             ];
         }
 
         return response()->json([
             "data" => $data
         ]);
+    }
+    public static function SaveDeposito(Request $request)
+    {
+        try 
+        {
+
+                $Arqueo         = $request->input('Arqueo');
+                $SelectCliente  = $request->input('SelectCliente');
+                $SelectCuenta   = $request->input('SelectCuenta');
+                $Monto          = $request->input('Monto');
+                $Referencia     = $request->input('Referencia');
+                $FechaDeposito  = $request->input('FechaDeposito');
+
+                $datos_a_insertar = [
+                    'id_arqueo'         => $Arqueo,
+                    'id_cliente'        => $SelectCliente,
+                    'id_cuenta'         => $SelectCuenta,
+                    'monto'             => $Monto,
+                    'refe'              => $Referencia,
+                    //'fecha_deposito'    => $FechaDeposito,
+                    'created_at'        => date('Y-m-d H:i:s'),
+                    'created_by'        => Auth::id(),
+                ];
+
+
+                $response = ArqueoDeposito::insertGetId($datos_a_insertar);
+
+                return $response;   
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        
+    }
+    public static function DownDeposito(Request $request)
+    {
+        try {
+            $ID         = $request->input('IdTransaccion');
+            
+            $response =   ArqueoDeposito::where('id_deposito',  $ID)->delete();
+
+            return $response;
+
+
+        } catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
     }
 
 }
