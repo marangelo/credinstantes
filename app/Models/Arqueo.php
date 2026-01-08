@@ -105,6 +105,7 @@ class Arqueo extends Model {
         $objPHPExcel = new PHPExcel();
         $tituloReporte = "";
         $titulosColumnas = array();
+        $LastRow = 0 ;
 
         $Arqueo     = Arqueo::find($ID);
         $ttSistema  = $Arqueo->Sistema;
@@ -256,6 +257,11 @@ class Arqueo extends Model {
                                     $i++;
                 }
 
+                $IniRowDepposito = $i;
+                $EndRowDepposito = $i + $Tranferencia->count();
+
+            
+
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'DEPOSITOS O TRANSFERENCIAS')
                 ->setCellValue('B'.$i,  '-')
                 ->setCellValue('C'.$i,  '-')
@@ -289,18 +295,26 @@ class Arqueo extends Model {
 
                 $ttTotal_Final =  $ttTotal - $ttSistema;
 
+                $LastRow = $i ;
+
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  'CUADRADO SEGÚN SISTEMA CONTRA EFECTIVO')
                 ->setCellValue('B'.$i,  '-')
                 ->setCellValue('C'.$i,  '-')
                 ->setCellValue('D'.$i,  number_format($ttTotal_Final,2,'.',''));
-                
-                $objPHPExcel->getActiveSheet()->mergeCells('A31:B31');
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$LastRow.':B'.$LastRow);
+
+                $NumRowComentario = $LastRow + 3;
+
                 $i = $i + 2 ; 
 
+                
 
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A34',  'COMENTARIO:');
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',  $Arqueo->comentario); 
-                $objPHPExcel->getActiveSheet()->mergeCells('A35:D36');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$NumRowComentario,  'COMENTARIO:');
+                $NumRowComentario++;
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$NumRowComentario.'',  $Arqueo->comentario); 
+
+                $Merced = $NumRowComentario + 1;
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$NumRowComentario.':D'.$Merced);
                 $style = array(
                     'alignment' => array(
                         'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -312,13 +326,9 @@ class Arqueo extends Model {
                         )
                     )
                 );
-                $objPHPExcel->getActiveSheet()->getStyle('A35:D36')->applyFromArray($style);
-                
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$NumRowComentario.':D'.$Merced)->applyFromArray($style);
 
-
-                $f = 39; 
-
-
+                $f = 60; 
 
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$f,  '_____________________________________');
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$f,  '_____________________________________');
@@ -332,17 +342,11 @@ class Arqueo extends Model {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$f,  'FIRMA OPERACIONES');
                 $objPHPExcel->getActiveSheet()->mergeCells('C'.$f.':D'.$f); 
 
-
-                //ESTE CONTROLA EL FORMATO DE CELDA QUE TIENE, SE LE TENDRA QUE PASAR DINAMICAMENTE DONDE TERMINA
-                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A7:D34");
-                //$objPHPExcel->getActiveSheet()->getStyle("B7:D".($i-1))->applyFromArray($right);
-                $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
+                $formatCode = '_-"C$"* #,##0.00_-;_-"C$"* #,##0.00_-;_-"C$"* "-"??_-;_-@_-';
+                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A7:D".$LastRow);
                 $objPHPExcel->getActiveSheet()->getStyle('C5:D5')->getNumberFormat()->setFormatCode($formatCode);
-                $objPHPExcel->getActiveSheet()->getStyle('B7:D31')->getNumberFormat()->setFormatCode($formatCode);
-                $objPHPExcel->getActiveSheet()->getStyle('B7:D31')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-
-
-
+                $objPHPExcel->getActiveSheet()->getStyle('B7:D'.$LastRow)->getNumberFormat()->setFormatCode($formatCode);
+                $objPHPExcel->getActiveSheet()->getStyle('B7:D'.$LastRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
                 //COLORES DE LOS TOTALES
                 $color_totales = array(                   
@@ -351,10 +355,13 @@ class Arqueo extends Model {
                         'color' => array('rgb' => '00B050') 
                     )
                 );
+
+        
                 $objPHPExcel->setActiveSheetIndex(0)->getStyle('B5')->applyFromArray($color_totales);
                 $objPHPExcel->setActiveSheetIndex(0)->getStyle('D18')->applyFromArray($color_totales);
                 $objPHPExcel->setActiveSheetIndex(0)->getStyle('D26')->applyFromArray($color_totales);
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('D28')->applyFromArray($color_totales);
+                //COLOR DE DEPOSITOS O TRANSFERENCIAS
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D'.$IniRowDepposito.':D'.$EndRowDepposito)->applyFromArray($color_totales);
 
                  //COLORES DE LOS TOTALES
                 $color_totales = array(                   
@@ -366,7 +373,8 @@ class Arqueo extends Model {
                 $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5')->applyFromArray($color_totales);
                 $objPHPExcel->setActiveSheetIndex(0)->getStyle('A18')->applyFromArray($color_totales);
                 $objPHPExcel->setActiveSheetIndex(0)->getStyle('A26')->applyFromArray($color_totales);
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('A28')->applyFromArray($color_totales);
+                //COLOR DE DEPOSITOS O TRANSFERENCIAS
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$IniRowDepposito.':A'.$EndRowDepposito)->applyFromArray($color_totales);
 
                 $color_totales = array(                   
                     'fill' => array(
@@ -374,8 +382,9 @@ class Arqueo extends Model {
                         'color' => array('rgb' => '7030A0') 
                     )
                 );
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('A29')->applyFromArray($color_totales);
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('D29')->applyFromArray($color_totales);
+                $RowColorDeposito = $EndRowDepposito + 1;
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$RowColorDeposito)->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D'.$RowColorDeposito)->applyFromArray($color_totales);
 
 
                 
@@ -385,8 +394,9 @@ class Arqueo extends Model {
                         'color' => array('rgb' => 'FFFF00') 
                     )
                 );
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('A30')->applyFromArray($color_totales);
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('D30')->applyFromArray($color_totales);
+                $RowColorTotal = $RowColorDeposito + 1;
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$RowColorTotal)->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D'.$RowColorTotal)->applyFromArray($color_totales);
 
                 $color_totales = array(                   
                     'fill' => array(
@@ -394,7 +404,8 @@ class Arqueo extends Model {
                         'color' => array('rgb' => 'ED7D31') 
                     )
                 );
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('D31')->applyFromArray($color_totales);
+                $RowColorTotalFinal = $RowColorTotal + 1;
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('D'.$RowColorTotalFinal)->applyFromArray($color_totales);
 
                 $color_totales = array(                   
                     'fill' => array(
@@ -402,7 +413,7 @@ class Arqueo extends Model {
                         'color' => array('rgb' => 'F8CBAD') 
                     )
                 );
-                //$objPHPExcel->setActiveSheetIndex(0)->getStyle('A6:D6')->applyFromArray($color_totales);
+                $objPHPExcel->setActiveSheetIndex(0)->getStyle('A6:D6')->applyFromArray($color_totales);
 
                 
 
@@ -420,7 +431,7 @@ class Arqueo extends Model {
                 );
 
                 $objPHPExcel->getActiveSheet()->getStyle('C5:D5')->applyFromArray($style_center);
-                $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A31:B31');
+                //$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A31:B31');
 
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A7',  'BILLETES CORDOBAS');
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A14',  'MONEDAS CORDOBAS');
