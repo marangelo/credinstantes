@@ -168,7 +168,8 @@
             })
         })
 
-        $("#bt_save_arqueo").click(function(){            
+        $("#bt_save_arqueo").click(function(){
+            
             var IdArqueo = $("#id_moneda").text();
 
             var dtIni               = $("#dtIni").val();
@@ -312,6 +313,9 @@
             });
 
             const result = await response.json();
+
+
+            Toast.fire({ icon: 'success', title: 'Accion Guardada.' });
             
 
         } catch (error) {
@@ -371,6 +375,7 @@
             });
 
             const result = await response.json();
+            Toast.fire({ icon: 'error', title: 'Accion Eliminada.' });
             
 
         } catch (error) {
@@ -379,7 +384,7 @@
         
     }
 
-    async function getData(Path,Arqueo, lbl, columns, callback = null) {
+    async function getData(Path,Arqueo, lbl, columns, callback = null, ttTransaccion,btnResumen) {
         try {
             const response = await fetch(Path, {
                 method: 'POST',
@@ -400,6 +405,10 @@
                 columns,
                 result.original.data
             );
+
+            $(ttTransaccion).html('( ' + numeral(isValue(result.original.Total,2,true)).format('0,00.00') + ' )');
+            $(btnResumen).val(numeral(isValue(result.original.Total,2,true)).format('0.00'));
+
 
             OpenModal(lbl); 
 
@@ -423,7 +432,9 @@
             [
                 'custom-content-desembolso-tab',
                 'custom-content-desembolso'
-            ]
+            ],
+            "#total_desembolso",
+            "#txt_deposito_dia"
         );
     }
     function InitDataTransferencias( IdArqueo, lbl) 
@@ -442,7 +453,9 @@
             [
                 'custom-content-transferencias-tab',
                 'custom-content-transferencias'
-            ]
+            ],
+            "#total_transferencia",
+            "#txt_deposito_tranferencia"
         );
     }
 
@@ -466,7 +479,9 @@
             [
                 'custom-content-depositos-tab',
                 'custom-content-depositos'
-            ]
+            ],
+            "#total_depositos",
+            "#txt_gastos"
         );
     }
     function InitDataTable(columns, data = []) {
@@ -511,7 +526,6 @@
             ] : []
         });
     }
-
 
 
 

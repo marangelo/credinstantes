@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
+                                <label> Total : <span class="text-success" id="total_desembolso" >( 0.00 )</span></label>
                                 <div class="input-group">                          
                                     <button type="button" class="btn btn-block bg-gradient-info" id="btn_save_desembolso">Guardar</button>
                                 </div>
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
+                                <label> Total : <span class="text-success" id="total_transferencia" >( 0.00 )</span></label>
                                 <div class="input-group">                          
                                     <button type="button" class="btn btn-block bg-gradient-info" id="btn_save_transferencia">Guardar</button>
                                 </div>
@@ -124,7 +124,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
+                                <label> Total : <span class="text-success" id="total_depositos" >( 0.00 )</span></label>
                                 <div class="input-group">                          
                                     <button type="button" class="btn btn-block bg-gradient-info" id="btn_save_deposito">Guardar</button>
                                 </div>

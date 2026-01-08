@@ -585,11 +585,10 @@ class Arqueo extends Model {
 
     public static function getDesembolso(Request $request)
     {
-        $ID         = $request->input('Arqueo');
-
-        $Desembolso = ArqueoDesembolso::where('id_arqueo', $ID)->get();
-
-        $data  = array();
+        $ID              = $request->input('Arqueo');
+        $Desembolso      = ArqueoDesembolso::where('id_arqueo', $ID)->get();
+        $data            = array();
+        $TotalDesembolso = 0;
         
         foreach ($Desembolso as $a) {
             $data[] = [
@@ -598,9 +597,11 @@ class Arqueo extends Model {
                 "monto"           => $a->monto,
                 "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDesembolso(' . $a->id_desembolsos . ')"><i class="fas fa-trash"></i></button>'
             ];
+            $TotalDesembolso = $TotalDesembolso + $a->monto;
         }
         return response()->json([
-            "data" => $data
+            "data" => $data,
+            "Total" => $TotalDesembolso
         ]);
 
     }
@@ -647,9 +648,10 @@ class Arqueo extends Model {
     }
     public static function getTransferencias(Request $request)
     {
-        $ID         = $request->input('Arqueo');
+        $ID                 = $request->input('Arqueo');
+        $Transferencias     = ArqueoTransferencia::where('id_arqueo', $ID)->get();
+        $TotalTransferencia = 0;
 
-        $Transferencias = ArqueoTransferencia::where('id_arqueo', $ID)->get();
 
         $data  = array();
         foreach ($Transferencias as $a) {
@@ -660,9 +662,11 @@ class Arqueo extends Model {
                 "refe"      => $a->referencia,
                 "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeTransferencia(' . $a->id_tranferencia . ')"><i class="fas fa-trash"></i></button>'
             ];
+            $TotalTransferencia = $TotalTransferencia + $a->monto;
         }
         return response()->json([
-            "data" => $data
+            "data" => $data,
+            "Total" => $TotalTransferencia
         ]);
 
     }
@@ -713,10 +717,13 @@ class Arqueo extends Model {
     }
     public static function getDepositos(Request $request)
     {
-        $ID         = $request->input('Arqueo');
+        $ID             = $request->input('Arqueo');
+        $TotalDeposito  = 0;
+        $data           = array();
 
         $Depositos = ArqueoDeposito::where('id_arqueo', $ID)->get();
-        $data  = array();
+        
+
         foreach ($Depositos as $a) {
             $data[] = [
                 "id"        => $a->id_deposito,
@@ -727,10 +734,12 @@ class Arqueo extends Model {
                 "referencias"      => $a->refe,
                 "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDeposito(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
             ];
+            $TotalDeposito = $TotalDeposito + $a->monto;
         }
 
         return response()->json([
-            "data" => $data
+            "data" => $data,
+            "Total" => $TotalDeposito
         ]);
     }
     public static function SaveDeposito(Request $request)
