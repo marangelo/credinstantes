@@ -115,6 +115,9 @@ Route::post('RemoveArqueo', 'ArqueosController@RemoveArqueo')->name('RemoveArque
 Route::get('ExportArqueo/{ID}', 'ArqueosController@ExportArqueo')->name('ExportArqueo');
 
 Route::post('getDesembolso', 'ArqueosController@getDesembolso')->name('getDesembolso');
+Route::post('SaveDesembolso', 'ArqueosController@SaveDesembolso')->name('SaveDesembolso');
+Route::post('DownDesembolso', 'ArqueosController@DownDesembolso')->name('DownDesembolso');
+
 Route::post('getTransferencias', 'ArqueosController@getTransferencias')->name('getTransferencias');
 Route::post('getDepositos', 'ArqueosController@getDepositos')->name('getDepositos');
 

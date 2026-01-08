@@ -13,6 +13,8 @@ use PHPExcel_Style;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Fill;
 
+use Auth;
+
 class Arqueo extends Model {
     public $timestamps = false;
     protected $table = "tbl_arqueo";
@@ -594,13 +596,54 @@ class Arqueo extends Model {
                 "id"              => $a->id_desembolsos,
                 "nombre_cliente"  => strtoupper($a->getCliente->nombre . " " . $a->getCliente->apellidos),
                 "monto"           => $a->monto,
-                "accion"    => '<button class="btn btn-sm btn-danger" onclick="Remove(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
+                "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDesembolso(' . $a->id_desembolsos . ')"><i class="fas fa-trash"></i></button>'
             ];
         }
         return response()->json([
             "data" => $data
         ]);
 
+    }
+    public static function SaveDesembolso(Request $request)
+    {
+        try {
+
+                $Arqueo         = $request->input('Arqueo');
+                $SelectCliente  = $request->input('SelectCliente');
+                $Monto          = $request->input('Monto');
+
+                $datos_a_insertar = [
+                    'id_arqueo'     => $Arqueo,
+                    'id_cliente'    => $SelectCliente,
+                    'monto'         => $Monto,
+                    'created_at'    => date('Y-m-d H:i:s'),
+                    'created_by'    => Auth::id(),
+                ];
+
+
+                $response = ArqueoDesembolso::insertGetId($datos_a_insertar);
+
+                return $response;   
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            } 
+    }
+    public static function DownDesembolso(Request $request)
+    {
+        try {
+            $ID         = $request->input('IdTransaccion');
+            
+            $response =   ArqueoDesembolso::where('id_desembolsos',  $ID)->delete();
+
+            return $response;
+
+
+        } catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
     }
     public static function getTransferencias(Request $request)
     {

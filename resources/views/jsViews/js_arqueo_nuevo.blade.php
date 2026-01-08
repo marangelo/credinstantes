@@ -211,26 +211,58 @@
             });
         })
 
+        $("#btn_save_desembolso").on("click", function() 
+        {
+            var lbl = $("#lbl_deposito_dia").html();    
+            var IdArqueo = $("#id_moneda").text();     
+            
+            var data = {
+                Path: "../SaveDesembolso",
+                Arqueo: IdArqueo,
+                SelectCliente: $("#id_select_cliente").val(),
+                Monto: $("#txt_desembolso").val()
+            };
+
+            UpTransacciones(data);
+
+            InitDataDesembolso( IdArqueo, lbl) 
+        })
+
+        $("#btn_save_transferencia").on("click", function() 
+        {
+            var data = {
+                Path: "../SaveTransferencia",
+                Arqueo: $("#id_moneda").text(),
+                cuenta: $("#id_select_transferencia").val(),
+                monto: $("#txt_transferencia").val(),
+                referencia: $("#txt_referencia_transferencia").val()
+            };
+            UpTransacciones(data);
+        })
+
+        $("#btn_save_deposito").on("click", function() 
+        {
+            var data = {
+                Path: "../SaveDeposito",
+                Arqueo: $("#id_moneda").text(),
+                cliente: $("#id_select_cliente_deposito").val(),
+                cuenta: $("#id_select_cuenta_deposito").val(),
+                monto: $("#txt_deposito_monto").val(),
+                referencia: $("#txt_referencia_deposito").val(),
+                fecha: $("#fecha_deposito").val()
+            };
+            UpTransacciones(data);
+        })
+
+        
+
 
         $("#btn_add_recuperacion").on("click", function() 
         {
             var lbl = $("#lbl_deposito_dia").html();    
             var IdArqueo = $("#id_moneda").text();      
-            getData(
-                '../getDesembolso',
-                IdArqueo, 
-                lbl,
-                [
-                    { "data": "id", "title": "ID" },
-                    { "data": "nombre_cliente", "title": "CLIENTE" },
-                    { "data": "monto", "title": "MONTO C$." , render: $.fn.dataTable.render.number( ',', '.', 2  ) },
-                    { "data": "accion", "title": " - " }
-                ],
-                [
-                    'custom-content-desembolso-tab',
-                    'custom-content-desembolso'
-                ]
-            );
+            InitDataDesembolso( IdArqueo, lbl) ;
+            
         })
         
         $("#btn_dep_transfer").on("click", function() 
@@ -291,6 +323,80 @@
         
     })
 
+    function InitDataDesembolso( IdArqueo, lbl) 
+    {
+        getData(
+            '../getDesembolso',
+            IdArqueo, 
+            lbl,
+            [
+                { "data": "id", "title": "ID" },
+                { "data": "nombre_cliente", "title": "CLIENTE" },
+                { "data": "monto", "title": "MONTO C$." , render: $.fn.dataTable.render.number( ',', '.', 2  ) },
+                { "data": "accion", "title": " - " }
+            ],
+            [
+                'custom-content-desembolso-tab',
+                'custom-content-desembolso'
+            ]
+        );
+    }
+
+    async function UpTransacciones(data) {
+        try {
+            const response = await fetch(data.Path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            
+
+        } catch (error) {
+            console.error(error);
+        }
+        
+    }
+
+    async function removeDesembolso(IdTransaccion) {
+            try {
+                await DownTransacciones(IdTransaccion, "../DownDesembolso");
+
+                var lbl = $("#lbl_deposito_dia").html();    
+                var IdArqueo = $("#id_moneda").text();      
+
+                InitDataDesembolso(IdArqueo, lbl);
+            } catch (error) {
+                console.error("Error al eliminar desembolso:", error);
+            }
+        }
+    
+    async function DownTransacciones(IdTransaccion, Path) {
+        try {
+            const response = await fetch(Path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ 
+                    IdTransaccion     : IdTransaccion
+                })
+            });
+
+            const result = await response.json();
+            
+
+        } catch (error) {
+            console.error(error);
+        }
+        
+    }
+
     async function getData(Path,Arqueo, lbl, columns, callback = null) {
         try {
             const response = await fetch(Path, {
@@ -347,7 +453,7 @@
             paging: false,
             searching: false,
             ordering: columns.length > 0, // evita error si no hay columnas
-            order: columns.length > 0 ? [[0, 'asc']] : [],
+            order: columns.length > 0 ? [[0, 'desc']] : [],
             language: {
                 zeroRecords: "NO HAY COINCIDENCIAS",
                 emptyTable: "NO HAY COINCIDENCIAS",

@@ -27,7 +27,7 @@
                             <div class="col-md-5">
                                 <div class="form-group">                      
                                     <label>CLIENTE. </label>                      
-                                    <select class="form-control select2" style="width: 100%;">
+                                    <select class="form-control select2" style="width: 100%;" id="id_select_cliente">
                                         @foreach($Clientes as $Cliente)
                                         <option value="{{$Cliente->id_clientes}}">{{$Cliente->nombre}} {{$Cliente->apellidos}} </option>
                                         @endforeach
@@ -40,13 +40,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-light"> C$. </span>
                                     </div>
-                                    <input type="text" class="form-control" id="00000" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
+                                    <input type="text" class="form-control" id="txt_desembolso" placeholder="0.00 " onkeypress='return isNumberKey(event)'>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
                                 <div class="input-group">                          
-                                    <button type="button" class="btn btn-block bg-gradient-info">Guardar</button>
+                                    <button type="button" class="btn btn-block bg-gradient-info" id="btn_save_desembolso">Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                             <div class="col-md-7">
                                 <div class="form-group">                      
                                     <label>CUENTAS PAR DEPT.</label>                      
-                                    <select class="form-control select2" style="width: 100%;">
+                                    <select class="form-control select2" style="width: 100%;" id="id_select_transferencia">
                                         @foreach($Cuentas as $c)
                                         <option value="{{$c['id_cuenta']}}">{{$c['Descripcion']}} </option>
                                         @endforeach
@@ -71,18 +71,18 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-light"> C$. </span>
                                     </div>
-                                    <input type="text" class="form-control" id="00000" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
+                                    <input type="text" class="form-control" placeholder="0.00" id="txt_transferencia" onkeypress='return isNumberKey(event)'>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
                                 <div class="input-group">                          
-                                    <button type="button" class="btn btn-block bg-gradient-info">Guardar</button>
+                                    <button type="button" class="btn btn-block bg-gradient-info" id="btn_save_transferencia">Guardar</button>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="input-group">                            
-                                    <input type="text" class="form-control" id="IdLorem" placeholder="Referencias " >
+                                    <input type="text" class="form-control" id="IdLorem" placeholder="Referencias" id="txt_referencia_transferencia" >
                                 </div>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">                      
                                 <label>CLIENTE.</label>                      
-                                <select class="form-control select2" style="width: 100%;">
+                                <select class="form-control select2" style="width: 100%;" id="id_select_cliente_deposito">
                                     @foreach($Clientes as $Cliente)
                                     <option value="{{$Cliente->id_clientes}}">{{$Cliente->nombre}} {{$Cliente->apellidos}} </option>
                                     @endforeach
@@ -106,7 +106,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">                      
                                 <label>CUENTAS BANCARIA.</label>                      
-                                <select class="form-control select2" style="width: 100%;">
+                                <select class="form-control select2" style="width: 100%;" id="id_select_cuenta_deposito">
                                     @foreach($Cuentas as $c)
                                     <option value="{{$c['id_cuenta']}}">{{$c['Descripcion']}} </option>
                                     @endforeach
@@ -120,13 +120,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-light"> C$. </span>
                                     </div>
-                                    <input type="text" class="form-control" id="00000" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
+                                    <input type="text" class="form-control" id="txt_deposito_monto" placeholder="0.00 " onkeypress='return isNumberKey(event)'>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <label> Total : <span class="text-success" >( 250,000.00 )</span></label>
                                 <div class="input-group">                          
-                                    <button type="button" class="btn btn-block bg-gradient-info">Guardar</button>
+                                    <button type="button" class="btn btn-block bg-gradient-info" id="btn_save_deposito">Guardar</button>
                                 </div>
                             </div>
 
@@ -136,14 +136,14 @@
                                         <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IdFechaGasto" value="{{ date('d/m/y') }}"/>
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="fecha_deposito" value="{{ date('d/m/y') }}"/>
                                     </div>
                                 </div> 
                             </div>
 
                             <div class="col-md-10">
                                 <div class="input-group">                          
-                                    <input type="text" class="form-control" id="IdLorem" placeholder="Referencias " >
+                                    <input type="text" class="form-control" placeholder="Referencias" id="txt_referencia_deposito" >
                                 </div>
                             </div>
 

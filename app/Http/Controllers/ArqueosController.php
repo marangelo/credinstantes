@@ -90,6 +90,16 @@ class ArqueosController extends Controller
         $response = Arqueo::getDesembolso($request);
         return response()->json($response);
     }
+    public function SaveDesembolso(Request $request)
+    {
+        $response = Arqueo::SaveDesembolso($request);
+        return response()->json($response);
+    }
+    public function DownDesembolso(Request $request)
+    {
+        $response = Arqueo::DownDesembolso($request);
+        return response()->json($response);
+    }
     public function getTransferencias(Request $request)
     {
         $response = Arqueo::getTransferencias($request);
