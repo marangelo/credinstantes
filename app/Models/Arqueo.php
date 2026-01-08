@@ -658,13 +658,58 @@ class Arqueo extends Model {
                 "cuenta"    => $a->BancoCuentas->Banco->banco.' '.$a->BancoCuentas->moneda.' '.$a->BancoCuentas->cuenta,
                 "monto"     => $a->monto,
                 "refe"      => $a->referencia,
-                "accion"    => '<button class="btn btn-sm btn-danger" onclick="Remove(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
+                "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeTransferencia(' . $a->id_tranferencia . ')"><i class="fas fa-trash"></i></button>'
             ];
         }
         return response()->json([
             "data" => $data
         ]);
 
+    }
+    public static function SaveTransferencia(Request $request)
+    {
+        try 
+        {
+
+                $Arqueo         = $request->input('Arqueo');
+                $SelectCuenta   = $request->input('SelectCuenta');
+                $Monto          = $request->input('Monto');
+                $Referencia     = $request->input('Referencia');
+
+                $datos_a_insertar = [
+                    'id_arqueo'         => $Arqueo,
+                    'id_cuenta'         => $SelectCuenta,
+                    'monto'             => $Monto,
+                    'referencia'        => $Referencia,
+                    'created_at'        => date('Y-m-d H:i:s'),
+                    'created_by'        => Auth::id(),
+                ];
+
+
+                $response = ArqueoTransferencia::insertGetId($datos_a_insertar);
+
+                return $response;   
+                
+            } catch (Exception $e) {
+                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+                return response()->json($mensaje);
+            }
+        
+    }
+    public static function DownTransferencia(Request $request)
+    {
+        try {
+            $ID         = $request->input('IdTransaccion');
+            
+            $response =   ArqueoTransferencia::where('id_tranferencia',  $ID)->delete();
+
+            return $response;
+
+
+        } catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
     }
     public static function getDepositos(Request $request)
     {

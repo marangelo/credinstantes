@@ -119,6 +119,9 @@ Route::post('SaveDesembolso', 'ArqueosController@SaveDesembolso')->name('SaveDes
 Route::post('DownDesembolso', 'ArqueosController@DownDesembolso')->name('DownDesembolso');
 
 Route::post('getTransferencias', 'ArqueosController@getTransferencias')->name('getTransferencias');
+Route::post('SaveTransferencia', 'ArqueosController@SaveTransferencia')->name('SaveTransferencia');
+Route::post('DownTransferencia', 'ArqueosController@DownTransferencia')->name('DownTransferencia');
+
 Route::post('getDepositos', 'ArqueosController@getDepositos')->name('getDepositos');
 
 

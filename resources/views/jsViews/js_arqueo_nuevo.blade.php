@@ -230,14 +230,18 @@
 
         $("#btn_save_transferencia").on("click", function() 
         {
+            var lbl = $("#lbl_deposito_tranferencia").html();     
+            var IdArqueo = $("#id_moneda").text();  
+
             var data = {
                 Path: "../SaveTransferencia",
-                Arqueo: $("#id_moneda").text(),
-                cuenta: $("#id_select_transferencia").val(),
-                monto: $("#txt_transferencia").val(),
-                referencia: $("#txt_referencia_transferencia").val()
+                Arqueo: IdArqueo,
+                SelectCuenta: $("#id_select_transferencia").val(),
+                Monto: $("#txt_transferencia").val(),
+                Referencia: $("#txt_referencia_transferencia").val()
             };
             UpTransacciones(data);
+            InitDataTransferencias( IdArqueo, lbl)
         })
 
         $("#btn_save_deposito").on("click", function() 
@@ -269,22 +273,8 @@
         {
             var lbl = $("#lbl_deposito_tranferencia").html();            
             var IdArqueo = $("#id_moneda").text();      
-            getData(
-                '../getTransferencias',
-                IdArqueo, 
-                lbl,
-                [
-                    { "data": "id", "title": "ID" },
-                    { "data": "cuenta", "title": "CUENTA" },
-                    { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
-                    { "data": "refe", "title": "REFERENCIA" },
-                    { "data": "accion", "title": " - " }
-                ],
-                [
-                    'custom-content-transferencias-tab',
-                    'custom-content-transferencias'
-                ]
-            );
+            
+            InitDataTransferencias( IdArqueo, lbl) 
         })
 
         $("#btn_dep_cliente").on("click", function() 
@@ -341,6 +331,25 @@
             ]
         );
     }
+    function InitDataTransferencias( IdArqueo, lbl) 
+    {
+        getData(
+            '../getTransferencias',
+            IdArqueo, 
+            lbl,
+            [
+                { "data": "id", "title": "ID" },
+                { "data": "cuenta", "title": "CUENTA" },
+                { "data": "monto", "title": "MONTO C$.", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+                { "data": "refe", "title": "REFERENCIA" },
+                { "data": "accion", "title": " - " }
+            ],
+            [
+                'custom-content-transferencias-tab',
+                'custom-content-transferencias'
+            ]
+        );
+    }
 
     async function UpTransacciones(data) {
         try {
@@ -363,18 +372,30 @@
     }
 
     async function removeDesembolso(IdTransaccion) {
-            try {
-                await DownTransacciones(IdTransaccion, "../DownDesembolso");
+        try {
+            await DownTransacciones(IdTransaccion, "../DownDesembolso");
 
-                var lbl = $("#lbl_deposito_dia").html();    
-                var IdArqueo = $("#id_moneda").text();      
+            var lbl = $("#lbl_deposito_tranferencia").html();     
+            var IdArqueo = $("#id_moneda").text();        
 
-                InitDataDesembolso(IdArqueo, lbl);
-            } catch (error) {
-                console.error("Error al eliminar desembolso:", error);
-            }
+            InitDataDesembolso(IdArqueo, lbl);
+        } catch (error) {
+            console.error("Error al eliminar desembolso:", error);
         }
-    
+    }
+    async function removeTransferencia(IdTransaccion) {
+        try {
+            await DownTransacciones(IdTransaccion, "../DownTransferencia");
+
+            var lbl = $("#lbl_deposito_dia").html();    
+            var IdArqueo = $("#id_moneda").text();      
+
+            InitDataTransferencias(IdArqueo, lbl);
+        } catch (error) {
+            console.error("Error al eliminar desembolso:", error);
+        }
+    }
+
     async function DownTransacciones(IdTransaccion, Path) {
         try {
             const response = await fetch(Path, {
@@ -426,7 +447,24 @@
         }
     }
 
-
+    function InitDataDesembolso( IdArqueo, lbl) 
+    {
+        getData(
+            '../getDesembolso',
+            IdArqueo, 
+            lbl,
+            [
+                { "data": "id", "title": "ID" },
+                { "data": "nombre_cliente", "title": "CLIENTE" },
+                { "data": "monto", "title": "MONTO C$." , render: $.fn.dataTable.render.number( ',', '.', 2  ) },
+                { "data": "accion", "title": " - " }
+            ],
+            [
+                'custom-content-desembolso-tab',
+                'custom-content-desembolso'
+            ]
+        );
+    }
     function InitDataTable(columns, data = []) {
 
         // destruir si existe

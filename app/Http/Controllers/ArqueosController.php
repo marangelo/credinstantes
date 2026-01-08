@@ -105,6 +105,16 @@ class ArqueosController extends Controller
         $response = Arqueo::getTransferencias($request);
         return response()->json($response);
     }
+    public function SaveTransferencia(Request $request)
+    {
+        $response = Arqueo::SaveTransferencia($request);
+        return response()->json($response);
+    }
+    public function DownTransferencia(Request $request)
+    {
+        $response = Arqueo::DownTransferencia($request);
+        return response()->json($response);
+    }
     public function getDepositos(Request $request)
     {
         $response = Arqueo::getDepositos($request);

@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="input-group">                            
-                                    <input type="text" class="form-control" id="IdLorem" placeholder="Referencias" id="txt_referencia_transferencia" >
+                                    <input type="text" class="form-control"placeholder="Referencias" id="txt_referencia_transferencia" >
                                 </div>
                             </div>
                         </div>
