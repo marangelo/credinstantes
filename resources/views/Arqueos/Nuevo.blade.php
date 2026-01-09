@@ -36,7 +36,7 @@
               @csrf
                 <div class="row">                  
                   <div class="col-md-3">
-                    <label id="lbl_deposito_dia" >DESEMBOLSOS DE RECUPERACION.</label>
+                    <label id="lbl_deposito_dia" >DESEMBOLSOS DE RECUP.</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text bg-light"> C$. </span>
@@ -48,7 +48,7 @@
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <label id="lbl_deposito_tranferencia" >DEPOSITOS O TRANSFERENCIAS.</label>
+                    <label id="lbl_deposito_tranferencia" >DEPOSITOS. O TRANSFERENCIAS.</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text bg-light">C$.</span>
@@ -74,7 +74,7 @@
                   
                     <!-- REMOVER AL TERMINAR COMMITS -->
                     <div class="col-md-3">
-                      <label id="lbl_gastos">DEPOSITOS DE CLIENTES.</label>
+                      <label id="lbl_gastos">DEP. DE CLIENTES.</label>
                       <div class="input-group">
                           <div class="input-group-prepend">
                             <span class="input-group-text bg-light">C$.</span>

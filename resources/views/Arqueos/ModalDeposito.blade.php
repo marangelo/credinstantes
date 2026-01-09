@@ -130,7 +130,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group date" id="dtAbono" data-target-input="nearest">
                                         <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
@@ -141,7 +141,7 @@
                                 </div> 
                             </div>
 
-                            <div class="col-md-10">
+                            <div class="col-md-8">
                                 <div class="input-group">                          
                                     <input type="text" class="form-control" placeholder="Referencias" id="txt_referencia_deposito" >
                                 </div>

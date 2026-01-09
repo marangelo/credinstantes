@@ -17,7 +17,7 @@
     $(document).ready(function () {
 
         InitTable();
-        $('#dt-arqueo').datetimepicker({
+        $('#dt-arqueo,#dtAbono').datetimepicker({
             format: 'DD/MM/YYYY',
             defaultDate: new Date()
         });
@@ -253,6 +253,7 @@
         {
             var lbl = $("#lbl_gastos").html();
             var IdArqueo = $("#id_moneda").text();
+            var FechaDeposito = $("#fecha_deposito").val()
 
             var data = {
                 Path: "../SaveDeposito",
@@ -261,7 +262,7 @@
                 SelectCuenta: $("#id_select_cuenta_deposito").val(),
                 Monto: $("#txt_deposito_monto").val(),
                 Referencia: $("#txt_referencia_deposito").val(),
-                FechaDeposito: $("#fecha_deposito").val()
+                FechaDeposito: moment(FechaDeposito, 'DD/MM/YYYY').format('YYYY-MM-DD hh:mm')
             };
 
             UpTransacciones(data);
@@ -471,8 +472,8 @@
             lbl,
             [
                 { "data": "id", "title": "ID" },
-                { "data": "FECHA", "title": "FECHA DEPOSITO", render: function(data,type,row){
-                    return moment(data).format('D MMM YYYY hh:mm A');
+                { "data": "FECHA", "title": "FECHA DEP.", render: function(data,type,row){
+                    return moment(data).format('D MMM YYYY');
                 } },
                 { "data": "nombre_cliente", "title": "CLIENTE" },
                 { "data": "cuenta_bancaria", "title": "CUENTA" },
