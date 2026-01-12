@@ -59,12 +59,21 @@ class Arqueo extends Model {
                     "Sistema"               => $ttSYS,
                     "gasto_operacion"       => $Gastos
                 ]);
-
-                return $response;   
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Arqueo guardado correctamente',
+                    'data'    => [
+                        'id' => $response
+                    ]
+                ], 200);
                 
             } catch (Exception $e) {
-                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-                return response()->json($mensaje);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al guardar ',
+                    'error'   => $e->getMessage()
+                ], 500);
+            
             }
         }
     } 
@@ -622,13 +631,22 @@ class Arqueo extends Model {
                 ];
 
 
-                $response = ArqueoDesembolso::insertGetId($datos_a_insertar);
+                $id = ArqueoDesembolso::insertGetId($datos_a_insertar);
 
-                return $response;   
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Desembolso guardado correctamente',
+                    'data'    => [
+                        'id' => $id
+                    ]
+                ], 200);
                 
             } catch (Exception $e) {
-                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-                return response()->json($mensaje);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al guardar el desembolso',
+                    'error'   => $e->getMessage()
+                ], 500);
             } 
     }
     public static function DownDesembolso(Request $request)
@@ -690,13 +708,23 @@ class Arqueo extends Model {
                 ];
 
 
-                $response = ArqueoTransferencia::insertGetId($datos_a_insertar);
+                $id = ArqueoTransferencia::insertGetId($datos_a_insertar);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Transferencia guardado correctamente',
+                    'data'    => [
+                        'id' => $id
+                    ]
+                ], 200);
 
                 return $response;   
                 
             } catch (Exception $e) {
-                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-                return response()->json($mensaje);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al guardar el transferencia',
+                    'error'   => $e->getMessage()
+                ], 500);
             }
         
     }
@@ -766,13 +794,24 @@ class Arqueo extends Model {
                 ];
 
 
-                $response = ArqueoDeposito::insertGetId($datos_a_insertar);
+                $id = ArqueoDeposito::insertGetId($datos_a_insertar);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Deposito guardado correctamente',
+                    'data'    => [
+                        'id' => $id
+                    ]
+                ], 200);
 
                 return $response;   
                 
             } catch (Exception $e) {
-                $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
-                return response()->json($mensaje);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al guardar el Deposito',
+                    'error'   => $e->getMessage()
+                ], 500);
             }
         
     }

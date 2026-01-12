@@ -168,49 +168,9 @@
             })
         })
 
-        $("#bt_save_arqueo").click(function(){            
-            var IdArqueo = $("#id_moneda").text();
-
-            var dtIni               = $("#dtIni").val();
-            var txt_deposito_dia    = $("#txt_deposito_dia").val();
-            var txt_tranferencia    = $("#txt_deposito_tranferencia").val();
-            var total_SYS           = $('#id_total_sistema').val();
-
-            var txt_gastos          = $("#txt_gastos").val();
-            var txt_commit          = $("#id_commit").val();
-
-            dtIni_                  = moment(dtIni, 'DD/MM/YYYY');
-            txt_deposito_dia_       = numeral(isValue(txt_deposito_dia,0,true)).format('0.00')
-            txt_tranferencia_       = numeral(isValue(txt_tranferencia,0,true)).format('0.00')
-            txt_gastos_             = numeral(isValue(txt_gastos,0,true)).format('0.00')
-            total_SYS_             = numeral(isValue(total_SYS,0,true)).format('0.00')
-
-            $.ajax({
-                url: "UpdateArqueo",
-                data: {
-                    Arqueo  : IdArqueo,
-                    Fecha   : dtIni_.format('YYYY-MM-DD'),
-                    Deposit : txt_deposito_dia_,
-                    Tranfe  : txt_tranferencia_,
-                    Gastos  : txt_gastos_,
-                    Commit  : txt_commit,
-                    ttSYS   : total_SYS_,
-                    _token  : "{{ csrf_token() }}" 
-                },
-                type: 'post',
-                async: true,
-                success: function(response) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Informacion Guardada.'
-                    })
-                    UpdateTotal();
-                },
-                error: function(response) {
-                    swal("Oops", "No se ha podido guardar!", "error");
-                }
-            }).done(function(data) {
-            });
+        $("#bt_save_arqueo").click(function(){      
+            SaveForm();      
+            
         })
 
         
@@ -228,9 +188,18 @@
                 Monto: $("#txt_desembolso").val()
             };
 
-            UpTransacciones(data);
+            UpTransacciones(data).then(function(res) {
+                if (res.original.success) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: res.original.message
+                    });
+                    InitDataDesembolso( IdArqueo, lbl);
+                    SaveForm();
+                }
+            });
 
-            InitDataDesembolso( IdArqueo, lbl) 
+            
         })
 
         $("#btn_save_transferencia").on("click", function() 
@@ -245,8 +214,17 @@
                 Monto: $("#txt_transferencia").val(),
                 Referencia: $("#txt_referencia_transferencia").val()
             };
-            UpTransacciones(data);
-            InitDataTransferencias( IdArqueo, lbl)
+            UpTransacciones(data).then(function(res) {
+                if (res.original.success) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: res.original.message
+                    });
+                    InitDataTransferencias( IdArqueo, lbl);
+                    SaveForm();
+                }
+            });
+            
         })
 
         $("#btn_save_deposito").on("click", function() 
@@ -265,9 +243,16 @@
                 FechaDeposito: moment(FechaDeposito, 'DD/MM/YYYY').format('YYYY-MM-DD hh:mm')
             };
 
-            UpTransacciones(data);
-            
-            InitDataDepositos( IdArqueo, lbl);
+            UpTransacciones(data).then(function(res) {
+                if (res.original.success) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Acción guardada.'
+                    });
+                    InitDataDepositos( IdArqueo, lbl);
+                    SaveForm()
+                }
+            });
         })
 
         $("#btn_add_recuperacion").on("click", function() 
@@ -304,6 +289,53 @@
         
     })
 
+    function SaveForm() {
+
+        var IdArqueo = $("#id_moneda").text();
+
+        var dtIni               = $("#dtIni").val();
+        var txt_deposito_dia    = $("#txt_deposito_dia").val();
+        var txt_tranferencia    = $("#txt_deposito_tranferencia").val();
+        var total_SYS           = $('#id_total_sistema').val();
+
+        var txt_gastos          = $("#txt_gastos").val();
+        var txt_commit          = $("#id_commit").val();
+
+        dtIni_                  = moment(dtIni, 'DD/MM/YYYY');
+        txt_deposito_dia_       = numeral(isValue(txt_deposito_dia,0,true)).format('0.00')
+        txt_tranferencia_       = numeral(isValue(txt_tranferencia,0,true)).format('0.00')
+        txt_gastos_             = numeral(isValue(txt_gastos,0,true)).format('0.00')
+        total_SYS_             = numeral(isValue(total_SYS,0,true)).format('0.00')
+
+        $.ajax({
+            url: "UpdateArqueo",
+            data: {
+                Arqueo  : IdArqueo,
+                Fecha   : dtIni_.format('YYYY-MM-DD'),
+                Deposit : txt_deposito_dia_,
+                Tranfe  : txt_tranferencia_,
+                Gastos  : txt_gastos_,
+                Commit  : txt_commit,
+                ttSYS   : total_SYS_,
+                _token  : "{{ csrf_token() }}" 
+            },
+            type: 'post',
+            async: true,
+            success: function(res) {
+                Toast.fire({
+                    icon: 'success',
+                    title: res.original.message
+                })
+                UpdateTotal();
+            },
+            error: function(response) {
+                swal("Oops", "No se ha podido guardar!", "error");
+            }
+        }).done(function(data) {
+        });
+        
+    }
+
     
 
     async function UpTransacciones(data) {
@@ -319,12 +351,12 @@
 
             const result = await response.json();
 
-
-            Toast.fire({ icon: 'success', title: 'Accion Guardada.' });
+            return result;
             
 
         } catch (error) {
             console.error(error);
+            return { success: false, error };
         }
         
     }
