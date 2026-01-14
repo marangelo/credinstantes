@@ -200,6 +200,12 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Arqueos Prom.</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Prox. Vencer</p>
@@ -373,6 +379,12 @@
                   <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Arqueos</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Arqueos Prom.</p>
                   </a>
                 </li>
                 <li class="nav-item">

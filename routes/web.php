@@ -126,6 +126,10 @@ Route::post('getDepositos', 'ArqueosController@getDepositos')->name('getDeposito
 Route::post('SaveDeposito', 'ArqueosController@SaveDeposito')->name('SaveDeposito');
 Route::post('DownDeposito', 'ArqueosController@DownDeposito')->name('DownDeposito');
 
+Route::get('ArqueosPromotor', 'ArqueosPromotorController@ShowHome')->name('ArqueosPromotor');
+Route::post('getDataArqueosPromotor', 'ArqueosPromotorController@getDataArqueosPromotor')->name('getDataArqueosPromotor');
+
+
 
 
 //RUTAS PARA EDITAR CREDITOS
