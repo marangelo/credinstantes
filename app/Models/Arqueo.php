@@ -37,6 +37,11 @@ class Arqueo extends Model {
         return $this->hasOne(Zonas::class, 'id_zona','id_zona');
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(Usuario::class, 'id','created_by');
+    }
+
     public static function UpdateArqueo(Request $request)
     {
         if ($request->ajax()) {
@@ -125,8 +130,8 @@ class Arqueo extends Model {
         $Desembolso = $Arqueo->Desembolso;
         $Tranferencia = $Arqueo->Transferencia;
         $name_user_arqueo = (empty($Arqueo->getZona->UsuarioCobrador->nombre)) ? 'N/D' : $Arqueo->getZona->UsuarioCobrador->nombre;
-        $name_user_creator = 'N/D';
-        
+        $name_user_creator = (empty($Arqueo->getUser->nombre)) ? 'N/D' : $Arqueo->getUser->nombre  ;
+    
         // ========== DEFINICIÓN DE ESTILOS ==========
         $estiloTituloColumnas = array(
             'font' => array(
@@ -497,7 +502,8 @@ class Arqueo extends Model {
                 'deposito_dia'              => 0.00,
                 'deposito_tranferencia'     => 0.00,
                 'gasto_operacion'           => 0.00,
-                'activo'                    => 1
+                'activo'                    => 1,
+                'created_by'                => Auth::id(),
             ];
 
             $IdInsertado = Arqueo::insertGetId($datos_a_insertar);
