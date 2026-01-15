@@ -190,8 +190,8 @@ class Arqueo extends Model {
         $sheet->getColumnDimension('D')->setWidth(15);
 
         // ========== ENCABEZADO PRINCIPAL ==========
-        $sheet->mergeCells('A1:D3');
-        $sheet->getStyle('A1:D3')->applyFromArray($estiloTituloPrincipal);
+        $sheet->mergeCells('A1:D2');
+        $sheet->getStyle('A1:D2')->applyFromArray($estiloTituloPrincipal);
         $sheet->setCellValue('A1', "CREDINSTANTE ARQUEO DE CAJA " . strtoupper(\Date::parse($Arqueo->fecha_arqueo)->format('d F')));
 
         // ========== INFORMACIÓN DE ZONA Y ENCABEZADOS ==========
@@ -264,7 +264,7 @@ class Arqueo extends Model {
         $i++;
 
         foreach ($Desembolso as $desembolso) {
-            $FullName = $desembolso->getCliente->nombre . ' ' . $desembolso->getCliente->apellidos;
+            $FullName = $desembolso->NameCliente;
             $sheet->setCellValue('A' . $i, strtoupper($FullName))
                     ->setCellValue('B' . $i, '')
                     ->setCellValue('C' . $i, '')
@@ -336,7 +336,7 @@ class Arqueo extends Model {
         ));
 
         // ========== SECCIÓN DE FIRMAS ==========
-        $f = $Merced + 20;
+        $f = $Merced + 2;
         
         // Líneas de firma
         $sheet->setCellValue('A' . $f, '_____________________________________')
@@ -350,7 +350,7 @@ class Arqueo extends Model {
                 ->setCellValue('C' . $f, 'FIRMA OPERACIONES: '. strtoupper($name_user_creator));
         $sheet->mergeCells('A' . $f . ':B' . $f);
         $sheet->mergeCells('C' . $f . ':D' . $f);
-        $f += 4;
+        $f += 2;
 
         // Firma del gerente
         $sheet->setCellValue('A' . $f, '_____________________________________')
@@ -608,7 +608,7 @@ class Arqueo extends Model {
         foreach ($Desembolso as $a) {
             $data[] = [
                 "id"              => $a->id_desembolsos,
-                "nombre_cliente"  => strtoupper($a->getCliente->nombre . " " . $a->getCliente->apellidos),
+                "nombre_cliente"  => strtoupper($a->NameCliente),
                 "monto"           => $a->monto,
                 "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDesembolso(' . $a->id_desembolsos . ')"><i class="fas fa-trash"></i></button>'
             ];
@@ -625,12 +625,12 @@ class Arqueo extends Model {
         try {
 
                 $Arqueo         = $request->input('Arqueo');
-                $SelectCliente  = $request->input('SelectCliente');
+                $NameCliente    = $request->input('SelectCliente');
                 $Monto          = $request->input('Monto');
 
                 $datos_a_insertar = [
                     'id_arqueo'     => $Arqueo,
-                    'id_cliente'    => $SelectCliente,
+                    'NameCliente'    => $NameCliente,
                     'monto'         => $Monto,
                     'created_at'    => date('Y-m-d H:i:s'),
                     'created_by'    => Auth::id(),

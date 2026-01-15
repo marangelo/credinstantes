@@ -11,8 +11,5 @@ class ArqueoDesembolso extends Model
     public $timestamps = false;
     protected $table = "tbl_arqueo_desembolso";
     protected $primaryKey = 'id_desembolsos';
-    public function getCliente() 
-    {
-        return $this->hasOne(Clientes::class, 'id_clientes', 'id_cliente');
-    }
+
 }

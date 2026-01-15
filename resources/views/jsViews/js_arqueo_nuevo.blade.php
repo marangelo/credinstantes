@@ -184,7 +184,7 @@
             var data = {
                 Path: "../SaveDesembolso",
                 Arqueo: IdArqueo,
-                SelectCliente: $("#id_select_cliente").val(),
+                SelectCliente: $("#name_cliente").val(),
                 Monto: $("#txt_desembolso").val()
             };
 

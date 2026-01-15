@@ -26,12 +26,13 @@
                         <div class="row mt-3"> 
                             <div class="col-md-5">
                                 <div class="form-group">                      
-                                    <label>CLIENTE. </label>                      
-                                    <select class="form-control select2" style="width: 100%;" id="id_select_cliente">
-                                        @foreach($Clientes as $Cliente)
-                                        <option value="{{$Cliente->id_clientes}}">{{$Cliente->nombre}} {{$Cliente->apellidos}} </option>
-                                        @endforeach
-                                    </select>
+                                    <label>CLIENTE. </label> 
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-light"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="name_cliente" placeholder="Nombre del Cliente">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-5">
