@@ -218,7 +218,7 @@
                     @if (in_array(Session::get('rol'), [1]))
 
                     var Bottones = `<div class="card-tools text-center">
-                                <a href="ShowDetalles/`+ row.Id +`" class="btn btn-success primary">
+                                <a href="Detalles/`+ row.Id +`" class="btn btn-success primary">
                                     <i class="far fa-edit"></i>
                                 </a>
                                 <a href="ExportArqueo/`+ row.Id +`" class="btn btn-primary">

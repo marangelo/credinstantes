@@ -19,4 +19,21 @@ class ArqueosPromotorController extends Controller
         
         return response()->json($response);
     }
+    public function Detalles($ID)
+    {         
+        $Titulo     = "Arqueo Nuevo";
+        return view('ArqueosPromotor.Detalles', compact('Titulo', 'ID'));
+    }
+    public function TableDetalles(Request $request)
+    {
+        $response = ArqueoPromotor::TableDetalles($request);
+        
+        return response()->json($response);
+    }
+    public function UpdateArqueoPromotor(Request $request)
+    {
+        $response = ArqueoPromotor::UpdateArqueoPromotor($request);
+        
+        return response()->json($response);
+    }
 }

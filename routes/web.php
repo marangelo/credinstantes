@@ -128,6 +128,9 @@ Route::post('DownDeposito', 'ArqueosController@DownDeposito')->name('DownDeposit
 
 Route::get('ArqueosPromotor', 'ArqueosPromotorController@ShowHome')->name('ArqueosPromotor');
 Route::post('getDataArqueosPromotor', 'ArqueosPromotorController@getDataArqueosPromotor')->name('getDataArqueosPromotor');
+Route::get('Detalles/{ID}', 'ArqueosPromotorController@Detalles')->name('Detalles');
+Route::post('TableDetalles', 'ArqueosPromotorController@TableDetalles')->name('TableDetalles');
+Route::post('UpdateArqueoPromotor', 'ArqueosPromotorController@UpdateArqueoPromotor')->name('UpdateArqueoPromotor');
 
 
 
