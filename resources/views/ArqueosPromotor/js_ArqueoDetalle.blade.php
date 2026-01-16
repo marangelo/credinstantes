@@ -37,7 +37,15 @@
         });
 
         $("#bt_save_arqueo").click(function(){      
-            SaveForm();
+            UpdateArqueo();
+        })
+
+        $("#btn_procesar").click(function(){      
+            ProcesarArqueo();
+        })
+
+        $("#btn_remover").click(function(){      
+            
         })
 
         
@@ -69,7 +77,7 @@
         }
     }
 
-    function SaveForm() {
+    function UpdateArqueo() {
 
         var IdArqueo = $("#id_moneda").text();
 
@@ -115,6 +123,51 @@
     }
 
 
+    function ProcesarArqueo() {
+
+        var IdArqueo = $("#id_moneda").text();
+
+        var dtIni               = $("#dtIni").val();
+        var txt_entregado       = $("#txt_entregado").val();
+        var txt_desembolsado    = $("#txt_desembolsado").val();
+        var txt_sobrante        = $('#id_sobrante').val();
+        var txt_consiliado      = $("#txt_consiliado").val();
+        var txt_commit          = $("#id_commit").val();
+
+        dtIni_               = moment(dtIni, 'YYYY-MM-DD');
+        txt_entregado_       = numeral(isValue(txt_entregado,0,true)).format('0.00')
+        txt_desembolsado_    = numeral(isValue(txt_desembolsado,0,true)).format('0.00')
+        txt_sobrante_        = numeral(isValue(txt_sobrante,0,true)).format('0.00')
+        txt_consiliado_      = numeral(isValue(txt_consiliado,0,true)).format('0.00')
+
+        $.ajax({
+            url: "../SaveArqueoPromotor",
+            data: {
+                Arqueo      : IdArqueo,
+                Fecha       : dtIni_.format('YYYY-MM-DD'),
+                Entregado   : txt_entregado_,
+                Desembolso  : txt_desembolsado_,
+                Sobrante    : txt_sobrante_,
+                Consolido   : txt_consiliado_,
+                Commit      : txt_commit,
+                _token      : "{{ csrf_token() }}" 
+            },
+            type: 'post',
+            async: true,
+            success: function(res) {
+                if(res.original.success){
+                    location.href = "../ArqueosPromotor";
+                }
+            },
+            error: function(response) {
+                swal("Oops", "No se ha podido guardar!", "error");
+            }
+        }).done(function(data) {
+        });
+        
+    }
+
+
     function updateSobrante() {
         var Desembolsado = parseFloat($("#txt_desembolsado").val());
         var Entregado = parseFloat($("#txt_entregado").val());
@@ -134,6 +187,8 @@
         $("#id_sobrante").val(infoArqueo.sobrante);
         $("#txt_consiliado").val(infoArqueo.consolidado);
         $("#id_commit").val(infoArqueo.comentario);
+
+        $("#IdCardTitle").text(infoArqueo.Promotor);
         
     }
 

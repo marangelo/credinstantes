@@ -36,4 +36,10 @@ class ArqueosPromotorController extends Controller
         
         return response()->json($response);
     }
+    public function SaveArqueoPromotor(Request $request)
+    {         
+        $response = ArqueoPromotor::SaveArqueoPromotor($request);
+        
+        return response()->json($response);
+    }
 }

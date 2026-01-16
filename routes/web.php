@@ -131,6 +131,7 @@ Route::post('getDataArqueosPromotor', 'ArqueosPromotorController@getDataArqueosP
 Route::get('Detalles/{ID}', 'ArqueosPromotorController@Detalles')->name('Detalles');
 Route::post('TableDetalles', 'ArqueosPromotorController@TableDetalles')->name('TableDetalles');
 Route::post('UpdateArqueoPromotor', 'ArqueosPromotorController@UpdateArqueoPromotor')->name('UpdateArqueoPromotor');
+Route::post('SaveArqueoPromotor', 'ArqueosPromotorController@SaveArqueoPromotor')->name('SaveArqueoPromotor');
 
 
 

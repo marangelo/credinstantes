@@ -81,33 +81,42 @@ class ArqueoPromotor extends Model {
         $ID_Arqueo = $request->input('Arqueo');
 
         $Arqueo = ArqueoPromotor::find($ID_Arqueo);
+        $PromotorDetalles = ArqueoPromotorDetalles::where('id_arqueo_prom', $ID_Arqueo)->get();
 
         $EfectivoDesembolsado = 0;
 
         $Detalles   = array();
         $Resultado  = array();
         $InfoArqueo = array();
-        
-        foreach ($Arqueo->Creditos as $key => $c) 
+
+        $RowDetalles = (count($PromotorDetalles) > 0) ? $PromotorDetalles : $Arqueo->Creditos;
+
+        foreach ($RowDetalles as $key => $c) 
         {  
+
+            $NombreCliente  = (count($PromotorDetalles) > 0) ? $c->nombre_cliente : strtoupper($c->Clientes->nombre) . ' ' . strtoupper($c->Clientes->apellidos);
+            $NombreZona     = (count($PromotorDetalles) > 0) ? $c->nombre_zona : strtoupper($c->Clientes->getZona->nombre_zona);
+
             $Detalles[$key] = [
-                "cliente"           => strtoupper($c->Clientes->nombre) . ' ' . strtoupper($c->Clientes->apellidos),
+                "cliente"           => $NombreCliente,
                 "monto_credito"     => $c->monto_credito,
                 "comprobante"       => $c->id_creditos,
-                "ruta"              => strtoupper($c->Clientes->getZona->nombre_zona),
+                "ruta"              => $NombreZona,
             ];
             $EfectivoDesembolsado += $c->monto_credito;
             
         }
 
         $EfectivoDesembolsado = (is_null($Arqueo->desembolsado)) ? $EfectivoDesembolsado : ($Arqueo->desembolsado ? $Arqueo->desembolsado : 0 );
+        
         $InfoArqueo[] = [
             "id_arqueo_prom"     => $Arqueo->id_arqueo_prom,
+            "Promotor"           => strtoupper($Arqueo->getPromotor->nombre) . ' \ ' . strtoupper($Arqueo->getPromotor->Zona->nombre_zona),
             "fecha"              => \Date::parse($Arqueo->fecha)->format('Y-m-d'),
-            "entregado"          => (is_null($Arqueo->entregado)) ? 0 : $Arqueo->entregado,
-            "desembolsado"       => (is_null($EfectivoDesembolsado)) ? 0 : $EfectivoDesembolsado,
-            "sobrante"           => (is_null($Arqueo->sobrante)) ? 0 : $Arqueo->sobrante,
-            "consolidado"        => (is_null($Arqueo->consolidado)) ? 0 : $Arqueo->consolidado,
+            "entregado"          => (is_null($Arqueo->entregado)) ? 0 : number_format($Arqueo->entregado, 2, '.', '') ,
+            "desembolsado"       => (is_null($EfectivoDesembolsado)) ? 0 : number_format($EfectivoDesembolsado, 2, '.', '') ,
+            "sobrante"           => (is_null($Arqueo->sobrante)) ? 0 : number_format($Arqueo->sobrante, 2, '.', '') ,
+            "consolidado"        => (is_null($Arqueo->consolidado)) ? 0 : number_format($Arqueo->consolidado, 2, '.', '') ,
             "comentario"         => $Arqueo->comentario,
             "id_promotor"        => $Arqueo->id_promotor,
         ];
@@ -148,6 +157,70 @@ class ArqueoPromotor extends Model {
                     'message' => 'Arqueo guardado correctamente',
                     'data'    => [
                         'id' => $response
+                    ]
+                ], 200);
+                
+            } catch (Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al guardar ',
+                    'error'   => $e->getMessage()
+                ], 500);
+            
+            }
+        }
+    } 
+    public static function SaveArqueoPromotor(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+
+                $Arqueo     = $request->input('Arqueo');
+                $Fecha      = $request->input('Fecha');
+                $Entregado  = $request->input('Entregado');
+                $Desembolso = $request->input('Desembolso');
+                $Sobrante   = $request->input('Sobrante');
+                $Consolido  = $request->input('Consolido');
+                $Commit     = $request->input('Commit');
+
+                $Detalles   = [];
+                
+
+                //ACTUALIZA LOS VALORES DEL ARQUEO PROMOTOR 
+                $response = ArqueoPromotor::where('id_arqueo_prom',$Arqueo)->update([
+                    "fecha"            => $Fecha,
+                    "entregado"        => $Entregado,
+                    "desembolsado"     => $Desembolso,                    
+                    "comentario"       => $Commit,
+                    "sobrante"         => $Sobrante,
+                    "consolidado"      => $Consolido
+                ]);
+                
+
+                $Arqueo = ArqueoPromotor::find($Arqueo);
+
+                //INSERTA LOS DETALLES DE LOS CREDITOS
+                foreach ($Arqueo->Creditos as $key => $c) 
+                {  
+                    $Detalles[$key] = [
+                        "id_arqueo_prom"    => $Arqueo->id_arqueo_prom,
+                        "nombre_cliente"    => strtoupper($c->Clientes->nombre) . ' ' . strtoupper($c->Clientes->apellidos),
+                        "monto_credito"     => $c->monto_credito,
+                        "id_creditos"       => $c->id_creditos,
+                        "nombre_zona"       => strtoupper($c->Clientes->getZona->nombre_zona),
+                        "created_by"        => Auth::id(),
+                    ];
+                    
+                }
+
+                $resultado = ArqueoPromotorDetalles::Insert($Detalles);
+
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Arqueo guardado correctamente',
+                    'data'    => [
+                        'id' => $resultado
                     ]
                 ], 200);
                 
