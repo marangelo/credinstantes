@@ -35,6 +35,10 @@ class ArqueoPromotor extends Model {
     {
         return $this->hasOne(Usuario::class, 'id','id_promotor');
     }
+    public function getOperativo()
+    {
+        return $this->hasOne(Usuario::class, 'id','created_by');
+    }
 
     public static function getData(Request $request)
     {
@@ -120,6 +124,11 @@ class ArqueoPromotor extends Model {
             "comentario"         => $Arqueo->comentario,
             "id_promotor"        => $Arqueo->id_promotor,
         ];
+
+        ArqueoPromotor::where('id_arqueo_prom',$Arqueo->id_arqueo_prom,)
+        ->update([
+            "estado_arqueo" => 2
+        ]);
 
 
         $Resultado = [
@@ -234,5 +243,158 @@ class ArqueoPromotor extends Model {
             }
         }
     } 
+
+
+    public static function Export($ID)
+    {
+        $objPHPExcel = new PHPExcel();
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+        $Arqueo = ArqueoPromotor::find($ID);
+        
+        $Detalles = ArqueoPromotorDetalles::where('id_arqueo_prom', $Arqueo->id_arqueo_prom)->get();
+
+        $Promotor = $Arqueo->getPromotor->nombre ?? 'N/D';
+        $Operativo = $Arqueo->getOperativo->nombre ?? 'N/D';
+
+        /* ================= ESTILOS ================= */
+        $tituloPrincipal = [
+            'font' => ['bold' => true, 'size' => 12, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => ['type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => ['rgb' => '00A3E0']],
+            'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
+            'borders' => ['allborders' => ['style' => 'thin']]
+        ];
+
+        $NumAlineado = [
+            'alignment' => ['horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT]
+        ];
+
+        $tituloSecundario = [
+            'font' => ['bold' => true, 'size' => 12, 'color' => ['rgb' => '000000']],
+            'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
+        ];
+
+        $encabezadoTabla = [
+            'font' => [
+                'bold' => true
+            ],
+            'alignment' => [
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap'       => true 
+            ],
+            'borders' => [
+                'allborders' => [
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                ]
+            ]
+        ];
+
+        $borde = [
+            'borders' => ['allborders' => ['style' => 'thin']]
+        ];
+
+        /* ================= COLUMNAS ================= */
+        $sheet->getColumnDimension('A')->setWidth(15);
+        $sheet->getColumnDimension('B')->setWidth(17);
+        $sheet->getColumnDimension('C')->setWidth(17);
+        $sheet->getColumnDimension('D')->setWidth(17);
+        $sheet->getColumnDimension('E')->setWidth(17);
+        $sheet->getColumnDimension('F')->setWidth(17);
+        $sheet->getColumnDimension('G')->setWidth(15);
+
+        /* ================= ENCABEZADO ================= */
+        $sheet->mergeCells('A1:G1');
+        $sheet->setCellValue('A1', 'GENERAR ARQUEO DE PROMOTORA');
+
+        $sheet->mergeCells('A2:G2');
+        $sheet->setCellValue('A2', strtoupper($Promotor).'   FECHA: '.\Date::parse($Arqueo->fecha_arqueo)->format('d/m/Y'));
+        $sheet->getStyle('A1:G2')->applyFromArray($tituloSecundario);
+
+        /* ================= TITULO ================= */
+        $sheet->mergeCells('A4:G5');
+        $sheet->setCellValue('A4', 'CREDINSTANTE ARQUEO DE PROMOTORIA '.strtoupper(\Date::parse($Arqueo->fecha_arqueo)->format('l d \\d\\e F Y')));
+        $sheet->getStyle('A4:G5')->applyFromArray($tituloPrincipal);
+
+        /* ================= ENCABEZADOS TABLA ================= */
+        $row = 6;
+        $sheet->fromArray([
+            'EFECTIVO ENTREGADO',
+            'CLIENTES DESEMBOLSADOS',
+            'MONTO DESEMBOLSADO',
+            'N° DE COMPROBANTE',
+            'RUTA',
+            'SOBRANTE',
+            'TOTALES SALDOS CONCILIADOS'
+        ], null, 'A'.$row);
+
+        $sheet->getStyle('A6:G6')->applyFromArray($encabezadoTabla);
+
+        /* ================= DETALLE ================= */
+        $row++;
+        $totalDesembolsado = 0;
+        $RowInit = $row;
+
+        foreach ($Detalles as $Detalle) {
+            $sheet
+                ->setCellValue('B'.$row, $Detalle->nombre_cliente)
+                ->setCellValue('C'.$row, number_format($Detalle->monto_credito, 2, '.', ','))
+                ->setCellValue('D'.$row, number_format($Detalle->id_creditos, 0, '.', '0'))
+                ->setCellValue('E'.$row, $Detalle->nombre_zona);
+            $totalDesembolsado += $Detalle->monto_credito;
+            $row++;
+        }
+
+
+        
+
+
+
+        /* ================= SUBTOTALES ================= */
+        $sheet->setCellValue('A'.$row, 'SUB TOTALES')
+            ->setCellValue('A'.$RowInit, number_format($Arqueo->entregado, 2, '.', ','))
+            ->setCellValue('C'.$row, number_format($totalDesembolsado, 2, '.', ','))
+            ->setCellValue('F'.$row, number_format($Arqueo->sobrante, 2, '.', ','))
+            ->setCellValue('G'.$row, number_format($Arqueo->consolidado, 2, '.', ','));
+
+        /* ================= FORMATOS NUMERICOS ================= */
+        $sheet->getStyle('A'.$RowInit)->applyFromArray($NumAlineado);
+        $sheet->getStyle('C'.$RowInit.':C'.$row)->applyFromArray($NumAlineado);
+        $sheet->getStyle('F'.$RowInit.':F'.$row)->applyFromArray($NumAlineado);
+        $sheet->getStyle('G'.$RowInit.':G'.$row)->applyFromArray($NumAlineado);
+        
+        $sheet->getStyle('A6:G'.$row)->applyFromArray($borde);
+
+        /* ================= COMENTARIOS ================= */
+        $row += 3;
+        $sheet->mergeCells('A'.$row.':G'.($row+1));
+        $sheet->setCellValue('A'.$row, $Arqueo->comentario);
+        $sheet->getStyle('A'.$row.':G'.($row+1))->applyFromArray($borde);
+
+        /* ================= FIRMAS ================= */
+        $row += 4;
+
+        $sheet->mergeCells('A'.$row.':C'.$row);
+        $sheet->mergeCells('E'.$row.':G'.$row);
+        $sheet->setCellValue('A'.$row, '______________________________');
+        $sheet->setCellValue('E'.$row, '______________________________');
+
+        $row++;
+        $sheet->setCellValue('A'.$row, 'FIRMA DEL PROMOTOR');
+        $sheet->setCellValue('E'.$row, 'FIRMA DEL OPERATIVO');
+
+        $row++;
+        $sheet->setCellValue('A'.$row, strtoupper($Promotor));
+        $sheet->setCellValue('E'.$row, strtoupper($Operativo));
+
+        /* ================= DESCARGA ================= */
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ArqueoPromotora.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $writer->save('php://output');
+    }
+
     
 }

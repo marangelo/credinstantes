@@ -221,7 +221,7 @@
                                 <a href="Detalles/`+ row.Id +`" class="btn btn-success primary">
                                     <i class="far fa-edit"></i>
                                 </a>
-                                <a href="ExportArqueo/`+ row.Id +`" class="btn btn-primary">
+                                <a href="ExportDetalles/`+ row.Id +`" class="btn btn-primary">
                                     <i class="far fa-file-excel"></i>
                                 </a>
                                 <a href="#!" onClick="Remover(`+ row.Id +`)" class="btn btn-danger">
@@ -230,7 +230,7 @@
                             </div>` ;
                     @else
                     var Bottones = `<div class="card-tools text-center">
-                                <a href="ExportArqueo/`+ row.Id +`" class="btn btn-primary">
+                                <a href="ExportDetalles/`+ row.Id +`" class="btn btn-primary">
                                     <i class="far fa-file-excel"></i>
                                 </a>
                             </div>` ;

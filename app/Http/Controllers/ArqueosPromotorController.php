@@ -22,7 +22,8 @@ class ArqueosPromotorController extends Controller
     public function Detalles($ID)
     {         
         $Titulo     = "Arqueo Nuevo";
-        return view('ArqueosPromotor.Detalles', compact('Titulo', 'ID'));
+        $Arqueo     = ArqueoPromotor::where('id_arqueo_prom', $ID)->first();
+        return view('ArqueosPromotor.Detalles', compact('Titulo','Arqueo'));
     }
     public function TableDetalles(Request $request)
     {
@@ -41,5 +42,10 @@ class ArqueosPromotorController extends Controller
         $response = ArqueoPromotor::SaveArqueoPromotor($request);
         
         return response()->json($response);
+    }
+
+    public function ExportDetalles($ID)
+    {
+        $response = ArqueoPromotor::Export($ID);
     }
 }

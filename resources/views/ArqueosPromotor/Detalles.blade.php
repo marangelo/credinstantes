@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-12">
         <!-- /.card -->
-        <small class="badge badge-info mb-2"><i class="fas fa-donate"></i> #: <span id="id_moneda"> {{$ID}}</span></small>
+        <small class="badge badge-info mb-2"><i class="fas fa-donate"></i> #: <span id="id_moneda"> {{$Arqueo->id_arqueo_prom}}</span></small>
         <div class="card">
             <div class="card-header" >
             <h3 class="card-title" id="IdCardTitle"> - - - - - - - </h3>
@@ -25,7 +25,7 @@
                     </div>
                     <input type="text" class="form-control datetimepicker-input" data-target="#dt-arqueo" id="dtIni" name="nmIni" />     
                     <span class="input-group-append">
-                        <a href="../ExportArqueo/{{$ID}}" class="btn btn-success"><i class="far fa-file-excel"></i></a>
+                        <a href="../ExportDetalles/{{$Arqueo->id_arqueo_prom}}" class="btn btn-success"><i class="far fa-file-excel"></i></a>
                     </span>
                 </div>
             </div>
@@ -99,16 +99,20 @@
                     
                     <div class="card-footer clearfix">
                         <div class="row"> 
-                            <div class="col-sm-6 col-md-6">
+                            @if($Arqueo->estado_arqueo <= 1)
+                            <div class="col-sm-6 col-md-6">                               
                                 <div class="form-group">                            
                                     <a href="#!" class="btn btn-success btn-block" id="btn_procesar" > <i class="fas fa-save"></i>  PROCESAR</a>                            
                                 </div>
                             </div>
+                            @endif
+                            @if(in_array(Session::get('rol'), array(1)))
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">                            
                                     <a href="#!" class="btn btn-danger btn-block" id="btn_remover" > <i class="fas fa-window-close"></i>  CANCELAR</a>                            
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
