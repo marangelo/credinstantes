@@ -200,6 +200,12 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a href="{{route('Bitacora')}}" class="nav-link {{ (request()->is('Bitacora')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Bitacora Desembolsos</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Arqueos Prom.</p>
@@ -385,6 +391,12 @@
                   <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Arqueos Prom.</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('Bitacora')}}" class="nav-link {{ (request()->is('Bitacora')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Bitacora Desembolsos</p>
                   </a>
                 </li>
                 <li class="nav-item">

@@ -258,3 +258,10 @@ Route::post('HolidaysSave', 'HolidaysController@HolidaysSave')->name('HolidaysSa
 Route::get('UpdateHoliday/{id}', 'HolidaysController@UpdateHoliday')->name('UpdateHoliday');
 
 
+
+Route::get('Bitacora', 'BitacoraController@Bitacora')->name('Bitacora');
+Route::post('getBitacora', 'BitacoraController@getBitacora')->name('getBitacora');
+Route::get('ExportarBitacora/{dtIni}/{dtEnd}/{IdZna}', 'BitacoraController@ExportarBitacora')->name('ExportarBitacora');
+
+
+
