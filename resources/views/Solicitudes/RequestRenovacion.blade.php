@@ -35,7 +35,15 @@
                       <div class="form-group">
                           <label>Fecha Inicio</label>
                           <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" value=" {{ $Request->req_start_date ?? date('d/m/y') }} "/>
+                              <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="dtApertura" 
+                              value=" {{ $Request->req_start_date ?? date('d/m/y') }} "
+
+                              @if(in_array(Session::get('rol'), [2, 3, 4, 5]) )
+                                  disabled
+                              @endif
+
+
+                              />
                               <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                   <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                               </div>
