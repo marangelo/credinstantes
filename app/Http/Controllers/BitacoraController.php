@@ -23,4 +23,9 @@ class BitacoraController extends Controller
     {
         $response = Bitacora::Export($request);
     }
+    public function UpdateSeguro(Request $request)
+    {
+        $response = Bitacora::UpdateSeguro($request);
+        return response()->json($response);
+    }
 }

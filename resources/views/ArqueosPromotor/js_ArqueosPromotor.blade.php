@@ -95,7 +95,7 @@
                             title: `ARQUEDO #:   ${result.value.ID_ARQUEO} `,
                             text: `FECHA:  ${result.value.FECHA_ARQUEO} `
                         });
-                        location.href = 'ShowDetalles/' + result.value.ID_ARQUEO
+                        location.href = 'Detalles/' + result.value.ID_ARQUEO
                     }
                 });
         })

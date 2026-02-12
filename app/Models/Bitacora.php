@@ -45,6 +45,8 @@ class Bitacora extends Model
 
             $Origen = $a->getRefResquest->getRequest->Origen ?? 'N/D';
 
+            $Seguro = (isset($a->Seguro)) ? $a->Seguro : '0';
+
             $Array_Bitacora[$key] = [
                 "Id"                => (string)$a->id_creditos,
                 "fecha_arqueo"      => \Date::parse($a->fecha_apertura)->format('d-m-Y') ,
@@ -52,7 +54,7 @@ class Bitacora extends Model
                 "id_zona"           => $a->Clientes->id_zona,
                 "Nombre"            => strtoupper($NameCliente),                
                 "Origen"            => strtoupper($Origen),
-                "Seguro"            => "",
+                "Seguro"            => $Seguro,
                 "Monto"             => $a->monto_credito,
                 "Plazo"             => $a->plazo,
                 "Cuota"             => $a->cuota,
@@ -64,6 +66,14 @@ class Bitacora extends Model
 
 
         return $Array_Bitacora;
+    }
+    public static function UpdateSeguro(Request $request)
+    {
+        $IdCredito = $request->IdCredito;
+        $Valor     = $request->Valor;
+
+        return Credito::where('id_creditos', $IdCredito)
+            ->update(['Seguro' => $Valor]);
     }
     public static function Export($request)
     {

@@ -13,6 +13,11 @@ class ArqueosPromotorController extends Controller
 
         return view('ArqueosPromotor.Home', compact('Titulo', 'Promotores'));
     }
+    public function Init($Zona)
+    {         
+        $InitArqueo         = ArqueoPromotor::InitArqueo($Zona);
+        return response()->json($InitArqueo);
+    }
     public function getDataArqueosPromotor(Request $request)
     {
         $response = ArqueoPromotor::getData($request);
@@ -42,6 +47,22 @@ class ArqueosPromotorController extends Controller
         $response = ArqueoPromotor::SaveArqueoPromotor($request);
         
         return response()->json($response);
+    }
+
+    public function RemoveArqueoPromotor(Request $request)
+    {         
+        $Arqueo     = $request->input('Arqueo');
+        $resultado = ArqueoPromotor::where('id_arqueo_prom',$Arqueo)->update([
+            "estado_arqueo" => 2
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Arqueo eliminado correctamente',
+            'data'    => [
+                'id' => $resultado
+            ]
+        ], 200);
     }
 
     public function ExportDetalles($ID)

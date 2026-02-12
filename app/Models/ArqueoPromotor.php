@@ -46,11 +46,11 @@ class ArqueoPromotor extends Model {
         $dtEnd    = $request->input('dtEnd').' 23:59:59';
         $IdZna    = $request->input('IdZna');
 
-        $Obj =  ArqueoPromotor::whereBetween('fecha', [$dtIni, $dtEnd])->Where('activo',1);
+        $Obj =  ArqueoPromotor::whereBetween('fecha', [$dtIni, $dtEnd])->Where('activo',1)->WhereIn('estado_arqueo', [0, 1]);
 
-        // if ($IdZna > 0) {
-        //     $Obj->Where('id_zona',$IdZna);
-        // }
+        if ($IdZna > 0) {
+            $Obj->Where('id_promotor',$IdZna);
+        }
 
         $Arqueos = $Obj->get();
 
@@ -78,6 +78,39 @@ class ArqueoPromotor extends Model {
 
 
         return $array_arqueos;
+    }
+    public static function InitArqueo($IdZona)
+    {
+        try {
+
+            $datos_a_insertar = [
+                'fecha'              => date('Y-m-d'),
+                'id_promotor'                   => $IdZona,                
+                'entregado'              => 0.00,
+                'desembolsado'     => 0.00,
+                'sobrante'           => 0.00,
+                'consolidado'        => 0.00,
+                'activo'                    => 1,
+                'created_at'                => date('Y-m-d H:i:s'),
+                'estado_arqueo'            => 0,
+                'created_by'                => Auth::id(),
+            ];
+
+            $IdInsertado = ArqueoPromotor::insertGetId($datos_a_insertar);
+
+            ArqueoDetalle::insert($ARQUEO_DET);
+
+            $array = [
+                "ID_ARQUEO"       => $IdInsertado,
+                "FECHA_ARQUEO"    => date('Y-m-d'),
+            ];
+            return $array;
+        
+        } catch (Exception $e) {
+            $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
+            return response()->json($mensaje);
+        }
+
     }
 
     public static function TableDetalles(Request $request)
@@ -125,10 +158,6 @@ class ArqueoPromotor extends Model {
             "id_promotor"        => $Arqueo->id_promotor,
         ];
 
-        ArqueoPromotor::where('id_arqueo_prom',$Arqueo->id_arqueo_prom,)
-        ->update([
-            "estado_arqueo" => 2
-        ]);
 
 
         $Resultado = [
@@ -223,6 +252,10 @@ class ArqueoPromotor extends Model {
                 }
 
                 $resultado = ArqueoPromotorDetalles::Insert($Detalles);
+
+                ArqueoPromotor::where('id_arqueo_prom',$Arqueo->id_arqueo_prom,)->update([
+                    "estado_arqueo" => 1
+                ]);
 
 
                 return response()->json([

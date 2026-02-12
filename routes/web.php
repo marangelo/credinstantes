@@ -126,6 +126,9 @@ Route::post('getDepositos', 'ArqueosController@getDepositos')->name('getDeposito
 Route::post('SaveDeposito', 'ArqueosController@SaveDeposito')->name('SaveDeposito');
 Route::post('DownDeposito', 'ArqueosController@DownDeposito')->name('DownDeposito');
 
+
+
+
 Route::get('ArqueosPromotor', 'ArqueosPromotorController@ShowHome')->name('ArqueosPromotor');
 Route::post('getDataArqueosPromotor', 'ArqueosPromotorController@getDataArqueosPromotor')->name('getDataArqueosPromotor');
 Route::get('Detalles/{ID}', 'ArqueosPromotorController@Detalles')->name('Detalles');
@@ -133,6 +136,9 @@ Route::post('TableDetalles', 'ArqueosPromotorController@TableDetalles')->name('T
 Route::post('UpdateArqueoPromotor', 'ArqueosPromotorController@UpdateArqueoPromotor')->name('UpdateArqueoPromotor');
 Route::post('SaveArqueoPromotor', 'ArqueosPromotorController@SaveArqueoPromotor')->name('SaveArqueoPromotor');
 Route::get('ExportDetalles/{ID}', 'ArqueosPromotorController@ExportDetalles')->name('ExportDetalles');
+Route::get('ArqueoInitPromotor/{ZONA}', 'ArqueosPromotorController@Init')->name('ArqueoInitPromotor');
+Route::post('RemoveArqueoPromotor', 'ArqueosPromotorController@RemoveArqueoPromotor')->name('RemoveArqueoPromotor');
+
 
 
 
@@ -262,6 +268,7 @@ Route::get('UpdateHoliday/{id}', 'HolidaysController@UpdateHoliday')->name('Upda
 Route::get('Bitacora', 'BitacoraController@Bitacora')->name('Bitacora');
 Route::post('getBitacora', 'BitacoraController@getBitacora')->name('getBitacora');
 Route::get('ExportarBitacora/{dtIni}/{dtEnd}/{IdZna}', 'BitacoraController@ExportarBitacora')->name('ExportarBitacora');
+Route::post('UpdateSeguro', 'BitacoraController@UpdateSeguro')->name('UpdateSeguro');
 
 
 

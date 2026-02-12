@@ -45,7 +45,7 @@
         })
 
         $("#btn_remover").click(function(){      
-            
+            RemoverArqueo();
         })
 
         
@@ -156,6 +156,32 @@
             async: true,
             success: function(res) {
                 if(res.original.success){
+                    location.href = "../ArqueosPromotor";
+                }
+            },
+            error: function(response) {
+                swal("Oops", "No se ha podido guardar!", "error");
+            }
+        }).done(function(data) {
+        });
+        
+    }
+    function RemoverArqueo() {
+
+        var IdArqueo = $("#id_moneda").text();
+
+        var dtIni               = $("#dtIni").val();
+
+        $.ajax({
+            url: "../RemoveArqueoPromotor",
+            data: {
+                Arqueo      : IdArqueo,
+                _token      : "{{ csrf_token() }}" 
+            },
+            type: 'post',
+            async: true,
+            success: function(res) {
+                if(res.success){
                     location.href = "../ArqueosPromotor";
                 }
             },
