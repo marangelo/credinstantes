@@ -185,7 +185,7 @@ class Consolidado extends Model {
         $NameMonth = 'CONSOLIDADO | ' . \Date::parse(date('Y-m-d'))->format('F');
         $NameMonth = mb_strtoupper($NameMonth);
 
-        $num_row    =  20 ;
+        $num_row    =  24 ;
     
         $estiloTituloColumnas = array(
             'font' => array(
@@ -217,7 +217,7 @@ class Consolidado extends Model {
         );
 
 
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H3');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:M3');
         $style = array(
             'font' => array(
             'name'      => 'Tahoma',
@@ -241,7 +241,7 @@ class Consolidado extends Model {
                 )
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A1:H3')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:M3')->applyFromArray($style);
     
         $color_totales = array(                   
             'fill' => array(
@@ -261,17 +261,13 @@ class Consolidado extends Model {
             
         }
 
-        $objPHPExcel->setActiveSheetIndex()->getStyle('A5:H5')->applyFromArray($color_totales);
+        $objPHPExcel->setActiveSheetIndex()->getStyle('A5:M5')->applyFromArray($color_totales);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        foreach (range('B', 'M') as $column) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth(20);
+        }
         
-        $objPHPExcel->getActiveSheet()->getStyle('A5:H5')->applyFromArray($estiloTituloColumnas);      
+        $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->applyFromArray($estiloTituloColumnas);      
 
         $i=6;
 
@@ -288,10 +284,10 @@ class Consolidado extends Model {
 
         $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
         $objPHPExcel->getActiveSheet()->getStyle('H'.$i)->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:H".$num_row);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:H6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:H'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:M".$num_row);
+        $objPHPExcel->getActiveSheet()->getStyle('C6:M6')->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:M'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:M'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
 
         

@@ -39,7 +39,7 @@
                               value=" {{ $Request->req_start_date ?? date('d/m/y') }} "
 
                               @if(in_array(Session::get('rol'), [2, 3, 4, 5]) )
-                                  disabled
+                                  
                               @endif
 
 
@@ -53,7 +53,14 @@
                     <div class="col-sm-4 col-md-4 col-xl-4">
                       <div class="form-group">
                         <label>Dia de Visita</label>
-                        <select class="form-control" id="slDiaVisita">
+                        <select class="form-control" id="slDiaVisita" 
+
+                        @if(in_array(Session::get('rol'), [2, 3, 4, 5]) )
+                            disabled
+                        @endif
+                        
+                        
+                        >
                           @foreach ($DiasSemana as $d)
                             <option 
                             {{ ( (isset($Request->visit_day) ? $Request->visit_day :  date('w') ) == $d->id_diassemana) ? 'selected' : '' }}

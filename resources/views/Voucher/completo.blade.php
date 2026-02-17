@@ -103,7 +103,7 @@
                             <td class="col-md-1 text-right">{{Auth::User()->Phone}}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table>         
                </td>
             </div>
         </div>
