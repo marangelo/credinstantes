@@ -468,7 +468,7 @@ class Arqueo extends Model {
             $array_arqueos[$key] = [
                 "Id"                        => $a->id_arqueo,
                 "Fecha_Cuota"               => \Date::parse($a->fecha_arqueo)->format('d-m-Y') ,
-                "Zona"                      => $a->getZona->nombre_zona,
+                "Zona"                      => $a->getZona->nombre_zona ?? 'N/D',
                 "Nombre"                    => strtoupper($name_user_arqueo),
                 "cuota_cobrada"             => $a->deposito_dia,
                 "deposito_tranferencia"     => $a->deposito_tranferencia,
@@ -772,16 +772,18 @@ class Arqueo extends Model {
             ];
 
             $TotalDeposito = $TotalDeposito + $a->monto;
-            $StrDepositos .= sprintf("%s - %s %s %s - %s - %s\n", 
+
+            $StrDepositos .= sprintf(
+                "%-10s - %-10s - %10s - %-10s - %10s\n", 
                 strtoupper($a->Cliente->nombre . " " . $a->Cliente->apellidos),
-                $a->Cuenta->Banco->banco,
-                $a->Cuenta->moneda,
                 $a->Cuenta->cuenta,
-                $a->monto,
+                number_format($a->monto, 2),
                 $a->refe,
-                $a->fecha_deposito
+                date('d/m/Y', strtotime($a->fecha_deposito))
             );
+            
         }
+
 
         return response()->json([
             "data" => $data,

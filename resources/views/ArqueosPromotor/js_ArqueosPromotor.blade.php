@@ -73,7 +73,7 @@
 
                     if (Zona > 0 ) {                        
                         try {
-                            const githubUrl = `ArqueoInit/${Zona}`;
+                            const githubUrl = `ArqueoInitPromotor/${Zona}`;
                             const response = await fetch(githubUrl);
                             if (!response.ok) {
                                 return Swal.showValidationMessage(`${JSON.stringify(await response.json())}`);
@@ -249,7 +249,7 @@
     }
     function Remover(ID) {
         $.ajax({
-            url: "RemoveArqueo",
+            url: "RemoveArqueoPromotor",
             data: {
                 Arqueo  : ID,
                 _token  : "{{ csrf_token() }}" 

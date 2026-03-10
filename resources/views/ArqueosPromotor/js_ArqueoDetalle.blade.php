@@ -193,6 +193,33 @@
         
     }
 
+    function toExel(Arqueo) {
+        if (Arqueo.estado_arqueo == 0) {
+            swal.fire({
+                title: 'No se puede exportar el arqueo hasta que se cierre',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            })
+        } else {
+            swal.fire({
+                title: '¿Desea Exportar el Arqueo?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Exportar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.open("../ExportDetalles/"+Arqueo.id_arqueo_prom);
+                }
+            })
+            
+        }
+    }
+
 
     function updateSobrante() {
         var Desembolsado = parseFloat($("#txt_desembolsado").val());
