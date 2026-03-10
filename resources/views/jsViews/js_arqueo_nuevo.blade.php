@@ -443,6 +443,11 @@
                 result.original.data
             );
 
+
+            if(typeof result.original.Comentarios !== 'undefined'){
+                setCommit(result.original.Comentarios);
+            }
+
             $(ttTransaccion).html('( ' + numeral(isValue(result.original.Total,2,true)).format('0,00.00') + ' )');
             $(btnResumen).val(numeral(isValue(result.original.Total,2,true)).format('0.00'));
 
@@ -452,6 +457,17 @@
         } catch (error) {
             console.error(error);
         }
+    }
+
+    function setCommit(commit) {
+
+        var str_commit = "";
+        $("#id_commit").val(str_commit);
+
+
+        $("#id_commit").val(commit);
+
+        
     }
 
     function InitDataDesembolso( IdArqueo, lbl) 
