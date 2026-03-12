@@ -199,12 +199,14 @@
                     <p>Arqueos</p>
                   </a>
                 </li>
+                @if (in_array(Session::get('rol'), [1, 3]))
                 <li class="nav-item">
                   <a href="{{route('Bitacora')}}" class="nav-link {{ (request()->is('Bitacora')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Bitacora Desembolsos</p>
                   </a>
                 </li>
+                @endif
                 <li class="nav-item">
                   <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>

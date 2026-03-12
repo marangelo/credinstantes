@@ -468,7 +468,7 @@ class Arqueo extends Model {
             $array_arqueos[$key] = [
                 "Id"                        => $a->id_arqueo,
                 "Fecha_Cuota"               => \Date::parse($a->fecha_arqueo)->format('d-m-Y') ,
-                "Zona"                      => $a->getZona->nombre_zona,
+                "Zona"                      => $a->getZona->nombre_zona ?? 'N/D',
                 "Nombre"                    => strtoupper($name_user_arqueo),
                 "cuota_cobrada"             => $a->deposito_dia,
                 "deposito_tranferencia"     => $a->deposito_tranferencia,
@@ -755,6 +755,8 @@ class Arqueo extends Model {
         $TotalDeposito  = 0;
         $data           = array();
 
+        $StrDepositos   = "";
+
         $Depositos = ArqueoDeposito::where('id_arqueo', $ID)->get();
         
 
@@ -768,12 +770,25 @@ class Arqueo extends Model {
                 "referencias"      => $a->refe,
                 "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDeposito(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
             ];
+
             $TotalDeposito = $TotalDeposito + $a->monto;
+
+            $StrDepositos .= sprintf(
+                "%-10s - %-10s - %10s - %-10s - %10s\n", 
+                strtoupper($a->Cliente->nombre . " " . $a->Cliente->apellidos),
+                $a->Cuenta->cuenta,
+                number_format($a->monto, 2),
+                $a->refe,
+                date('d/m/Y', strtotime($a->fecha_deposito))
+            );
+            
         }
+
 
         return response()->json([
             "data" => $data,
-            "Total" => $TotalDeposito
+            "Total" => $TotalDeposito,
+            "Comentarios" => $StrDepositos
         ]);
     }
     public static function SaveDeposito(Request $request)

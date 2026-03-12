@@ -25,7 +25,7 @@
                     </div>
                     <input type="text" class="form-control datetimepicker-input" data-target="#dt-arqueo" id="dtIni" name="nmIni" />     
                     <span class="input-group-append">
-                        <a href="../ExportDetalles/{{$Arqueo->id_arqueo_prom}}" class="btn btn-success"><i class="far fa-file-excel"></i></a>
+                        <a href="#!" onclick="toExel({{$Arqueo}})" class="btn btn-success"><i class="far fa-file-excel"></i></a>
                     </span>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                     
                     <div class="card-footer clearfix">
                         <div class="row"> 
-                            @if($Arqueo->estado_arqueo <= 1)
+                            @if($Arqueo->estado_arqueo == 0)
                             <div class="col-sm-6 col-md-6">                               
                                 <div class="form-group">                            
                                     <a href="#!" class="btn btn-success btn-block" id="btn_procesar" > <i class="fas fa-save"></i>  PROCESAR</a>                            
@@ -107,7 +107,7 @@
                             </div>
                             @endif
                             @if(in_array(Session::get('rol'), array(1)))
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-sm-{{ $Arqueo->estado_arqueo == 0 ? 6 : 12 }} col-md-{{ $Arqueo->estado_arqueo == 0 ? 6 : 12 }}">
                                 <div class="form-group">                            
                                     <a href="#!" class="btn btn-danger btn-block" id="btn_remover" > <i class="fas fa-window-close"></i>  CANCELAR</a>                            
                                 </div>

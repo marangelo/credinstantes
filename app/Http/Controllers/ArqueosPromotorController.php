@@ -28,6 +28,7 @@ class ArqueosPromotorController extends Controller
     {         
         $Titulo     = "Arqueo Nuevo";
         $Arqueo     = ArqueoPromotor::where('id_arqueo_prom', $ID)->first();
+        
         return view('ArqueosPromotor.Detalles', compact('Titulo','Arqueo'));
     }
     public function TableDetalles(Request $request)
@@ -52,6 +53,7 @@ class ArqueosPromotorController extends Controller
     public function RemoveArqueoPromotor(Request $request)
     {         
         $Arqueo     = $request->input('Arqueo');
+        
         $resultado = ArqueoPromotor::where('id_arqueo_prom',$Arqueo)->update([
             "estado_arqueo" => 2
         ]);

@@ -98,7 +98,7 @@ class ArqueoPromotor extends Model {
 
             $IdInsertado = ArqueoPromotor::insertGetId($datos_a_insertar);
 
-            ArqueoDetalle::insert($ARQUEO_DET);
+            //ArqueoDetalle::insert($datos_a_insertar);
 
             $array = [
                 "ID_ARQUEO"       => $IdInsertado,
@@ -143,8 +143,11 @@ class ArqueoPromotor extends Model {
             $EfectivoDesembolsado += $c->monto_credito;
             
         }
+    
 
-        $EfectivoDesembolsado = (is_null($Arqueo->desembolsado)) ? $EfectivoDesembolsado : ($Arqueo->desembolsado ? $Arqueo->desembolsado : 0 );
+        //$EfectivoDesembolsado = (is_null($Arqueo->desembolsado)) ? $EfectivoDesembolsado : ($Arqueo->desembolsado ? $Arqueo->desembolsado : 0 );
+
+        //dd($EfectivoDesembolsado);
         
         $InfoArqueo[] = [
             "id_arqueo_prom"     => $Arqueo->id_arqueo_prom,
