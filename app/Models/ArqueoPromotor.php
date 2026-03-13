@@ -58,15 +58,14 @@ class ArqueoPromotor extends Model {
         
         foreach ($Arqueos as $key => $a) 
         {  
-            //$name_user_arqueo = (empty($a->getZona->UsuarioCobrador->nombre)) ? 'N/D' : $a->getZona->UsuarioCobrador->nombre ;
-
-            $name_user_arqueo = 'PROMOTOR ' . $a->id_arqueo_prom;
+            $Name_user = $a->getPromotor->nombre;
+            $Name_zona = $a->getPromotor->Zona->nombre_zona;
 
             $array_arqueos[$key] = [
                 "Id"                => $a->id_arqueo_prom,
                 "fecha_arqueo"      => \Date::parse($a->fecha)->format('d-m-Y') ,
-                "Zona"              => $a->id_arqueo_prom,
-                "Nombre"            => strtoupper($name_user_arqueo),
+                "Zona"              => strtoupper($Name_zona),
+                "Nombre"            => strtoupper($Name_user),
                 
                 "entregado"         => $a->entregado,
                 "desembolsado"      => $a->desembolsado,

@@ -6,15 +6,12 @@
                 ranges: {
                 'Hoy': [moment(), moment()],
                 'Últm. 7 Días': [moment().subtract(6, 'days'), moment()],
-                'Últm. 30 Días': [moment().subtract(29, 'days'), moment()],
-                
+                'Últm. 30 Días': [moment().subtract(29, 'days'), moment()],                
                 'Esta Semana': [moment().startOf('week'), moment().endOf('week')],
-                'Semana Anterior': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-                
+                'Semana Anterior': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],                
                 'Este Mes': [moment().startOf('month'), moment()],
-                'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                
-                //'1 Año': [moment().subtract(1, 'year'), moment()],
+                'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],                
+                '1 Año': [moment().subtract(1, 'year'), moment()],
                 // '2 Años': [moment().subtract(2, 'year'), moment()],
                 // '3 Años': [moment().subtract(3, 'year'), moment()]
                 },
