@@ -10,7 +10,7 @@ class BitacoraController extends Controller
     public function Bitacora()
         {         
             $Titulo      = "Bitacora";
-            $Usuarios    = DB::table('view_user')->whereNotIn('id_rol', [1])->get();
+            $Usuarios    = DB::table('view_user')->whereNotIn('id', [32])->get();
             return view('Bitacora.Desembolsos', compact('Titulo','Usuarios'));
         }
     public function getBitacora(Request $request)
