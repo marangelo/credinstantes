@@ -773,12 +773,14 @@ class Arqueo extends Model {
 
             $TotalDeposito = $TotalDeposito + $a->monto;
 
+            $isMoneda = $a->Cuenta->moneda == 'DOLARES' ? '$. ' : 'C$. ';
+
             $StrDepositos .= sprintf(
                 "%-10s - %-10s - %10s - %-10s - %10s\n", 
                 strtoupper($a->Cliente->nombre . " " . $a->Cliente->apellidos),
                 $a->Cuenta->cuenta,
-                number_format($a->monto, 2),
-                $a->refe,
+                $isMoneda.number_format($a->monto, 2),
+                'REF. '.$a->refe,
                 date('d/m/Y', strtotime($a->fecha_deposito))
             );
             

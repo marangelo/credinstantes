@@ -462,8 +462,8 @@
     function setCommit(commit) {
 
         var str_commit = "";
-        $("#id_commit").val(str_commit);
 
+        $("#id_commit").val(str_commit);
 
         $("#id_commit").val(commit);
 
