@@ -26,13 +26,20 @@ class Bitacora extends Model
         $Creditos = Credito::where('activo', 1)
                 ->whereBetween('fecha_apertura', [$dtIni, $dtEnd])
                 ->whereIn('estado_credito', [1, 2, 3])
-                ->whereNotIn('id_clientes', $ClientesArchivados)
-                ->when($IdZna > -1, function ($query) use ($IdZna) {
-                    $query->whereHas('Clientes', function ($q) use ($IdZna) {
-                        $q->where('id_zona', $IdZna);
-                    });
-                })
-                ->get();      
+                ->whereNotIn('id_clientes', $ClientesArchivados);
+                
+                // ->when($IdZna > -1, function ($query) use ($IdZna) {
+                //     $query->whereHas('Clientes', function ($q) use ($IdZna) {
+                //         $q->where('id_zona', $IdZna);
+                //     });
+                // })->get();    
+                
+
+        if ($IdZna > -1) {
+            $Creditos->where('asignado', $IdZna);
+        }
+
+        $Creditos = $Creditos->get();
     
 
         $Array_Bitacora = array();
@@ -79,10 +86,12 @@ class Bitacora extends Model
     {
         $dtIni = $request->dtIni;
         $dtEnd = $request->dtEnd;
+        $IdZna = $request->IdZna;
+
+        $InfoUser = Usuario::where('id', $IdZna)->first();
 
         $Creditos = Bitacora::getBitacora($request);
-        $Zonas    = Zonas::getZonas();
-        
+
         $objPHPExcel = new PHPExcel();
 
         /* ================= ESTILOS ================= */
@@ -126,93 +135,86 @@ class Bitacora extends Model
             ]
         ];
 
-        /* ================= HOJAS POR ZONA ================= */
-        $index = 0;
+        /* ================= HOJA UNICA ================= */
 
-        foreach ($Zonas as $zona) {
+        $usuario = $InfoUser->nombre ?? 'Reporte';
 
-            if ($index > 0) {
-                $objPHPExcel->createSheet();
-            }
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+        $sheet->setTitle(strtoupper($usuario));
 
-            $sheet = $objPHPExcel->setActiveSheetIndex($index);
-            $sheet->setTitle(strtoupper($zona->nombre_zona));
+        /* ================= TITULOS ================= */
 
-            /* ================= TITULOS ================= */
-            $sheet->mergeCells('A1:K1');
-            $sheet->setCellValue('A1', 'CREDINSTANTE');
-            $sheet->getStyle('A1:K1')->applyFromArray($titulo);
+        $sheet->mergeCells('A1:K1');
+        $sheet->setCellValue('A1', 'CREDINSTANTE');
+        $sheet->getStyle('A1:K1')->applyFromArray($titulo);
 
-            $sheet->mergeCells('A2:K2');
-            $sheet->setCellValue(
-                'A2',
-                'BITACORA DE DESEMBOLSO ' . strtoupper(\Date::parse($dtIni)->format('F Y'))
-            );
-            $sheet->getStyle('A2:K2')->applyFromArray($subtitulo);
+        $sheet->mergeCells('A2:K2');
+        $sheet->setCellValue(
+            'A2',
+            'BITACORA DE DESEMBOLSO ' . strtoupper(\Date::parse($dtIni)->format('F Y'))
+        );
+        $sheet->getStyle('A2:K2')->applyFromArray($subtitulo);
 
-            /* ================= ENCABEZADOS ================= */
-            $row = 4;
-            $sheet->fromArray([
-                'ORIGEN',
-                'FECHA',
-                'NOMBRES Y APELLIDOS',
-                'MONTO',
-                'PLAZO',
-                'CUOTA',
-                'SEGURO',
-                'DIA DE VISITA',
-                'N° DE COMPROBANTE',
-                'TASA DE %',
-                'ZONA'
-            ], null, 'A'.$row);
+        /* ================= ENCABEZADOS ================= */
 
-            $sheet->getStyle('A4:K4')->applyFromArray($encabezado);
+        $row = 4;
 
-            /* ================= DETALLE ================= */
+        $sheet->fromArray([
+            'ORIGEN',
+            'FECHA',
+            'NOMBRES Y APELLIDOS',
+            'MONTO',
+            'PLAZO',
+            'CUOTA',
+            'SEGURO',
+            'DIA DE VISITA',
+            'N° DE COMPROBANTE',
+            'TASA DE %',
+            'ZONA'
+        ], null, 'A'.$row);
+
+        $sheet->getStyle('A4:K4')->applyFromArray($encabezado);
+
+        /* ================= DETALLE ================= */
+
+        $row++;
+
+        foreach ($Creditos as $c) {
+
+            $sheet->setCellValue('A'.$row, strtoupper($c['Origen']))
+                ->setCellValue('B'.$row, strtoupper($c['fecha_arqueo']))
+                ->setCellValue('C'.$row, strtoupper($c['Nombre']))
+                ->setCellValue('D'.$row, $c['Monto'])
+                ->setCellValue('E'.$row, $c['Plazo'])
+                ->setCellValue('F'.$row, $c['Cuota'])
+                ->setCellValue('G'.$row, $c['Seguro'])
+                ->setCellValue('H'.$row, strtoupper($c['IdSemana']))
+                ->setCellValue('I'.$row, $c['Id'])
+                ->setCellValue('J'.$row, $c['Interes'].'%')
+                ->setCellValue('K'.$row, strtoupper($c['nombre_zona'] ?? ''));
+
             $row++;
-            
-            foreach ($Creditos as $c) {
-                
+        }
 
-                if ($c['id_zona'] != $zona->id_zona) {
-                    continue;
-                }
+        /* ================= FORMATOS ================= */
 
-                $sheet->setCellValue('A'.$row, strtoupper($c['Origen']))
-                    ->setCellValue('B'.$row, strtoupper($c['fecha_arqueo']))
-                    ->setCellValue('C'.$row, strtoupper($c['Nombre']))
-                    ->setCellValue('D'.$row, $c['Monto'])
-                    ->setCellValue('E'.$row, $c['Plazo'])
-                    ->setCellValue('F'.$row, $c['Cuota'])
-                    ->setCellValue('G'.$row, $c['Seguro'])
-                    ->setCellValue('H'.$row, strtoupper($c['IdSemana']))
-                    ->setCellValue('I'.$row, $c['Id'])
-                    ->setCellValue('J'.$row, $c['Interes'].'%')
-                    ->setCellValue('K'.$row, strtoupper($zona->nombre_zona));
+        $sheet->getStyle('D5:D'.$row)->getNumberFormat()
+            ->setFormatCode('"C$" #,##0.00');
 
-                $row++;
-            }
+        $sheet->getStyle('F5:F'.$row)->getNumberFormat()
+            ->setFormatCode('"C$" #,##0.00');
 
-            /* ================= FORMATOS ================= */
-            $sheet->getStyle('E5:E'.$row)->getNumberFormat()
-                ->setFormatCode('"C$" #,##0.00');
+        $sheet->getStyle('G5:G'.$row)->getNumberFormat()
+            ->setFormatCode('"C$" #,##0.00');
 
-            $sheet->getStyle('F5:F'.$row)->getNumberFormat()
-                ->setFormatCode('"C$" #,##0.00');
+        $sheet->getStyle('A4:K'.$row)->applyFromArray($borde);
 
-            $sheet->getStyle('H5:H'.$row)->getNumberFormat()
-                ->setFormatCode('"C$" #,##0.00');
-
-            $sheet->getStyle('A4:K'.$row)->applyFromArray($borde);
-
-            foreach (range('A','K') as $col) {
-                $sheet->getColumnDimension($col)->setAutoSize(true);
-            }
-
-            $index++;
+        foreach (range('A','K') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
         /* ================= DESCARGA ================= */
+
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Bitacora_Desembolsos.xlsx"');
         header('Cache-Control: max-age=0');
@@ -220,5 +222,7 @@ class Bitacora extends Model
         $writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $writer->save('php://output');
     }
+
+    
 
 }

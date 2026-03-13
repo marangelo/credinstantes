@@ -16,7 +16,7 @@
                 'Este Mes': [moment().startOf('month'), moment()],
                 'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                 
-                //'1 Año': [moment().subtract(1, 'year'), moment()],
+                '1 Año': [moment().subtract(1, 'year'), moment()],
                 // '2 Años': [moment().subtract(2, 'year'), moment()],
                 // '3 Años': [moment().subtract(3, 'year'), moment()]
                 },

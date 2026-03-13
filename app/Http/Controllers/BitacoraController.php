@@ -3,15 +3,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Bitacora;
-use App\Models\Zonas;
+use App\Models\Usuario;
 
 class BitacoraController extends Controller 
 { 
     public function Bitacora()
         {         
             $Titulo      = "Bitacora";
-            $Zonas       = Zonas::getZonas();
-            return view('Bitacora.Desembolsos', compact('Titulo','Zonas'));
+            $Usuarios    = Usuario::where('activo','S')->whereNotIn('id_rol', [1])->get();
+            return view('Bitacora.Desembolsos', compact('Titulo','Usuarios'));
         }
     public function getBitacora(Request $request)
     {

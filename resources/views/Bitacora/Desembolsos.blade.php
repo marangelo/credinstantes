@@ -47,11 +47,10 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
-                                            <option value="-1"  selected="selected">Todas las Zonas.</option>
-                                            @foreach($Zonas as $Zona)
-                                                <option value="{{ $Zona->id_zona }}">{{ strtoupper( $Zona->nombre_zona ) }}</option>
+                                            <option value="-1"  selected="selected">Usuarios.</option>
+                                            @foreach($Usuarios as $u)
+                                                <option value="{{ $u->id }}">{{ strtoupper( $u->nombre ) }}</option>
                                             @endforeach
-                                        
                                         </select>
                                         
                                     </div>
