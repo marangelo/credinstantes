@@ -606,11 +606,14 @@ class Arqueo extends Model {
         $TotalDesembolso = 0;
         
         foreach ($Desembolso as $a) {
+            
+            $Accion = (Auth::user()->id_rol == 1) ? '<button class="btn btn-sm btn-danger" onclick="removeDesembolso(' . $a->id_desembolsos . ')"><i class="fas fa-trash"></i></button>' : '';
+
             $data[] = [
                 "id"              => $a->id_desembolsos,
                 "nombre_cliente"  => strtoupper($a->NameCliente),
                 "monto"           => $a->monto,
-                "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDesembolso(' . $a->id_desembolsos . ')"><i class="fas fa-trash"></i></button>'
+                "accion"          => $Accion
             ];
             $TotalDesembolso = $TotalDesembolso + $a->monto;
         }
@@ -679,12 +682,13 @@ class Arqueo extends Model {
 
         $data  = array();
         foreach ($Transferencias as $a) {
+            $Accion = (Auth::user()->id_rol == 1) ? '<button class="btn btn-sm btn-danger" onclick="removeTransferencia(' . $a->id_tranferencia . ')"><i class="fas fa-trash"></i></button>' : '';
             $data[] = [
                 "id"        => $a->id_tranferencia,
                 "cuenta"    => $a->BancoCuentas->Banco->banco.' '.$a->BancoCuentas->moneda.' '.$a->BancoCuentas->cuenta,
                 "monto"     => $a->monto,
                 "refe"      => $a->referencia,
-                "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeTransferencia(' . $a->id_tranferencia . ')"><i class="fas fa-trash"></i></button>'
+                "accion"    => $Accion
             ];
             $TotalTransferencia = $TotalTransferencia + $a->monto;
         }
@@ -761,6 +765,9 @@ class Arqueo extends Model {
         
 
         foreach ($Depositos as $a) {
+
+            $Accion = (Auth::user()->id_rol == 1) ? '<button class="btn btn-sm btn-danger" onclick="removeDeposito(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>' : '';
+
             $data[] = [
                 "id"        => $a->id_deposito,
                 "FECHA"     => $a->fecha_deposito,
@@ -768,7 +775,7 @@ class Arqueo extends Model {
                 "cuenta_bancaria"    => $a->Cuenta->Banco->banco.' '.$a->Cuenta->moneda.' '.$a->Cuenta->cuenta,
                 "monto"     => $a->monto,
                 "referencias"      => $a->refe,
-                "accion"    => '<button class="btn btn-sm btn-danger" onclick="removeDeposito(' . $a->id_deposito . ')"><i class="fas fa-trash"></i></button>'
+                "accion"    => $Accion
             ];
 
             $TotalDeposito = $TotalDeposito + $a->monto;
