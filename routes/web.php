@@ -97,7 +97,7 @@ Route::get('getDashboardPromotor/{ID}', 'ReportsController@getDashboardPromotor'
 Route::get('Desembolsados', 'CredinstanteController@Desembolsados')->name('Desembolsados');
 Route::get('getClientesDesembolsados', 'ReportsController@getClientesDesembolsados')->name('getClientesDesembolsados');
 Route::get('MetricasPromotor', 'CredinstanteController@MetricasPromotor')->name('MetricasPromotor');
-Route::get('getMetricasPromotor/{ID}', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
+Route::post('getMetricasPromotor', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
 Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')->name('ExportMetricasPromotor');
 
 Route::get('RecuperacionCobro', 'ReportsController@RecuperacionCobro')->name('RecuperacionCobro');
