@@ -191,7 +191,7 @@ class Bitacora extends Model
                 ->setCellValue('H'.$row, strtoupper($c['IdSemana']))
                 ->setCellValue('I'.$row, $c['Id'])
                 ->setCellValue('J'.$row, $c['Interes'].'%')
-                ->setCellValue('K'.$row, strtoupper($c['nombre_zona'] ?? ''));
+                ->setCellValue('K'.$row, strtoupper($c['Zona'] ?? ''));
 
             $row++;
         }
