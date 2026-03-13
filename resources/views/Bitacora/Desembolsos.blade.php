@@ -49,7 +49,7 @@
                                         <select class="form-control select2" style="width: 100%;" id="id_select_zona" name="IdZona">
                                             <option value="-1"  selected="selected">Usuarios.</option>
                                             @foreach($Usuarios as $u)
-                                                <option value="{{ $u->id }}">{{ strtoupper( $u->nombre ) }}</option>
+                                                <option value="{{ $u->id }}">{{ strtoupper( $u->nombre )  }}</option>
                                             @endforeach
                                         </select>
                                         

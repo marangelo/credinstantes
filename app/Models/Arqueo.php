@@ -780,7 +780,7 @@ class Arqueo extends Model {
 
             $TotalDeposito = $TotalDeposito + $a->monto;
 
-            $isMoneda = $a->Cuenta->moneda == 'DOLARES' ? '$. ' : 'C$. ';
+            $isMoneda = $a->Cuenta->moneda == 'DOLARES' ? '$ ' : 'C$ ';
 
             $StrDepositos .= sprintf(
                 "%-10s - %-10s - %10s - %-10s - %10s\n", 
