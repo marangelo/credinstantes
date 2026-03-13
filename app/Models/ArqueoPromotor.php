@@ -341,7 +341,7 @@ class ArqueoPromotor extends Model {
 
         /* ================= ENCABEZADO ================= */
         $sheet->mergeCells('A1:G1');
-        $sheet->setCellValue('A1', 'GENERAR ARQUEO DE PROMOTORA');
+        $sheet->setCellValue('A1', 'ARQUEO DE PROMOTORA');
 
         $sheet->mergeCells('A2:G2');
         $sheet->setCellValue('A2', strtoupper($Promotor).'   FECHA: '.\Date::parse($Arqueo->fecha_arqueo)->format('d/m/Y'));
@@ -374,7 +374,7 @@ class ArqueoPromotor extends Model {
         foreach ($Detalles as $Detalle) {
             $sheet
                 ->setCellValue('B'.$row, $Detalle->nombre_cliente)
-                ->setCellValue('C'.$row, number_format($Detalle->monto_credito, 2, '.', ','))
+                ->setCellValue('C'.$row, 'C$ '.number_format($Detalle->monto_credito, 2, '.', ','))
                 ->setCellValue('D'.$row, number_format($Detalle->id_creditos, 0, '.', '0'))
                 ->setCellValue('E'.$row, $Detalle->nombre_zona);
             $totalDesembolsado += $Detalle->monto_credito;
@@ -388,17 +388,16 @@ class ArqueoPromotor extends Model {
 
         /* ================= SUBTOTALES ================= */
         $sheet->setCellValue('A'.$row, 'SUB TOTALES')
-            ->setCellValue('A'.$RowInit, number_format($Arqueo->entregado, 2, '.', ','))
-            ->setCellValue('C'.$row, number_format($totalDesembolsado, 2, '.', ','))
-            ->setCellValue('F'.$row, number_format($Arqueo->sobrante, 2, '.', ','))
-            ->setCellValue('G'.$row, number_format($Arqueo->consolidado, 2, '.', ','));
+            ->setCellValue('A'.$RowInit, 'C$ '.number_format($Arqueo->entregado, 2, '.', ','))
+            ->setCellValue('C'.$row, 'C$ '.number_format($totalDesembolsado, 2, '.', ','))
+            ->setCellValue('F'.$row, 'C$ '.number_format($Arqueo->sobrante, 2, '.', ','))
+            ->setCellValue('G'.$row, 'C$ '.number_format($Arqueo->consolidado, 2, '.', ','));
 
         /* ================= FORMATOS NUMERICOS ================= */
         $sheet->getStyle('A'.$RowInit)->applyFromArray($NumAlineado);
         $sheet->getStyle('C'.$RowInit.':C'.$row)->applyFromArray($NumAlineado);
         $sheet->getStyle('F'.$RowInit.':F'.$row)->applyFromArray($NumAlineado);
         $sheet->getStyle('G'.$RowInit.':G'.$row)->applyFromArray($NumAlineado);
-        
         $sheet->getStyle('A6:G'.$row)->applyFromArray($borde);
 
         /* ================= COMENTARIOS ================= */

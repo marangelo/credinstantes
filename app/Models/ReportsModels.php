@@ -400,11 +400,12 @@ class ReportsModels extends Model {
 
         return $array_dashboard;
     }
-    public static function getMetricasPromotor($Prom)
+    public static function getMetricasPromotor( Request $request )
     {
-        $dtNow  = date('Y-m-d');
-        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
-        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59';    
+
+        $D1     = $request->input('dtIni');
+        $D2     = $request->input('dtEnd');
+        $Prom   = $request->input('Prom');
         
         $array_dashboard         = [];
         $ArrayClientesNuevos     = [] ;
