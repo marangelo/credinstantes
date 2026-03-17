@@ -36,7 +36,9 @@ class CalcularMetricas extends Command
         $array_consolidado    = [];
 
         $dtNow  = date('Y-m-d');
+
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
+        
         $D2     = date('Y-m-d', strtotime($dtNow)). ' 23:59:59'; 
 
 
