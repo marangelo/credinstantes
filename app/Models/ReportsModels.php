@@ -400,19 +400,8 @@ class ReportsModels extends Model {
 
         return $array_dashboard;
     }
-    public static function getMetricasPromotor( $requestOrId, $dtIni = null, $dtEnd = null )
+    public static function getMetricasPromotor($Prom, $D1, $D2)
     {
-        // Handle both Request object and direct parameters
-        if ($requestOrId instanceof Request) {
-            $D1     = $requestOrId->input('dtIni');
-            $D2     = $requestOrId->input('dtEnd');
-            $Prom   = $requestOrId->input('Prom');
-        } else {
-            // Called from console command with zone ID
-            $D1     = $dtIni;
-            $D2     = $dtEnd;
-            $Prom   = $requestOrId; // This is actually the zone/promotor ID
-        }
         
         $array_dashboard         = [];
         $ArrayClientesNuevos     = [] ;
