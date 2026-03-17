@@ -16,12 +16,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">PROMOTOR</h1>
+            <h1 class="m-0" id="lbl_titulo">PROMOTOR</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">PROMOTOR</li>
+              <li class="breadcrumb-item active">Promotor</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -32,26 +32,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        
-        <div class="card-header">
-          <h3 class="card-title" id="IdCardTitle"></h3>
-          <div class="card-tools">
-            <div class="input-group input-group-sm">
-              <select class="custom-select" style="width: auto;" id="IdFilterByZone" >
-                <option value="-1" selected="selected"> Todas </option>
-                @foreach ($Promo as $p)
-                  <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
-                @endforeach
-                
-              </select>
-              <div class="input-group-append">
-                <div class="btn btn-primary" id="IdbtnFilter">
-                  <i class="fa fa-filter"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      
         <div class="row">
 
             <div class="col-12 col-sm-6 col-md-3">
@@ -96,32 +77,52 @@
         <div class="card">
             
               <div class="card-body">
-                
-              <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <div class="input-group">
-                            <input type="search" class="form-control form-control-lg" id="tbl_cliente_promotor_buscar" placeholder="Escriba cliente a buscar">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-lg btn-default">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                                <button type="submit" class="btn btn-lg btn-default button_export_excel">
-                                    <i class="fa fa-file-excel"></i>
-                                </button>
-                            </div>
+
+                <div class="row">
+                    <div class="col-md-7">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
+                        <input type="search" class="form-control form-control-lg" id="tbl_cliente_promotor_buscar" placeholder="Escriba cliente a buscar">
+                        <button type="submit" class="btn btn-lg btn-default button_export_excel">
+                            <i class="fa fa-file-excel"></i>
+                        </button>
+                      </div>
                     </div>
-                </div>
-                <div class="tab-content p-0">
-                  <!-- Morris chart - Sales -->
-                  <div class="position-relative mb-4">
-                  <table id="tbl_cliente_promotor" class="table table-bordered table-hover"></table>
-                </div>
-                  <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <select class="form-control form-control-lg select2" style="width: 100%;" id="IdFilterByZone" name="IdZona">
+                            <option value="-1"  selected="selected">Todas...</option>
+                            @foreach ($Promo as $p)
+                            <option value="{{$p->id}}"> {{strtoupper($p->nombre)}}</option>
+                            @endforeach
+                        </select>
+                        
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                          <div class="input-group date" id="dt-end" data-target-input="nearest">
+                            <input type="text" class="form-control form-control-lg" name="dt_range" />
+                              <div class="input-group-append" data-target="#dt-end" data-toggle="datetimepicker">
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                              </div>
+                              <div class="card-tools"  id="IdbtnFilter">
+                                  <div class="btn btn-primary form-control-lg" style="display: flex; align-items: center;">
+                                      <i class="fa fa-filter" style="margin: auto;"></i>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <table id="tbl_cliente_promotor" class="table table-bordered table-hover"></table>
+                    </div>
                   </div>
                 </div>
-              </div><!-- /.card-body -->
+              </div>
             </div>
         
         

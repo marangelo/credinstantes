@@ -116,9 +116,9 @@ class ReportsController extends Controller
         
         return response()->json($response);
     }
-    public function getMetricasPromotor($Opt)
+    public function getMetricasPromotor(Request $request)
     {
-        $response = ReportsModels::getMetricasPromotor($Opt);
+        $response = ReportsModels::getMetricasPromotor($request);
         
         return response()->json($response);
     }

@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Arqueo;
 use App\Models\Zonas;
+use App\Models\Clientes;
+use App\Models\BancoCuentas;
 use App\Exports\ExportArqueo;
 use App\Traits\CheckUserLock;
 
@@ -33,8 +35,10 @@ class ArqueosController extends Controller
         $Titulo     = "Arqueo Nuevo";
         $Arqueo     = Arqueo::find($ID); 
         $Cobrado    = Arqueo::Cobrado($ID);
+        $Clientes   = Clientes::getClientes(0);
+        $Cuentas    = BancoCuentas::getBancoCuentas();
     
-        return view('Arqueos.Nuevo', compact('Titulo','Arqueo','Cobrado'));
+        return view('Arqueos.Nuevo', compact('Titulo','Arqueo','Cobrado','Clientes','Cuentas'));
     }
 
     public function UpdateRecuperado(Request $request)
@@ -78,6 +82,52 @@ class ArqueosController extends Controller
     public function RemoveArqueo(Request $request)
     {
         $response = Arqueo::RemoveArqueo($request);
+        return response()->json($response);
+    }
+
+    public function getDesembolso(Request $request)
+    {
+        $response = Arqueo::getDesembolso($request);
+        return response()->json($response);
+    }
+    public function SaveDesembolso(Request $request)
+    {
+        $response = Arqueo::SaveDesembolso($request);
+        return response()->json($response);
+    }
+    public function DownDesembolso(Request $request)
+    {
+        $response = Arqueo::DownDesembolso($request);
+        return response()->json($response);
+    }
+    public function getTransferencias(Request $request)
+    {
+        $response = Arqueo::getTransferencias($request);
+        return response()->json($response);
+    }
+    public function SaveTransferencia(Request $request)
+    {
+        $response = Arqueo::SaveTransferencia($request);
+        return response()->json($response);
+    }
+    public function DownTransferencia(Request $request)
+    {
+        $response = Arqueo::DownTransferencia($request);
+        return response()->json($response);
+    }
+    public function getDepositos(Request $request)
+    {
+        $response = Arqueo::getDepositos($request);
+        return response()->json($response);
+    }
+    public function SaveDeposito(Request $request)
+    {
+        $response = Arqueo::SaveDeposito($request);
+        return response()->json($response);
+    }
+    public function DownDeposito(Request $request)
+    {
+        $response = Arqueo::DownDeposito($request);
         return response()->json($response);
     }
 

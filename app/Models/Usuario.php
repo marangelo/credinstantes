@@ -22,7 +22,6 @@ class Usuario extends Model {
         return Usuario::where('activo','S')->get();
     }
 
-   
     public static function SaveUsuario(Request $request) {
         if ($request->ajax()) {
             try {

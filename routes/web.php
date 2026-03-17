@@ -97,7 +97,7 @@ Route::get('getDashboardPromotor/{ID}', 'ReportsController@getDashboardPromotor'
 Route::get('Desembolsados', 'CredinstanteController@Desembolsados')->name('Desembolsados');
 Route::get('getClientesDesembolsados', 'ReportsController@getClientesDesembolsados')->name('getClientesDesembolsados');
 Route::get('MetricasPromotor', 'CredinstanteController@MetricasPromotor')->name('MetricasPromotor');
-Route::get('getMetricasPromotor/{ID}', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
+Route::post('getMetricasPromotor', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
 Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')->name('ExportMetricasPromotor');
 
 Route::get('RecuperacionCobro', 'ReportsController@RecuperacionCobro')->name('RecuperacionCobro');
@@ -113,6 +113,34 @@ Route::post('ShowDetalles/UpdateArqueo', 'ArqueosController@UpdateArqueo')->name
 Route::post('ShowDetalles/UpdateRecuperado', 'ArqueosController@UpdateRecuperado')->name('ShowDetalles/UpdateRecuperado');
 Route::post('RemoveArqueo', 'ArqueosController@RemoveArqueo')->name('RemoveArqueo');
 Route::get('ExportArqueo/{ID}', 'ArqueosController@ExportArqueo')->name('ExportArqueo');
+
+Route::post('getDesembolso', 'ArqueosController@getDesembolso')->name('getDesembolso');
+Route::post('SaveDesembolso', 'ArqueosController@SaveDesembolso')->name('SaveDesembolso');
+Route::post('DownDesembolso', 'ArqueosController@DownDesembolso')->name('DownDesembolso');
+
+Route::post('getTransferencias', 'ArqueosController@getTransferencias')->name('getTransferencias');
+Route::post('SaveTransferencia', 'ArqueosController@SaveTransferencia')->name('SaveTransferencia');
+Route::post('DownTransferencia', 'ArqueosController@DownTransferencia')->name('DownTransferencia');
+
+Route::post('getDepositos', 'ArqueosController@getDepositos')->name('getDepositos');
+Route::post('SaveDeposito', 'ArqueosController@SaveDeposito')->name('SaveDeposito');
+Route::post('DownDeposito', 'ArqueosController@DownDeposito')->name('DownDeposito');
+
+
+
+
+Route::get('ArqueosPromotor', 'ArqueosPromotorController@ShowHome')->name('ArqueosPromotor');
+Route::post('getDataArqueosPromotor', 'ArqueosPromotorController@getDataArqueosPromotor')->name('getDataArqueosPromotor');
+Route::get('Detalles/{ID}', 'ArqueosPromotorController@Detalles')->name('Detalles');
+Route::post('TableDetalles', 'ArqueosPromotorController@TableDetalles')->name('TableDetalles');
+Route::post('UpdateArqueoPromotor', 'ArqueosPromotorController@UpdateArqueoPromotor')->name('UpdateArqueoPromotor');
+Route::post('SaveArqueoPromotor', 'ArqueosPromotorController@SaveArqueoPromotor')->name('SaveArqueoPromotor');
+Route::get('ExportDetalles/{ID}', 'ArqueosPromotorController@ExportDetalles')->name('ExportDetalles');
+Route::get('ArqueoInitPromotor/{ZONA}', 'ArqueosPromotorController@Init')->name('ArqueoInitPromotor');
+Route::post('RemoveArqueoPromotor', 'ArqueosPromotorController@RemoveArqueoPromotor')->name('RemoveArqueoPromotor');
+
+
+
 
 
 //RUTAS PARA EDITAR CREDITOS
@@ -234,5 +262,13 @@ Route::post('HolidaysEdit', 'HolidaysController@HolidaysEdit')->name('HolidaysEd
 Route::post('HolidaysDelete', 'HolidaysController@HolidaysDelete')->name('HolidaysDelete');
 Route::post('HolidaysSave', 'HolidaysController@HolidaysSave')->name('HolidaysSave');
 Route::get('UpdateHoliday/{id}', 'HolidaysController@UpdateHoliday')->name('UpdateHoliday');
+
+
+
+Route::get('Bitacora', 'BitacoraController@Bitacora')->name('Bitacora');
+Route::post('getBitacora', 'BitacoraController@getBitacora')->name('getBitacora');
+Route::get('ExportarBitacora/{dtIni}/{dtEnd}/{IdZna}', 'BitacoraController@ExportarBitacora')->name('ExportarBitacora');
+Route::post('UpdateSeguro', 'BitacoraController@UpdateSeguro')->name('UpdateSeguro');
+
 
 

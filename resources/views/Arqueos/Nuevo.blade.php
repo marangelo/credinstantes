@@ -7,10 +7,6 @@
 @section('content')
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      
-    </section>
 
     <!-- Main content -->
     <section class="content">
@@ -18,7 +14,7 @@
         <div class="row">
           <div class="col-12">
             <!-- /.card -->
-            <small class="badge badge-info mb-1"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
+            <small class="badge badge-info mb-2"><i class="fas fa-donate"></i> #: <span id="id_moneda">{{$Arqueo->id_arqueo}}</span></small>
             <div class="card">
               <div class="card-header" >
               <h3 class="card-title">{{strtoupper ( $Arqueo->getZona->nombre_zona ) }} / {{strtoupper ( (empty($Arqueo->getZona->UsuarioCobrador->nombre)) ? 'N/D' : $Arqueo->getZona->UsuarioCobrador->nombre ) }}</h3>
@@ -40,46 +36,56 @@
               @csrf
                 <div class="row">                  
                   <div class="col-md-3">
-                    <label >DESEMBOLSOS DEL DIA.</label>
+                    <label id="lbl_deposito_dia" >DESEMBOLSOS DE RECUP.</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text bg-white"> C$. </span>
+                        <span class="input-group-text bg-light"> C$. </span>
                       </div>
                       <input type="text" class="form-control" id="txt_deposito_dia" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_dia,2) }}" onkeypress='return isNumberKey(event)'>
+                      <div class="input-group-append">
+                        <div class="input-group-text btn-success" id="btn_add_recuperacion"><i class="fas fa-plus"></i></div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <label >DEPOSITOS O TRANSFERENCIAS.</label>
+                    <label id="lbl_deposito_tranferencia" >DEPOSITOS. O TRANSFERENCIAS.</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text bg-olive">C$.</span>
+                        <span class="input-group-text bg-light">C$.</span>
                       </div>
                       <input type="text" class="form-control" id="txt_deposito_tranferencia" placeholder="0.00 " value="{{ number_format($Arqueo->deposito_tranferencia,2) }}" onkeypress='return isNumberKey(event)'>
+                      <div class="input-group-append">
+                        <div class="input-group-text btn-success" id="btn_dep_transfer"><i class="fas fa-plus"></i></div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
-                    <label>SISTEMA </label>    <em>(Capital + Interes)</em>               
+                    <label>SISTEMA </label><em>(Capital + Interes)</em>               
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text bg-olive"> C$. </span>
+                        <span class="input-group-text bg-light"> C$. </span>
                       </div>
                       <input type="text" class="form-control" id="id_total_sistema" placeholder="0.00 " value="{{ number_format($Cobrado,2) }}" onkeypress='return isNumberKey(event)'>
+                      <div class="input-group-append">
+                        <div class="input-group-text btn-warning" id="bt_save_arqueo"><i class="fas fa-save"></i></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-3">
-                    <label>GASTO OPERATI. DEL DIA.</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-purple">C$.</span>
+                  
+                    <!-- REMOVER AL TERMINAR COMMITS -->
+                    <div class="col-md-3">
+                      <label id="lbl_gastos">DEP. DE CLIENTES.</label>
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text bg-light">C$.</span>
+                          </div>
+                          <input type="text" class="form-control" placeholder="0.00 " value="{{ number_format($Arqueo->gasto_operacion,2) }}" id="txt_gastos" onkeypress='return isNumberKey(event)'>
+                          <div class="input-group-append">
+                        <div class="input-group-text btn-success" id="btn_dep_cliente"><i class="fas fa-plus"></i></div>
                       </div>
-                      <input type="text" class="form-control" placeholder="0.00 " value="{{ number_format($Arqueo->gasto_operacion,2) }}" id="txt_gastos" onkeypress='return isNumberKey(event)'>
-                      <div class="input-group-append">
-                        <div class="input-group-text btn-success" id="bt_save_arqueo"><i class="fas fa-save"></i></div>
                       </div>
-                      
                     </div>
-
-                    </div>
+                    
                   </div>
                 </div>
 
@@ -173,5 +179,6 @@
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+    @include('Arqueos.ModalDeposito')      
   </div>
 @endsection

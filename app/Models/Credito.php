@@ -21,6 +21,11 @@ class Credito extends Model
         return $this->hasOne(Clientes::class, 'id_clientes','id_clientes');
     }
 
+    public function promotor()
+    {
+        return $this->belongsTo(ArqueoPromotor::class, 'asignado', 'id_promotor');
+    }
+
     public function getHistoryPagos()
     {
         return $this->hasOne(PagosFechas::class, 'ID_CREDITO','id_creditos');

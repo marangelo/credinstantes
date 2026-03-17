@@ -26,10 +26,8 @@
                     <h3>JINOTEPE - CARAZO</h3>
                     <h4><strong>DE PALI 2C. SUR 20 VRS OESTE.</strong></h4>
                     <h4>TELEF: 2533 - 6439</h4>
-                    <h4>CEL: 7553 - 2435 <br></h4>
-                    <div class="text-center">
-                        <h4><strong>Facebook: Credinstante Jinotepe <br> Instagran: Credinstante | Tik tok: Credinstante.</strong></h4>
-                    </div>  
+                    <h4>CEL: 7553 - 2435 </h4>
+                    <h4>Facebook: Credinstante Jinotepe | Instagran: Credinstante | Tik tok: Credinstante.</h4>
                 </div>
                 <table class="table table-hover">
                     <thead>
