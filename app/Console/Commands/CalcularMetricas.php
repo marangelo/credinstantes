@@ -38,7 +38,7 @@ class CalcularMetricas extends Command
         $dtNow  = date('Y-m-d');
 
         $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
-        
+
         $D2     = date('Y-m-d', strtotime($dtNow)). ' 23:59:59'; 
 
 
@@ -50,7 +50,7 @@ class CalcularMetricas extends Command
 
             $MoraAtrasada = PagosFechas::getMoraCalcHistory($Id_Zona,'atrasada',$D1, $D2);
             $MoraVencida  = PagosFechas::getMoraCalcHistory($Id_Zona,'vencida',$D1, $D2);    
-            $SaldosColocados = ReportsModels::getMetricasPromotor($Id_Zona);
+            $SaldosColocados = ReportsModels::getMetricasPromotor($Id_Zona, $D1, $D2);
 
 
             $Dias = Pagos::selectRaw('SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
