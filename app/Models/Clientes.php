@@ -63,6 +63,11 @@ class Clientes extends Model
 
         return $resultados;
     }
+
+    public static function getAllClientes(){
+        $Clientes = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->get();
+        return $Clientes;
+    }
     public static function CheckStatus($IdCred){
 
         $Estado             = 1;
