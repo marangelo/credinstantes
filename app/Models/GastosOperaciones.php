@@ -111,130 +111,176 @@ class GastosOperaciones extends Model {
             }
         }
     }
-    public static function ExportGastos(Request $request) 
+
+    public static function ExportGastos(Request $request)
     {
-        
+        $dt_ini = $request->input('dt_ini') . ' 00:00:00';
+        $dt_end = $request->input('dt_end') . ' 23:59:59';
+
+        $gastos = GastosOperaciones::select('concepto', 'fecha_gasto', 'monto')
+            ->whereBetween('fecha_gasto', [$dt_ini, $dt_end])
+            ->where('activo', 1)
+            ->orderBy('fecha_gasto', 'asc')
+            ->get();
+
         $objPHPExcel = new PHPExcel();
-        $tituloReporte = "";
-        $titulosColumnas = array();
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
-        $dt_ini    = $request->input('dt_ini').' 00:00:00';
-        $dt_end    = $request->input('dt_end').' 23:59:59';
+        $filaInicioDatos = 6;
+        $filaEncabezado = 5;
+        $filaTotal = $filaInicioDatos + $gastos->count();
 
+        $titulo = 'CREDINSTANTES GASTOS OPERATIVOS ' . strtoupper(\Carbon\Carbon::parse($dt_ini)->translatedFormat('F Y'));
 
-        $Gastos     = GastosOperaciones::WhereBetween('fecha_gasto', [$dt_ini, $dt_end])->Where('activo',1)->get();
-
-        $num_row    = $Gastos->count() + 5;
-    
-        $estiloTituloColumnas = array(
-            'font' => array(
-                        'name'  => 'Arial',
-                        'bold'  => true,
-                        'size'      => 10,
-            ),
-            'alignment' =>  array(
-                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                                'wrap'          => TRUE
-                            ),
-            'borders' => array(
-                            'top' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN,
-                        ),
-            'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,)
-            )
-        );
-                
-        $estiloInformacion = new PHPExcel_Style();
-        $estiloInformacion->applyFromArray(
-            array(
-                'borders' => array(
-                'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
-                'allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN,),
-                )
-            )
-        );
-
-
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:C3');
-        $style = array(
-            'font' => array(
-            'name'      => 'Tahoma',
-            'bold'      => true,
-            'italic'    => false,
-            'strike'    => false,
-            'size'      => 12,
-            'color'     => array('rgb' => 'FFFFFF')
-            ),
-            'fill' => array(
-                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                'color' => array('rgb' => '4472C4') 
-            ),
-            'alignment' => array(
+        // =========================
+        // ESTILOS
+        // =========================
+        $styleTitulo = [
+            'font' => [
+                'name'  => 'Tahoma',
+                'bold'  => true,
+                'size'  => 12,
+                'color' => ['rgb' => 'FFFFFF']
+            ],
+            'fill' => [
+                'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => ['rgb' => '4472C4']
+            ],
+            'alignment' => [
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
-            ),
-            'borders' => array(
-                'allborders' => array(
+                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ],
+            'borders' => [
+                'allborders' => [
                     'style' => PHPExcel_Style_Border::BORDER_THIN
-                )
-            )
-        );
-        $objPHPExcel->getActiveSheet()->getStyle('A1:C3')->applyFromArray($style);
-    
-        $color_totales = array(                   
-            'fill' => array(
-                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                'color' => array('rgb' => '92D050') 
-            )
-        );
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A1', "CREDINSTANTES GASTOS OPERATIVOS ". strtoupper(\Date::parse($dt_ini)->format('F'))) 
-        ->setCellValue('A5',  'CONCEPTO')
-        ->setCellValue('B5',  'FECHA')
-        ->setCellValue('C5',  'MONTO');
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A5:C5')->applyFromArray($color_totales);
+                ]
+            ]
+        ];
 
-        
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        
-        $objPHPExcel->getActiveSheet()->getStyle('A5:C5')->applyFromArray($estiloTituloColumnas);      
+        $styleHeader = [
+            'font' => [
+                'name' => 'Arial',
+                'bold' => true,
+                'size' => 10,
+            ],
+            'fill' => [
+                'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => ['rgb' => '92D050']
+            ],
+            'alignment' => [
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap'       => true
+            ],
+            'borders' => [
+                'allborders' => [
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                ]
+            ]
+        ];
 
-        $i=6;
-        $ttTOTAL = 0;
-        foreach ($Gastos as $g ){
-            $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A'.$i,  $g->concepto)
-            ->setCellValue('B'.$i,  $g->fecha_gasto)
-            ->setCellValue('C'.$i,  $g->monto);
-            $ttTOTAL += $g->monto;
-            $i++;
+        $styleBordes = [
+            'borders' => [
+                'allborders' => [
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                ]
+            ]
+        ];
+
+        $styleTotal = [
+            'font' => [
+                'bold' => true
+            ],
+            'fill' => [
+                'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => ['rgb' => 'D9EAD3']
+            ],
+            'borders' => [
+                'allborders' => [
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                ]
+            ]
+        ];
+
+        $formatMoneda = '_-"C$"* #,##0.00_-;_-"C$"* #,##0.00_-;_-"C$"* "-"??_-;_-@_-';
+        $formatFecha = 'dd/mm/yyyy';
+
+        // =========================
+        // TITULO
+        // =========================
+        $sheet->mergeCells('A1:C3');
+        $sheet->setCellValue('A1', $titulo);
+        $sheet->getStyle('A1:C3')->applyFromArray($styleTitulo);
+
+        // =========================
+        // ENCABEZADOS
+        // =========================
+        $sheet->setCellValue('A5', 'CONCEPTO')
+            ->setCellValue('B5', 'FECHA')
+            ->setCellValue('C5', 'MONTO');
+
+        $sheet->getStyle('A5:C5')->applyFromArray($styleHeader);
+
+        // =========================
+        // ANCHOS DE COLUMNAS
+        // =========================
+        $sheet->getColumnDimension('A')->setWidth(40);
+        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('C')->setWidth(15);
+
+        // =========================
+        // DATOS
+        // =========================
+        $fila = $filaInicioDatos;
+        foreach ($gastos as $gasto) {
+            $sheet
+                ->setCellValue("A{$fila}",  $gasto['concepto'])
+                ->setCellValue("B{$fila}",  $gasto['fecha_gasto'])
+                ->setCellValue("C{$fila}",  $gasto['monto'] ?? 0);
+            $fila++;
         }
-        
 
+        // =========================
+        // TOTAL
+        // =========================
+        $total = number_format($gastos->sum('monto'), 2, '.', ',');    
 
-        $formatCode = '_-"$"* #,##0.00_-;_-"$"* #,##0.00_-;_-"$"* "-"??_-;_-@_-';
-        $objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$i,  '')
-                ->setCellValue('B'.$i,  'TOTAL')
-                ->setCellValue('C'.$i,  number_format($ttTOTAL,2,'.',''));
-                
-        
-        $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A6:C".$num_row);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:C6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('C6:C6')->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:C'.$num_row)->getNumberFormat()->setFormatCode($formatCode);
-        $objPHPExcel->getActiveSheet()->getStyle('B6:C'.$num_row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $sheet->setCellValue("B{$filaTotal}", 'TOTAL')
+            ->setCellValue("C{$filaTotal}", $total);
 
+        $sheet->getStyle("A{$filaInicioDatos}:C{$filaTotal}")->applyFromArray($styleBordes);
+        $sheet->getStyle("B{$filaTotal}:C{$filaTotal}")->applyFromArray($styleTotal);
+
+        // =========================
+        // FORMATOS
+        // =========================
+        if ($gastos->count() > 0) {
+            $sheet->getStyle("B{$filaInicioDatos}:B" . ($filaTotal - 1))
+                ->getNumberFormat()
+                ->setFormatCode($formatFecha);
+
+            $sheet->getStyle("C{$filaInicioDatos}:C{$filaTotal}")
+                ->getNumberFormat()
+                ->setFormatCode($formatMoneda);
+
+            $sheet->getStyle("C{$filaInicioDatos}:C{$filaTotal}")
+                ->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        }
+
+        $sheet->setTitle('Gastos Operativos');
+
+        // =========================
+        // DESCARGA
+        // =========================
+        $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        $NameFile = "GastosOperativos_" . $meses[date('n')-1] . ".xlsx";
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="GastosOperativos.xlsx"');
+        header('Content-Disposition: attachment;filename="' . $NameFile . '"');
         header('Cache-Control: max-age=0');
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-        
-        
+
+        $writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $writer->save('php://output');
+        exit;
     }
 }
