@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\Request;
 
+use Auth;
+
 
 class RequestsCredit extends Model
 {
@@ -33,6 +35,16 @@ class RequestsCredit extends Model
     
         $IdZna          = $request->input('IdZna');
         $TypeForm       = $request->input('tyForm');
+
+        $UserAuth = Auth::user();
+
+        $Rol    = $UserAuth->id_rol;
+        $Zona   = $UserAuth->id_zona;
+
+        // Si el usuario es Promotor, se le asigna la zona del mismo para filtrar las solicitudes
+        if ($Rol == 2) {
+            $IdZna = $Zona;
+        }
 
         $array_prospectos   = array();
 
