@@ -40,6 +40,8 @@ class RequestsCredit extends Model
 
         $Rol    = $UserAuth->id_rol;
         $Zona   = $UserAuth->id_zona;
+        $IDUser  = $UserAuth->id;
+
 
         // Si el usuario es Promotor, se le asigna la zona del mismo para filtrar las solicitudes
         if ($Rol == 2) {
@@ -59,8 +61,15 @@ class RequestsCredit extends Model
             })
             ->when($IdZna > 0, function ($q) use ($IdZna) {
                 $q->where('id_zone', $IdZna);
-            })
-            ->get();
+            });
+            
+
+        if ($Rol == 3 || $Rol == 1) {
+            $Prospectos = $Prospectos->get();
+        }else{
+            $Prospectos = $Prospectos->where('created_by', $IDUser)->get();
+        }
+        
 
         
         
