@@ -23,8 +23,26 @@ class ControllerCatalogoClientes extends Controller
     
     public function ViewCatalogoClientes()
     {         
+        $User       = Auth::user();
+        $ZonaUser   = $User->id_zona;
+        $Rol        = $User->id_rol;
+
+        // ADMINISTRADO Y OPERACIONS
+        if (in_array($Rol, [1, 3]))  {
+            $Clientes = Clientes::whereIn('activo', [1])->get();
+
+        // PROMOTORIA
+        }else if (in_array($Rol, [4])) {
+                $Clientes = Clientes::whereIn('activo', [0])->get();
+        // OTROS ROLES
+            }else{
+                $Clientes = Clientes::whereIn('activo', [1])->where('id_zona', $ZonaUser)->get();            
+            
+        }
+
+
         $Titulo     = "Catalogo de Clientes";
-        $Clientes   = Clientes::whereIn('activo', [1])->get();
+        
         $Zonas      = Zonas::getZonas(); 
         return view('ClientesCatalogo.Table', compact('Titulo', 'Clientes','Zonas'));
     }
