@@ -49,40 +49,47 @@ class ControllerCatalogoClientes extends Controller
 
     public function FiltrarClientes(Request $request)
     {
-        $id_zona       = $request->input('id_zona');
-        
-        $Clientes   = Clientes::whereIn('activo', [1])->when($id_zona > 0, function ($query) use ($id_zona) {
-            $query->where('id_zona', $id_zona);
-        })->get();  
+        $id_zona = $request->input('id_zona');
+        $User    = Auth::user();
+        $Rol     = $User->id_rol;
+        $Show    = in_array(Session::get('rol'), [1, 3]);
 
-        $arryClientes = [];
+        $Clientes = Clientes::with('getCreditos.Estado')
+            ->when($Rol == 4, fn($q) => $q
+                ->whereDoesntHave('getCreditos', fn($q2) => $q2->whereIn('estado_credito', [1, 2, 3]))
+                ->whereHas('getCreditos', fn($q2) => $q2->where('estado_credito', 4))
+            )
+            ->when($Rol != 4, fn($q) => $q->whereIn('activo', [1]))
+            ->when($id_zona > 0, fn($q) => $q->where('id_zona', $id_zona))
+            ->get();
 
-        $Show = (in_array(Session::get('rol'), [1, 3])) ? true : false ;
+        return response()->json($Clientes->map(function ($c) use ($Show) {
+            $credito = $c->getCreditos->first();
 
-        foreach ($Clientes as $c) {
+            $estado = $credito
+                ? sprintf(
+                    '<span class="badge bg-%s">%s</span>',
+                    ['success', 'danger', 'warning', 'secondary'][$credito->estado_credito - 1] ?? 'secondary',
+                    strtoupper($credito->Estado->nombre_estado ?? '-')
+                )
+                : '<span class="badge bg-secondary">-</span>';
 
-            $Estado = '<span class="badge ' . ($c->getCreditos->count() > 0 ? 'bg-' . ['success','danger','warning',''][$c->getCreditos->first()->estado_credito - 1] : '') . ' ">
-                            ' . ($c->getCreditos->count() > 0 ? strtoupper($c->getCreditos->first()->Estado->nombre_estado) : '-') . '
-                        </span>';
-
-
-            $Acciones = '<button class="btn p-0 text-info" type="button" onClick="Editar('. $c->id_clientes .' )"><span class="text-500 fas fa-edit"></span></button>
-                        <button class="btn p-0 text-red ms-2" type="button"onClick="Remover('. $c->id_clientes.' )"><span class="text-500 fas fa-trash-alt"></span></button>';
-
-            $arryClientes[] = [
-                'id_clientes' => $c->id_clientes,
-                'nombre' => $c->nombre,
-                'apellidos' => $c->apellidos,                
-                'direccion_domicilio' => $c->direccion_domicilio,
-                'estado' =>$Estado,
-                'ciclo' => $c->getCreditos->count(),
-                'telefono' => $c->telefono,
-                'cedula' => $c->cedula,
-                'acciones' => ($Show) ? $Acciones : '' 
+            return [
+                'id_clientes'          => $c->id_clientes,
+                'nombre'               => $c->nombre,
+                'apellidos'            => $c->apellidos,
+                'direccion_domicilio'  => $c->direccion_domicilio,
+                'estado'               => $estado,
+                'ciclo'                => $c->getCreditos->count(),
+                'telefono'             => $c->telefono,
+                'cedula'               => $c->cedula,
+                'acciones'             => $Show ? sprintf(
+                    '<button class="btn p-0 text-info" onClick="Editar(%d)"><span class="text-500 fas fa-edit"></span></button>
+                     <button class="btn p-0 text-red ms-2" onClick="Remover(%d)"><span class="text-500 fas fa-trash-alt"></span></button>',
+                    $c->id_clientes, $c->id_clientes
+                ) : '',
             ];
-        }
-
-        return response()->json($arryClientes);
+        }));
     }
 
     public function FormClientes($id)
