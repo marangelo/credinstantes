@@ -33,7 +33,7 @@ class ControllerCatalogoClientes extends Controller
 
         // PROMOTORIA
         }else if (in_array($Rol, [4])) {
-                $Clientes = Clientes::whereIn('activo', [0])->get();
+                $Clientes = Clientes::getInactivos(0);  
         // OTROS ROLES
             }else{
                 $Clientes = Clientes::whereIn('activo', [1])->where('id_zona', $ZonaUser)->get();            
