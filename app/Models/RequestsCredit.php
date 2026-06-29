@@ -124,7 +124,7 @@ class RequestsCredit extends Model
         //$response = RequestsCredit::where('id_req', $IdProspecto)->delete();
 
         $response = RequestsCredit::where('id_req', $IdProspecto)->update([
-            'activo' => 0
+            'activo' => 2
         ]);
         return $response;
     }

@@ -227,6 +227,12 @@
                   </a>
                 </li>
                 @endif
+                <li class="nav-item">
+                  <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Solic. Denegadas</p>
+                  </a>
+                </li>
                 <!-- 
                 <li class="nav-item">
                   <a href="{{route('Dispensa')}}" class="nav-link {{ (request()->is('Dispensa')) ? 'active' : '' }}" >
@@ -407,7 +413,12 @@
                     <p>Historial. Pagos</p>
                   </a>
                 </li>
-                
+                <li class="nav-item">
+                  <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Solic. Denegadas</p>
+                  </a>
+                </li>
               </ul>
               <li class="nav-header">MOVIMIENTOS</li>
               <li class="nav-item menu-open">
