@@ -240,7 +240,20 @@
         
             @case(2)
             <div class="row">
-              <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-2">
+                <div class="info-box mb-3" style="background-color: #00BFFF;">
+
+                  <div class="info-box-content">
+                    <span class="info-box-text">RECUPERACION</span>
+                    <span class="info-box-number"><small>C$ </small><span id="lblCapital"></span>
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+              </div> 
+
+              <div class="col-12 col-sm-6 col-md-2">
                 <div class="info-box mb-3 bg-info">
 
                   <div class="info-box-content">
@@ -250,7 +263,7 @@
                 </div>
               </div>
 
-              <div class="col-12 col-sm-6 col-md-3">
+              <div class="col-12 col-sm-6 col-md-2">
                 <div class="info-box mb-3" style="background-color: #FFA0AB;">
                   <div class="info-box-content">
                     <span class="info-box-text">SALDO DE CARTERA</span>
