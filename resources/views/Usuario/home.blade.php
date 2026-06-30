@@ -6,7 +6,7 @@
         <div class="secure-header-inner">
             <div class="secure-brand">
                 <span class="material-symbols-outlined brand-shield">shield_lock</span>
-                <span class="brand-name">CREDIN$TANTES</span>
+                <span class="brand-name">CREDIN$TANTE</span>
             </div>
             <div class="secure-header-right">
                 <span class="header-badge">USO INTERNO</span>
@@ -23,8 +23,8 @@
                     <div class="card-icon-circle">
                         <img class="card-logo-img" src="{{ asset('img/Logo.png') }}" alt="Credin$tante">
                     </div>
-                    <h2 class="card-title">Acceso al Sistema</h2>
-                    <p class="card-subtitle">Inicie sesión con sus credenciales de acceso</p>
+                    <h2 class="card-title">CREDIN$TANTE</h2>
+                    <p class="card-subtitle">¡Creciendo con vos!</p>
 
                     <form id="frm_login" method="POST" action="{{route('login')}}" class="secure-form" autocomplete="off">
                         @csrf
