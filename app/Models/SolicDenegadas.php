@@ -11,7 +11,7 @@ class SolicDenegadas
         $dtIni = $request->input('dtIni');
         $dtEnd = $request->input('dtEnd');
 
-        $query = RequestsCredit::where('activo', 2)
+        $query = RequestsCredit::where('activo', 2)->where('Origen', 'Nueva')
             ->with('User');
 
         if ($dtIni && $dtEnd) {
@@ -52,7 +52,7 @@ class SolicDenegadas
         $dt_ini = $request->input('dt_ini');
         $dt_end = $request->input('dt_end');
 
-        $query = RequestsCredit::where('activo', 2)
+        $query = RequestsCredit::where('activo', 2)->where('Origen', 'Nueva')
             ->with('User');
 
         if ($dt_ini && $dt_end) {

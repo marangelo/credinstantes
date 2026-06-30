@@ -155,12 +155,6 @@ Route::post('RemoveGasto', 'GastosOperacionesController@RemoveGasto')->name('Rem
 Route::get('ExportGastos', 'GastosOperacionesController@ExportGastos')->name('ExportGastos');
 route::post('getGasto', 'GastosOperacionesController@getGasto')->name('getGasto');
 
-//RUTAS DE SOLICITUDES DENEGADAS
-Route::get('SolicDenegadas', 'SolicDenegadasController@SolicDenegadas')->name('SolicDenegadas');
-Route::post('getSolicDenegadas', 'SolicDenegadasController@getSolicDenegadas')->name('getSolicDenegadas');
-Route::get('ExportSolicDenegadas', 'SolicDenegadasController@ExportSolicDenegadas')->name('ExportSolicDenegadas');
-Route::post('ReactivarSolicDenegada', 'SolicDenegadasController@ReactivarSolicDenegada')->name('ReactivarSolicDenegada');
-
 Route::get('Payrolls', 'PayrollsController@getPayrolls')->name('Payrolls');
 Route::post('SavePayroll', 'PayrollsController@SavePayroll')->name('SavePayroll');
 Route::post('EmployeeTypePayroll', 'PayrollsController@EmployeeTypePayroll')->name('EmployeeTypePayroll');
@@ -275,6 +269,12 @@ Route::get('Bitacora', 'BitacoraController@Bitacora')->name('Bitacora');
 Route::post('getBitacora', 'BitacoraController@getBitacora')->name('getBitacora');
 Route::get('ExportarBitacora/{dtIni}/{dtEnd}/{IdZna}', 'BitacoraController@ExportarBitacora')->name('ExportarBitacora');
 Route::post('UpdateSeguro', 'BitacoraController@UpdateSeguro')->name('UpdateSeguro');
+
+//RUTAS DE SOLICITUDES DENEGADAS
+Route::get('SolicDenegadas', 'SolicDenegadasController@SolicDenegadas')->name('SolicDenegadas');
+Route::post('getSolicDenegadas', 'SolicDenegadasController@getSolicDenegadas')->name('getSolicDenegadas');
+Route::get('ExportSolicDenegadas', 'SolicDenegadasController@ExportSolicDenegadas')->name('ExportSolicDenegadas');
+Route::post('ReactivarSolicDenegada', 'SolicDenegadasController@ReactivarSolicDenegada')->name('ReactivarSolicDenegada');
 
 
 
