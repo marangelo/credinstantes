@@ -1,48 +1,104 @@
 @extends('layouts.lyt_login')
-@section('content')    
+@section('content')
 
-<div class="login-box">
-  <!-- /.login-logo -->
-  <div class="card card-outline card-success">
-    <div class="card-header text-center">
-      <div class="text-center mb-1">
-        <img class="profile-user-img img-fluid img-circle" src="{{ asset('img/Logo.png') }}" alt="User profile picture">
-      </div>
-      <a href="#" class="h1"><b>CREDIN$TANTE</b></a>
-    </div>
-    <div class="card-body">
-      <p class="login-box-msg">Ingrese sus Credenciales</p>
+<div class="secure-wrapper">
+    <header class="secure-header">
+        <div class="secure-header-inner">
+            <div class="secure-brand">
+                <span class="material-symbols-outlined brand-shield">shield_lock</span>
+                <span class="brand-name">CREDIN$TANTE</span>
+            </div>
+            <div class="secure-header-right">
+                <span class="header-badge">USO INTERNO</span>
+                <span class="material-symbols-outlined header-lang">language</span>
+            </div>
+        </div>
+    </header>
 
-      <form id="frm_login" method="POST" action="{{route('login')}}">
-      @csrf
-        <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" id="lbl_email" placeholder="Email" value="wilber@credinstantes.com">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+    <main class="secure-main">
+        <div class="secure-card-wrap">
+            <div class="secure-card">
+                <div class="card-accent"></div>
+                <div class="card-body">
+                    <div class="card-icon-circle">
+                        <img class="card-logo-img" src="{{ asset('img/Logo.png') }}" alt="Credin$tante">
+                    </div>
+                    <h2 class="card-title">CREDIN$TANTE</h2>
+                    <p class="card-subtitle">¡Creciendo con vos!</p>
+
+                    <form id="frm_login" method="POST" action="{{route('login')}}" class="secure-form" autocomplete="off">
+                        @csrf
+
+                        <div class="field-group">
+                            <label class="field-label" for="lbl_email">Correo</label>
+                            <div class="field-input-wrap">
+                                <span class="material-symbols-outlined field-icon">mail</span>
+                                <input type="email" name="email" class="field-input" id="lbl_email" placeholder="usuario@credinstante.com" value="wilber@credinstantes.com">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="lbl_pass">Contraseña</label>
+                            <div class="field-input-wrap">
+                                <span class="material-symbols-outlined field-icon">lock</span>
+                                <input type="password" name="password" class="field-input" id="lbl_pass" placeholder="••••••••" value="123456">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-acceder-secure">
+                            Acceder
+                        </button>
+
+                        <div class="card-footer-divider">
+                            <span class="divider-line"></span>
+                            <span class="version-label">{{ENV('APP_VERSION')}}</span>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" id="lbl_pass" placeholder="Contrasena" value="123456">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+
+            <div class="security-notice">
+                <span class="material-symbols-outlined notice-icon">info</span>
+                <p class="notice-text">Este es un sistema restringido. El acceso no autorizado está estrictamente prohibido.</p>
             </div>
-          </div>
         </div>
-        <div class="social-auth-links text-center mt-2 mb-3">
-          <button type="submit" class="btn btn-credi-primary btn-block text-white">Acceder</button>
+    </main>
+
+    <footer class="secure-footer">
+        <div class="secure-footer-inner">
+            <div class="footer-left">
+                <span class="footer-badge">USO INTERNO</span>
+                <span class="footer-divider"></span>
+                <p class="footer-copy">© 2024 CREDI$TANTE — Derechos Reservados </p>
+            </div>
+            <div class="footer-right">
+                <a href="#" class="footer-link">
+                    <span class="material-symbols-outlined link-icon">policy</span>
+                    Política de Seguridad
+                </a>
+                <span class="version-pill">System {{ENV('APP_VERSION')}}</span>
+            </div>
         </div>
-      </form>
-      <div class="text-center ">
-        <p class="description">{{ENV('APP_VERSION')}}</p>
-      </div>
-    </div>
-    <!-- /.card-body -->
-  </div>
-  <!-- /.card -->
+    </footer>
 </div>
+
+<script>
+    document.querySelectorAll('.field-input').forEach(input => {
+        input.addEventListener('focus', () => {
+            input.closest('.field-input-wrap').classList.add('input-focused');
+        });
+        input.addEventListener('blur', () => {
+            input.closest('.field-input-wrap').classList.remove('input-focused');
+        });
+    });
+
+    window.history.replaceState(null, null, window.location.href);
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+</script>
 
 @endsection
 
