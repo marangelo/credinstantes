@@ -128,6 +128,15 @@ class RequestsCredit extends Model
         ]);
         return $response;
     }
+    public static function UpRequest($IdProspecto)
+    {        
+        //$response = RequestsCredit::where('id_req', $IdProspecto)->delete();
+
+        $response = RequestsCredit::where('id_req', $IdProspecto)->update([
+            'activo' => 0
+        ]);
+        return $response;
+    }
 
 
 }

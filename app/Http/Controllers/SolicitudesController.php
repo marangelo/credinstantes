@@ -82,18 +82,12 @@ class SolicitudesController extends Controller
         $TypoSolicitud         = $request->input('_Origin'); 
 
         if($TypoSolicitud === "Renovacion"){
-            $response = Credito::AddCredito($request); 
-            RequestsCredit::UpdateEstadoRequest($IdProspecto);    
+            $response = Credito::AddCredito($request);    
         }else{
             $response = Credito::SaveNewCredito($request);   
-            RequestsCredit::where('id_req', $IdProspecto)->update([
-                'activo' => 2
-            ]);
         }
     
-        
-
-         
+        RequestsCredit::UpRequest($IdProspecto);  
         
         
         return response()->json([
