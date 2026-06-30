@@ -58,7 +58,9 @@ class LoginController extends Controller
 
     public function logout () {        
         auth()->logout();
-        return redirect('/');
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect('/')->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
     public function login(Request $request) {
 
@@ -100,7 +102,14 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return view('Usuario.home');
+        if (auth()->check()) {
+            return redirect($this->redirectTo());
+        }
+        return response()
+            ->view('Usuario.home')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
         
     }
 }
