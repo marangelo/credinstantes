@@ -75,7 +75,7 @@
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
-<script src="{{ asset('js/Funciones.js') }}"></script>
+<script src="{{ asset('js/Funciones.js') }}?v={{ filemtime(public_path('js/Funciones.js')) }}"></script>
 <script src="{{ asset('js/dashboard.js') }}"></script>
 <!-- Page specific script -->
 @yield('metodosjs')

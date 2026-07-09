@@ -353,8 +353,11 @@ class CredinstanteController extends Controller
     public function updatePassword(Request $request)
     {
         $response = Usuario::updatePassword($request);
-        
-        return response()->json($response);
+
+        return response()->json([
+            'success' => $response['success'],
+            'message' => $response['message'] ?? ''
+        ]);
     }
     public function getSaldoAbono($IdCredito,$opt)
     {

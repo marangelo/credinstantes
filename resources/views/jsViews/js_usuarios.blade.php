@@ -92,13 +92,15 @@
     }
 
     function Edit_form(usr) {
+
+    console.log(usr);
         $('#modal_xl_add_user').modal('show');  
         $("#txtFullName").val(usr.nombre);
         $("#txtUserName").val(usr.email);
         $("#txtPhone").val(usr.Phone);
         $("#id_estado").html(usr.id);
-        $("#txtPassWord_one").val("password-hide");
-        $("#txtPassWord_two").val("password-hide");
+        $("#txtPassWord_one").val("pwd-hide");
+        $("#txtPassWord_two").val("pwd-hide");
         $("#txtComentario").val(usr.Comment);
         $("#sclPrivi").val(usr.id_rol).change();
         $("#sclZona").val(usr.id_zona).change();

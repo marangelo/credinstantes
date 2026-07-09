@@ -114,7 +114,7 @@
 
 <!-- AdminLTE App -->
 <script src="{{ asset('js/adminlte.min.js') }}"></script>
-<script src="{{ asset('js/Funciones.js') }}"></script>
+<script src="{{ asset('js/Funciones.js') }}?v={{ filemtime(public_path('js/Funciones.js')) }}"></script>
 
 <!-- Page specific script -->
 @yield('metodosjs')

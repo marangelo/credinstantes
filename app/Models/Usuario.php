@@ -22,18 +22,23 @@ class Usuario extends Model {
         return Usuario::where('activo','S')->get();
     }
 
+    
+
     public static function SaveUsuario(Request $request) {
         if ($request->ajax()) {
             try {
+                
+                $txtPassword = $request->input('Contrasena');
+                $txtPassword = ($txtPassword != 'pwd-hide') ? $txtPassword : null ;
+
 
                 $usuario        = $request->input('Usuario');
                 $nombre         = $request->input('Nombre');
                 $Phone          = $request->input('Phone');
-                $passwprd       = Hash::make($request->input('Contrasena'));
+                $passwprd       = Hash::make($txtPassword);
                 $Estado         = $request->input('Estado');
                 $id_rol         = $request->input('Permiso');
                 $id_zona        = $request->input('Zona');
-
                 $Comment        = $request->input('Commit');
 
 
@@ -49,14 +54,22 @@ class Usuario extends Model {
                     $obj->activo        = 'S';                 
                     $response = $obj->save();
                 } else {
-                    $response =   Usuario::where('id',  $Estado)->update([
+
+                    $updateData = [
                         "email" => $usuario,
                         "Phone" => $Phone,
                         "nombre" => $nombre,
                         "Comment" => $Comment,
                         "id_rol" => $id_rol,
                         "id_zona" => $id_zona,
-                    ]);
+                    ];
+
+                    if ($txtPassword !== null) {
+                        $updateData["password"] = $passwprd;
+                    }
+
+                    $response = Usuario::where('id', $Estado)->update($updateData);
+
                 }
 
                 return response()->json($response);
@@ -91,17 +104,26 @@ class Usuario extends Model {
 
     public static function updatePassword(Request $request)
     {
-        $user = Auth::user();
-        $currentPassword = $request->input('currentPassword');
-        $newPassword = $request->input('newPassword');
-    
-        if (!Hash::check($currentPassword, $user->password)) {
-            return response()->json(['success' => false]);
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return ['success' => false, 'message' => 'Usuario no autenticado'];
+            }
+
+            $currentPassword = $request->input('currentPassword');
+            $newPassword = $request->input('newPassword');
+
+            if (!Hash::check($currentPassword, $user->password)) {
+                return ['success' => false, 'message' => 'Contraseña actual incorrecta'];
+            }
+
+            $user->password = Hash::make($newPassword);
+            $saved = $user->save();
+
+            return ['success' => $saved, 'message' => $saved ? 'Contraseña actualizada' : 'Error al guardar'];
+
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
         }
-    
-        $user->password = Hash::make($newPassword);
-        $user->save();
-    
-        return response()->json(['success' => true]);
     }
 }
