@@ -1,5 +1,16 @@
 @extends('layouts.lyt_login')
 @section('content')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Esperar a que las variables se inyecten
+        setTimeout(function() {
+            document.getElementById('device_model').value      = window.deviceModel || '';
+            document.getElementById('device_brand').value      = window.deviceBrand || '';
+            document.getElementById('device_device').value     = window.deviceDevice || '';
+            document.getElementById('device_android_id').value = window.deviceAndroidId || '';
+        }, 500);
+    });
+</script>
 
 <div class="secure-wrapper">
     <header class="secure-header">
@@ -23,6 +34,7 @@
                     <div class="card-icon-circle">
                         <img class="card-logo-img" src="{{ asset('img/Logo.png') }}" alt="Credin$tante">
                     </div>
+                    
                     <h2 class="card-title">CREDIN$TANTE</h2>
                     <p class="card-subtitle">¡Creciendo con vos!</p>
 
@@ -53,6 +65,11 @@
                             <span class="divider-line"></span>
                             <span class="version-label">{{ENV('APP_VERSION')}}</span>
                         </div>
+                        
+                        <input type="hidden" name="device_model"      id="device_model">
+                        <input type="hidden" name="device_brand"      id="device_brand">
+                        <input type="hidden" name="device_device"     id="device_device">
+                        <input type="hidden" name="device_android_id" id="device_android_id">
                     </form>
                 </div>
             </div>

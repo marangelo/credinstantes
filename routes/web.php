@@ -276,5 +276,9 @@ Route::post('getSolicDenegadas', 'SolicDenegadasController@getSolicDenegadas')->
 Route::get('ExportSolicDenegadas', 'SolicDenegadasController@ExportSolicDenegadas')->name('ExportSolicDenegadas');
 Route::post('ReactivarSolicDenegada', 'SolicDenegadasController@ReactivarSolicDenegada')->name('ReactivarSolicDenegada');
 
+//RUTAS DE REPORTE DE ACCESOS
+Route::get('LoginLog', 'LoginLogReportController@index')->name('LoginLog');
+Route::post('getLoginLog', 'LoginLogReportController@getData')->name('getLoginLog');
+Route::get('ExportLoginLog', 'LoginLogReportController@exportExcel')->name('ExportLoginLog');
 
 

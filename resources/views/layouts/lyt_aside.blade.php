@@ -169,10 +169,16 @@
             
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{route('MetricasPromotor')}}" class="nav-link {{ (request()->is('MetricasPromotor')) ? 'active' : '' }}" >
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Promotores</p>
-                    </a>
+                  <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Solic. Denegadas</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('LoginLog')}}" class="nav-link {{ (request()->is('LoginLog')) ? 'active' : '' }}" >
+                    <i class="fas fa-history nav-icon"></i>
+                    <p>Reporte Accesos</p>
+                  </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
@@ -417,6 +423,12 @@
                   <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Solic. Denegadas</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('LoginLog')}}" class="nav-link {{ (request()->is('LoginLog')) ? 'active' : '' }}" >
+                    <i class="fas fa-history nav-icon"></i>
+                    <p>Reporte Accesos</p>
                   </a>
                 </li>
               </ul>
