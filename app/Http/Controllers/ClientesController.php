@@ -18,10 +18,10 @@ class ClientesController extends Controller
         $DaysLastPayment = Clientes::getDaysLastPayment(269); 
         
 
-        if($DaysLastPayment >= 10){
-            dd('El cliente tiene más de 10 días es. Reactivacion', $DaysLastPayment);
+        if($DaysLastPayment >= 30){
+            dd('El cliente tiene más de 30 días es. Reactivacion', $DaysLastPayment);
         } else {
-            dd('El cliente tiene menos de 10 días es. Renovación', $DaysLastPayment);
+            dd('El cliente tiene menos de 30 días es. Renovación', $DaysLastPayment);
         }
 
     }

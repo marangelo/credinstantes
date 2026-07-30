@@ -169,8 +169,14 @@
             
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                  <a href="{{route('MetricasPromotor')}}" class="nav-link {{ (request()->is('MetricasPromotor')) ? 'active' : '' }}" >
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <p>Promotores</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-ban nav-icon"></i>
                     <p>Solic. Denegadas</p>
                   </a>
                 </li>
@@ -182,46 +188,46 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-clipboard-list nav-icon"></i>
                         <p>Visitar</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                   <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-money-bill-wave nav-icon"></i>
                     <p>Ingresos</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-exclamation-triangle nav-icon"></i>
                     <p>Morosidad</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos</p>
                   </a>
                 </li>
                 @if (in_array(Session::get('rol'), [1, 3]))
                 <li class="nav-item">
                   <a href="{{route('Bitacora')}}" class="nav-link {{ (request()->is('Bitacora')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-book nav-icon"></i>
                     <p>Bitacora Desembolsos</p>
                   </a>
                 </li>
                 @endif
                 <li class="nav-item">
                   <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos Prom.</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-clock nav-icon"></i>
                     <p>Prox. Vencer</p>
                   </a>
                 </li>
@@ -235,7 +241,7 @@
                 @endif
                 <li class="nav-item">
                   <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-ban nav-icon"></i>
                     <p>Solic. Denegadas</p>
                   </a>
                 </li>
@@ -378,38 +384,38 @@
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-clipboard-list nav-icon"></i>
                         <p>Visitar</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                   <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-money-bill-wave nav-icon"></i>
                     <p>Ingresos</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-exclamation-triangle nav-icon"></i>
                     <p>Morosidad</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos Prom.</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Bitacora')}}" class="nav-link {{ (request()->is('Bitacora')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-book nav-icon"></i>
                     <p>Bitacora Desembolsos</p>
                   </a>
                 </li>
@@ -421,7 +427,7 @@
                 </li>
                 <li class="nav-item">
                   <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-ban nav-icon"></i>
                     <p>Solic. Denegadas</p>
                   </a>
                 </li>

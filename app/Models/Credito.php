@@ -446,6 +446,8 @@ class Credito extends Model
 
         if ($request->ajax()) {
             try {
+                // Definir el umbral de días para determinar si es una reactivación o un re-préstamo
+                $UmbralDias = 30; 
 
                 $idInsertado        = $request->input('IdClientes');
 
@@ -514,7 +516,9 @@ class Credito extends Model
                  //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
                 //Clientes::CheckStatus($IdCredito);            
                 
-                if($DaysLastPayment >= 10){
+
+                // Determinar si es una reactivación según los días desde el último pago
+                if($DaysLastPayment >= $UmbralDias) {
 
                     ClientesReactivacion::insert([
                         'id_clientes' => $idInsertado,
@@ -526,14 +530,17 @@ class Credito extends Model
 
                 } 
 
-                if($DaysLastPayment < 10){
+                // Determinar si es un re-préstamo según los días desde el último pago
+                if($DaysLastPayment < $UmbralDias) {
+
                     Reloan::insert([
                         'loan_id'       => $IdCredito,
                         'date_reloan'   => $FechaOpen, 
                         'amount_reloan' => $Monto_,
                         'user_created'  => $Promotor_,
                         'id_clientes'   => $idInsertado
-                    ]); 
+                    ]);
+                    
                 }
 
                 $IdProspecto           = $request->input('IdProspecto_'); 

@@ -52,8 +52,7 @@ class SolicDenegadas
         $dt_ini = $request->input('dt_ini');
         $dt_end = $request->input('dt_end');
 
-        $query = RequestsCredit::where('activo', 2)->where('Origen', 'Nueva')
-            ->with('User');
+        $query = RequestsCredit::where('activo', 2)->where('Origen', 'Nueva')->with('User');
 
         if ($dt_ini && $dt_end) {
             $query->whereBetween('req_start_date', [$dt_ini . ' 00:00:00', $dt_end . ' 23:59:59']);
