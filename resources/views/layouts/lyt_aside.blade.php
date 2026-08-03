@@ -156,7 +156,7 @@
                 @endif
               </ul>
           </li>
-          @if (in_array(Session::get('rol'), [1, 5]))
+          @if (in_array(Session::get('rol'), [1]))
           <li class="nav-item">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
