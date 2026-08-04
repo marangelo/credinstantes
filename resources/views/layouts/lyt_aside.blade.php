@@ -156,7 +156,7 @@
                 @endif
               </ul>
           </li>
-          @if (in_array(Session::get('rol'), [1]))
+          @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -180,12 +180,16 @@
                     <p>Solic. Denegadas</p>
                   </a>
                 </li>
+
+                @if (in_array(Session::get('rol'), [1]))
                 <li class="nav-item">
                   <a href="{{route('LoginLog')}}" class="nav-link {{ (request()->is('LoginLog')) ? 'active' : '' }}" >
                     <i class="fas fa-history nav-icon"></i>
                     <p>Reporte Accesos</p>
                   </a>
                 </li>
+                @endif
+
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
                         <i class="fas fa-clipboard-list nav-icon"></i>
