@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use App\Models\LoginLogReport;
 use App\Models\Usuario;
 use App\Traits\CheckUserLock;
@@ -18,6 +19,9 @@ class LoginLogReportController extends Controller
             $response = $this->checkUserLock();
             if ($response) {
                 return $response;
+            }
+            if (!in_array(Session::get('rol'), [1])) {
+                return redirect('/')->with('error', 'Acceso no autorizado.');
             }
             return $next($request);
         });
