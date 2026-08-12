@@ -255,7 +255,7 @@ class ReportsModels extends Model {
         $ttPagoIntereses    = 0;
 
         // CLIENTES ARCHIVADOS
-        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+        //$ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
 
 
         $D1     = date('Y-m-01', strtotime($dt_end)). ' 00:00:00';
@@ -266,7 +266,7 @@ class ReportsModels extends Model {
         $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
         $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
 
-        $Dispensa     = Abono::Dispensa($D1, $D2);
+        $Dispensa     = Abono::Dispensa($D1, $D2, $Opt);
 
 
         if ($role == 2) {
@@ -277,7 +277,7 @@ class ReportsModels extends Model {
                                     SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                 ->whereBetween('FECHA_ABONO', [$D1, $D2])
                 ->where('activo', 1)
-                ->whereNotIn('id_clientes', $ClientesArchivados)
+                //->whereNotIn('id_clientes', $ClientesArchivados)
                 ->when($Opt > -1, function ($query) use ($Opt) {
                     $query->where('id_zona', $Opt);
                 })

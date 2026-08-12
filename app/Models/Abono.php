@@ -560,14 +560,13 @@ class Abono extends Model
             }
         }
     }
-    public static function Dispensa($D1, $D2){
-        
-        // CLIENTES ARCHIVADOS
-        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
-        
+    public static function Dispensa($D1, $D2, $Zona){
+
         $Dispensa = Abono::whereBetween('fecha_cuota_secc1', [$D1, $D2])
-        ->whereHas('credito', function ($q) use ($ClientesArchivados) {
-            $q->whereNotIn('id_clientes', $ClientesArchivados);
+        ->when($Zona > -1, function ($q) use ($Zona) {
+            $q->whereHas('credito.Clientes', function ($c) use ($Zona) {
+                $c->where('id_zona', $Zona);
+            });
         })
         ->sum('Descuento');
 

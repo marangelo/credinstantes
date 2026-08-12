@@ -35,6 +35,8 @@
 
     function CalcIndicadores(){
     
+        $("#IdCardTitle").text("Calc. Indicadores . . .");
+
         var vLabel = []
         var vData = []
 
@@ -59,7 +61,7 @@
         
         Opt      = isValue(Opt,-1,true)       
         
-        $("#IdCardTitle").text("Calculando . . . ") 
+        $("#IdCardTitle").text("Calc. Indicadores . . . ") 
 
 
         
@@ -103,7 +105,7 @@
 
             var UTIL_NETA     = numeral(isValue(dataset['UTIL_NETA'],0,true)).format('0,00.00');        
             $("#lbl_ultil_neta").text(UTIL_NETA)
-            data[0]['UTILIDAD_NETA'] = INTERESES;
+            data[0]['UTILIDAD_NETA'] = UTIL_NETA;
 
         
             var Clientes = dataset['clientes_activos'];
@@ -213,6 +215,8 @@
 
             tbMetricas(data)
         
+        }).always(function () {
+            $("#IdCardTitle").text("INDICADORES");
         });
 
         
@@ -220,12 +224,14 @@
 
     function tbMetricas(ARRAY_METRICAS) {
 
-        console.log(ARRAY_METRICAS);
+        console.log(ARRAY_METRICAS)
+
+
 
         if ( $.fn.DataTable.isDataTable('#tbl_metrias_home') ) {
-        var dataTable = $('#tbl_metrias_home').DataTable();
-        dataTable.clear().destroy();
-        $("tbl_metrias_home").empty();
+            var dataTable = $('#tbl_metrias_home').DataTable();
+            dataTable.clear().destroy();
+            $("tbl_metrias_home").empty();
         }
 
         $('#tbl_metrias_home').DataTable({

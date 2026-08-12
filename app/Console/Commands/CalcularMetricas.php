@@ -81,7 +81,7 @@ class CalcularMetricas extends Command
             //Clientes Nuevos, Reactivaciones y Represtamos
             $ClientesRenovados      = Credito::ClientesRenovados($Id_Zona,$D1, $D2);
             $ClientesNuevos         = Credito::ClientesNuevos($Id_Zona,$D1, $D2);
-            $Dispensa               = Abono::Dispensa($D1, $D2);
+            $Dispensa               = Abono::Dispensa($D1, $D2, $Id_Zona);
 
             
 
