@@ -434,13 +434,7 @@
                     <i class="fas fa-ban nav-icon"></i>
                     <p>Solic. Denegadas</p>
                   </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('LoginLog')}}" class="nav-link {{ (request()->is('LoginLog')) ? 'active' : '' }}" >
-                    <i class="fas fa-history nav-icon"></i>
-                    <p>Reporte Accesos</p>
-                  </a>
-                </li>
+                </li>                
               </ul>
               <li class="nav-header">MOVIMIENTOS</li>
               <li class="nav-item menu-open">

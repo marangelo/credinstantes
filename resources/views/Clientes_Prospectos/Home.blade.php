@@ -105,9 +105,7 @@
                   </div>
                 </div>
                 
-                <table id="tbl_ingresos" class="table table-bordered table-striped">
-                 
-                </table>
+                <table id="tbl_ingresos" class="table table-bordered table-striped"></table>
               </div>
                 <!-- /.row -->
               </div>

@@ -74,11 +74,15 @@ class Prospectos extends Model {
         
         foreach ($Prospectos as $key => $c) {
 
-            $Acciones = '<a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" ><i class="fas fa-money-check-alt"></i> </a>';
+            $Acciones = '<a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>';
 
-            if(in_array(Auth::User()->id_rol, [1,3])){
+        
+            
+            if(in_array(Auth::User()->id_rol, [1])){
                 $Acciones .='<a href="FormPospecto/' . $c->id_prospecto.' " class="btn btn-primary btn-block" ><i class="fas fa-edit"></i> </a>';            
-                $Acciones .='<a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>';
+                $Acciones .='<a href="#!"' . $c->id_prospecto.' " class="btn btn-success btn-block" onclick="ModalProspecto(' . $c->id_prospecto.')" >
+            <i class="fas fa-money-check-alt"></i> </a>';
+
             }
             
 
