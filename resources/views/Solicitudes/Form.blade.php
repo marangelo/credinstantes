@@ -39,7 +39,7 @@
                                     class="form-control datetimepicker-input"
                                     data-target="#reservationdate"
                                     id="dtApertura"
-                                    @if(in_array(Session::get('rol'), [2, 3, 4, 5]) )
+                                    @if(in_array(Session::get('rol'), [2, 4, 5]) )
                                         disabled
                                     @endif
                                     value="{{ isset($Request->req_start_date) 
@@ -59,7 +59,7 @@
                         <label>Dia de Visita</label>
                         <select class="form-control" id="slDiaVisita" 
                         
-                          @if(in_array(Session::get('rol'), [2, 3, 4, 5]) )
+                          @if(in_array(Session::get('rol'), [2, 4, 5]) )
                               disabled
                           @endif
 
