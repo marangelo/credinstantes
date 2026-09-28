@@ -282,3 +282,8 @@ Route::post('getLoginLog', 'LoginLogReportController@getData')->name('getLoginLo
 Route::get('ExportLoginLog', 'LoginLogReportController@exportExcel')->name('ExportLoginLog');
 
 
+
+//RUTAS DE MONITOREO DE ACTIVIDAD (auditoria rol 3 - solo admins id 7 y 32)
+Route::get('MonitoreoActividad', 'MonitoreoActividadController@index')->name('MonitoreoActividad');
+Route::post('getMonitoreoActividad', 'MonitoreoActividadController@getData')->name('getMonitoreoActividad');
+Route::get('ExportMonitoreoActividad', 'MonitoreoActividadController@exportExcel')->name('ExportMonitoreoActividad');

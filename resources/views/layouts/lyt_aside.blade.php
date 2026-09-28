@@ -190,6 +190,15 @@
                 </li>
                 @endif
 
+                @if (in_array(Auth::id(), [7, 32]))
+                <li class="nav-item">
+                  <a href="{{route('MonitoreoActividad')}}" class="nav-link {{ (request()->is('MonitoreoActividad')) ? 'active' : '' }}" >
+                    <i class="fas fa-desktop nav-icon"></i>
+                    <p>Monitoreo de Actividad</p>
+                  </a>
+                </li>
+                @endif
+
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
                         <i class="fas fa-clipboard-list nav-icon"></i>
