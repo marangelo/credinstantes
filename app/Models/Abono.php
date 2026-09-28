@@ -18,6 +18,19 @@ class Abono extends Model
         return $this->belongsTo(Credito::class, 'id_creditos', 'id_creditos');
     }
 
+    /**
+     * Asegura que la fecha del abono lleve la hora real de registro.
+     * Si solo llega la fecha (sin hora), le agrega la hora del servidor.
+     * La columna fecha_cuota ya es datetime; no se altera el esquema.
+     */
+    private static function conHoraRegistro($fecha)
+    {
+        if ($fecha && strlen(trim($fecha)) <= 10) {
+            return trim($fecha) . ' ' . now()->format('H:i:s');
+        }
+        return $fecha;
+    }
+
     public static function getAbonos()
     {
         return Abono::all();
@@ -145,8 +158,7 @@ class Abono extends Model
                 $intereses_total = 0;
 
                 $IdCred          = $request->input('IdCred');
-                $FechaAbono      = $request->input('FechaAbono');
-               
+                $FechaAbono      = self::conHoraRegistro($request->input('FechaAbono'));
                 $Total_          = $request->input('Total_');
                 
                 //$IdCred          = 1;
@@ -230,8 +242,6 @@ class Abono extends Model
                     "estado_credito"=>1,
                     "fecha_culmina"=>$LastDate
                 ]);
-
-               
     
 
                 return $pagos;
@@ -250,7 +260,7 @@ class Abono extends Model
         if ($request->ajax()) {
             try {
                 $IdCred         = $request->input('IdCred');
-                $FechaAbono     = $request->input('FechaAbono');
+                $FechaAbono     = self::conHoraRegistro($request->input('FechaAbono'));
                 $NumPago        = $request->input('NumPago');
                 $Descuento      = $request->input('Desc');
                 $ttAbono        = $request->input('Total_');
@@ -329,7 +339,7 @@ class Abono extends Model
         if ($request->ajax()) {
             try {
                 $IdCred         = $request->input('IdCred');
-                $FechaAbono     = $request->input('FechaAbono');
+                $FechaAbono     = self::conHoraRegistro($request->input('FechaAbono'));
                 $NumPago        = $request->input('NumPago');
                 $Descuento      = $request->input('Desc');
                 $CompletarPago  = false;
@@ -446,7 +456,7 @@ class Abono extends Model
             try {
 
                 $IdCred         = $request->input('IdCred');
-                $FechaAbono     = $request->input('FechaAbono');
+                $FechaAbono     = self::conHoraRegistro($request->input('FechaAbono'));
                 $Descuentos     = $request->input('Desc');
                 $CompletarPago  = false;
                 $Total_         = $request->input('Total_');
@@ -521,7 +531,6 @@ class Abono extends Model
                 RefAbonos::where('id_creditos', $p->ID_CREDITO)->where('numero_pago', $p->NUM_PAGO)->update( [ 
                     'Pagado'      => 1
                 ]);
-              
             }
         }
         return $Pagos;

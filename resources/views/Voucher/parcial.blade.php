@@ -47,8 +47,12 @@
                             <td class="col-md-1 text-right">{{ date('d-m-y',strtotime($Abono->fecha_cuota))}}</td>
                         </tr>
                         <tr>
-                            <td class="col-md-9"><em>HORA:</em></h4></td>
+                            <td class="col-md-9"><em>HORA IMPRESION:</em></h4></td>
                             <td class="col-md-1 text-right">{{ date('H:iA')}}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em>HORA REG.:</em></td>
+                            <td class="col-md-1 text-right">{{ (($Abono->fecha_cuota_secc2 ?? $Abono->fecha_cuota) && date('H:i:s', strtotime($Abono->fecha_cuota_secc2 ?? $Abono->fecha_cuota)) !== '00:00:00') ? date('h:i A', strtotime($Abono->fecha_cuota_secc2 ?? $Abono->fecha_cuota)) : '-' }}</td>
                         </tr>
                         <tr>
                             <td class="col-md-9"><em>NOMBRE:</em></h4></td>
