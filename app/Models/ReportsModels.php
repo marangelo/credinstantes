@@ -133,7 +133,7 @@ class ReportsModels extends Model {
     public static function CalcRecuperacion(Request $request)
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
-        $dtEnd    = $request->input('dtEnd').' 00:00:00';
+        $dtEnd    = $request->input('dtEnd').' 23:59:59';
         
         $Cobra    = Auth::id();
         $id_zona  = Auth::User()->id_zona;
