@@ -36,6 +36,11 @@ Route::get('Perfil/{id}', 'CredinstanteController@getPerfil')->name('Perfil/{id}
 
 Route::get('voucher/{id}', 'CredinstanteController@prtVoucher')->name('voucher/{id}');
 Route::get('voucherParcial/{id}', 'CredinstanteController@prtVoucherParcial')->name('voucherParcial/{id}');
+Route::get('notificacionVisita/{id}', 'CredinstanteController@prtNotificacionVisita')->name('notificacionVisita/{id}');
+Route::post('SaveNotificacionVisita', 'CredinstanteController@SaveNotificacionVisita')->name('SaveNotificacionVisita');
+Route::get('Notificaciones', 'NotificacionesController@index')->name('Notificaciones');
+Route::post('getNotificaciones', 'NotificacionesController@getNotificaciones')->name('getNotificaciones');
+Route::get('getNotificacionesCliente/{id}', 'NotificacionesController@getNotificacionesCliente')->name('getNotificacionesCliente');
 
 Route::post('SaveNewCredito', 'CredinstanteController@SaveNewCredito')->name('SaveNewCredito');
 Route::post('editClient', 'CredinstanteController@editClient')->name('editClient');

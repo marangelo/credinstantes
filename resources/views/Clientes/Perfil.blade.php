@@ -132,7 +132,12 @@
                                         <div class="col-md-12 mt-1">
                                           @if( Session::get('rol') != '4')
                                             <button type="button" class="btn btn-success btn-block btn-sm" onclick="getIdCredi({{$c->id_creditos}})"><i class="fas fa-money-bill-alt"></i> </button>
-                                          @endif    
+                                          @endif
+                                        </div>
+                                        <div class="col-md-12 mt-1">
+                                            <button type="button" class="btn btn-warning btn-block btn-sm" title="Notificación de visita" onclick="getNotificacionVisita({{$c->id_creditos}})">
+                                              <i class="fas fa-bell"></i>
+                                            </button>
                                         </div>
                                         <div class="col-md-12 mt-1">
                                           @if (in_array(Session::get('rol'), [1, 5]))
@@ -455,6 +460,77 @@
     <!-- /.modal-dialog -->
   </div>
 
+  <div class="modal fade" id="modal-notificacion-visita">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            <div class="user-block">
+              <img class="img-circle" src="{{asset('img/user.png')}}" alt="User Image">
+              <span class="username"><a href="#">{{ $perfil_cliente->nombre}} {{ $perfil_cliente->apellidos}}</a> | [NOTIFICACIÓN DE VISITA]</span>
+              <span class="description"># Cliente : <span>{{ $perfil_cliente->id_clientes}}</span> - # Credito: <span id="lbl_ntf_id_credito"> 0 </span></span>
+            </div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label>Fecha de Visita</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                  </div>
+                  <input type="date" class="form-control" id="txt_ntf_fecha">
+                </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Hora de Visita</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-clock"></i></span>
+                  </div>
+                  <input type="time" class="form-control" id="txt_ntf_hora">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label>Monto Atrasado</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                  </div>
+                  <input type="text" class="form-control" id="txt_ntf_monto" placeholder="C$ 0.00" onkeypress='return isNumberKey(event)'>
+                </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Fecha Próxima Visita</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-check"></i></span>
+                  </div>
+                  <input type="date" class="form-control" id="txt_ntf_proxima">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Comentarios <small class="text-muted">(<span id="lbl_ntf_contador">0</span>/100)</small></label>
+              <textarea class="form-control" id="txt_ntf_comentario" rows="2" maxlength="100" placeholder="Comentario corto..."></textarea>
+            </div>
+
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-warning" id="btn_print_notificacion"><i class="fas fa-print"></i> Imprimir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="modal-historico">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -476,6 +552,9 @@
             <li class="nav-item">
               <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill" href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile" aria-selected="false">HISTORICOS</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-content-below-notif-tab" data-toggle="pill" href="#custom-content-below-notif" role="tab" aria-controls="custom-content-below-notif" aria-selected="false">NOTIFICACIONES</a>
+            </li>
 
           </ul>
             <div class="tab-content" id="custom-content-below-tabContent">
@@ -488,6 +567,11 @@
               <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
                   <div class="col-12 table-responsive">   
                     <table id="tbl_pagos_realizados"  class="table table-striped " style="width:100%"></table>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="custom-content-below-notif" role="tabpanel" aria-labelledby="custom-content-below-notif-tab">
+                  <div class="col-12 table-responsive">
+                    <table id="tbl_notificaciones_cliente"  class="table table-striped " style="width:100%"></table>
                   </div>
               </div>
              

@@ -156,6 +156,12 @@
                 @endif
               </ul>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('Notificaciones') }}" class="nav-link {{ (request()->is('Notificaciones')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-bell"></i>
+              <p>Notificaciones</p>
+            </a>
+          </li>
           @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">

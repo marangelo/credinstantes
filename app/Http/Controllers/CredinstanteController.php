@@ -10,6 +10,7 @@ use App\Models\Departamentos;
 use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Abono;
+use App\Models\NotificacionVisita;
 use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\Usuario;
@@ -60,6 +61,17 @@ class CredinstanteController extends Controller
         \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago Parcial de: ". $Id);
         return view('Voucher.parcial', compact('Abono'));
         
+    }
+
+    public function SaveNotificacionVisita(Request $request)
+    {
+        return NotificacionVisita::SaveNotificacion($request);
+    }
+
+    public function prtNotificacionVisita($Id){
+        $Notificacion = NotificacionVisita::find($Id);
+        \Log::channel('log_vouchers')->info("Se imprimio la Notificacion de visita: ". $Id);
+        return view('Voucher.notificacion', compact('Notificacion'));
     }
 
     public function InfoCliente($id)

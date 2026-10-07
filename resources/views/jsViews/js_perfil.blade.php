@@ -624,6 +624,143 @@
 
     })
 
+    function getNotificacionVisita(IdCredito){
+        var ahora = moment();
+
+        $("#lbl_ntf_id_credito").html(IdCredito);
+        $("#txt_ntf_fecha").val(ahora.format('YYYY-MM-DD'));
+        $("#txt_ntf_hora").val(ahora.format('HH:mm'));
+        $("#txt_ntf_monto").val('');
+        $("#txt_ntf_proxima").val('');
+        $("#txt_ntf_comentario").val('');
+        $("#lbl_ntf_contador").html(0);
+        $('#modal-notificacion-visita').modal('show');
+    }
+
+    $("#txt_ntf_comentario").on('input', function () {
+        $("#lbl_ntf_contador").html($(this).val().length);
+    });
+
+    $("#btn_print_notificacion").click(function(){
+        var IdCredito   = $("#lbl_ntf_id_credito").text().trim();
+        var Fecha       = $("#txt_ntf_fecha").val();
+        var Hora        = $("#txt_ntf_hora").val();
+        var Monto       = numeral($("#txt_ntf_monto").val()).value();
+        var Proxima     = $("#txt_ntf_proxima").val();
+        var Comentario  = $("#txt_ntf_comentario").val();
+
+        if (!Fecha || !Hora) {
+            Swal.fire("Fecha y hora de la visita son requeridas", "", "error");
+            return;
+        }
+
+        if (!(Monto > 0)) {
+            Swal.fire("Digite el monto atrasado", "", "error");
+            return;
+        }
+
+        if (Proxima && moment(Proxima).isBefore(moment(Fecha))) {
+            Swal.fire("La próxima visita no puede ser antes de la visita", "", "error");
+            return;
+        }
+
+        var btn = $(this);
+
+        // Bloquea el botón mientras se guarda para evitar varios registros por clicks repetidos
+        if (btn.data('guardando')) return;
+        btn.data('guardando', true).prop('disabled', true)
+           .html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+
+        // Se abre la ventana antes del AJAX para evitar el bloqueo de popups
+        var winTicket = window.open('', '_blank');
+        if (winTicket) winTicket.document.write('<p style="font-family:sans-serif">Guardando notificación...</p>');
+
+        var Datos = {
+            IdCredito       : IdCredito,
+            FechaVisita     : Fecha,
+            HoraVisita      : Hora,
+            MontoAtrasado   : Monto,
+            FechaProxima    : Proxima,
+            Comentario      : Comentario,
+            _token          : "{{ csrf_token() }}"
+        };
+
+        var MaxIntentos = 3;
+
+        function Liberar() {
+            btn.data('guardando', false).prop('disabled', false)
+               .html('<i class="fas fa-print"></i> Imprimir');
+        }
+
+        function Fallo(Mensaje, Reintentable) {
+            if (!Reintentable) {
+                if (winTicket) winTicket.close();
+                Liberar();
+                Swal.fire("Oops", Mensaje, "error");
+                return;
+            }
+
+            // El botón sigue bloqueado mientras el usuario decide, así no se generan registros nuevos
+            Swal.fire({
+                icon: 'error',
+                title: 'No se pudo guardar',
+                text: Mensaje,
+                showCancelButton: true,
+                confirmButtonText: 'Reintentar',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Guardar(1);
+                } else {
+                    if (winTicket) winTicket.close();
+                    Liberar();
+                }
+            });
+        }
+
+        function Guardar(Intento) {
+            $.ajax({
+                url: "{{ route('SaveNotificacionVisita') }}",
+                type: 'post',
+                data: Datos,
+                timeout: 15000,
+                success: function(response) {
+                    if (response.success) {
+                        $('#modal-notificacion-visita').modal('hide');
+                        Liberar();
+                        if (winTicket) {
+                            winTicket.location.href = "../notificacionVisita/" + response.id;
+                        } else {
+                            window.open("../notificacionVisita/" + response.id, '_blank');
+                        }
+                    } else {
+                        Fallo(response.message, false);
+                    }
+                },
+                error: function(xhr) {
+                    // Solo se reintentan fallas de red/timeout o errores del servidor (5xx).
+                    // El servidor devuelve la notificación existente si el registro ya se había insertado.
+                    var Reintentable = (xhr.status === 0 || xhr.status >= 500);
+
+                    if (Reintentable && Intento < MaxIntentos) {
+                        btn.html('<i class="fas fa-spinner fa-spin"></i> Reintentando (' + (Intento + 1) + '/' + MaxIntentos + ')...');
+                        setTimeout(function () { Guardar(Intento + 1); }, 1000 * Math.pow(2, Intento - 1));
+                        return;
+                    }
+
+                    var Mensaje = (xhr.status === 419)
+                        ? "La sesión expiró, recargue la página."
+                        : (xhr.responseJSON && xhr.responseJSON.message) || "No se ha podido guardar la notificación!";
+
+                    Fallo(Mensaje, Reintentable);
+                }
+            });
+        }
+
+        Guardar(1);
+    });
+
     function getIdCredi(IdCredito){
 
     
@@ -723,9 +860,60 @@
 
             initTable_modal('#tbl_lista_abonos',data[0].Abonos);
             initTable_historico('#tbl_pagos_realizados',data[0].Pagos);
-            
+
 
         });
+
+        $.get( "../getNotificacionesCliente/{{ $perfil_cliente->id_clientes }}", function( data ) {
+            initTable_notificaciones('#tbl_notificaciones_cliente', data);
+        });
+    }
+
+    function initTable_notificaciones(id,datos){
+        $(id).DataTable({
+            "data": datos,
+            "destroy": true,
+            "info": false,
+            responsive: true,
+            "bPaginate": true,
+            "searching": false,
+            "order": [
+                [0, "desc"]
+            ],
+            "lengthMenu": [
+                [5, -1],
+                [5, "Todo"]
+            ],
+            "language": {
+                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última ",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "SIN NOTIFICACIONES",
+                "search": "BUSCAR"
+            },
+            'columns':  [
+                {"title": "#","data": "Id"},
+                {"title": "CREDITO","data": "IdCredito"},
+                {"title": "FECHA VISITA","data": "FechaVisita", "render": function(data, type, row) {
+                    return `<span class="badge rounded-pill badge-soft-info ">`+ row.FechaVisita + ' ' + row.HoraVisita +`</span> `
+                }},
+                {"title": "MONTO ATRASADO","data": "Monto", "render": function(data) {
+                    return `<span class="badge rounded-pill badge-soft-info text-danger">C$  `+ numeral(data).format('0,00.00') +`</span> `
+                }},
+                {"title": "PROXIMA VISITA","data": "Proxima"},
+                {"title": "COMENTARIO","data": "Comentario"},
+                {"title": "USUARIO","data": "Usuario"},
+                {"title": "","data": "Id", "orderable": false, "render": function(data) {
+                    return `<a href="../notificacionVisita/`+ data +`" target="_blank" class="btn btn-warning btn-sm"><i class="fas fa-print"></i></a>`
+                }},
+            ],
+        });
+        $(id + "_length").hide();
     }
 
   
