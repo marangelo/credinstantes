@@ -751,21 +751,19 @@
         Guardar(1);
     });
 
-    // El comprobante se abre con un enlace real (<a target="_blank">), igual que los vouchers de abono.
-    // No se usa window.open() porque en el WebView de la app Android abre una ventana en blanco
-    // y puede descargar la página actual antes de que se envíe la petición.
+    // Se llama solo cuando el registro ya se guardó.
+    // En el WebView de la app Android se navega en la misma vista (window.open deja la ventana en blanco).
+    // En navegador se intenta otra pestaña; si el bloqueador de popups la impide, se navega en la misma.
     function MostrarComprobante(IdNotificacion) {
         var Url = "{{ url('notificacionVisita') }}/" + IdNotificacion;
+        var EsWebView = /\bwv\b/.test(navigator.userAgent);
 
-        Swal.fire({
-            icon: 'success',
-            title: 'Notificación guardada',
-            html: `<a href="` + Url + `" target="_blank" class="btn btn-warning btn-lg mt-2" onclick="Swal.close()">
-                        <i class="fas fa-print"></i> Ver comprobante
-                   </a>`,
-            showConfirmButton: false,
-            showCloseButton: true
-        });
+        if (!EsWebView) {
+            var win = window.open(Url, '_blank');
+            if (win) return;
+        }
+
+        window.location.href = Url;
     }
 
     function getIdCredi(IdCredito){
