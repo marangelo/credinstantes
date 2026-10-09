@@ -671,10 +671,6 @@
         btn.data('guardando', true).prop('disabled', true)
            .html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
 
-        // Se abre la ventana antes del AJAX para evitar el bloqueo de popups
-        var winTicket = window.open('', '_blank');
-        if (winTicket) winTicket.document.write('<p style="font-family:sans-serif">Guardando notificación...</p>');
-
         var Datos = {
             IdCredito       : IdCredito,
             FechaVisita     : Fecha,
@@ -694,7 +690,6 @@
 
         function Fallo(Mensaje, Reintentable) {
             if (!Reintentable) {
-                if (winTicket) winTicket.close();
                 Liberar();
                 Swal.fire("Oops", Mensaje, "error");
                 return;
@@ -713,7 +708,6 @@
                 if (result.isConfirmed) {
                     Guardar(1);
                 } else {
-                    if (winTicket) winTicket.close();
                     Liberar();
                 }
             });
@@ -729,11 +723,7 @@
                     if (response.success) {
                         $('#modal-notificacion-visita').modal('hide');
                         Liberar();
-                        if (winTicket) {
-                            winTicket.location.href = "../notificacionVisita/" + response.id;
-                        } else {
-                            window.open("../notificacionVisita/" + response.id, '_blank');
-                        }
+                        MostrarComprobante(response.id);
                     } else {
                         Fallo(response.message, false);
                     }
@@ -760,6 +750,23 @@
 
         Guardar(1);
     });
+
+    // El comprobante se abre con un enlace real (<a target="_blank">), igual que los vouchers de abono.
+    // No se usa window.open() porque en el WebView de la app Android abre una ventana en blanco
+    // y puede descargar la página actual antes de que se envíe la petición.
+    function MostrarComprobante(IdNotificacion) {
+        var Url = "{{ url('notificacionVisita') }}/" + IdNotificacion;
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Notificación guardada',
+            html: `<a href="` + Url + `" target="_blank" class="btn btn-warning btn-lg mt-2" onclick="Swal.close()">
+                        <i class="fas fa-print"></i> Ver comprobante
+                   </a>`,
+            showConfirmButton: false,
+            showCloseButton: true
+        });
+    }
 
     function getIdCredi(IdCredito){
 
