@@ -12,7 +12,21 @@
     vertical-align: top;
     border-top: 1px solid #ddd;
 }
+    .ntf-titulo { font-size: 22px; font-weight: bold; margin: 10px 0 2px; }
+    .ntf-numero { font-size: 16px; margin-bottom: 8px; }
+    .ntf-comentario { font-size: 20px; line-height: 1.4; padding: 6px 8px !important; }
 </style>
+
+@php
+    // Formato amigable: Sábado, 10 Oct. 2026
+    $FechaAmigable = function ($Fecha) {
+        if (is_null($Fecha)) return '-';
+        $Dias  = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        $Meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        $t = strtotime($Fecha);
+        return $Dias[date('w', $t)] . ', ' . date('j', $t) . ' ' . $Meses[date('n', $t) - 1] . '. ' . date('Y', $t);
+    };
+@endphp
 
 
 <div class="">
@@ -27,19 +41,15 @@
                     <h4><strong>DE PALI 2C. SUR 20 VRS OESTE.</strong></h4>
                     <h4>TELEF: 2533 - 6439</h4>
                     <h4>CEL: 7553 - 2435 </h4>
+                    <div class="ntf-titulo">NOTIFICACIÓN DE COBRO</div>
+                    <div class="ntf-numero">No {{ sprintf('%04d', $Notificacion->id_notificacion) }}</div>
                 </div>
                 <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>NOTIFICACION DE VISITA No {{ sprintf('%04d', $Notificacion->id_notificacion) }}</th>
-                            <th class="text-right"></th>
-                        </tr>
-                    </thead>
 
                     <tbody>
                         <tr>
                             <td class="col-md-9"><em>FECHA VISITA:</em></td>
-                            <td class="col-md-1 text-right">{{ date('d-m-y', strtotime($Notificacion->fecha_visita)) }}</td>
+                            <td class="col-md-1 text-right">{{ $FechaAmigable($Notificacion->fecha_visita) }}</td>
                         </tr>
                         <tr>
                             <td class="col-md-9"><em>HORA VISITA:</em></td>
@@ -59,11 +69,11 @@
                         </tr>
                         <tr>
                             <td class="col-md-9"><em>PROXIMA VISITA:</em></td>
-                            <td class="col-md-1 text-right">{{ is_null($Notificacion->fecha_proxima) ? '-' : date('d-m-y', strtotime($Notificacion->fecha_proxima)) }}</td>
+                            <td class="col-md-1 text-right">{{ $FechaAmigable($Notificacion->fecha_proxima) }}</td>
                         </tr>
                         @if(!empty($Notificacion->comentario))
                         <tr>
-                            <td colspan="2"><em>COMENTARIO:</em><br>{{ $Notificacion->comentario }}</td>
+                            <td colspan="2"><em>COMENTARIO:</em><div class="ntf-comentario">{{ $Notificacion->comentario }}</div></td>
                         </tr>
                         @endif
                         <tr>
