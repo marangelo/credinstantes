@@ -290,7 +290,8 @@
         var Dire_        = $("#txtDireccion").val();
 
 
-        var Monto_     = numeral($("#txtMonto").val()).format('0.00');   
+        var Monto_     = numeral($("#txtMonto").val()).format('0.00');
+        var Respaldo_  = numeral($("#txtRespaldo").val()).format('0.00');
         var Plato_     = numeral($("#txtPlazo").val()).format('0.00');   
         var Interes_   = numeral($("#txtInteres").val()).format('0.00');
         var Cuotas_    = numeral($("#txtCuotas").val()).format('0.00');
@@ -370,6 +371,7 @@
                     Tele_        : Tele_,
                     Dire_        : Dire_,
                     Monto_       : Monto_,  
+                    Respaldo_    : Respaldo_,
                     Plato_       : Plato_,  
                     Interes_     : Interes_,
                     Cuotas_      : Cuotas_,

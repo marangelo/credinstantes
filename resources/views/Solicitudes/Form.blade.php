@@ -505,7 +505,7 @@
                         
                       </div>
                     
-                    <div class="col-sm-6 col-md-4 col-xl-4">
+                    <div class="col-sm-6 col-md-2 col-xl-2">
                       <div class="form-group">
                         <label>Monto</label>
                           <div class="input-group mb-3">
@@ -513,6 +513,20 @@
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
                             <input type="text" id="txtMonto" class="form-control"  value="{{ $Request->monto ?? '0.00' }}" 
+                            data-mask data-inputmask="'alias': 'currency' "
+                            >
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-2 col-xl-2">
+                      <div class="form-group">
+                        <label>Respaldo</label>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
+                            
+                            <input type="text" id="txtRespaldo" class="form-control"  value="{{ $Request->Seguro ?? '0.00' }}"
                             data-mask data-inputmask="'alias': 'currency' "
                             >
                           </div>

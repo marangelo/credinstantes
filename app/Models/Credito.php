@@ -192,6 +192,7 @@ class Credito extends Model
 
                 $DiaSemana_         = $request->input('DiaSemana_');
                 $Monto_             = $request->input('Monto_');
+                $Respaldo_          = $request->input('Respaldo_');
                 $Plato_             = $request->input('Plato_');
                 $Interes_           = $request->input('Interes_');
                 $Total_             = $request->input('Total_');
@@ -232,22 +233,24 @@ class Credito extends Model
                 $idInsertado = Clientes::insertGetId($datos_a_insertar);
 
                 $datos_credito = [
-                    'creado_por'          => Auth::id(),
-                    'asignado'            => $Promotor,
-                    'fecha_apertura'      => date('Y-m-d',strtotime($FechaOpen)),
-                    'id_diassemana'       => $DiaSemana_,
-                    'id_clientes'         => $idInsertado,
-                    'monto_credito'       => $Monto_,
-                    'plazo'               => $Plato_,
-                    'taza_interes'        => $Interes_,
-                    'numero_cuotas'       => $Cuotas_,
-                    'total'               => $Total_,
-                    'cuota'               => $vlCuota,
-                    'interes'             => $vlInteres,
-                    'intereses_por_cuota'=>$InteresesPorCuota,
-                    'saldo'               => $Saldos_,
-                    'estado_credito'               => $Estado,
-                    'activo'            => 1
+                    'creado_por'            => Auth::id(),
+                    'asignado'              => $Promotor,
+                    'fecha_apertura'        => date('Y-m-d',strtotime($FechaOpen)),
+                    'id_diassemana'         => $DiaSemana_,
+                    'id_clientes'           => $idInsertado,
+                    'monto_credito'         => $Monto_,
+                    'plazo'                 => $Plato_,
+                    'taza_interes'          => $Interes_,
+                    'numero_cuotas'         => $Cuotas_,
+                    'total'                 => $Total_,
+                    'cuota'                 => $vlCuota,
+                    'interes'               => $vlInteres,
+                    'intereses_por_cuota'   =>$InteresesPorCuota,
+                    'saldo'                 => $Saldos_,
+                    'estado_credito'        => $Estado,
+                    'activo'                => 1,
+                    //CAMPO AGREGADO PARA GUARDAR EL RESPALDO DEL CREDITO
+                    'Seguro'                => $Respaldo_
                 ];
 
                 $IdCredito = Credito::insertGetId($datos_credito);
@@ -454,6 +457,7 @@ class Credito extends Model
                 $DiaSemana_         = $request->input('DiaSemana_');
                 $Promotor_          = $request->input('Promotor_');
                 $Monto_             = $request->input('Monto_');
+                $Respaldo_          = $request->input('Respaldo_');
                 $Plato_             = $request->input('Plato_');
                 $Interes_           = $request->input('Interes_');
                 $Total_             = $request->input('Total_');
@@ -464,6 +468,7 @@ class Credito extends Model
                 $Saldos_             = $request->input('Saldos_');
                 $InteresesPorCuota             = $request->input('InteresesPorCuota');
                 $FechaOpen             = $request->input('FechaOpen');
+                
 
 
                 $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);    
@@ -488,6 +493,8 @@ class Credito extends Model
                     'intereses_por_cuota'   =>$InteresesPorCuota,
                     'estado_credito'        => 1,
                     'activo'                => 1,
+                    //CAMPO AGREGADO PARA GUARDAR EL RESPALDO DEL CREDITO
+                    'Seguro'                => $Respaldo_
                 ];
                 
                 $IdCredito = Credito::insertGetId($datos_credito);
