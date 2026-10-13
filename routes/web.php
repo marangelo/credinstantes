@@ -105,6 +105,13 @@ Route::get('MetricasPromotor', 'CredinstanteController@MetricasPromotor')->name(
 Route::post('getMetricasPromotor', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
 Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')->name('ExportMetricasPromotor');
 
+Route::get('Ruleta', 'RuletaAdminController@ShowHome')->name('Ruleta');
+Route::post('getGirosRuleta', 'RuletaAdminController@getGirosRuleta')->name('getGirosRuleta');
+Route::get('RuletaPromociones', 'RuletaAdminController@ShowPromociones')->name('RuletaPromociones');
+Route::post('getPromocionesRuleta', 'RuletaAdminController@getPromocionesRuleta')->name('getPromocionesRuleta');
+Route::post('SavePromocionRuleta', 'RuletaAdminController@SavePromocionRuleta')->name('SavePromocionRuleta');
+Route::post('RemovePromocionRuleta', 'RuletaAdminController@RemovePromocionRuleta')->name('RemovePromocionRuleta');
+
 Route::get('RecuperacionCobro', 'ReportsController@RecuperacionCobro')->name('RecuperacionCobro');
 Route::post('CalcRecuperacion', 'ReportsController@CalcRecuperacion')->name('CalcRecuperacion');
 
