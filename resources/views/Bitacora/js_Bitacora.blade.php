@@ -183,7 +183,7 @@
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },  
                 {
-                    "title": "SEGURO",
+                    "title": "RESPALDO",
                     "data": "Seguro",
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },  

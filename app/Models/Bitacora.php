@@ -166,7 +166,7 @@ class Bitacora extends Model
             'MONTO',
             'PLAZO',
             'CUOTA',
-            'SEGURO',
+            'RESPALDO',
             'DIA DE VISITA',
             'N° DE COMPROBANTE',
             'TASA DE %',
