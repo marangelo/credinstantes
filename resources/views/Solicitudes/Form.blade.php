@@ -30,7 +30,10 @@
             <div class="card">
               <div class="card-header" style="display:none"></div>
               <div class="card-body">
-                <div class="row">                    
+                {{-- Una solicitud ya registrada solo la modifican Admin (1) y Operaciones (3) --}}
+                @php $PuedeEditar = ( $Request->id_req ?? 0 ) == 0 || in_array(Session::get('rol'), [1,3]); @endphp
+                <fieldset {{ $PuedeEditar ? '' : 'disabled' }} style="min-width:0;border:0;padding:0;margin:0">
+                <div class="row">
                     <div class="col-sm-4 col-md-4 col-xl-4">
                       <div class="form-group">
                           <label>Fecha Inicio </label>
@@ -639,7 +642,7 @@
                       </div>
                     </div>
                     <input type="hidden" name="name_id_Client" id="id_Client" value="{{ $Request->id_cliente ?? 0 }}" >
-                    @if ( ( $Request->id_req ?? 0 ) == 0  || in_array(Session::get('rol'), [1,3,5])  )
+                    @if ( $PuedeEditar )
                     <div class="col-sm-6">
                         <input type="hidden" name="IdRequest" id="IdRequest" value="{{ $Request->id_req ?? 0 }}" >
                         <div class="form-group">                            
@@ -654,7 +657,8 @@
                     @endif
 
 
-                  </div>                
+                  </div>
+                </fieldset>
               </div>
               </div>
             </div>
