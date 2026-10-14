@@ -53,9 +53,13 @@ class RuletaController extends Controller
 
     public function BuscarCliente(Request $request)
     {
-        $request->validate(['cedula' => 'required|string|max:50']);
+        // Cédula y número de crédito activo juntos: el crédito tiene que ser de esa cédula
+        $request->validate([
+            'cedula'  => 'required|string|max:50',
+            'credito' => 'required|integer|min:1',
+        ]);
 
-        list($Status, $Respuesta) = Ruleta::BuscarCliente($request->input('cedula'));
+        list($Status, $Respuesta) = Ruleta::BuscarCliente($request->input('cedula'), (int) $request->input('credito'));
 
         return response()->json($Respuesta, $Status);
     }
@@ -83,7 +87,7 @@ class RuletaController extends Controller
 
     public function Giro(Request $request)
     {
-        $request->validate(['codigo' => 'required|string|max:20']);
+        $request->validate(['codigo' => 'required|string|max:20']); // 8 dígitos (o RP-XXXXXX en giros viejos)
 
         list($Status, $Respuesta) = Ruleta::GiroPorCodigo($request->input('codigo'));
 
@@ -96,11 +100,13 @@ class RuletaController extends Controller
         $request->validate([
             'id_usuario'  => 'required|integer',
             'id_clientes' => 'required|integer',
+            'id_creditos' => 'required|integer|min:1',
         ]);
 
         list($Status, $Respuesta) = Ruleta::Girar(
             (int) $request->input('id_usuario'),
             (int) $request->input('id_clientes'),
+            (int) $request->input('id_creditos'),
             self::ROLES_PERMITIDOS
         );
 

@@ -299,16 +299,39 @@ class Ruleta
             ->select('c.id_clientes', 'c.nombre', 'c.apellidos', 'c.cedula', 'c.telefono', DB::raw('CAST(c.activo AS UNSIGNED) as activo'), 'z.nombre_zona');
     }
 
-    // Búsqueda por cédula para la app de la ruleta. Solo datos del cliente y si ya participó.
-    public static function BuscarCliente($Cedula)
+    // estado_credito (tbl_estados): 1 Al Día, 2 En Mora, 3 Vencido, 4 Inactivo.
+    // Un crédito "activo en este momento" es el que no fue anulado (activo = 1) y no está Inactivo.
+    const ESTADOS_CREDITO_ACTIVO = [1, 2, 3];
+
+    // Búsqueda para la app de la ruleta: se piden cédula y número de crédito (id_creditos) juntos,
+    // como doble verificación. El cliente tiene varios créditos a lo largo del tiempo: solo se
+    // acepta el que está activo hoy y que pertenece a esa cédula.
+    public static function BuscarCliente($Cedula, $IdCredito)
     {
-        // Si la cédula está repetida se toma el registro activo más reciente
-        $Cliente = self::QueryCliente()
-            ->whereRaw(str_replace('cedula', 'c.cedula', self::CEDULA_SQL) . ' = ?', [self::NormalizarCedula($Cedula)])
-            ->orderByRaw('c.activo DESC, c.id_clientes DESC')
+        $Credito = DB::table('tbl_creditos as cr')
+            ->join('tbl_clientes as c', 'c.id_clientes', '=', 'cr.id_clientes')
+            ->where('cr.id_creditos', $IdCredito)
+            ->where('cr.activo', 1)
+            ->select('cr.id_creditos', 'cr.id_clientes', 'cr.estado_credito', 'c.cedula')
             ->first();
 
-        return self::FichaCliente($Cliente);
+        if (!$Credito) {
+            return [404, ['CODIGO' => 'NO_ENCONTRADO', 'MENSAJE' => 'No encontramos ese número de crédito.']];
+        }
+
+        // Se compara normalizada: "001-150389-0012k" y "0011503890012K" son la misma cédula
+        if (self::NormalizarCedula($Credito->cedula) !== self::NormalizarCedula($Cedula)) {
+            return [404, ['CODIGO' => 'NO_COINCIDE', 'MENSAJE' => 'Ese número de crédito no pertenece a la cédula ingresada.']];
+        }
+
+        if (!in_array((int) $Credito->estado_credito, self::ESTADOS_CREDITO_ACTIVO, true)) {
+            return [404, [
+                'CODIGO'  => 'CREDITO_INACTIVO',
+                'MENSAJE' => 'Ese crédito ya no está activo. Pedile al cliente el número de su crédito vigente.',
+            ]];
+        }
+
+        return self::FichaCliente(self::QueryCliente()->where('c.id_clientes', $Credito->id_clientes)->first(), $Credito);
     }
 
     // Lo que necesita la pantalla de la ruleta: cliente, premios de la promoción vigente y si ya participó.
@@ -317,7 +340,8 @@ class Ruleta
         return self::FichaCliente(self::QueryCliente()->where('c.id_clientes', $IdCliente)->first());
     }
 
-    private static function FichaCliente($Cliente)
+    // $Credito: el crédito activo con el que se identificó al cliente (solo en la búsqueda).
+    private static function FichaCliente($Cliente, $Credito = null)
     {
         if (!$Cliente) {
             return [404, ['CODIGO' => 'NO_ENCONTRADO', 'MENSAJE' => 'No encontramos al cliente.']];
@@ -336,6 +360,7 @@ class Ruleta
                 'ZONA'     => $Cliente->nombre_zona,
                 'ACTIVO'   => (bool) $Cliente->activo,
             ],
+            'CREDITO'      => $Credito ? ['ID' => (int) $Credito->id_creditos, 'ESTADO' => (int) $Credito->estado_credito] : null,
             'PROMOCION'    => $Promocion ? ['ID' => $Promocion->id_promocion, 'NOMBRE' => $Promocion->nombre, 'PREMIOS' => $Premios] : null,
             'PARTICIPACION'=> $Promocion ? self::ParticipacionPrevia($Promocion->id_promocion, $Cliente->cedula) : null,
         ]];
@@ -355,11 +380,12 @@ class Ruleta
 
         $Giros = DB::table('tbl_ruleta_giros as g')
             ->join('tbl_clientes as c', 'c.id_clientes', '=', 'g.id_clientes')
+            ->leftJoin('cat_zona as z', 'z.id_zona', '=', 'c.id_zona')
             ->where('g.id_usuario', $IdUsuario)
             ->where('g.fecha', '>=', $Desde)
             ->where('g.fecha', '<', $Hasta)
             ->orderBy('g.fecha', 'desc')
-            ->select('g.codigo', 'g.tipo', 'g.monto', 'g.premio', 'g.fecha', DB::raw("TRIM(CONCAT(c.nombre, ' ', IFNULL(c.apellidos, ''))) as cliente"))
+            ->select('g.codigo', 'g.tipo', 'g.monto', 'g.premio', 'g.fecha', 'z.nombre_zona as zona', DB::raw("TRIM(CONCAT(c.nombre, ' ', IFNULL(c.apellidos, ''))) as cliente"))
             ->get();
 
         $Dinero    = $Giros->where('tipo', 'DINERO');
@@ -377,7 +403,7 @@ class Ruleta
                 'OBJETOS'   => $Giros->count() - $Dinero->count(),
             ],
             'GIROS' => $Giros->map(function ($g) {
-                return ['CODIGO' => $g->codigo, 'FECHA' => $g->fecha, 'CLIENTE' => $g->cliente] + self::PremioDeGiro($g);
+                return ['CODIGO' => $g->codigo, 'FECHA' => $g->fecha, 'CLIENTE' => $g->cliente, 'ZONA' => $g->zona ? trim($g->zona) : null] + self::PremioDeGiro($g);
             })->values(),
             'PROMOCION' => $Promocion ? [
                 'NOMBRE'  => $Promocion->nombre,
@@ -397,7 +423,7 @@ class Ruleta
             ->join('tbl_ruleta_promociones as p', 'p.id_promocion', '=', 'g.id_promocion')
             ->leftJoin('users as u', 'u.id', '=', 'g.id_usuario')
             ->where('g.codigo', strtoupper(trim((string) $Codigo)))
-            ->select('g.codigo', 'g.tipo', 'g.monto', 'g.premio', 'g.fecha', 'c.nombre', 'c.apellidos', 'c.cedula', 'u.nombre as promotor', 'p.nombre as promocion')
+            ->select('g.codigo', 'g.tipo', 'g.monto', 'g.premio', 'g.fecha', 'g.id_creditos', 'c.nombre', 'c.apellidos', 'c.cedula', 'u.nombre as promotor', 'p.nombre as promocion')
             ->first();
 
         if (!$Giro) {
@@ -411,6 +437,7 @@ class Ruleta
                 'FECHA'     => $Giro->fecha,
                 'CLIENTE'   => trim($Giro->nombre . ' ' . $Giro->apellidos),
                 'CEDULA'    => $Giro->cedula,
+                'CREDITO'   => $Giro->id_creditos ? (int) $Giro->id_creditos : null, // null en giros anteriores al cambio
                 'PROMOTOR'  => $Giro->promotor,
                 'PROMOCION' => $Giro->promocion,
             ] + self::PremioDeGiro($Giro),
@@ -419,7 +446,8 @@ class Ruleta
 
     // Giro desde la app de la ruleta. El premio lo decide el servidor, nunca la app.
     // Devuelve [codigo HTTP, respuesta]. Los rechazos de negocio van con 409 y un CODIGO.
-    public static function Girar($IdUsuario, $IdCliente, array $RolesPermitidos)
+    // $IdCredito: el crédito activo con el que el promotor identificó al cliente (cédula + crédito).
+    public static function Girar($IdUsuario, $IdCliente, $IdCredito, array $RolesPermitidos)
     {
         $Promotor = DB::table('users')
             ->where('id', $IdUsuario)
@@ -441,7 +469,19 @@ class Ruleta
             return [404, ['CODIGO' => 'CLIENTE_INVALIDO', 'MENSAJE' => 'El cliente no existe o no está activo.']];
         }
 
-        return DB::transaction(function () use ($Promotor, $Cliente) {
+        // Mismo criterio que la búsqueda: el crédito es del cliente y sigue activo en este momento
+        $Credito = DB::table('tbl_creditos')
+            ->where('id_creditos', $IdCredito)
+            ->where('id_clientes', $Cliente->id_clientes)
+            ->where('activo', 1)
+            ->whereIn('estado_credito', self::ESTADOS_CREDITO_ACTIVO)
+            ->first();
+
+        if (!$Credito) {
+            return [409, ['CODIGO' => 'CREDITO_INVALIDO', 'MENSAJE' => 'El crédito no es de este cliente o ya no está activo. Buscalo de nuevo.']];
+        }
+
+        return DB::transaction(function () use ($Promotor, $Cliente, $Credito) {
             $Ahora = Carbon::now();
             $Hoy   = $Ahora->copy()->startOfDay();
 
@@ -496,13 +536,15 @@ class Ruleta
                 return $Suerte <= 0;
             });
 
+            // Código del voucher: número entero de 8 dígitos al azar (no correlativo, para que no se adivine)
             do {
-                $Codigo = 'RP-' . strtoupper(bin2hex(random_bytes(3)));
+                $Codigo = (string) random_int(10000000, 99999999);
             } while (DB::table('tbl_ruleta_giros')->where('codigo', $Codigo)->exists());
 
             DB::table('tbl_ruleta_giros')->insert([
                 'id_promocion' => $Promocion->id_promocion,
                 'id_clientes'  => $Cliente->id_clientes,
+                'id_creditos'  => $Credito->id_creditos,
                 'id_usuario'   => $Promotor->id,
                 'id_premio'    => $Premio['ID'],
                 'id_zona'      => $Cliente->id_zona,
