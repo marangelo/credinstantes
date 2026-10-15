@@ -61,31 +61,6 @@
             var vTableArticulos = $('#tbl_ingresos').DataTable();     
             vTableArticulos.search(this.value).draw();
         });
-
-        $('#tbl_ingresos').on('click', "td", function() {
-            var dtaRow = var_tbl_ingresos.row(this).data();
-
-
-            Swal.fire({
-                title: 'Valor de Seguro',
-                text: "Ingrese el valor de la columna Seguro",
-                input: 'number',
-                showCancelButton: true,
-                confirmButtonText: 'Enviar',
-                cancelButtonText: 'Cancelar',
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var valor_seguro = result.value;
-                    var IdCredito = dtaRow.Id
-                    $.post("UpdateSeguro", {IdCredito: IdCredito, Valor: valor_seguro, _token: "{{ csrf_token() }}" }, function(response) {
-                        if (response) {
-                            InitTable();
-                        }
-                    });
-                }
-            });
-        });
     })
 
     function InitTable() {
