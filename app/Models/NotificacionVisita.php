@@ -121,7 +121,7 @@ class NotificacionVisita extends Model
                 $Notificacion->hora_visita    = $request->input('HoraVisita');
                 $Notificacion->monto_atrasado = $request->input('MontoAtrasado', 0);
                 $Notificacion->fecha_proxima  = $request->input('FechaProxima') ?: null;
-                $Notificacion->comentario     = mb_substr((string) $request->input('Comentario'), 0, 100);
+                $Notificacion->comentario     = mb_substr((string) $request->input('Comentario'), 0, 300);
                 $Notificacion->id_usuario     = Auth::id();
                 $Notificacion->save();
 

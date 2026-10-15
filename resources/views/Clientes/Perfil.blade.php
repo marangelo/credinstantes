@@ -518,8 +518,8 @@
             </div>
 
             <div class="form-group">
-              <label>Comentarios <small class="text-muted">(<span id="lbl_ntf_contador">0</span>/100)</small></label>
-              <textarea class="form-control" id="txt_ntf_comentario" rows="2" maxlength="100" placeholder="Comentario corto..."></textarea>
+              <label>Comentarios <small class="text-muted">(<span id="lbl_ntf_contador">0</span>/300)</small></label>
+              <textarea class="form-control" id="txt_ntf_comentario" rows="4" maxlength="300" placeholder="Comentario corto..."></textarea>
             </div>
 
         </div>
