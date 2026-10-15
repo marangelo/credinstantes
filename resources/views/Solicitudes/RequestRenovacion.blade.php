@@ -529,7 +529,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
-                            <input type="text" id="txtRespaldo" class="form-control" data-mask data-inputmask="'alias': 'currency' ">
+                            <input type="text" id="txtRespaldo" class="form-control" {{ Session::get('rol') == 1 ? '' : 'readonly' }} data-mask data-inputmask="'alias': 'currency' ">
                           </div>
                         </div>
                     </div>

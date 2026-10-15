@@ -52,6 +52,12 @@
             }
         });
 
+        $('#txtMonto').on('keyup touchend', function(e) {
+            if (e.type === 'touchend' || isNumberKey(e)) {
+                Calc_Respaldo();
+            }
+        });
+
         $("#btn_remove_prospecto").click(function(){
             var Idrequest = $("#IdRequest").val();
 
@@ -251,6 +257,21 @@
         $("#txtIntereses").val(vlInteres);
         $("#txtSaldos").val(Total_);
         $("#txtInteresesPorCuota").val(vlInterePorCuota);
+    }
+
+    // Respaldo sugerido según el monto: C$ 200 hasta 5,000 y C$ 50 más por cada
+    // tramo de 5,000 hasta 55,000 (C$ 700). De 55,000.01 en adelante, C$ 800.
+    function Calc_Respaldo(){
+        var Monto_    = parseFloat(numeral($("#txtMonto").val()).value()) || 0;
+        var Respaldo_ = 0;
+
+        if (Monto_ > 55000) {
+            Respaldo_ = 800;
+        } else if (Monto_ > 0) {
+            Respaldo_ = 200 + (Math.ceil(Monto_ / 5000) - 1) * 50;
+        }
+
+        $("#txtRespaldo").val(numeral(Respaldo_).format('0.00'));
     }
 
     function SaveRequest(){

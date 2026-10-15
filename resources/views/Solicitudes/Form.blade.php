@@ -529,7 +529,7 @@
                               <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             </div>
                             
-                            <input type="text" id="txtRespaldo" class="form-control"  value="{{ $Request->Seguro ?? '0.00' }}"
+                            <input type="text" id="txtRespaldo" class="form-control" {{ Session::get('rol') == 1 ? '' : 'readonly' }} value="{{ $Request->Seguro ?? '0.00' }}"
                             data-mask data-inputmask="'alias': 'currency' "
                             >
                           </div>
