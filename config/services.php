@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ruleta' => [
+        'key' => env('RULETA_API_KEY'),
+    ],
+
 ];

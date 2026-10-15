@@ -156,6 +156,28 @@
                 @endif
               </ul>
           </li>
+          @if (in_array(Session::get('rol'), [1, 5]))
+          <li class="nav-item {{ (request()->is('Ruleta*')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('Ruleta*')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-dharmachakra"></i>
+              <p>Ruleta<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('Ruleta') }}" class="nav-link {{ (request()->is('Ruleta')) ? 'active' : '' }}">
+                  <i class="fas fa-chart-pie nav-icon"></i>
+                  <p>Dashboard</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('RuletaPromociones') }}" class="nav-link {{ (request()->is('RuletaPromociones')) ? 'active' : '' }}">
+                  <i class="fas fa-tags nav-icon"></i>
+                  <p>Promociones</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
           <li class="nav-item">
             <a href="{{ route('Notificaciones') }}" class="nav-link {{ (request()->is('Notificaciones')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-bell"></i>
