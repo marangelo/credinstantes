@@ -13,6 +13,7 @@ use App\Models\ClientesGarantia;
 use App\Models\ClientesReferencias;
 use App\Models\Departamentos;
 use App\Models\ClientesFiador;
+use App\Models\UsuarioZona;
 
 class ControllerCatalogoClientes extends Controller
 {
@@ -42,8 +43,18 @@ class ControllerCatalogoClientes extends Controller
 
 
         $Titulo     = "Catalogo de Clientes";
-        
-        $Zonas      = Zonas::getZonas(); 
+
+        $Zonas      = Zonas::getZonas();
+
+        // Promotor: solo sus zonas asignadas, en la lista y en el filtro (sin zonas = ninguno)
+        $ZonasPromotor = UsuarioZona::ZonasPromotor($User);
+        if (!is_null($ZonasPromotor)) {
+            $Clientes = $Clientes->filter(function ($c) use ($ZonasPromotor) {
+                return in_array((int) $c->id_zona, $ZonasPromotor, true);
+            })->values();
+            $Zonas = $Zonas->whereIn('id_zona', $ZonasPromotor)->values();
+        }
+
         return view('ClientesCatalogo.Table', compact('Titulo', 'Clientes','Zonas'));
     }
 
@@ -54,7 +65,11 @@ class ControllerCatalogoClientes extends Controller
         $Rol     = $User->id_rol;
         $Show    = in_array(Session::get('rol'), [1, 3]);
 
+        // Promotor: aunque pida otra zona, solo recibe clientes de sus zonas asignadas
+        $ZonasPromotor = UsuarioZona::ZonasPromotor($User);
+
         $Clientes = Clientes::with('getCreditos.Estado')
+            ->when(!is_null($ZonasPromotor), fn($q) => $q->whereIn('id_zona', $ZonasPromotor))
             ->when($Rol == 4, fn($q) => $q
                 ->whereDoesntHave('getCreditos', fn($q2) => $q2->whereIn('estado_credito', [1, 2, 3]))
                 ->whereHas('getCreditos', fn($q2) => $q2->where('estado_credito', 4))
