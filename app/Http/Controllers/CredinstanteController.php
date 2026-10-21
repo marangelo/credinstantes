@@ -11,6 +11,7 @@ use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Abono;
 use App\Models\NotificacionVisita;
+use App\Models\UsuarioZona;
 use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\Usuario;
@@ -388,8 +389,14 @@ class CredinstanteController extends Controller
     public function Promotor()
     {         
         $Titulo = "Promotor";
-        
-        $Zonas  = Zonas::getZonas();  
+
+        $Zonas  = Zonas::getZonas();
+
+        // Promotor: el filtro solo muestra sus zonas asignadas
+        $ZonasPromotor = UsuarioZona::ZonasPromotor(Auth::User());
+        if (!is_null($ZonasPromotor)) {
+            $Zonas = $Zonas->whereIn('id_zona', $ZonasPromotor)->values();
+        }
         
         return view('Promotor.Home',compact('Titulo','Zonas'));
 

@@ -188,6 +188,14 @@ class Clientes extends Model
 
         $ClientesInactivos = Clientes::getInactivos($Zona);
 
+        // Promotor: solo ve clientes de sus zonas asignadas (sin zonas = ninguno)
+        $ZonasPromotor = UsuarioZona::ZonasPromotor(Auth::User());
+        if (!is_null($ZonasPromotor)) {
+            $ClientesInactivos = $ClientesInactivos->filter(function ($c) use ($ZonasPromotor) {
+                return in_array((int) $c->id_zona, $ZonasPromotor, true);
+            })->values();
+        }
+
         $ClientePromotores = ClientePromotores::get();
 
         $ArrayClientesInactivos     = [] ;

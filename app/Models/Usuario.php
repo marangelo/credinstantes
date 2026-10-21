@@ -5,6 +5,7 @@ use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class Usuario extends Model {
     protected $table = "users";
@@ -15,11 +16,14 @@ class Usuario extends Model {
     public function Zona(){
         return $this->hasOne(Zonas::class,'id_zona','id_zona');
     }
+    public function ZonasPromotor(){
+        return $this->hasMany(UsuarioZona::class,'id_usuario','id');
+    }
 
 
     public static function getUsuarios()
     {
-        return Usuario::where('activo','S')->get();
+        return Usuario::with('ZonasPromotor')->where('activo','S')->get();
     }
 
     
@@ -41,6 +45,12 @@ class Usuario extends Model {
                 $id_zona        = $request->input('Zona');
                 $Comment        = $request->input('Commit');
 
+                // Zonas del Promotor (rol 4): se guardan aparte en tbl_usuario_zonas, no cambian id_zona
+                $EsPromotor     = ($id_rol == 4);
+                $Zonas          = array_filter((array) $request->input('Zonas', []));
+
+                DB::beginTransaction();
+
 
                 if ($Estado=="0") {
                     $obj = new Usuario();   
@@ -53,6 +63,7 @@ class Usuario extends Model {
                     $obj->Comment       = $Comment;
                     $obj->activo        = 'S';                 
                     $response = $obj->save();
+                    $IdUsuario = $obj->id;
                 } else {
 
                     $updateData = [
@@ -69,12 +80,18 @@ class Usuario extends Model {
                     }
 
                     $response = Usuario::where('id', $Estado)->update($updateData);
+                    $IdUsuario = $Estado;
 
                 }
 
+                UsuarioZona::Sincronizar($IdUsuario, $EsPromotor ? $Zonas : []);
+
+                DB::commit();
+
                 return response()->json($response);
                 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
+                DB::rollBack();
                 $mensaje =  'Excepción capturada: ' . $e->getMessage() . "\n";
                 return response()->json($mensaje);
             }

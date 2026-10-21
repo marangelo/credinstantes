@@ -237,13 +237,24 @@
                           </div>
                         </div>
 
-                      
+
                       </div>
 
                       <div class="col-sm-12">
                     <div class="form-group">
                       <label>Comentarios</label>
                       <textarea class="form-control" id="txtComentario" rows="4" placeholder="Algun comentario ? ..."></textarea>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12" id="div_zonas_promotor" style="display:none">
+                    <div class="form-group">
+                      <label>Zonas del Promotor:</label>
+                      <select class="form-control select2" id="sclZonasPromotor" multiple="multiple" data-placeholder="Seleccione zonas" style="width: 100%;">
+                        @foreach ($Zonas as $z)
+                          <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
+                        @endforeach
+                      </select>
                     </div>
                   </div>
                       

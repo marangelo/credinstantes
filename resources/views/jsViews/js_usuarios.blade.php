@@ -21,6 +21,15 @@
         "buttons": ["copy", "excel", "print"]
     }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
 
+    $('#sclZonasPromotor').select2({ theme: 'bootstrap4', dropdownParent: $('#modal_xl_add_user') });
+
+    // Rol 4 = Promotor: se muestra el selector de zonas del promotor (aparte de su Zona)
+    function ToggleZonas() {
+        $("#div_zonas_promotor").toggle($("#sclPrivi").val() == 4);
+    }
+
+    $("#sclPrivi").on('change', ToggleZonas);
+
     $("#btn_form_add_user").click(function(){
         // Limpiar los campos de entrada
         $("#txtFullName").val("");
@@ -32,6 +41,8 @@
 
         // Restablecer el select a su valor predeterminado (1 en este caso)
         $("#sclPrivi").val(1);
+        $("#sclZonasPromotor").val(null).trigger('change');
+        ToggleZonas();
 
         // Llamar a la función para guardar el formulario
         $('#modal_xl_add_user').modal('show');     
@@ -104,6 +115,10 @@
         $("#txtComentario").val(usr.Comment);
         $("#sclPrivi").val(usr.id_rol).change();
         $("#sclZona").val(usr.id_zona).change();
+
+        var ZonasPromotor = (usr.zonas_promotor || []).map(function (z) { return String(z.id_zona); });
+        $("#sclZonasPromotor").val(ZonasPromotor).trigger('change');
+        ToggleZonas();
     }
 
     function Save_Form() {
@@ -117,6 +132,7 @@
         var Pass02      = $("#txtPassWord_two").val();
         var Commit      = $("#txtComentario").val();
         var Estado      = $("#id_estado").text();
+        var Zonas       = $("#sclZonasPromotor").val() || [];
 
         const Formulario = {
             Permiso     : isValue(Permiso, 'N/D', true),
@@ -127,6 +143,7 @@
             Contrasena  : isValue(Pass01, 'N/D', true),
             Estado      : isValue(Estado, 'N/D', true),
             Commit      : isValue(Commit, 'N/D', true),
+            Zonas       : (Permiso == 4) ? Zonas : [],
             _token      : "{{ csrf_token() }}" 
         };
 
@@ -152,7 +169,9 @@
                     data: Formulario,
                     async: true,
                     success: function(response) {
-                        if (response) {
+                        if (response && response.success === false) {
+                            Swal.fire("Oops", response.message, "error");
+                        } else if (response) {
                             Swal.fire({
                                 title: 'Registro procesado Correctamente ',
                                 icon: 'success',
