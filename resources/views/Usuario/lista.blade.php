@@ -247,6 +247,7 @@
                     </div>
                   </div>
 
+                  @if (in_array(Session::get('rol'), [1]))
                   <div class="col-sm-12" id="div_zonas_promotor" style="display:none">
                     <div class="form-group">
                       <label>Zonas del Promotor:</label>
@@ -257,7 +258,8 @@
                       </select>
                     </div>
                   </div>
-                      
+                  @endif
+
                     </div>
 
                   </div>

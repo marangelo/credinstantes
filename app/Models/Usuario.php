@@ -84,7 +84,10 @@ class Usuario extends Model {
 
                 }
 
-                UsuarioZona::Sincronizar($IdUsuario, $EsPromotor ? $Zonas : []);
+                // Solo el admin ve y edita las Zonas del Promotor; si guarda otro rol no se tocan
+                if (Auth::User()->id_rol == 1) {
+                    UsuarioZona::Sincronizar($IdUsuario, $EsPromotor ? $Zonas : []);
+                }
 
                 DB::commit();
 
