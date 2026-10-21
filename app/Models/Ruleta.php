@@ -305,6 +305,10 @@ class Ruleta
     // Un crédito "activo en este momento" es el que no fue anulado (activo = 1) y no está Inactivo.
     const ESTADOS_CREDITO_ACTIVO = [1, 2, 3];
 
+    // Solo un crédito Al Día puede girar la ruleta; En Mora o Vencido quedan fuera.
+    const ESTADO_AL_DIA = 1;
+    const NOMBRES_ESTADO = [1 => 'Al Día', 2 => 'En Mora', 3 => 'Vencido', 4 => 'Inactivo'];
+
     // Búsqueda para la app de la ruleta: se piden cédula y número de crédito (id_creditos) juntos,
     // como doble verificación. El cliente tiene varios créditos a lo largo del tiempo: solo se
     // acepta el que está activo hoy y que pertenece a esa cédula.
@@ -333,7 +337,18 @@ class Ruleta
             ]];
         }
 
-        return self::FichaCliente(self::QueryCliente()->where('c.id_clientes', $Credito->id_clientes)->first(), $Credito);
+        $Ficha = self::FichaCliente(self::QueryCliente()->where('c.id_clientes', $Credito->id_clientes)->first(), $Credito);
+
+        // No puede girar, pero se manda la ficha para que la app muestre al cliente con el motivo
+        if ((int) $Credito->estado_credito !== self::ESTADO_AL_DIA && $Ficha[0] === 200) {
+            $Estado = self::NOMBRES_ESTADO[(int) $Credito->estado_credito] ?? 'otro estado';
+            return [409, [
+                'CODIGO'  => 'CREDITO_NO_AL_DIA',
+                'MENSAJE' => 'El crédito está ' . $Estado . '. Solo los clientes con crédito Al Día pueden girar la ruleta.',
+            ] + $Ficha[1]];
+        }
+
+        return $Ficha;
     }
 
     // Lo que necesita la pantalla de la ruleta: cliente, premios de la promoción vigente y si ya participó.
@@ -471,7 +486,7 @@ class Ruleta
             return [404, ['CODIGO' => 'CLIENTE_INVALIDO', 'MENSAJE' => 'El cliente no existe o no está activo.']];
         }
 
-        // Mismo criterio que la búsqueda: el crédito es del cliente y sigue activo en este momento
+        // Mismo criterio que la búsqueda: el crédito es del cliente, sigue activo y está Al Día
         $Credito = DB::table('tbl_creditos')
             ->where('id_creditos', $IdCredito)
             ->where('id_clientes', $Cliente->id_clientes)
@@ -481,6 +496,15 @@ class Ruleta
 
         if (!$Credito) {
             return [409, ['CODIGO' => 'CREDITO_INVALIDO', 'MENSAJE' => 'El crédito no es de este cliente o ya no está activo. Buscalo de nuevo.']];
+        }
+
+        // Se vuelve a revisar al girar: el estado pudo cambiar después de la búsqueda
+        if ((int) $Credito->estado_credito !== self::ESTADO_AL_DIA) {
+            $Estado = self::NOMBRES_ESTADO[(int) $Credito->estado_credito] ?? 'otro estado';
+            return [409, [
+                'CODIGO'  => 'CREDITO_NO_AL_DIA',
+                'MENSAJE' => 'El crédito está ' . $Estado . '. Solo los clientes con crédito Al Día pueden girar la ruleta.',
+            ]];
         }
 
         return DB::transaction(function () use ($Promotor, $Cliente, $Credito) {
