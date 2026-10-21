@@ -86,7 +86,7 @@
                 '<option value="DINERO">Dinero</option><option value="OBJETO">Objeto</option>' +
             '</select></td>' +
             '<td><input class="form-control form-control-sm txt_premio_valor" maxlength="60"></td>' +
-            '<td><input type="number" class="form-control form-control-sm txt_premio_peso" min="1" max="1000" step="1"></td>' +
+            '<td><input type="number" class="form-control form-control-sm txt_premio_peso" min="0.0001" max="1000" step="any"></td>' +
             '<td class="text-right align-middle lbl_premio_chance"></td>' +
             '<td><button type="button" class="btn btn-sm btn-outline-danger btn_quitar_premio" title="Quitar"><i class="fas fa-times"></i></button></td>' +
         '</tr>');
@@ -102,10 +102,10 @@
     // % de probabilidad de cada premio según su peso
     function CalcularChances() {
         var filas = $('#tbl_premios_editor tbody tr');
-        var pesos = filas.map(function () { return Math.max(0, parseInt($(this).find('.txt_premio_peso').val(), 10) || 0); }).get();
+        var pesos = filas.map(function () { return Math.max(0, parseFloat($(this).find('.txt_premio_peso').val()) || 0); }).get();
         var total = pesos.reduce(function (a, b) { return a + b; }, 0);
         filas.each(function (i) {
-            $(this).find('.lbl_premio_chance').text(total > 0 ? numeral(pesos[i] / total).format('0.[0]%') : '-');
+            $(this).find('.lbl_premio_chance').text(total > 0 ? numeral(pesos[i] / total).format('0.[000]%') : '-');
         });
     }
 
@@ -147,7 +147,7 @@
                     var total = r['PREMIOS'].reduce(function (a, p) { return a + p['PESO']; }, 0);
                     var conPeso = r['PREMIOS'].some(function (p) { return p['PESO'] !== 1; });
                     var premios = r['PREMIOS'].map(function (p) {
-                        var chance = conPeso ? ' <small>(' + numeral(p['PESO'] / total).format('0.[0]%') + ')</small>' : '';
+                        var chance = conPeso ? ' <small>(' + numeral(p['PESO'] / total).format('0.[000]%') + ')</small>' : '';
                         var icono  = p['TIPO'] === 'OBJETO' ? '<i class="fas fa-gift mr-1"></i>' : '';
                         return '<span class="badge badge-light mr-1">' + icono + $('<div>').text(TextoPremio(p)).html() + chance + '</span>';
                     }).join('');

@@ -130,7 +130,7 @@
                   </thead>
                   <tbody></tbody>
                 </table>
-                <small class="form-text text-muted">El peso define qué tan seguido sale cada premio. Con todos en 1, todos tienen la misma chance. En la ruleta todas las rebanadas se ven del mismo tamaño.</small>
+                <small class="form-text text-muted">El peso define qué tan seguido sale cada premio. Con todos en 1, todos tienen la misma chance. Acepta decimales (hasta 4) para premios difíciles, ej. 0.025. En la ruleta todas las rebanadas se ven del mismo tamaño.</small>
               </div>
             </div>
             <div class="modal-footer justify-content-between">

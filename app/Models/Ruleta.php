@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 class Ruleta
 {
     // Premios de una promoción: dinero (monto) u objeto (nombre). PESO es la probabilidad
-    // relativa: con todos en 1 cada premio tiene la misma chance.
+    // relativa (hasta 4 decimales, ej. 0.025): con todos en 1 cada premio tiene la misma chance.
     public static function PremiosDe($IdPromocion)
     {
         return DB::table('tbl_ruleta_premios')
@@ -26,7 +26,7 @@ class Ruleta
                     'TIPO'   => $p->tipo,
                     'MONTO'  => $p->tipo === 'DINERO' ? (float) $p->monto : null,
                     'NOMBRE' => $p->tipo === 'OBJETO' ? $p->nombre : null,
-                    'PESO'   => (int) $p->peso,
+                    'PESO'   => (float) $p->peso,
                 ];
             })
             ->values();
@@ -218,9 +218,11 @@ class Ruleta
             $Tipo = isset($p['tipo']) ? $p['tipo'] : '';
             $Peso = isset($p['peso']) && $p['peso'] !== '' ? $p['peso'] : 1;
 
-            if (!ctype_digit((string) $Peso) || $Peso < 1 || $Peso > 1000) {
-                $Error('El peso de cada premio debe ser un número entero entre 1 y 1000.');
+            // Hasta 4 decimales para poder dar chances chicas (ej. 0.025)
+            if (!preg_match('/^(\d+(\.\d{1,4})?|\.\d{1,4})$/', (string) $Peso) || $Peso < 0.0001 || $Peso > 1000) {
+                $Error('El peso de cada premio debe ser un número entre 0.0001 y 1000, con hasta 4 decimales.');
             }
+            $Peso = round((float) $Peso, 4);
 
             if ($Tipo === 'DINERO') {
                 $Monto = isset($p['monto']) ? $p['monto'] : null;
@@ -228,14 +230,14 @@ class Ruleta
                     $Error('Los premios en dinero deben tener un monto mayor a cero.');
                 }
                 $Clave = 'D:' . round((float) $Monto, 2);
-                $Fila  = ['tipo' => 'DINERO', 'monto' => round((float) $Monto, 2), 'nombre' => null, 'peso' => (int) $Peso];
+                $Fila  = ['tipo' => 'DINERO', 'monto' => round((float) $Monto, 2), 'nombre' => null, 'peso' => $Peso];
             } elseif ($Tipo === 'OBJETO') {
                 $Nombre = trim(isset($p['nombre']) ? (string) $p['nombre'] : '');
                 if ($Nombre === '' || mb_strlen($Nombre) > 60) {
                     $Error('Los objetos deben tener un nombre de hasta 60 caracteres.');
                 }
                 $Clave = 'O:' . mb_strtoupper($Nombre);
-                $Fila  = ['tipo' => 'OBJETO', 'monto' => null, 'nombre' => $Nombre, 'peso' => (int) $Peso];
+                $Fila  = ['tipo' => 'OBJETO', 'monto' => null, 'nombre' => $Nombre, 'peso' => $Peso];
             } else {
                 $Error('Cada premio debe ser dinero u objeto.');
             }
@@ -530,9 +532,11 @@ class Ruleta
 
             // Sorteo por peso: cada premio tiene PESO / suma de pesos de probabilidad.
             // La rueda de la app dibuja todas las rebanadas iguales: el peso no cambia el dibujo.
-            $Suerte = random_int(1, $Premios->sum('PESO'));
-            $Premio = $Premios->first(function ($p) use (&$Suerte) {
-                $Suerte -= $p['PESO'];
+            // Los pesos tienen hasta 4 decimales: se pasan a enteros (x10000) para sortear con random_int.
+            $Escala = function ($p) { return (int) round($p['PESO'] * 10000); };
+            $Suerte = random_int(1, $Premios->sum($Escala));
+            $Premio = $Premios->first(function ($p) use (&$Suerte, $Escala) {
+                $Suerte -= $Escala($p);
                 return $Suerte <= 0;
             });
 
