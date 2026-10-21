@@ -17,7 +17,21 @@
                     .attr({ type: objeto ? 'text' : 'number', placeholder: objeto ? 'Ej. Gorra' : 'Ej. 100', maxlength: 60 })
                     .val('');
             })
-            .on('input', '.txt_premio_peso', CalcularChances)
+            // Peso: solo números y punto decimal. type="number" deja pasar e, +, - (y letras en Firefox)
+            .on('keydown', '.txt_premio_peso', function (e) {
+                if (e.ctrlKey || e.metaKey || e.key.length > 1) return;   // Backspace, flechas, Tab, copiar/pegar
+                if (!/^[0-9.]$/.test(e.key)) e.preventDefault();
+            })
+            .on('paste', '.txt_premio_peso', function (e) {
+                var texto = (e.originalEvent.clipboardData || window.clipboardData).getData('text');
+                if (!/^\d*\.?\d{0,4}$/.test($.trim(texto))) e.preventDefault();
+            })
+            .on('input', '.txt_premio_peso', function () {
+                // Máximo 4 decimales, igual que la validación del servidor
+                var v = $(this).val();
+                if (/\.\d{5,}$/.test(v)) $(this).val(v.replace(/(\.\d{4})\d+$/, '$1'));
+                CalcularChances();
+            })
             .on('click', '.btn_quitar_premio', function () {
                 $(this).closest('tr').remove();
                 CalcularChances();
@@ -86,7 +100,7 @@
                 '<option value="DINERO">Dinero</option><option value="OBJETO">Objeto</option>' +
             '</select></td>' +
             '<td><input class="form-control form-control-sm txt_premio_valor" maxlength="60"></td>' +
-            '<td><input type="number" class="form-control form-control-sm txt_premio_peso" min="0.0001" max="1000" step="any"></td>' +
+            '<td><input type="number" class="form-control form-control-sm txt_premio_peso" min="0.001" max="1000" step="0.001"></td>' +
             '<td class="text-right align-middle lbl_premio_chance"></td>' +
             '<td><button type="button" class="btn btn-sm btn-outline-danger btn_quitar_premio" title="Quitar"><i class="fas fa-times"></i></button></td>' +
         '</tr>');
