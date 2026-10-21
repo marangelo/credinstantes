@@ -23,6 +23,29 @@ class RuletaController extends Controller
             }
             return $next($request);
         });
+
+        // Cada llamada (salvo el login) trae el id del promotor de la sesión de la ruleta. Si lo
+        // bloquearon, lo desactivaron o le quitaron el rol en Credinstantes, se rechaza y la app
+        // cierra su sesión: no alcanza con haberlo validado al ingresar.
+        $this->middleware(function ($request, $next) {
+            if (!self::UsuarioHabilitado((int) $request->input('id_usuario'))) {
+                return response()->json([
+                    'CODIGO'  => 'USUARIO_BLOQUEADO',
+                    'MENSAJE' => 'Tu usuario ya no está habilitado para la ruleta.',
+                ], 403);
+            }
+            return $next($request);
+        })->except('Login');
+    }
+
+    // Mismo criterio que el login: activo, sin bloqueo y con un rol permitido
+    private static function UsuarioHabilitado($IdUsuario)
+    {
+        return $IdUsuario > 0 && Usuario::where('id', $IdUsuario)
+            ->where('activo', 'S')
+            ->where('Lock', 1)
+            ->whereIn('id_rol', self::ROLES_PERMITIDOS)
+            ->exists();
     }
 
     public function Login(Request $request)
@@ -49,6 +72,13 @@ class RuletaController extends Controller
             'rol'     => $user->id_rol,
             'zona'    => $user->id_zona,
         ]);
+    }
+
+    // La app lo llama en cada cambio de pantalla: el middleware del constructor ya revisó que el
+    // promotor siga habilitado; si llega acá, la sesión sigue válida.
+    public function Sesion()
+    {
+        return response()->json(['CODIGO' => 'OK']);
     }
 
     public function BuscarCliente(Request $request)

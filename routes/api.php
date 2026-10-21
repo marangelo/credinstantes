@@ -29,4 +29,5 @@ Route::post('ruleta/preparar', 'RuletaController@Preparar')->name('RuletaPrepara
 Route::post('ruleta/girar', 'RuletaController@Girar')->name('RuletaGirar');
 Route::post('ruleta/giro', 'RuletaController@Giro')->name('RuletaGiro');
 Route::post('ruleta/mis-giros', 'RuletaController@MisGiros')->name('RuletaMisGiros');
+Route::post('ruleta/sesion', 'RuletaController@Sesion')->name('RuletaSesion');
 
