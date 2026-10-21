@@ -51,7 +51,7 @@
                 <h3 class="card-title">Listado de Clientes</h3>
                 
                 <div class="card-tools">  
-                  @if (in_array(Session::get('rol'), [1, 3, 5]))
+                  @if (in_array(Session::get('rol'), [1, 2, 3, 5]))
                   <span class="badge badge-success"><span id="id_al_dia_count"></span> ACTIVOS</span>
                   <span class="badge badge-danger"><span id="id_al_mora_count"></span> MORA</span>
                   <span class="badge badge-warning"><span id="id_al_vencido_count"></span> VENCIDOS</span>
