@@ -58,6 +58,14 @@
             }
         });
 
+        // Si el usuario cambia el Respaldo a mano (ej. lo deja en 0), el cálculo
+        // automático ya no lo sobrescribe en este formulario.
+        $('#txtRespaldo').on('input change paste', function() {
+            if (!$(this).prop('readonly')) {
+                RespaldoManual = true;
+            }
+        });
+
         $("#btn_remove_prospecto").click(function(){
             var Idrequest = $("#IdRequest").val();
 
@@ -259,10 +267,20 @@
         $("#txtInteresesPorCuota").val(vlInterePorCuota);
     }
 
+    // true cuando el Respaldo se editó a mano; desde ahí se respeta ese valor
+    var RespaldoManual = false;
+
     // Respaldo sugerido según el monto: C$ 200 hasta 5,000 y C$ 50 más por cada
     // tramo de 5,000 hasta 55,000 (C$ 700). De 55,000.01 en adelante, C$ 800.
     function Calc_Respaldo(){
-        var Monto_    = parseFloat(numeral($("#txtMonto").val()).value()) || 0;
+        if (RespaldoManual) return;
+
+        // Al procesar una solicitud ya subida (IdRequest > 0), quien no puede editar el
+        // Respaldo (campo readonly, solo el admin lo edita) no debe cambiar el valor guardado.
+        var Procesando = parseInt($("#IdRequest").val()) > 0;
+        if (Procesando && $("#txtRespaldo").prop('readonly')) return;
+
+        var Monto_   = parseFloat(numeral($("#txtMonto").val()).value()) || 0;
         var Respaldo_ = 0;
 
         if (Monto_ > 55000) {
