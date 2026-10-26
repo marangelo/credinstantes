@@ -166,7 +166,7 @@
                                         </div> 
                                         
                                         <div class="col-md-12 mt-1">
-                                          @if (in_array(Session::get('rol'), [1, 5]))
+                                          @if (in_array(Session::get('rol'), [1]))
                                             <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmItem({{$c->id_creditos}})"><i class="fas fa-trash"></i> </button>
                                           @endif                                          
                                         </div>  

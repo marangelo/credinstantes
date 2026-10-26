@@ -39,7 +39,7 @@ class RedirectIfAuthenticated
                     return redirect('Promotor');
                 break;
                 case '5':
-                    return redirect('Supervisor');
+                    return redirect(RouteServiceProvider::HOME);
                 break;
     
                 default:

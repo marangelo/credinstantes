@@ -38,7 +38,7 @@ class LoginController extends Controller
             break;
 
             case '5':
-                return 'Supervisor';
+                return 'Dashboard';
             break;
 
             default:

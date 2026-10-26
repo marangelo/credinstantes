@@ -121,7 +121,8 @@
                 { "title": "FECHA SOLICITUD", "data": "FechaSolicitud" },
                 { "title": "MONTO C$.", "data": "MontoSolicitado", render: $.fn.dataTable.render.number(',', '.', 2, '') },
                 { "title": "CREADO POR.", "data": "Usuario" },
-                {"title": "ACCIÓN","data": "Id", "render": function(data, type, row) {
+                // Supervisor (5): solo consulta, sin la columna para reactivar
+                {"title": "ACCIÓN","data": "Id", "visible": {{ Session::get('rol') == 5 ? 'false' : 'true' }}, "render": function(data, type, row) {
                     return `<button class="btn btn-success btn-sm" onClick="ReactivarSolic(`+ row.Id +`)">
                         <i class="fas fa-check-circle"></i> Reactivar
                     </button>`;

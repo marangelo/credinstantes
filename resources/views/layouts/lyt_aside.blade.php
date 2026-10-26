@@ -107,7 +107,7 @@
                         <p>Inactivos</p>
                     </a>
                 </li>
-                @if (in_array(Session::get('rol'), [1]))
+                @if (in_array(Session::get('rol'), [1, 5]))
                 <li class="nav-item">
                   <a href="../ClientesNA/-1" class="nav-link {{ (request()->is('ClientesNA/*')) ? 'active' : '' }}" >
                     <i class="nav-icon fas fa-user nav-icon"></i>
@@ -169,12 +169,14 @@
                   <p>Dashboard</p>
                 </a>
               </li>
+              @if (in_array(Session::get('rol'), [1]))
               <li class="nav-item">
                 <a href="{{ route('RuletaPromociones') }}" class="nav-link {{ (request()->is('RuletaPromociones')) ? 'active' : '' }}">
                   <i class="fas fa-tags nav-icon"></i>
                   <p>Promociones</p>
                 </a>
               </li>
+              @endif
             </ul>
           </li>
           @endif
@@ -280,13 +282,7 @@
                   </a>
                 </li>
                 @endif
-                <li class="nav-item">
-                  <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
-                    <i class="fas fa-ban nav-icon"></i>
-                    <p>Solic. Denegadas</p>
-                  </a>
-                </li>
-                <!-- 
+                <!--
                 <li class="nav-item">
                   <a href="{{route('Dispensa')}}" class="nav-link {{ (request()->is('Dispensa')) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
@@ -365,7 +361,7 @@
                   <p>Cat. Clientes</p>
               </a>
           </li>
-          @if (in_array(Session::get('rol'), [1, 5]))
+          @if (in_array(Session::get('rol'), [1]))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
