@@ -156,7 +156,7 @@
                 @endif
               </ul>
           </li>
-          @if (in_array(Session::get('rol'), [1, 5]))
+          @if (in_array(Session::get('rol'), [1]))
           <li class="nav-item {{ (request()->is('Ruleta*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('Ruleta*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-dharmachakra"></i>
@@ -169,14 +169,12 @@
                   <p>Dashboard</p>
                 </a>
               </li>
-              @if (in_array(Session::get('rol'), [1]))
               <li class="nav-item">
                 <a href="{{ route('RuletaPromociones') }}" class="nav-link {{ (request()->is('RuletaPromociones')) ? 'active' : '' }}">
                   <i class="fas fa-tags nav-icon"></i>
                   <p>Promociones</p>
                 </a>
               </li>
-              @endif
             </ul>
           </li>
           @endif
@@ -236,12 +234,14 @@
                     </a>
                 </li>
 
+                @if (in_array(Session::get('rol'), [1]))
                 <li class="nav-item">
                   <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
                     <i class="fas fa-money-bill-wave nav-icon"></i>
                     <p>Ingresos</p>
                   </a>
                 </li>
+                @endif
                 <li class="nav-item">
                   <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
                     <i class="fas fa-exclamation-triangle nav-icon"></i>
