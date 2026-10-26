@@ -107,7 +107,8 @@
                             <td class="col-md-1 text-right">{{Auth::User()->Phone}}</td>
                         </tr>
                     </tbody>
-                </table>         
+                </table>
+                @include('Voucher.pie_ruleta')
                </td>
             </div>
         </div>

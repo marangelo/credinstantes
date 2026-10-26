@@ -111,6 +111,7 @@
                         </tr>
                     </tbody>
                 </table>
+                @include('Voucher.pie_ruleta')
                </td>
             </div>
         </div>
