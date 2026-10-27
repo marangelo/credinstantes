@@ -10,7 +10,10 @@
         });
 
         var userRole = $("#id_rol_user").text();
-        
+
+        // Supervisor (rol 5): puede exportar a Excel solo la lista de Clientes Inactivos
+        var ExportInactivos = {{ (($Titulo ?? '') === 'Clientes Inactivos' && in_array(Session::get('rol'), [5])) ? 'true' : 'false' }};
+
         $('#id_select_zona').change(function() {
             var selectedValue = this.value;           
             window.location.href = currentPath.slice(0, -1) + selectedValue;
@@ -33,7 +36,11 @@
                 "emptyTable": "-",
                 "search": "BUSCAR"
             },
-            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ],
+            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : (ExportInactivos ? [{
+                extend: 'excel',
+                title: 'Clientes Inactivos',
+                exportOptions: { columns: [1, 2, 3, 4, 5, 6] } // sin la columna de acciones
+            }] : [ ]),
             columnDefs: [
                 { visible: false, targets: 0 },
                 {"width": "13%","targets": [0,1,2,3,4,5,6]},
