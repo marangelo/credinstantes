@@ -345,7 +345,7 @@
             </a>
           </li>
           @endif
-          @if (in_array(Session::get('rol'), [1, 5]))
+          @if (in_array(Session::get('rol'), [1]))
           <li class="nav-item" >
             <a  href="{{route('Consolidado', ['year' => date('Y')])}}"  class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
