@@ -50,12 +50,7 @@
               <i class="fas fa-user nav-icon"></i><p>Desembolsado</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="{{ route('Notificaciones') }}" class="nav-link {{ (request()->is('Notificaciones')) ? 'active' : '' }}">
-              <i class="fas fa-bell nav-icon"></i><p>Notificaciones</p>
-            </a>
-          </li>
-          
+         
          
 
           <li class="nav-header">MOVIMIENTOS</li>
