@@ -38,6 +38,8 @@
   
   <!-- Toastr -->
   <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+  <!-- Sistema de diseño global (celular primero) -->
+  <link rel="stylesheet" href="{{ asset('css/ui.css') }}?v={{ filemtime(public_path('css/ui.css')) }}">
 
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed {{ (request()->segment(1)  == 'Perfil' || request()->segment(1)  == 'Consolidado' ) ? ' sidebar-closed sidebar-collapse ' : '' }}">
@@ -115,6 +117,7 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('js/adminlte.min.js') }}"></script>
 <script src="{{ asset('js/Funciones.js') }}?v={{ filemtime(public_path('js/Funciones.js')) }}"></script>
+<script src="{{ asset('js/ui.js') }}?v={{ filemtime(public_path('js/ui.js')) }}"></script>
 
 <!-- Page specific script -->
 @yield('metodosjs')
