@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Nóminas (Quincenal / Depreciación / Comisiones)
+   Tokens de public/css/ui.css (--ui-*).
+   ========================================================================== */
+
+/* ---------- Encabezado ---------- */
+.pr-header { display: flex; align-items: center; gap: 0.875rem; padding: 0.25rem 0; }
+.pr-header-icon { flex: none; width: 44px; height: 44px; border-radius: 50%; }
+.pr-header-text { flex: 1; min-width: 0; }
+.pr-title { margin: 0; font-size: 1.5rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+.pr-subtitle { margin: 0.125rem 0 0; font-size: 0.875rem; color: var(--ui-text-muted); }
+.pr-status { flex: none; display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; font-size: 0.8125rem; border-radius: 999px; }
+
+/* ---------- Barra: buscar + acciones (una fila, alineada) ---------- */
+.pr-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+.pr-search { position: relative; flex: 1 1 18rem; min-width: 0; }
+.pr-search > .fa-search { position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); color: var(--ui-text-muted); pointer-events: none; }
+.dark-mode .pr-search .form-control { height: 44px; padding-left: 2.5rem; }
+.pr-actions { display: flex; gap: 0.5rem; flex: none; }
+.pr-actions .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 44px; padding: 0 1rem; white-space: nowrap; }
+
+
+/* ---------- Tabla ---------- */
+.pr-table-wrap { border: 1px solid var(--ui-border); border-radius: 10px; }
+.dark-mode .pr-table { margin: 0 !important; color: var(--ui-text); border-collapse: separate; border-spacing: 0; }
+.dark-mode .pr-table thead th {
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  vertical-align: bottom;
+  color: var(--ui-text-muted);
+  background: var(--ui-surface-2);
+  border: 0 !important;
+  border-bottom: 1px solid var(--ui-border) !important;
+  white-space: nowrap;
+}
+.dark-mode .pr-table tbody td { padding: 0.625rem 0.75rem; vertical-align: middle; border-top: 1px solid var(--ui-border); }
+.dark-mode .pr-table tbody tr:hover td { background: rgba(255, 255, 255, 0.03); }
+.pr-money { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pr-col-neto { font-weight: 700; }
+.dark-mode .pr-table thead th.pr-col-neto { color: var(--ui-text); }
+.pr-muted { color: var(--ui-text-muted); }
+.pr-name { font-weight: 700; color: var(--ui-text); white-space: nowrap; }
+a.pr-name { color: var(--ui-info); }
+a.pr-name:hover { text-decoration: underline; text-underline-offset: 2px; }
+.dark-mode .pr-table tfoot td { padding: 0.75rem; font-weight: 700; background: var(--ui-surface-2); border-top: 1px solid var(--ui-border-strong); }
+
+
+/* Celular: la tabla se vuelve tarjetas (ui.css); el resumen pasa a 2 columnas */
+@media (max-width: 767.98px) {
+  .pr-title { font-size: 1.25rem; }
+  .pr-header { flex-wrap: wrap; }
+  .pr-search { flex-basis: 100%; }
+  .pr-actions { flex: 1; }
+  .pr-actions .btn { flex: 1; }
+  .pr-table-wrap { border: 0; }
+  .pr-name { white-space: normal; }
+}
+
+/* Celular: el subtotal se muestra como una tarjeta más (ui.css oculta los tfoot por defecto) */
+@media (max-width: 767.98px) {
+  .dark-mode table.ui-cards.pr-table > tfoot { display: block; }
+  .dark-mode table.ui-cards.pr-table > tfoot > tr {
+    display: block;
+    padding: 0.625rem 0.875rem;
+    background: var(--ui-surface) !important;
+    border: 1px solid var(--ui-brand);
+    border-radius: var(--ui-radius);
+  }
+  .dark-mode table.ui-cards.pr-table > tfoot > tr > td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.3rem 0 !important;
+    background: transparent;
+    border: 0 !important;
+    text-align: right;
+  }
+  .dark-mode table.ui-cards.pr-table > tfoot > tr > td:empty { display: none; }
+  .dark-mode table.ui-cards.pr-table > tfoot > tr > td + td:not(:empty) { border-top: 1px solid var(--ui-border) !important; }
+  .dark-mode table.ui-cards.pr-table > tfoot > tr > td[data-label]::before {
+    content: attr(data-label);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ui-text-muted);
+    text-align: left;
+  }
+  .dark-mode table.ui-cards.pr-table > tfoot > tr > td:first-child { display: block; font-size: 1rem; text-align: left; color: var(--ui-brand); }
+  .dark-mode table.ui-cards.pr-table > tfoot > tr > td:first-child::before { content: none; }
+}
