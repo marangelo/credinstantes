@@ -1,27 +1,35 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#lbl_cancelacion").hide();
+        // Los créditos ahora se muestran como tarjetas (Perfil.blade.php), ya no como tabla.
 
-        $("#tbl_abonos_creditos").DataTable({
-            "responsive": true,
-            "order": [[0, 'desc']],
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "excel", "print"],
-            columnDefs: [{ visible: false, targets: 1 }],
-            "drawCallback": function(settings) {
-                var api = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
-                var last = null;
+        // Selector segmentado "Tipo de pago" -> controla el select #slTipoAbono que usa la lógica
+        $('#pfTipoSeg').on('click', 'button[data-tipo]', function () {
+            var tipo = String($(this).data('tipo'));
+            if ($('#slTipoAbono').val() === tipo) return;
+            marcarTipo(tipo);
+            $('#slTipoAbono').val(tipo).trigger('change');
+        });
 
-                api.column(1, { page: 'current' }).data().each(function(group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before('<tr class="group"><td colspan="13">' + group + '</td></tr>');
-                        last = group;
-                    }
-                });
+        // El botón muestra el monto que se va a registrar (sirve de confirmación)
+        $('#txt_Total_abono').on('input keyup change', actualizarBotonPago);
+
+        // Al abrir la hoja de pago, el botón vuelve a su estado normal
+        $('#modal-lg').on('show.bs.modal', function () { liberarBotonPago(); });
+
+        // En PC: al abrir, el cursor queda en el monto (seleccionado) y Enter registra el pago.
+        // En celular no se enfoca solo, para no abrir el teclado encima de la hoja.
+        $('#modal-lg').on('shown.bs.modal', function () {
+            if (window.matchMedia && window.matchMedia('(pointer: fine)').matches) {
+                $('#txt_Total_abono').trigger('focus').trigger('select');
             }
-        }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
+        });
+        $('#txt_Total_abono, #txt_descuento').on('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                $('#btn_save_abono').trigger('click');
+            }
+        });
 
 
         $('#reservationdate').datetimepicker({
@@ -40,18 +48,16 @@
             
             var OpSelected = this.value ;
 
+            marcarTipo(OpSelected);
+
             if (OpSelected === '0' || OpSelected === '1') {
-                $("#txt_Total_abono").val(0.00);
-
-                $("#id_lbl_cuota").text("Calculando....")
-
+                // Recalcula de inmediato (antes había una espera fija de 3 s)
+                $("#txt_Total_abono").val('');
                 $("#lbl_cancel_capital").html("C$ 0.00");
                 $("#lbl_cancel_interes").html("C$ 0.00");
+                actualizarBotonPago();
 
-                setTimeout(function() {
-                    $("#id_lbl_cuota").text(" Cuota a pagar ");
-                    getIdCredi(IdC_)
-                }, 3000);
+                getIdCredi($.trim(IdC_));
             } else {
                 $("#lbl_cancelacion").hide();
             }
@@ -208,7 +214,18 @@
 
         $("#btn_save_abono").click(function(){
 
+            var btnPago = $(this);
+            // Evita registrar el mismo pago dos veces (doble toque / red lenta)
+            if (btnPago.data('guardando')) return;
+
             var Total_      = $("#txt_Total_abono").val();
+
+            if (!(numeral(Total_).value() > 0)) {
+                $("#txt_Total_abono").addClass('is-invalid').trigger('focus');
+                Swal.fire("Monto inválido", "Escriba un monto mayor que cero.", "error");
+                return;
+            }
+            $("#txt_Total_abono").removeClass('is-invalid');
             var IdCred      = $("#lbl_credito").text();
             var DateAbono   = $("#IddtApertura").val();
             // var DateAbono   = $("#lista_pagos option:selected").text(); 
@@ -238,7 +255,9 @@
             }else{
 
                 if (sldPendiene === '0.00' || opt === '0' || opt === '1') {
-                   
+
+                    bloquearBotonPago();
+
                     $.ajax({
                         url: "{{ route('SaveNewAbono')}}",
                         type: 'post',
@@ -254,25 +273,31 @@
                         async: true,
                         success: function(response) {
                             if(response){
+                                // El botón queda bloqueado: el pago ya se guardó y la página se recarga
+                                $('#modal-lg').modal('hide');
                                 Swal.fire({
-                                title: 'Correcto',
-                                icon: 'success',
-                                showCancelButton: false,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'OK'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        location.reload();
-                                    }   
-                                })
+                                    title: 'Pago registrado',
+                                    text: 'C$ ' + numeral(Total_).format('0,0.00') + ' al crédito #' + IdCred,
+                                    icon: 'success',
+                                    confirmButtonText: 'Listo',
+                                    allowOutsideClick: false
+                                }).then(function () {
+                                    location.reload();
+                                });
+                            } else {
+                                liberarBotonPago();
+                                Swal.fire("No se registró el pago", "El servidor no confirmó el pago. Revise el historial antes de intentar de nuevo.", "error");
                             }
                         },
-                        error: function(response) {
-                            Swal.fire("Oops", "No se ha podido guardar!", "error");
+                        error: function(xhr) {
+                            liberarBotonPago();
+                            var msg = (xhr.status === 419)
+                                ? "La sesión expiró. Recargue la página e intente de nuevo."
+                                : (xhr.status === 0)
+                                    ? "Sin conexión. Revise el historial antes de intentar de nuevo, por si el pago sí se guardó."
+                                    : "No se ha podido guardar el pago.";
+                            Swal.fire("No se registró el pago", msg, "error");
                         }
-                    }).done(function(data) {
-                        //location.reload();
                     });
                     
                 } else {
@@ -290,6 +315,7 @@
     function initTable_historico(id,datos){
         var tabla = $(id).DataTable({
             "data": datos,
+            "createdRow": etiquetarFila,
             "destroy": true,
             "info": false,
             responsive: true,
@@ -341,6 +367,7 @@
     function initTable_modal(id,datos){
         var tabla = $(id).DataTable({
             "data": datos,
+            "createdRow": etiquetarFila,
             "destroy": true,
             "info": false,
             responsive: true,
@@ -381,7 +408,7 @@
                 {"title": "PENDIENTE","data": "saldo_cuota", "render": function(data, type, row, meta) {
 
                     if(row.saldo_cuota > 0){
-                        return `<a href="#" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+ `,`+ row.NumPago +`)" class=""><span class="badge rounded-pill ms-3 badge-soft-info text-danger">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> </a>  `
+                        return `<a href="#" class="pf-pending-link" title="Cobrar el saldo pendiente de esta cuota" onclick="AbonoPendiente(`+row.saldo_cuota+`,`+row.id_creditos+ `,`+ row.NumPago +`); return false;">C$ `+ numeral(row.saldo_cuota).format('0,0.00')  +` · Cobrar</a>`
                     }else{
                         return `<span class="badge rounded-pill badge-soft-info ">C$  `+ numeral(row.saldo_cuota).format('0,00.00')  +`</span> `
                     }
@@ -395,32 +422,22 @@
                 }},
                 
 
-                {"title": "--------------","data": "cuota_cobrada", "render": function(data, type, row, meta) {
+                {"title": "","data": "cuota_cobrada", "orderable": false, "className": "pf-td-actions", "render": function(data, type, row, meta) {
 
                     var isPagoParcial   = numeral(isValue(row.abono_dia2,0,true)).format('000.00')
-
                     var id_voucher      = numeral(isValue(row.id_abonoscreditos,0,true)).format('0')
 
-                    var isCol = (isPagoParcial > 0)? '4' : '6';
-
-                    var isHide = (isPagoParcial > 0)? '' : 'style="display:none"';
-
-                    return `<div class="row">
-
-                        <div class="col-md-`+isCol+` col-xl-`+isCol+`  " `+isHide+`>
-                            <button type="button" class="btn btn-warning btn-block btn-sm"><a href="../voucherParcial/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i> Parcial</a></button>
-                        </div>
-
-                        <div class="col-md-`+isCol+` col-xl-`+isCol+`  ">
-                            <button type="button" class="btn btn-primary btn-block btn-sm"><a href="../voucher/`+id_voucher+`" class="text-white" target="_blank"><i class="fas fa-print"></i> Completo</a></button>
-                        </div>
-                        <div class="col-md-`+isCol+` col-xl-`+isCol+`  ">
-                            @if( Session::get('rol') == '1')        
-                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick="rmAbono(`+row.id_abonoscreditos+`)"><i class="fas fa-trash"></i> Remover</button>      
-                            @endif
-                        </div>
-                        
-                    </div>`
+                    // Enlaces reales (antes eran <a> dentro de <button>, HTML inválido y difícil de tocar)
+                    var html = '<div class="pf-row-actions">';
+                    if (isPagoParcial > 0) {
+                        html += '<a href="../voucherParcial/' + id_voucher + '" target="_blank" rel="noopener" class="pf-btn"><i class="fas fa-print" aria-hidden="true"></i> Parcial</a>';
+                    }
+                    html += '<a href="../voucher/' + id_voucher + '" target="_blank" rel="noopener" class="pf-btn"><i class="fas fa-print" aria-hidden="true"></i> Comprobante</a>';
+                    @if( Session::get('rol') == '1')
+                    html += '<button type="button" class="pf-btn pf-btn--danger" onclick="rmAbono(' + row.id_abonoscreditos + ')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Eliminar</button>';
+                    @endif
+                    html += '</div>';
+                    return html;
                 }},
 
                 ],
@@ -809,6 +826,8 @@
             txtSaldo = (parseFloat(data.Saldo_Pendiente) > 0)? data.Saldo_Pendiente : dtSaldo
 
             $("#id_mdl_saldo_pendiente").html(SaldoPe_);
+            $("#pfPendNote").prop('hidden', !(parseFloat(data.Saldo_Pendiente) > 0));
+            marcarTipo(opt);
 
             if ((parseFloat(dtSaldo) > 0) ) {
 
@@ -819,6 +838,7 @@
                 
                 
                 $("#txt_Total_abono").val(txtSaldo);
+                actualizarBotonPago();
 
                 switch (opt) {
                     case '0':
@@ -877,6 +897,7 @@
     function initTable_notificaciones(id,datos){
         $(id).DataTable({
             "data": datos,
+            "createdRow": etiquetarFila,
             "destroy": true,
             "info": false,
             responsive: true,
@@ -922,6 +943,39 @@
     }
 
   
+    // ---------- Hoja de pago: helpers ----------
+    function marcarTipo(tipo) {
+        $('#pfTipoSeg button').each(function () {
+            $(this).attr('aria-checked', String($(this).data('tipo')) === String(tipo) ? 'true' : 'false');
+        });
+    }
+
+    function actualizarBotonPago() {
+        if ($('#btn_save_abono').data('guardando')) return;
+        var monto = numeral($('#txt_Total_abono').val()).value() || 0;
+        $('#pfPayLabel').text(monto > 0 ? 'Registrar C$ ' + numeral(monto).format('0,0.00') : 'Registrar pago');
+    }
+
+    function bloquearBotonPago() {
+        $('#btn_save_abono').data('guardando', true).prop('disabled', true).attr('aria-busy', 'true');
+        $('#pfPayLabel').text('Guardando…');
+    }
+
+    function liberarBotonPago() {
+        $('#btn_save_abono').data('guardando', false).prop('disabled', false).attr('aria-busy', 'false');
+        actualizarBotonPago();
+    }
+
+    // En celular las filas de las tablas del historial se muestran como tarjetas con etiquetas
+    function etiquetarFila(row, data, dataIndex, cells) {
+        var api = this.api ? this.api() : (this.column ? this : null);
+        if (!api) return;
+        $(cells).each(function (i) {
+            var titulo = $(api.column(i).header()).text().trim();
+            if (titulo && titulo.replace(/-/g, '') !== '') $(this).attr('data-label', titulo);
+        });
+    }
+
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))

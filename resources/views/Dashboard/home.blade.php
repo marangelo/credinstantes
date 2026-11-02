@@ -3,453 +3,116 @@
 @include('jsViews.js_dashboard')
 @endsection
 @section('content')
-<div class="wrapper">
+@php
+  // Catálogo de indicadores. Los "id" son los que llena js_dashboard; no cambiarlos.
+  $kpi = [
+    'ingreso'       => ['id' => 'lblIngreso',        'label' => 'Ingreso neto',     'tone' => 'success', 'icon' => 'fa-hand-holding-usd', 'currency' => true],
+    'capital'       => ['id' => 'lblCapital',        'label' => 'Capital',          'tone' => 'success', 'icon' => 'fa-coins',            'currency' => true],
+    'recuperacion'  => ['id' => 'lblCapital',        'label' => 'Recuperación',     'tone' => 'success', 'icon' => 'fa-coins',            'currency' => true],
+    'util_bruta'    => ['id' => 'lblInteres',        'label' => 'Utilidad bruta',   'tone' => 'success', 'icon' => 'fa-chart-line',       'currency' => true],
+    'util_neta'     => ['id' => 'lbl_ultil_neta',    'label' => 'Utilidad neta',    'tone' => 'success', 'icon' => 'fa-piggy-bank',       'currency' => true],
+    'creditos'      => ['id' => 'lblClientes',       'label' => 'Créditos activos', 'tone' => 'primary', 'icon' => 'fa-users',            'currency' => false],
+    'saldo_cartera' => ['id' => 'id_saldos_cartera', 'label' => 'Saldo de cartera', 'tone' => 'primary', 'icon' => 'fa-wallet',           'currency' => true],
+    'saldo_capital' => ['id' => 'lbl_saldo_capital', 'label' => 'Saldo capital',    'tone' => 'primary', 'icon' => 'fa-university',       'currency' => true],
+    'mora_atrasada' => ['id' => 'lblMoraAtrasada',   'label' => 'Mora atrasada',    'tone' => 'warning', 'icon' => 'fa-clock',            'currency' => true],
+    'mora_vencida'  => ['id' => 'lblMoraVencida',    'label' => 'Mora vencida',     'tone' => 'danger',  'icon' => 'fa-exclamation-triangle', 'currency' => true],
+    'dispensa'      => ['id' => 'lbl_dispensa',      'label' => 'Dispensa',         'tone' => 'neutral', 'icon' => 'fa-percent',          'currency' => true],
+  ];
 
+  // Qué ve cada rol, agrupado por tema (mismo contenido que antes, ahora con jerarquía).
+  $grupos_por_rol = [
+    1 => ['Resultados' => ['ingreso', 'capital', 'util_bruta', 'util_neta'],
+          'Cartera'    => ['creditos', 'saldo_cartera', 'saldo_capital'],
+          'Riesgo'     => ['mora_atrasada', 'mora_vencida', 'dispensa']],
+    2 => ['Cobranza'   => ['recuperacion'],
+          'Cartera'    => ['creditos', 'saldo_cartera'],
+          'Riesgo'     => ['mora_atrasada', 'mora_vencida']],
+    3 => ['Resultados' => ['ingreso'],
+          'Cartera'    => ['creditos', 'saldo_cartera'],
+          'Riesgo'     => ['mora_atrasada', 'mora_vencida']],
+    5 => ['Resultados' => ['ingreso'],
+          'Cartera'    => ['creditos', 'saldo_cartera'],
+          'Riesgo'     => ['mora_atrasada', 'mora_vencida', 'dispensa']],
+  ];
+  $grupos = $grupos_por_rol[(int) Session::get('rol')] ?? [];
+@endphp
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0" id="IdCardTitle">INDICADORES</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">INDICADORES</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v={{ filemtime(public_path('css/dashboard.css')) }}">
+
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid dash">
+
+      <header class="dash-header">
+        <div>
+          <h1 class="dash-title" id="IdCardTitle">Indicadores</h1>
+          <p class="dash-subtitle">Resumen de la cartera al corte seleccionado</p>
+        </div>
+      </header>
+
+      @if (in_array(Session::get('rol'), [1, 2, 3, 5]))
+      <form class="dash-filters" id="dashFilters" role="search" aria-label="Filtros de indicadores" onsubmit="return false;">
+        <div class="form-group">
+          <label for="IdFilterByZone">Zona</label>
+          <select class="form-control" id="IdFilterByZone" name="IdZona">
+            <option value="-1" selected>Todas las zonas</option>
+            @foreach ($Zonas as $z)
+              <option value="{{ $z->id_zona }}">{{ strtoupper($z->nombre_zona) }}</option>
+            @endforeach
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dtIni">Fecha de corte</label>
+          <div class="input-group date" id="dt-Ini" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" data-target="#dt-Ini" id="dtIni"
+                   value="{{ date('d/m/Y') }}" inputmode="numeric" autocomplete="off" aria-describedby="dtIniHelp"/>
+            <div class="input-group-append" data-target="#dt-Ini" data-toggle="datetimepicker">
+              <span class="input-group-text" aria-hidden="true"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+          <span id="dtIniHelp" class="dash-sr-only">Formato día/mes/año</span>
+        </div>
+
+        <div class="dash-actions">
+          <button type="submit" class="dash-btn" id="IdbtnFilter" aria-busy="false">
+            <i class="fa fa-filter dash-btn-icon" aria-hidden="true"></i>
+            <span class="spinner-border spinner-border-sm dash-spinner" aria-hidden="true"></span>
+            <span>Aplicar</span>
+          </button>
+          <div class="dash-export">
+            <table id="tbl_metrias_home" class="table" aria-hidden="true"></table>
+          </div>
+        </div>
+      </form>
+      @endif
+
+      <div class="dash-kpis" id="dashKpis" aria-busy="false">
+        @foreach ($grupos as $titulo => $claves)
+          <section class="dash-group" style="--n: {{ count($claves) }}" aria-labelledby="grp-{{ \Illuminate\Support\Str::slug($titulo) }}">
+            <h2 class="dash-group-title" id="grp-{{ \Illuminate\Support\Str::slug($titulo) }}">{{ $titulo }}</h2>
+            <div class="dash-grid">
+              @foreach ($claves as $clave)
+                @include('Dashboard.partials.kpi', $kpi[$clave])
+              @endforeach
+            </div>
+          </section>
+        @endforeach
+      </div>
+
+      <section class="dash-card" aria-labelledby="chartTitle">
+        <div class="dash-card-header">
+          <h2 class="dash-card-title" id="chartTitle">Ingreso por mes</h2>
+          <span class="dash-card-hint">Montos en C$</span>
+        </div>
+        <div class="dash-card-body">
+          <div class="dash-chart">
+            <canvas id="sales-chart" role="img" aria-label="Gráfico de barras del ingreso por mes"></canvas>
+          </div>
+        </div>
+      </section>
+
     </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        @if (in_array(Session::get('rol'), [1, 2, 3, 5]))
-        <div class="row">        
-          <div class="col-md-6">
-            <label>Zonas</label>
-            <div class="form-group">
-              <select class="form-control select2" style="width: 100%;" id="IdFilterByZone" name="IdZona">
-                <option value="-1" selected="selected"> Todas </option>
-                  @foreach ($Zonas as $z)
-                    <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
-                  @endforeach
-              
-              </select>
-              
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label>CULMINA</label>
-            <div class="form-group">
-              <div class="input-group date" id="dt-Ini" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#dt-Ini" id="dtIni" value="{{ date('d/m/Y') }}"/>
-                  <div class="input-group-append" data-target="#dt-Ini" data-toggle="datetimepicker">
-                      <div class="input-group-text" ><i class="fa fa-calendar"></i></div>
-                  </div>
-                  <div class="input-group-text btn btn-primary"  id="IdbtnFilter" ><i class="fa fa-filter" ></i></div>
-                  <table id="tbl_metrias_home" class="table table-bordered table-striped"></table>
-              </div>
-            </div>
-          </div>          
-        </div>
-        @endif
-
-        
-        @switch(Session::get('rol'))
-            @case(1)
-            <div class="row">
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box " style="background-color: #008000;">
-                  
-                  <div class="info-box-content ">
-                    <span class="info-box-text">INGRESO NETO</span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span></span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-            
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3" style="background-color: #00BFFF;">
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">CAPITAL</span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblCapital"></span>
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>    
-
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3 bg-warning" >
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">UTL. BRUTA</span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblInteres"></span></span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3" style="background-color: #008000;" >
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">UTL. NETA</span>
-                    <span class="info-box-number"><small>C$ </small><span id="lbl_ultil_neta">C$ 0.00</span></span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>              
-              
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3 bg-info">
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">CREDITOS ACTIVOS</span>
-                    <span class="info-box-number"><span id="lblClientes"></span></span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3" style="background-color: #FFA0AB;">
-                  <div class="info-box-content">
-                    <span class="info-box-text">SALDO DE CARTERA</span>
-                    <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3" style="background-color: #FFA0AB;">
-                  <div class="info-box-content">
-                    <span class="info-box-text">SALDO CAPITAL.</span>
-                    <span class="info-box-number"><small>C$ </small><span id="lbl_saldo_capital"> 0.00 </span></span>
-                  </div>
-                </div>
-              </div>
-
-       
-                <div class="col-6 col-sm-6 col-md-3">
-                  <div class="info-box " style="background-color: #FF8000;">              
-                    <div class="info-box-content ">
-                      <span class=""> MORA ATRASADA </span>
-                      <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
-                      </span>
-                    </div>
-                  </div>                  
-                </div>
-                
-                <div class="col-6 col-sm-6 col-md-3">
-                  <div class="info-box mb-3 bg-danger">
-                    <div class="info-box-content">
-                      <span class="info-box-text"> MORA VENCIDA </span>
-                      <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-6 col-sm-6 col-md-4">
-                  <div class="info-box mb-3 bg-success">
-                    <div class="info-box-content">
-                      <span class="info-box-text"> Dispensa C$.</span>
-                      <span class="info-box-number"><span id="lbl_dispensa"> 0.00</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-                @break
-        
-            @case(3)
-            <div class="row">
-              <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-box " style="background-color: #008000;">
-                  
-                  <div class="info-box-content ">
-                    <span class="info-box-text">INGRESO NETO</span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblIngreso" ></span></span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-              <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-box mb-3 bg-info">
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">CREDITOS ACTIVOS</span>
-                    <span class="info-box-number"><span id="lblClientes"></span></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-box mb-3" style="background-color: #FFA0AB;">
-                  <div class="info-box-content">
-                    <span class="info-box-text">SALDO DE CARTERA</span>
-                    <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="info-box " style="background-color: #FF8000;">              
-                  <div class="info-box-content ">
-                    <span class=""> MORA ATRASADA </span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="info-box mb-3 bg-danger">
-
-                  <div class="info-box-content">
-                    <span class="info-box-text"> MORA VENCIDA </span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-            </div>
-            @break
-        
-            @case(2)
-            <div class="row">
-                <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3" style="background-color: #00BFFF;">
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">RECUPERACION</span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblCapital"></span>
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div> 
-
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3 bg-info">
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">CREDITOS ACTIVOS</span>
-                    <span class="info-box-number"><span id="lblClientes"></span></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box mb-3" style="background-color: #FFA0AB;">
-                  <div class="info-box-content">
-                    <span class="info-box-text">SALDO DE CARTERA</span>
-                    <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box " style="background-color: #FF8000;">              
-                  <div class="info-box-content ">
-                    <span class=""> MORA ATRASADA </span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-
-              <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3 bg-danger">
-
-                  <div class="info-box-content">
-                    <span class="info-box-text"> MORA VENCIDA </span>
-                    <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-              </div>
-              @break
-              @case(5)
-              <div class="row">
-                <div class="col-12 col-sm-6 col-md-2">
-                  <div class="info-box " style="background-color: #008000;">
-                    
-                    <div class="info-box-content ">
-                      <span class="info-box-text">INGRESO NETO</span>
-                      <span class="info-box-number"><small>C$ </small><span id="lblIngreso" >0.00</span></span>
-                    </div>
-                    <!-- /.info-box-content -->
-                  </div>
-                  <!-- /.info-box -->
-                </div>
-              
-                <div class="col-12 col-sm-6 col-md-2">
-                  <div class="info-box mb-3 bg-info">
-
-                    <div class="info-box-content">
-                      <span class="info-box-text">CREDITOS ACTIVOS</span>
-                      <span class="info-box-number"><span id="lblClientes">0</span></span>
-                    </div>
-                    <!-- /.info-box-content -->
-                  </div>
-                  <!-- /.info-box -->
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-2">
-                  <div class="info-box mb-3" style="background-color: #FFA0AB;">
-
-                    <div class="info-box-content">
-                      <span class="info-box-text">SALDO DE CARTERA</span>
-                      <span class="info-box-number"><small>C$ </small><span id="id_saldos_cartera"> 0.00 </span></span>
-                    </div>
-                    <!-- /.info-box-content -->
-                  </div>
-                  <!-- /.info-box -->
-                </div>
-              
-                <div class="col-6 col-sm-6 col-md-2">
-                  <div class="info-box " style="background-color: #FF8000;">              
-                    <div class="info-box-content ">
-                      <span class=""> MORA ATRASADA </span>
-                      <span class="info-box-number"><small>C$ </small><span id="lblMoraAtrasada" > 0.00</span>
-                      </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                  </div>
-                  <!-- /.info-box -->
-                </div>
-                <div class="col-6 col-sm-6 col-md-2">
-                  <div class="info-box mb-3 bg-danger">
-                    <div class="info-box-content">
-                      <span class="info-box-text"> MORA VENCIDA </span>
-                      <span class="info-box-number"><small>C$ </small><span id="lblMoraVencida"> 0.00</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6 col-sm-6 col-md-2">
-                  <div class="info-box mb-3 bg-success">
-                    <div class="info-box-content">
-                      <span class="info-box-text"> Dispensa C$.</span>
-                      <span class="info-box-number"><span id="lbl_dispensa"> 0.00</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              @break
-        @endswitch
-
-        
-  
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="card-title">INGRESO POR MES</h5>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-              
-                <div class="position-relative mb-4">
-                  <canvas id="sales-chart" height="200"></canvas>
-                </div>
-
-                
-              </div>
-              <!-- ./card-body -->
-              <div class="card-footer">
-                <div class="row" style="display:none">
-                  <div class="col-sm-6 col-6">
-                    <div class="description-block border-right">
-                      <h5 class="description-header text-warning">C$ 35,210.43</h5>
-                      <span class="description-text">MORA ATRASADA</span>
-                    </div>
-                    <!-- /.description-block -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-6 col-6">
-                    <div class="description-block border-right">
-                      <h5 class="description-header text-danger">C$10,390.90</h5>
-                      <span class="description-text">MORA VENCIDA</span>
-                    </div>
-                    <!-- /.description-block -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-3 col-6" style="display:none">
-                    <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
-                      <h5 class="description-header">C$24,813.53</h5>
-                      <span class="description-text">TOTAL PROFIT</span>
-                    </div>
-                    <!-- /.description-block -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-sm-3 col-6" style="display:none">
-                    <div class="description-block">
-                      <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>
-                      <h5 class="description-header">1200</h5>
-                      <span class="description-text">GOAL COMPLETIONS</span>
-                    </div>
-                    <!-- /.description-block -->
-                  </div>
-                </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-
-   
-      </div><!--/. container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-
-  <!-- Main Footer -->
-  @include('layouts.lyt_footer')
+  </section>
 </div>
 @endsection

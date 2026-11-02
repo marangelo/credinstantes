@@ -119,33 +119,72 @@
         
         });
 
+        // Al corregir un campo marcado, se quita la marca de error
+        $(document).on('input change', '.sol .is-invalid', function () {
+            $(this).removeClass('is-invalid').removeAttr('aria-invalid');
+        });
+
+        initSectionNav();
+
+        // Las tablas en pestañas ocultas se reajustan al mostrarse
+        $('.sol-tablist a[data-toggle="tab"]').on('shown.bs.tab', function () {
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        });
+        // Al corregir, quitar la marca de error de la pestaña
+        $(document).on('input change', '.tab-pane', function () {
+            if (!$(this).find('.is-invalid').length) {
+                $('.sol-tablist a[href="#' + this.id + '"]').removeClass('has-error');
+            }
+        });
+
+        // Resumen en la barra fija: a quién y cuánto
+        function actualizarResumen() {
+            var quien = $.trim(($('#txtNombre').val() || '') + ' ' + ($('#txtApellido').val() || ''));
+            var monto = numeral($('#txtMonto').val()).value() || 0;
+            $('#solLiveWho').text(quien || 'Sin cliente');
+            $('#solLiveAmount').text('C$ ' + numeral(monto).format('0,0.00'));
+        }
+        $('#txtNombre, #txtApellido, #txtMonto').on('input keyup change', actualizarResumen);
+
+        // Botones que repiten una acción (p. ej. "Procesar" al final del formulario)
+        $('[data-proxy-click]').on('click', function () {
+            $($(this).data('proxy-click')).trigger('click');
+        });
+
         $("#btn_save_prospecto").click(function(e) {
+            e.preventDefault();
+
+            // Datos mínimos del cliente
+            var faltanCliente = marcarVacios(['#txtNombre', '#txtApellido']);
+            if (faltanCliente.length > 0) {
+                irAlCampo(faltanCliente[0]);
+                return Swal.fire({
+                    title: 'Faltan datos del cliente',
+                    text: 'Escriba el nombre y el apellido del cliente.',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+
             const nombre = $('#id_nombres_fiador').val().trim();
 
             if (nombre) {
-                const campos = [
+                const camposIncompletos = marcarVacios([
                     '#id_apellidos_fiador',
                     '#id_cedula_fiador',
-                    '#selectEstadoCivil',
+                    '#id_estado_civil_fiador',
                     '#id_telefono_fiador',
                     '#id_dir_domicilio_fiador',
                     '#id_dir_trabajo_fiador'
-                ];
-
-                const camposIncompletos = campos.filter(selector => {
-                    const campo = $(selector);
-                    const vacio = !campo.val().trim();
-                    campo.css('border', vacio ? '2px solid red' : '');
-                    return vacio;
-                });
+                ]);
 
                 if (camposIncompletos.length > 0) {
-                    e.preventDefault();
-                    return swal.fire({
-                        title: 'Campos incompletos',
-                        text: 'Por favor, completa todos los campos obligatorios.',
+                    irAlCampo(camposIncompletos[0]);
+                    return Swal.fire({
+                        title: 'Faltan datos del fiador',
+                        text: 'Si agrega un fiador, complete todos sus datos (están marcados en rojo).',
                         icon: 'warning',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'Entendido'
                     });
                 }else{
                     swal.fire({
@@ -185,8 +224,10 @@
         var count = $("#total_garantias").html();
 
         // Verificar que los campos no estén vacíos
-        if (!detalles || !marca || !color || !valor) {
-            alert("Todos los campos son obligatorios.");
+        var faltan = marcarVacios(['#detalles', '#marca', '#color', '#valor']);
+        if (faltan.length > 0) {
+            $(faltan[0]).trigger('focus');
+            avisoCampos('Complete artículo, marca, color y valor para agregar la garantía.');
             return;
         }
 
@@ -218,8 +259,10 @@
         var count = table.data().length;
 
         // Verificar que los campos no estén vacíos
-        if (!nombre_red || !telefono_ref || !direccion_red) {
-            alert("Todos los campos son obligatorios.");
+        var faltan = marcarVacios(['#id_nombre_ref', '#id_telefono_ref', '#id_direcion_ref']);
+        if (faltan.length > 0) {
+            $(faltan[0]).trigger('focus');
+            avisoCampos('Complete nombre, teléfono y dirección para agregar la referencia.');
             return;
         }
 
@@ -472,6 +515,85 @@
         }
     }
 
+
+    // Marca en rojo los campos vacíos (un select en "0" cuenta como vacío) y devuelve sus selectores
+    function marcarVacios(selectores) {
+        return selectores.filter(function (selector) {
+            var campo = $(selector);
+            if (!campo.length) return false;
+            var val = $.trim(campo.val() || '');
+            var vacio = val === '' || (campo.is('select') && val === '0');
+            campo.toggleClass('is-invalid', vacio);
+            if (vacio) { campo.attr('aria-invalid', 'true'); } else { campo.removeAttr('aria-invalid'); }
+            return vacio;
+        });
+    }
+
+    function irAlCampo(selector) {
+        var el = $(selector)[0];
+        if (!el) return;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Si el campo está en una pestaña cerrada, abrirla y marcarla
+        var pane = $(el).closest('.tab-pane');
+        if (pane.length) {
+            var tab = $('.sol-tablist a[href="#' + pane.attr('id') + '"]');
+            tab.addClass('has-error');
+            if (!pane.hasClass('active')) tab.tab('show');
+        }
+
+        setTimeout(function () {
+            el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+            setTimeout(function () { el.focus({ preventScroll: true }); }, reduce ? 0 : 300);
+        }, pane.length ? 200 : 0);
+    }
+
+    function avisoCampos(texto) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'warning',
+            title: texto,
+            showConfirmButton: false,
+            timer: 3500
+        });
+    }
+
+    // Resalta en la barra de secciones la que se está viendo
+    function initSectionNav() {
+        var links = document.querySelectorAll('.sol-nav a');
+        if (!links.length || !('IntersectionObserver' in window)) return;
+
+        var byId = {};
+        links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                links.forEach(function (a) { a.removeAttribute('aria-current'); });
+                var link = byId[entry.target.id];
+                if (link) {
+                    link.setAttribute('aria-current', 'true');
+                    link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+                }
+            });
+        }, { rootMargin: '-130px 0px -60% 0px' });
+
+        Object.keys(byId).forEach(function (id) {
+            var sec = document.getElementById(id);
+            if (sec) observer.observe(sec);
+        });
+
+        links.forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                var target = document.getElementById(a.getAttribute('href').slice(1));
+                if (!target) return;
+                e.preventDefault();
+                var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+            });
+        });
+    }
 
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode

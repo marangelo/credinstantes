@@ -5,107 +5,69 @@
 @endsection
 
 @section('content')
-  <div class="content-wrapper">
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>SOLICITUDES  <span id="lbl_titulo_reporte">{{$lblBtn}}</span></h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">Solicitudes</li>
-              <li class="breadcrumb-item active">{{$lblBtn}}</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <!-- /.card -->
-            <div class="card">
-              <div class="card-header" style="display:none">
-              
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-              @csrf
-                <div class="row">
-                  <div class="col-md-9">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                      </div>
-                      <input type="text" class="form-control" id="id_txt_buscar" placeholder="Buscar cliente">
-                    </div>
-                  </div>
-                  
-                  <div class="col-md-3">
-                    <div class="btn-group w-100">                          
-                          
-                          <button type="button" class="btn btn-success button_export_excel" id="btn-export-gasto">
-                              <i class="fas fa-file-excel "></i> EXCEL
-                          </button>
-                          
-                          <a href="#!" class="btn btn-warning" id="btn_open_modal_renovacion">
-                              <i class="fas fa-user "></i> {{$lblBtn}} 
-                          </a>
-                      </div>
-                  </div>
-                </div>
-                
-                <table id="tbl_ingresos" class="table table-bordered table-striped">
-              
-                </table>
-              </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
+@php
+  $esRenovar = trim($lblBtn) === 'RENOVAR';
+  $titulo    = $esRenovar ? 'Renovaciones' : 'Solicitudes nuevas';
+  $accion    = $esRenovar ? 'Renovar cliente' : 'Nueva solicitud';
+@endphp
 
-    <div class="modal fade" id="modal-renovacion">
-    <div class="modal-dialog modal-xl">
+<link rel="stylesheet" href="{{ asset('css/sol-lista.css') }}?v={{ filemtime(public_path('css/sol-lista.css')) }}">
+
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid sl">
+      @csrf
+      {{-- El JS lee este texto (NUEVAS / RENOVAR) para saber qué lista cargar --}}
+      <span id="lbl_titulo_reporte" class="d-none">{{ $lblBtn }}</span>
+
+      <header class="sl-header">
+        <div>
+          <h1 class="sl-title">{{ $titulo }}</h1>
+          <p class="sl-subtitle"><span id="slTotal">—</span> solicitudes pendientes</p>
+        </div>
+        <a href="#!" role="button" class="sl-btn sl-btn--primary" id="btn_open_modal_renovacion">
+          <i class="fas {{ $esRenovar ? 'fa-redo' : 'fa-plus' }}" aria-hidden="true"></i> <span class="sl-btn-text">{{ $accion }}</span>
+        </a>
+      </header>
+
+      <div class="sl-toolbar">
+        <div class="sl-search">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar por nombre, cédula o teléfono"
+                 aria-label="Buscar solicitudes" autocomplete="off" enterkeyhint="search">
+        </div>
+        <button type="button" class="sl-btn button_export_excel" id="btn-export-gasto" title="Exportar a Excel">
+          <i class="far fa-file-excel" aria-hidden="true"></i><span class="sl-btn-text">Excel</span>
+        </button>
+      </div>
+
+      <div class="sl-list">
+        <table id="tbl_ingresos" class="table sl-table" width="100%"></table>
+      </div>
+    </div>
+  </section>
+
+  {{-- ===================== Hoja: elegir cliente a renovar ===================== --}}
+  <div class="modal fade sl-modal" id="modal-renovacion" tabindex="-1" aria-labelledby="slRenTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-            <div class="user-block">
-              <img class="img-circle" src="{{asset('img/user.png')}}" alt="User Image">
-              <span class="username"><a href="#">SOLICITUD DE CREDITO</a> | [RENOVACION] </span>
-              <span class="description">Seleccionar a que clientes se le aplicara la renovacion</span>
-            </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <div>
+            <h2 class="modal-title" id="slRenTitle">Renovar cliente</h2>
+            <p class="sl-modal-sub">Elija el cliente inactivo al que se le hará la solicitud de renovación.</p>
+          </div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          
-          <div class="col-12 table-responsive">   
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-search"></i></span>
-              </div>
-              <input type="text" class="form-control" id="txt_search_renovaciones" placeholder="Buscar cliente">
-            </div>
-            <table id="tbl_renovaciones"  class="table table-striped " style="width:100%"></table>
-          </div>          
+          <div class="sl-search sl-search--modal">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="search" class="form-control" id="txt_search_renovaciones" placeholder="Buscar cliente"
+                   aria-label="Buscar cliente para renovar" autocomplete="off" enterkeyhint="search">
+          </div>
+          <table id="tbl_renovaciones" class="table sl-pick" style="width:100%"></table>
         </div>
-        
       </div>
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
   </div>
-
-  </div>
+</div>
 @endsection

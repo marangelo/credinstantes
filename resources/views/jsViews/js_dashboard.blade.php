@@ -1,21 +1,18 @@
 <script type="text/javascript">
-    $(document).ready(function () { 
-        
+    var salesChart = null;   // una sola instancia; antes se creaba un Chart nuevo en cada filtro
 
+    $(document).ready(function () {
 
-        $("#IdbtnFilter").click(function () {
-            CalcIndicadores()
+        $("#IdbtnFilter").on('click', function (e) {
+            e.preventDefault();
+            CalcIndicadores();
         });
-
 
         $('#dt-Ini').datetimepicker({
             format: 'DD/MM/YYYY'
         });
 
-
         CalcIndicadores();
- 
-      
     });
 
     function isValue(value, def, is_return) {
@@ -32,206 +29,139 @@
         }
     }
 
-
-    function CalcIndicadores(){
-    
-        $("#IdCardTitle").text("Calc. Indicadores . . .");
-
-        var vLabel = []
-        var vData = []
-
-        var ticksStyle = {
-            fontColor: '#495057',
-            fontStyle: 'bold'
-        }
-
-
-        var $salesChart = $('#sales-chart')
-
-
-        var dtIni   = $("#dtIni").val();
-         
-        dtIni      = isValue(dtIni,'N/D',true)
-    
-        const [dt_Ini_] = [dtIni].map(dt => moment(dt, 'DD/MM/YYYY').format('YYYY-MM-DD'));
-
-        
-        
-        var Opt   = $("#IdFilterByZone option:selected").val(); 
-        
-        Opt      = isValue(Opt,-1,true)       
-        
-        $("#IdCardTitle").text("Calc. Indicadores . . . ") 
-
-
-        
-
-        $.getJSON("getDashboard/"+Opt, { dt_ini: dt_Ini_ }, function(dataset) {
-            var data =  [
-                {
-                "INGRESO_NETO": "",
-                "CAPITAL": "",
-                "UTILIDAD_BRUTA": "",
-                "UTILIDAD_NETA" : "", 
-                "CREDITOS_ACTIVOS" : "",
-                "SALDO_CARTERA": "",
-                "MORA_ATRASADA" : "",
-                "MORA_VENCIDA" : "",
-                "DISPENSA" : "",
-                "SALDOS_CAPITAL" : ""
-                
-                }
-            ];
-        
-
-            var Ingreso = dataset['INGRESO'];
-        
-            Ingreso     = numeral(isValue(Ingreso,0,true)).format('0,00.00');
-        
-            $("#lblIngreso").text(Ingreso)    
-            data[0]['INGRESO_NETO'] = Ingreso;
-        
-            var CAPITAL = dataset['CAPITAL'];
-        
-            CAPITAL     = numeral(isValue(CAPITAL,0,true)).format('0,00.00');
-            data[0]['CAPITAL'] = CAPITAL;
-        
-            $("#lblCapital").text(CAPITAL)
-        
-            var INTERESES = dataset['INTERESES'];
-            INTERESES     = numeral(isValue(INTERESES,0,true)).format('0,00.00');        
-            $("#lblInteres").text(INTERESES)
-            data[0]['UTILIDAD_BRUTA'] = INTERESES;
-
-            var UTIL_NETA     = numeral(isValue(dataset['UTIL_NETA'],0,true)).format('0,00.00');        
-            $("#lbl_ultil_neta").text(UTIL_NETA)
-            data[0]['UTILIDAD_NETA'] = UTIL_NETA;
-
-        
-            var Clientes = dataset['clientes_activos'];
-            Clientes     = numeral(isValue(Clientes,0,true)).format('0,00');
-            $("#lblClientes").text(Clientes)
-            data[0]['CREDITOS_ACTIVOS'] = Clientes;
-        
-            var Cartera = dataset['SALDOS_CARTERA'];
-            
-            Cartera     = numeral(isValue(Cartera,0,true)).format('0,00.00');
-            
-            $("#id_saldos_cartera").text(Cartera)
-            data[0]['SALDO_CARTERA'] = Cartera;
-        
-        
-            var MoraAtrasada = dataset['MORA_ATRASADA'];    
-            
-            MoraAtrasada     = numeral(isValue(MoraAtrasada,0,true)).format('0,00.00');    
-            $("#lblMoraAtrasada").text(MoraAtrasada)
-            data[0]['MORA_ATRASADA'] = MoraAtrasada;
-        
-            var MoraVencida = dataset['MORA_VENCIDA'];    
-            MoraVencida     = numeral(isValue(MoraVencida,0,true)).format('0,00.00');    
-            $("#lblMoraVencida").text(MoraVencida)
-            data[0]['MORA_VENCIDA'] = MoraVencida;
-
-            var DISPENSA	= dataset['DISPENSA'];     
-            DISPENSA     = numeral(isValue(DISPENSA,0,true)).format('0,00.00'); 
-            data[0]['DISPENSA'] = DISPENSA;
-            $("#lbl_dispensa").text(DISPENSA)
-
-
-            var SALDOS_CAPITAL = dataset['SALDOS_CAPITAL'];
-            SALDOS_CAPITAL     = numeral(isValue(SALDOS_CAPITAL,0,true)).format('0,00.00'); 
-            $("#lbl_saldo_capital").text(SALDOS_CAPITAL)
-            data[0]['SALDOS_CAPITAL'] = SALDOS_CAPITAL;
-
-            
-        
-            $.each(dataset.Data, function(i, item) {
-                vData.push(item);
-            })
-        
-            $.each(dataset.label, function(i, item) {
-                vLabel.push(item);
-            })
-
-            var salesChart = new Chart($salesChart, {
-                type: 'bar',
-                data: {
-                labels: vLabel,
-                datasets: [{
-                        backgroundColor: '#007bff',
-                        borderColor: '#007bff',
-                        data: vData
-                        },
-                    ]
-                },
-                options: {
-                maintainAspectRatio: false,
-                tooltips: {
-                    mode: 'index',
-                    intersect: true
-                },
-                hover: {
-                    mode: 'index',
-                    intersect: true
-                },
-                legend: {
-                    display: false
-                },
-                scales: {
-                    yAxes: [{
-                    // display: false,
-                    gridLines: {
-                        display: true,
-                        lineWidth: '4px',
-                        color: 'rgba(0, 0, 0, .2)',
-                        zeroLineColor: 'transparent'
-                    },
-                    ticks: $.extend({
-                        beginAtZero: true,
-        
-                        // Include a dollar sign in the ticks
-                        callback: function (value) {
-                        if (value >= 1000) {
-                            value /= 1000
-                            value += 'k'
-                        }
-        
-                        return 'C$' + value
-                        }
-                    }, ticksStyle)
-                    }],
-                    xAxes: [{
-                    display: true,
-                    gridLines: {
-                        display: false
-                    },
-                    ticks: ticksStyle
-                    }]
-                }
-                }
-            })
-
-        
-
-            tbMetricas(data)
-        
-        }).always(function () {
-            $("#IdCardTitle").text("INDICADORES");
-        });
-
-        
+    function setLoading(isLoading) {
+        $("#dashKpis").attr('aria-busy', isLoading ? 'true' : 'false');
+        $("#IdbtnFilter")
+            .prop('disabled', isLoading)
+            .attr('aria-busy', isLoading ? 'true' : 'false');
     }
 
+    // Escribe un valor y dispara un fundido corto para indicar que cambió
+    function setKpi(selector, text) {
+        var $el = $(selector);
+        if (!$el.length) return;
+        $el.removeClass('is-updated').text(text);
+        void $el[0].offsetWidth;   // reinicia la animación
+        $el.addClass('is-updated');
+    }
+
+    function money(v) { return numeral(isValue(v, 0, true)).format('0,0.00'); }
+    function count(v) { return numeral(isValue(v, 0, true)).format('0,0'); }
+
+    function CalcIndicadores() {
+
+        var dtIni = isValue($("#dtIni").val(), 'N/D', true);
+        var dt_Ini_ = moment(dtIni, 'DD/MM/YYYY').format('YYYY-MM-DD');
+        var Opt = isValue($("#IdFilterByZone option:selected").val(), -1, true);
+
+        setLoading(true);
+
+        $.getJSON("getDashboard/" + Opt, { dt_ini: dt_Ini_ }, function (dataset) {
+
+            var data = [{
+                "INGRESO_NETO"     : money(dataset['INGRESO']),
+                "CAPITAL"          : money(dataset['CAPITAL']),
+                "UTILIDAD_BRUTA"   : money(dataset['INTERESES']),
+                "UTILIDAD_NETA"    : money(dataset['UTIL_NETA']),
+                "CREDITOS_ACTIVOS" : count(dataset['clientes_activos']),
+                "SALDO_CARTERA"    : money(dataset['SALDOS_CARTERA']),
+                "MORA_ATRASADA"    : money(dataset['MORA_ATRASADA']),
+                "MORA_VENCIDA"     : money(dataset['MORA_VENCIDA']),
+                "DISPENSA"         : money(dataset['DISPENSA']),
+                "SALDOS_CAPITAL"   : money(dataset['SALDOS_CAPITAL'])
+            }];
+
+            setKpi("#lblIngreso",        data[0].INGRESO_NETO);
+            setKpi("#lblCapital",        data[0].CAPITAL);
+            setKpi("#lblInteres",        data[0].UTILIDAD_BRUTA);
+            setKpi("#lbl_ultil_neta",    data[0].UTILIDAD_NETA);
+            setKpi("#lblClientes",       data[0].CREDITOS_ACTIVOS);
+            setKpi("#id_saldos_cartera", data[0].SALDO_CARTERA);
+            setKpi("#lblMoraAtrasada",   data[0].MORA_ATRASADA);
+            setKpi("#lblMoraVencida",    data[0].MORA_VENCIDA);
+            setKpi("#lbl_dispensa",      data[0].DISPENSA);
+            setKpi("#lbl_saldo_capital", data[0].SALDOS_CAPITAL);
+
+            renderChart($.map(dataset.label || [], function (x) { return x; }),
+                        $.map(dataset.Data  || [], function (x) { return x; }));
+
+            tbMetricas(data);
+
+        }).fail(function () {
+            if (window.toastr) {
+                toastr.error('No se pudieron cargar los indicadores. Revise su conexión e intente de nuevo.');
+            }
+        }).always(function () {
+            setLoading(false);
+        });
+    }
+
+    function renderChart(vLabel, vData) {
+        var brand   = '#86b817';
+        var muted   = '#adb5bd';
+        var grid    = 'rgba(255, 255, 255, 0.08)';
+        var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (salesChart) {
+            salesChart.data.labels = vLabel;
+            salesChart.data.datasets[0].data = vData;
+            salesChart.update();
+            return;
+        }
+
+        salesChart = new Chart($('#sales-chart'), {
+            type: 'bar',
+            data: {
+                labels: vLabel,
+                datasets: [{
+                    label: 'Ingreso',
+                    backgroundColor: brand,
+                    hoverBackgroundColor: '#9ad11f',
+                    borderWidth: 0,
+                    maxBarThickness: 48,
+                    data: vData
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                animation: { duration: reduced ? 0 : 400 },
+                legend: { display: false },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                    displayColors: false,
+                    callbacks: {
+                        label: function (item) { return 'C$ ' + numeral(item.yLabel).format('0,0.00'); }
+                    }
+                },
+                hover: { mode: 'index', intersect: false },
+                scales: {
+                    yAxes: [{
+                        gridLines: { color: grid, zeroLineColor: grid, drawBorder: false },
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: muted,
+                            padding: 8,
+                            callback: function (value) {
+                                return 'C$' + (value >= 1000 ? numeral(value).format('0.[0]a') : value);
+                            }
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: { display: false, drawBorder: false },
+                        ticks: { fontColor: muted }
+                    }]
+                }
+            }
+        });
+    }
+
+    // Tabla oculta: solo existe para el botón "Excel" de DataTables
     function tbMetricas(ARRAY_METRICAS) {
 
-        console.log(ARRAY_METRICAS)
-
-
-
-        if ( $.fn.DataTable.isDataTable('#tbl_metrias_home') ) {
-            var dataTable = $('#tbl_metrias_home').DataTable();
-            dataTable.clear().destroy();
-            $("tbl_metrias_home").empty();
+        if ($.fn.DataTable.isDataTable('#tbl_metrias_home')) {
+            $('#tbl_metrias_home').DataTable().clear().destroy();
+            $("#tbl_metrias_home").empty();
         }
 
         $('#tbl_metrias_home').DataTable({
@@ -239,43 +169,32 @@
             "paging": false,
             "destroy": true,
             "lengthChange": false,
-            "searching": true,
-            "ordering": true,
+            "searching": false,
+            "ordering": false,
             "info": false,
             "autoWidth": false,
-            "responsive": true,
-            "language": {
-                "zeroRecords": "NO HAY COINCIDENCIAS",
-                "paginate": {
-                    "first": "Primera",
-                    "last": "Última ",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-                "lengthMenu": "MOSTRAR _MENU_",
-                "emptyTable": "-",
-                "search": "BUSCAR"
-            },
-            "dom": 'lBfrtip',
-            buttons: [{extend: 'excelHtml5'}],
+            "responsive": false,
+            "dom": 'B',
+            buttons: [{
+                extend: 'excelHtml5',
+                text: '<i class="fas fa-file-excel" aria-hidden="true"></i> Excel',
+                titleAttr: 'Exportar indicadores a Excel',
+                className: 'btn btn-outline-light',
+                title: 'Indicadores'
+            }],
             'columns': [
-                {"title": "INGRESO NETO","data"   : "INGRESO_NETO"},                
-                {"title": "CAPITAL","data"    : "CAPITAL"},
-                {"title": "UTILIDAD BRUTA","data"    : "UTILIDAD_BRUTA"},
-                {"title": "UTILIDAD NETA","data"    : "UTILIDAD_NETA"},
-                {"title": "CREDITOS ACTIVOS","data"   : "CREDITOS_ACTIVOS"},
-                {"title": "SALDO DE CARTERA","data"   : "SALDO_CARTERA"},
-                {"title": "MORA ATRASADA","data"   : "MORA_ATRASADA"},
-                {"title": "MORA VENCIDA","data"   : "MORA_VENCIDA"},
-                {"title": "DISPENSA","data"   : "DISPENSA"},
-                {"title": "SALDOS CAPITAL","data"   : "SALDOS_CAPITAL"},
+                {"title": "INGRESO NETO",     "data": "INGRESO_NETO"},
+                {"title": "CAPITAL",          "data": "CAPITAL"},
+                {"title": "UTILIDAD BRUTA",   "data": "UTILIDAD_BRUTA"},
+                {"title": "UTILIDAD NETA",    "data": "UTILIDAD_NETA"},
+                {"title": "CREDITOS ACTIVOS", "data": "CREDITOS_ACTIVOS"},
+                {"title": "SALDO DE CARTERA", "data": "SALDO_CARTERA"},
+                {"title": "MORA ATRASADA",    "data": "MORA_ATRASADA"},
+                {"title": "MORA VENCIDA",     "data": "MORA_VENCIDA"},
+                {"title": "DISPENSA",         "data": "DISPENSA"},
+                {"title": "SALDOS CAPITAL",   "data": "SALDOS_CAPITAL"},
             ],
-        });  
-        $("#tbl_metrias_home_length").hide();
-        $("#tbl_metrias_home_filter").hide();
-        
+        });
         $("#tbl_metrias_home").hide();
     }
-
-    
 </script>
