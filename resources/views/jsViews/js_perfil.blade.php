@@ -315,7 +315,7 @@
     function initTable_historico(id,datos){
         var tabla = $(id).DataTable({
             "data": datos,
-            "createdRow": etiquetarFila,
+            "drawCallback": etiquetarFila,
             "destroy": true,
             "info": false,
             responsive: true,
@@ -367,7 +367,7 @@
     function initTable_modal(id,datos){
         var tabla = $(id).DataTable({
             "data": datos,
-            "createdRow": etiquetarFila,
+            "drawCallback": etiquetarFila,
             "destroy": true,
             "info": false,
             responsive: true,
@@ -897,7 +897,7 @@
     function initTable_notificaciones(id,datos){
         $(id).DataTable({
             "data": datos,
-            "createdRow": etiquetarFila,
+            "drawCallback": etiquetarFila,
             "destroy": true,
             "info": false,
             responsive: true,
@@ -967,12 +967,20 @@
     }
 
     // En celular las filas de las tablas del historial se muestran como tarjetas con etiquetas
-    function etiquetarFila(row, data, dataIndex, cells) {
-        var api = this.api ? this.api() : (this.column ? this : null);
+    // Se usa como drawCallback: la tabla ya existe y this.api() funciona
+    function etiquetarFila() {
+        var api = this.api ? this.api() : null;
         if (!api) return;
-        $(cells).each(function (i) {
-            var titulo = $(api.column(i).header()).text().trim();
-            if (titulo && titulo.replace(/-/g, '') !== '') $(this).attr('data-label', titulo);
+        var titulos = [];
+        api.columns().every(function (i) {
+            titulos[i] = $.trim($(this.header()).text());
+        });
+        api.rows({ page: 'current' }).every(function () {
+            $(this.node()).children('td').each(function () {
+                var idx = api.cell(this).index();
+                var t = idx ? titulos[idx.column] : '';
+                if (t && t.replace(/-/g, '') !== '') $(this).attr('data-label', t);
+            });
         });
     }
 
