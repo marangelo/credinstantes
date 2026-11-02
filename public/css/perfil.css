@@ -347,7 +347,7 @@
 .pf-group-title:first-child { margin-top: 0; }
 
 /* Pestañas del historial */
-.pf-tabs { display: flex; gap: 0.25rem; margin: 0 0 1rem; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--pf-border); }
+.pf-tabs { display: flex; flex-wrap: nowrap; gap: 0.25rem; margin: 0 0 1rem; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--pf-border); }
 .pf-tabs::-webkit-scrollbar { display: none; }
 .pf-tabs .nav-link {
   min-height: 44px; display: inline-flex; align-items: center; padding: 0 1rem;
@@ -384,11 +384,29 @@
 
 @media (max-width: 575.98px) {
   .pf { padding-top: 0.75rem; }
-  .pf-modal .modal-dialog { margin: 0; max-width: 100%; min-height: 100%; }
-  .pf-modal .modal-dialog-scrollable { max-height: 100%; height: 100%; }
-  .pf-modal .modal-content { min-height: 100vh; border-radius: 0; border: 0; }
-  .pf-modal .modal-footer { position: sticky; bottom: 0; background: var(--pf-surface); }
+  /* Hojas flotantes: no ocupan toda la pantalla; dejan ver el perfil detrás
+     y crecen solo lo que necesita su contenido (con scroll si no cabe). */
+  .dark-mode .pf-modal .modal-dialog {
+    margin: 1.25rem 0.75rem;
+    max-width: none;
+    min-height: 0;
+  }
+  .dark-mode .pf-modal .modal-dialog-scrollable { height: auto; max-height: calc(100% - 2.5rem); }
+  .dark-mode .pf-modal .modal-content {
+    min-height: 0;
+    max-height: calc(100vh - 2.5rem);
+    max-height: calc(100dvh - 2.5rem);
+    border: 1px solid var(--pf-border);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+  .dark-mode .pf-modal .modal-header { padding: 0.875rem 1rem; }
+  .dark-mode .pf-modal .modal-body { padding: 1rem; }
+  .dark-mode .pf-modal .modal-footer { position: static; padding: 0.75rem 1rem; background: transparent; }
+  .pf-modal .modal-title { font-size: 1.125rem; }
   .pf-modal .modal-footer .pf-btn { flex: 1; }
+  .pf-modal .pf-field { margin-bottom: 0.75rem; }
+  .dark-mode .pf-modal .pf-amount .form-control { min-height: 52px; font-size: 1.5rem; }
   .pf-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pf-result { border-left: 0; border-top: 1px solid var(--pf-border); }
   .pf-result--total { grid-column: 1 / -1; border-top: 0; }
