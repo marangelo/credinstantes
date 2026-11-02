@@ -119,6 +119,12 @@
 .dark-mode .btn-success { color: var(--ui-brand-ink); background-color: var(--ui-brand); border-color: var(--ui-brand); }
 .dark-mode .btn-success:hover, .dark-mode .btn-success:focus { color: var(--ui-brand-ink); background-color: var(--ui-brand); border-color: var(--ui-brand); filter: brightness(1.08); }
 
+/* ---------- Footer: en celular se oculta (fijo abajo, tapaba el contenido) ---------- */
+@media (max-width: 767.98px) {
+  .dark-mode .main-footer { display: none; }
+  .dark-mode.layout-footer-fixed .wrapper .content-wrapper { padding-bottom: 0; }
+}
+
 /* ---------- Pantallas táctiles: objetivos de 44px y texto de 16px ---------- */
 @media (pointer: coarse), (max-width: 767.98px) {
   .dark-mode .content-wrapper .form-control:not(textarea):not(.form-control-sm),
