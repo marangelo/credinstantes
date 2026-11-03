@@ -5,281 +5,166 @@
 @endsection
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Usuario</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">USUARIO</li>
-            </ol>
-          </div>
+<link rel="stylesheet" href="{{ asset('css/usuarios.css') }}?v={{ filemtime(public_path('css/usuarios.css')) }}">
+
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container-fluid us">
+
+      <header class="us-header">
+        <div>
+          <h1 class="us-title">Usuarios</h1>
+          <p class="us-subtitle">{{ $Usuarios->count() }} usuarios del sistema</p>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
+        <button type="button" class="us-btn us-btn--primary" id="btn_form_add_user">
+          <i class="fas fa-plus" aria-hidden="true"></i> <span>Nuevo usuario</span>
+        </button>
+      </header>
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <!-- /.card -->
+      <div class="us-toolbar">
+        <div class="us-search">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input type="search" class="form-control" id="usSearch" placeholder="Buscar por nombre, email, permiso o zona"
+                 aria-label="Buscar usuarios" autocomplete="off" enterkeyhint="search">
+        </div>
+      </div>
 
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Clientes del Sistema</h3>
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" id="btn_form_add_user" >
-                      <i class="fas fa-plus text-success"></i>
+      <div class="us-list">
+        <table id="tbl_usrs" class="table us-table no-cards" width="100%">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Permiso</th>
+              <th>Zona</th>
+              <th>Creación</th>
+              <th><span class="us-sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+          @foreach ($Usuarios as $u)
+            @php
+              $activo = $u->Lock > 0;
+              $nombre = strtoupper($u->nombre);
+            @endphp
+            <tr>
+              <td class="c-id">{{ $u->id }}</td>
+              <td class="c-name">
+                <span class="us-name">{{ $nombre }}</span>
+              </td>
+              <td class="c-email">{{ strtolower($u->email) }}</td>
+              @php $zonaUs = strtoupper($u->Zona->nombre_zona ?? ''); @endphp
+              <td class="c-rol" data-zona="{{ $zonaUs ? ' · ' . $zonaUs : '' }}">{{ ucfirst(mb_strtolower($u->RolName->descripcion ?? '')) }}</td>
+              <td class="c-zona">{{ $zonaUs }}</td>
+              <td class="c-fecha" data-order="{{ $u->created_at }}">{{ Date::parse($u->created_at)->format('d M Y') }}</td>
+              <td class="c-actions">
+                <div class="us-actions">
+                  <button type="button" class="us-btn" onclick="Edit_form({{ $u }})" aria-label="Editar a {{ $nombre }}">
+                    <i class="fas fa-pen" aria-hidden="true"></i><span>Editar</span>
                   </button>
-                  
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="tbl_usrs" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nombre Completo</th>
-                    <th>Email</th>
-                    <th>Permisos</th>
-                    <th>Zona</th>
-                    <th>Creación</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  @foreach ($Usuarios as $u)  
-                  <tr>
-                    <td>{{ $u->id }}</td>
-                    <td>{{ strtoupper($u->nombre) }}</td>
-                    <td>{{strtoupper($u->email) }}</td>
-                    <td>{{strtoupper($u->RolName->descripcion) }}</td>
-                    <td>{{strtoupper($u->Zona->nombre_zona) }}</td>
-                    <td>{{ Date::parse($u->created_at)->format('D, M d, Y') }}</td>
-                    <th>
-                    <div class="card-tools text-center">
-                     
-                      <button type="button" class="btn btn-tool " onclick="Edit_form({{ $u }})" >
-                        <i class="fas fa-edit text-primary"></i>
-                      </button>
-                      <button type="button" class="btn btn-tool" onclick="Remove_form({{ $u->id }})">
-                        <i class="fas fa-trash text-danger"></i>
-                      </button>
-
-                      <button type="button" class="btn btn-tool" onclick="Lock({{ $u->id }})">                        
-                        @if($u->Lock > 0)
-                        <i class="fas fa-lock-open text-success"></i>
-                        @else
-                        <i class="fas fa-lock text-danger"></i>
-                        @endif
+                  <button type="button" class="us-btn {{ $activo ? 'us-btn--ok' : 'us-btn--lock' }}" onclick="Lock({{ $u->id }}, {{ $activo ? 'true' : 'false' }})"
+                          title="{{ $activo ? 'Desbloqueado: toque para bloquear' : 'Bloqueado: toque para desbloquear' }}"
+                          aria-label="{{ $nombre }} está {{ $activo ? 'desbloqueado. Bloquear' : 'bloqueado. Desbloquear' }}">
+                    {{-- Verde = desbloqueado, rojo = bloqueado: el botón muestra el ESTADO; la acción se confirma al tocarlo --}}
+                    <i class="fas {{ $activo ? 'fa-lock-open' : 'fa-lock' }}" aria-hidden="true"></i><span>{{ $activo ? 'Desbloqueado' : 'Bloqueado' }}</span>
+                  </button>
+                  <div class="dropdown">
+                    <button type="button" class="us-btn us-btn--icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Más acciones para {{ $nombre }}">
+                      <i class="fas fa-ellipsis-h" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right us-menu">
+                      <button type="button" class="dropdown-item us-menu-danger" onclick="Remove_form({{ $u->id }})">
+                        <i class="fas fa-trash-alt" aria-hidden="true"></i> Eliminar usuario
                       </button>
                     </div>
-                    </th>
-                  </tr>
-                  @endforeach
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>#</th>
-                    <th>Nombre Completo</th>
-                    <th>Email</th>
-                    <th>Permisos</th>
-                    <th>Zona</th>
-                    <th>Creación</th>
-                    <th></th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
+                  </div>
+                </div>
+              </td>
+            </tr>
+          @endforeach
+          </tbody>
+        </table>
       </div>
-      <!-- /.container-fluid -->
-    </section>
-    <div class="modal fade" id="modal_xl_add_user">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Nuevo Usuarios</h4>
-              <span id="id_estado" style="display:none" >Estado</span>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+    </div>
+  </section>
+
+  {{-- ===================== Hoja: Nuevo / Editar usuario ===================== --}}
+  <div class="modal fade us-modal" id="modal_xl_add_user" tabindex="-1" aria-labelledby="usModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="usModalTitle">Nuevo usuario</h2>
+          <span id="id_estado" style="display:none">Estado</span>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <h3 class="us-group-title">Datos</h3>
+          <div class="us-cols us-cols--3">
+            <div class="us-field">
+              <label for="txtFullName">Nombre completo</label>
+              <input type="text" id="txtFullName" class="form-control" autocapitalize="words" autocomplete="off">
             </div>
-            <div class="modal-body">
-            <div class="card card-warning">
-            
-              <!-- /.card-header -->
-              <div class="card-body">
-                <div class="row">
-                  
-                  <div class="col-md-12">
-
-                    <div class="row" >
-                      <div class="col-md-4">
-
-                        <div class="form-group">
-                          <label>Nombre Completo:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            </div>
-                            <input type="text" id="txtFullName" class="form-control" placeholder="Wilmer Ramos">
-                          </div>
-                        </div>
-                        
-                      
-                      </div>
-
-                      <div class="col-md-4">
-                        
-                        <div class="form-group">
-                          <label>Email:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-at"></i></span>
-                            </div>
-                            <input type="text" id="txtUserName" class="form-control" placeholder="demo@demo.com">
-                          </div>
-                        </div>
-                        
-                        
-                      </div>
-
-                      <div class="col-md-4">
-                        
-                        <div class="form-group">
-                          <label>Telefono:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            </div>
-                            <input type="text" id="txtPhone" class="form-control" placeholder="" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
-                          </div>
-                        </div>
-                        
-                        
-                      </div>
-
-                      <div class="col-md-3">
-
-                        <div class="form-group">
-                          <label>Contraseña:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-key"></i></span>
-                            </div>
-                            <input type="password" id="txtPassWord_one" class="form-control"  >
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <div class="col-md-3">
-
-                        <div class="form-group">
-                          <label>Confirme contraseña:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-key"></i></i></span>
-                            </div>
-                            <input type="password" class="form-control" id="txtPassWord_two" >
-                          </div>
-                        </div>
-                        
-                      </div>
-
-                      <div class="col-md-3">
-
-                        <div class="form-group">
-                          <label>Permiso:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-user-shield"></i></i></span>
-                            </div>
-                            <select class="form-control" id="sclPrivi">
-                              @foreach ($Roles as $r)
-                                <option value="{{$r->id}}"> {{strtoupper($r->descripcion)}}</option>
-                              @endforeach                       
-                            </select>
-                          </div>
-                        </div>
-
-                      
-                      </div>
-
-                      <div class="col-md-3">
-
-                        <div class="form-group">
-                          <label>Zona:</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fas fa-user-shield"></i></i></span>
-                            </div>
-                            <select class="form-control" id="sclZona">
-                              @foreach ($Zonas as $z)
-                                <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
-                              @endforeach                       
-                            </select>
-                          </div>
-                        </div>
-
-
-                      </div>
-
-                      <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Comentarios</label>
-                      <textarea class="form-control" id="txtComentario" rows="4" placeholder="Algun comentario ? ..."></textarea>
-                    </div>
-                  </div>
-
-                  @if (in_array(Session::get('rol'), [1]))
-                  <div class="col-sm-12" id="div_zonas_promotor" style="display:none">
-                    <div class="form-group">
-                      <label>Zonas del Promotor:</label>
-                      <select class="form-control select2" id="sclZonasPromotor" multiple="multiple" data-placeholder="Seleccione zonas" style="width: 100%;">
-                        @foreach ($Zonas as $z)
-                          <option value="{{$z->id_zona}}"> {{strtoupper($z->nombre_zona)}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
-                  @endif
-
-                    </div>
-
-                  </div>
-                </div>
-                <div class="row">
-                  
-                </div>
-              </div>
-              <!-- /.card-body -->
+            <div class="us-field">
+              <label for="txtUserName">Email</label>
+              <input type="email" id="txtUserName" class="form-control" inputmode="email" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="usuario@credinstante.com">
             </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-success" id="btn_save_user">Guardar</button>
+            <div class="us-field">
+              <label for="txtPhone">Teléfono</label>
+              <input type="tel" id="txtPhone" class="form-control" inputmode="numeric" data-inputmask="'mask': ['+505-9999-9999']" data-mask>
             </div>
           </div>
-          <!-- /.modal-content -->
+
+          <h3 class="us-group-title">Acceso</h3>
+          <div class="us-cols us-cols--2">
+            <div class="us-field">
+              <label for="txtPassWord_one">Contraseña</label>
+              <input type="password" id="txtPassWord_one" class="form-control" autocomplete="new-password">
+            </div>
+            <div class="us-field">
+              <label for="txtPassWord_two">Confirme la contraseña</label>
+              <input type="password" id="txtPassWord_two" class="form-control" autocomplete="new-password">
+            </div>
+            <div class="us-field">
+              <label for="sclPrivi">Permiso</label>
+              <select class="form-control" id="sclPrivi">
+                @foreach ($Roles as $r)
+                  <option value="{{ $r->id }}">{{ strtoupper($r->descripcion) }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="us-field">
+              <label for="sclZona">Zona</label>
+              <select class="form-control" id="sclZona">
+                @foreach ($Zonas as $z)
+                  <option value="{{ $z->id_zona }}">{{ strtoupper($z->nombre_zona) }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          @if (in_array(Session::get('rol'), [1]))
+            <div class="us-field" id="div_zonas_promotor" style="display:none">
+              <label for="sclZonasPromotor">Zonas del Promotor</label>
+              <select class="form-control select2" id="sclZonasPromotor" multiple="multiple" data-placeholder="Seleccione zonas" style="width: 100%;">
+                @foreach ($Zonas as $z)
+                  <option value="{{ $z->id_zona }}">{{ strtoupper($z->nombre_zona) }}</option>
+                @endforeach
+              </select>
+            </div>
+          @endif
+
+          <div class="us-field">
+            <label for="txtComentario">Comentarios</label>
+            <textarea class="form-control" id="txtComentario" rows="2" placeholder="Algún comentario…"></textarea>
+          </div>
         </div>
-        <!-- /.modal-dialog -->
+        <div class="modal-footer">
+          <button type="button" class="us-btn" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="us-btn us-btn--primary" id="btn_save_user"><i class="fas fa-check" aria-hidden="true"></i> Guardar</button>
+        </div>
       </div>
-    <!-- /.content -->
+    </div>
   </div>
+</div>
 @endsection

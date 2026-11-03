@@ -1,25 +1,38 @@
 <script type="text/javascript">
     $('[data-mask]').inputmask()
     
-    $("#tbl_usrs").DataTable({
-            "responsive": true, 
-        "lengthChange": false, 
+    // En celular cada usuario es una tarjeta (usuarios.css); en PC, tabla.
+    var tblUsuarios = $("#tbl_usrs").DataTable({
+        "responsive": false,
+        "lengthChange": false,
         "autoWidth": false,
-        "info": false,
+        "info": true,
+        "pageLength": 25,
+        "order": [[1, 'asc']],
+        "dom": "rt<'us-pager'ip>",
+        "columnDefs": [{ "targets": [6], "orderable": false }],
         "language": {
-            "zeroRecords": "NO HAY COINCIDENCIAS",
+            "zeroRecords": "No hay usuarios que coincidan con la búsqueda",
+            "info": "_START_–_END_ de _TOTAL_",
+            "infoEmpty": "0 usuarios",
+            "infoFiltered": "(de _MAX_)",
             "paginate": {
                 "first": "Primera",
-                "last": "Última ",
+                "last": "Última",
                 "next": "Siguiente",
                 "previous": "Anterior"
             },
-            "lengthMenu": "MOSTRAR _MENU_",
-            "emptyTable": "-",
-            "search": "BUSCAR"
-        },
-        "buttons": ["copy", "excel", "print"]
-    }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
+            "emptyTable": "No hay usuarios",
+            "search": "Buscar"
+        }
+    });
+
+    var tBuscarUs = null;
+    $('#usSearch').on('input', function () {
+        var q = this.value;
+        clearTimeout(tBuscarUs);
+        tBuscarUs = setTimeout(function () { tblUsuarios.search(q).draw(); }, 150);
+    });
 
     $('#sclZonasPromotor').select2({ theme: 'bootstrap4', dropdownParent: $('#modal_xl_add_user') });
 
@@ -44,9 +57,9 @@
         $("#sclZonasPromotor").val(null).trigger('change');
         ToggleZonas();
 
-        // Llamar a la función para guardar el formulario
-        $('#modal_xl_add_user').modal('show');     
-        $("#id_estado").html(0);   
+        $("#usModalTitle").text("Nuevo usuario");
+        $('#modal_xl_add_user').modal('show');
+        $("#id_estado").html(0);
     });
     function Remove_form(IdElem){
 
@@ -104,8 +117,8 @@
 
     function Edit_form(usr) {
 
-    console.log(usr);
-        $('#modal_xl_add_user').modal('show');  
+        $("#usModalTitle").text("Editar usuario");
+        $('#modal_xl_add_user').modal('show');
         $("#txtFullName").val(usr.nombre);
         $("#txtUserName").val(usr.email);
         $("#txtPhone").val(usr.Phone);
@@ -199,18 +212,20 @@
         
     }
 
-    function Lock(IdUser){
+    // El servidor alterna el estado (LockUser); el texto ahora depende de si está activo
+    function Lock(IdUser, EstaActivo){
 
- 
+        var bloquear = (EstaActivo !== false);
 
         Swal.fire({
-            title: '¿Estas Seguro de Inactivar Al usuario  ?',
-            text: "¡Se Inactivara al Usuario temporalmente!",
+            title: bloquear ? '¿Bloquear a este usuario?' : '¿Desbloquear a este usuario?',
+            text: bloquear ? 'No podrá iniciar sesión hasta que se desbloquee.' : 'Podrá volver a iniciar sesión.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si!',
+            confirmButtonText: bloquear ? 'Sí, bloquear' : 'Sí, desbloquear',
+            cancelButtonText: 'Cancelar',
             target: document.getElementById('mdlMatPrima'),
             showLoaderOnConfirm: true,
             preConfirm: () => {
@@ -225,7 +240,7 @@
                     success: function(response) {
                         if(response){
                             Swal.fire({
-                                title: 'Inactivado Correctamente ' ,
+                                title: bloquear ? 'Usuario bloqueado' : 'Usuario desbloqueado',
                                 icon: 'success',
                                 showCancelButton: false,
                                 confirmButtonColor: '#3085d6',
