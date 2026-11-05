@@ -74,7 +74,10 @@ class Prospectos extends Model {
         
         foreach ($Prospectos as $key => $c) {
 
-            $Acciones = '<a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>';
+            // Eliminar: solo Administrador (1) y Operaciones (3)
+            $Acciones = in_array(Auth::User()->id_rol, [1, 3])
+                ? '<a href="deleteProspecto/' . $c->id_prospecto.' " class="btn btn-danger btn-block" ><i class="fas fa-trash"></i> </a>'
+                : '';
 
         
             

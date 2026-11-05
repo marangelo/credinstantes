@@ -92,6 +92,11 @@ class ProspectosController extends Controller
     }
     public function DeleteProspecto($IdProspecto)
     {
+        // Solo Administrador (1) y Operaciones (3) pueden eliminar prospectos
+        if (!in_array(Auth::User()->id_rol, [1, 3])) {
+            return redirect()->route('Prospectos');
+        }
+
         $response = Prospectos::UpdateEstadoProspecto($IdProspecto,0);        
         
         if($response){

@@ -354,8 +354,10 @@
                 {"title": "CREADO POR","data": "Usuario"},
                 {
                     "title": "ACCION",
-                    "data": "Accion"
-                }, 
+                    "data": "Accion",
+                    // Solo Administrador y Operaciones tienen acciones; para el resto se oculta la columna
+                    "visible": {{ in_array(Auth::User()->id_rol, [1, 3]) ? 'true' : 'false' }}
+                },
                
             ],
            
