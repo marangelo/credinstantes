@@ -35,9 +35,6 @@
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY'
         });
-        $('#dtAbono').datetimepicker({
-            format: 'DD/MM/YYYY'
-        });
 
 
        
@@ -832,7 +829,9 @@
             if ((parseFloat(dtSaldo) > 0) ) {
 
 
-                $('#modal-lg').modal('show');                
+                // La fecha del pago es siempre la de hoy (campo de solo lectura)
+                $("#IddtApertura").val(moment().format('DD/MM/YYYY'));
+                $('#modal-lg').modal('show');
                 $("#lbl_credito").html(IdCredito);
 
                 

@@ -268,10 +268,11 @@
         {{-- 4. Fecha --}}
         <div class="pf-field">
           <label for="IddtApertura">Fecha del pago</label>
-          <div class="input-group date" id="dtAbono" data-target-input="nearest">
-            <input type="text" class="form-control datetimepicker-input" data-target="#dtAbono" id="IddtApertura" inputmode="numeric" value="{{ date('d/m/Y') }}"/>
-            <div class="input-group-append" data-target="#dtAbono" data-toggle="datetimepicker">
-              <span class="input-group-text" aria-hidden="true"><i class="fa fa-calendar"></i></span>
+          {{-- Solo lectura: el pago se aplica con la fecha del día, no se puede cambiar --}}
+          <div class="input-group">
+            <input type="text" class="form-control" id="IddtApertura" value="{{ date('d/m/Y') }}" readonly tabindex="-1" aria-readonly="true"/>
+            <div class="input-group-append">
+              <span class="input-group-text" aria-hidden="true"><i class="fas fa-lock"></i></span>
             </div>
           </div>
         </div>
