@@ -24,6 +24,7 @@
     'zona'         => $Request->id_zone ?? null,
     'estado_civil' => $Request->estado_civil ?? '',
     'direccion'    => $Request->client_address ?? '',
+    'comentario'   => $Request->comentario ?? '',
     'negocio'      => $Request ? $Request->getNegocio : null,
     'conyugue'     => $Request ? $Request->getConyugue : null,
     'fiador'       => $Request ? $Request->getFiador : null,

@@ -1,6 +1,11 @@
 <script type="text/javascript"> 
-    $(document).ready(function () 
+    $(document).ready(function ()
     {
+        // Comentarios: contador de caracteres (máx. 500)
+        $('#txtComentarioSolicitud').on('input', function () {
+            $('#txtComentarioSolicitudLen').text(this.value.length);
+        });
+
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY'
         });
@@ -470,7 +475,8 @@
                     iGarantias  : Info_garantias,
                     iReferencias: Info_referencias,
                     iFiador     : Info_fiador,
-                    IdClientes     : IdCiente_
+                    IdClientes     : IdCiente_,
+                    Comentario_    : $.trim($("#txtComentarioSolicitud").val() || '')
                 },
                 async: true,
             success: function(response) {

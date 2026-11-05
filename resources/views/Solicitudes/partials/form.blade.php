@@ -10,6 +10,7 @@
     2. Crédito  (5 columnas + resultados en una franja)
     3. Asignación (3 columnas)
     4. Información adicional en pestañas: Negocio · Referencias · Cónyuge · Garantías · Fiador
+    5. Comentarios (nota para quien aprueba)
 --}}
 @php
   $estadosCiviles = ['0' => 'Seleccione un estado civil', '1' => 'Soltero(a)', '2' => 'Casado(a)', '3' => 'Divorciado(a)', '4' => 'Viudo(a)', '5' => 'Unión libre'];
@@ -44,6 +45,7 @@
           <a href="#sec-credito">Crédito</a>
           <a href="#sec-asignacion">Asignación</a>
           <a href="#sec-adicional">Info. adicional</a>
+          <a href="#sec-comentarios">Comentarios</a>
         </nav>
         <div class="sol-toolbar-end">
           <p class="sol-live" id="solLive">
@@ -454,6 +456,30 @@
               </form>
             </div>
 
+          </div>
+        </section>
+
+        {{-- ============ 5. Comentarios ============
+             Nota de quien llena la solicitud; se lee al revisarla para aprobación.
+             Se guarda en tbl_requests_credit.comentario (SaveNewProspecto / UpRequestCredit). --}}
+        <section class="sol-section" id="sec-comentarios" aria-labelledby="h-comentarios">
+          <div class="sol-section-head">
+            <div>
+              <h2 class="sol-section-title" id="h-comentarios">Comentarios</h2>
+              <p class="sol-section-hint">Lo que deba saber quien apruebe la solicitud.</p>
+            </div>
+            <span class="sol-tag">Opcional</span>
+          </div>
+          <div class="sol-section-body">
+            <div class="sol-field">
+              <label class="sol-label sol-sr-only" for="txtComentarioSolicitud">Comentario</label>
+              <textarea class="form-control" id="txtComentarioSolicitud" name="comentario_solicitud" rows="4" maxlength="500"
+                        aria-describedby="txtComentarioSolicitudCount"
+                        placeholder="Ej.: cliente puntual en el crédito anterior, negocio propio desde hace 3 años…">{{ $v['comentario'] ?? '' }}</textarea>
+              <p class="sol-help sol-counter" id="txtComentarioSolicitudCount" aria-live="polite">
+                <span id="txtComentarioSolicitudLen">{{ mb_strlen($v['comentario'] ?? '') }}</span> / 500
+              </p>
+            </div>
           </div>
         </section>
 

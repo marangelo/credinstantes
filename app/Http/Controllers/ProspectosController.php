@@ -165,7 +165,10 @@ class ProspectosController extends Controller
             'Saldos_'      => 'required|numeric',
             'vlInteres'    => 'required|numeric',
             'InteresesPorCuota' => 'required|numeric',
-        ], $messages);
+            'Comentario_'  => 'nullable|string|max:500',
+        ], $messages + ['Comentario_.max' => 'El comentario no puede pasar de 500 caracteres.']);
+
+        $Comentario = trim((string) $request->input('Comentario_', ''));
 
         $idInsertado = RequestsCredit::insertGetId([
             'req_start_date'      => $request->FechaOpen,
@@ -192,7 +195,8 @@ class ProspectosController extends Controller
             'activo'              => 1,
             'created_by'          => Auth::id(),
             'Origen'              => $request->_Origin,
-            'id_cliente'          => $request->IdClientes	
+            'id_cliente'          => $request->IdClientes,
+            'comentario'          => $Comentario !== '' ? $Comentario : null,
         ]);
 
         if(isset($iNegocio) && $iNegocio != null) {
