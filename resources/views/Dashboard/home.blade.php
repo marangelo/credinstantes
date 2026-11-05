@@ -6,17 +6,17 @@
 @php
   // Catálogo de indicadores. Los "id" son los que llena js_dashboard; no cambiarlos.
   $kpi = [
-    'ingreso'       => ['id' => 'lblIngreso',        'label' => 'Ingreso neto',     'tone' => 'success', 'icon' => 'fa-hand-holding-usd', 'currency' => true],
-    'capital'       => ['id' => 'lblCapital',        'label' => 'Capital',          'tone' => 'success', 'icon' => 'fa-coins',            'currency' => true],
-    'recuperacion'  => ['id' => 'lblCapital',        'label' => 'Recuperación',     'tone' => 'success', 'icon' => 'fa-coins',            'currency' => true],
-    'util_bruta'    => ['id' => 'lblInteres',        'label' => 'Utilidad bruta',   'tone' => 'success', 'icon' => 'fa-chart-line',       'currency' => true],
-    'util_neta'     => ['id' => 'lbl_ultil_neta',    'label' => 'Utilidad neta',    'tone' => 'success', 'icon' => 'fa-piggy-bank',       'currency' => true],
-    'creditos'      => ['id' => 'lblClientes',       'label' => 'Créditos activos', 'tone' => 'primary', 'icon' => 'fa-users',            'currency' => false],
-    'saldo_cartera' => ['id' => 'id_saldos_cartera', 'label' => 'Saldo de cartera', 'tone' => 'primary', 'icon' => 'fa-wallet',           'currency' => true],
-    'saldo_capital' => ['id' => 'lbl_saldo_capital', 'label' => 'Saldo capital',    'tone' => 'primary', 'icon' => 'fa-university',       'currency' => true],
-    'mora_atrasada' => ['id' => 'lblMoraAtrasada',   'label' => 'Mora atrasada',    'tone' => 'warning', 'icon' => 'fa-clock',            'currency' => true],
-    'mora_vencida'  => ['id' => 'lblMoraVencida',    'label' => 'Mora vencida',     'tone' => 'danger',  'icon' => 'fa-exclamation-triangle', 'currency' => true],
-    'dispensa'      => ['id' => 'lbl_dispensa',      'label' => 'Dispensa',         'tone' => 'neutral', 'icon' => 'fa-percent',          'currency' => true],
+    'ingreso'       => ['id' => 'lblIngreso',        'label' => 'Ingreso neto',     'tone' => 'ingreso', 'icon' => 'fa-hand-holding-usd', 'currency' => true],
+    'capital'       => ['id' => 'lblCapital',        'label' => 'Capital',          'tone' => 'capital', 'icon' => 'fa-coins',            'currency' => true],
+    'recuperacion'  => ['id' => 'lblCapital',        'label' => 'Recuperación',     'tone' => 'capital', 'icon' => 'fa-coins',            'currency' => true],
+    'util_bruta'    => ['id' => 'lblInteres',        'label' => 'Utilidad bruta',   'tone' => 'util-bruta', 'icon' => 'fa-chart-line',       'currency' => true],
+    'util_neta'     => ['id' => 'lbl_ultil_neta',    'label' => 'Utilidad neta',    'tone' => 'ingreso', 'icon' => 'fa-piggy-bank',       'currency' => true],
+    'creditos'      => ['id' => 'lblClientes',       'label' => 'Créditos activos', 'tone' => 'creditos', 'icon' => 'fa-users',            'currency' => false],
+    'saldo_cartera' => ['id' => 'id_saldos_cartera', 'label' => 'Saldo de cartera', 'tone' => 'saldo', 'icon' => 'fa-wallet',           'currency' => true],
+    'saldo_capital' => ['id' => 'lbl_saldo_capital', 'label' => 'Saldo capital',    'tone' => 'saldo', 'icon' => 'fa-university',       'currency' => true],
+    'mora_atrasada' => ['id' => 'lblMoraAtrasada',   'label' => 'Mora atrasada',    'tone' => 'mora-atrasada', 'icon' => 'fa-clock',            'currency' => true],
+    'mora_vencida'  => ['id' => 'lblMoraVencida',    'label' => 'Mora vencida',     'tone' => 'mora-vencida',  'icon' => 'fa-exclamation-triangle', 'currency' => true],
+    'dispensa'      => ['id' => 'lbl_dispensa',      'label' => 'Dispensa',         'tone' => 'dispensa', 'icon' => 'fa-percent',          'currency' => true],
   ];
 
   // Qué ve cada rol, agrupado por tema (mismo contenido que antes, ahora con jerarquía).

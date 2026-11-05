@@ -171,6 +171,17 @@
 .kpi--danger  { --tone: var(--tone-danger); }
 .kpi--neutral { --tone: var(--tone-neutral); }
 
+/* Colores por indicador, los mismos del dashboard anterior (rama master),
+   aclarados lo justo para leerse sobre el fondo oscuro */
+.kpi--ingreso       { --tone: #4cd964; }   /* Ingreso neto / Utl. neta: verde */
+.kpi--capital       { --tone: #33ccf5; }   /* Capital / Recuperación: celeste */
+.kpi--util-bruta    { --tone: #ffc107; }   /* Utl. bruta: amarillo */
+.kpi--creditos      { --tone: #3fc1d6; }   /* Créditos activos: turquesa */
+.kpi--saldo         { --tone: #ff9eac; }   /* Saldo de cartera / capital: rosado */
+.kpi--mora-atrasada { --tone: #ff8c1a; }   /* Mora atrasada: naranja */
+.kpi--mora-vencida  { --tone: #ff6b78; }   /* Mora vencida: rojo */
+.kpi--dispensa      { --tone: #4cc764; }   /* Dispensa: verde */
+
 .kpi-head {
   display: flex;
   align-items: center;
@@ -179,10 +190,10 @@
 }
 .kpi-label {
   margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 1.0625rem;
+  font-weight: 700;
   line-height: 1.3;
-  color: var(--dash-text-muted);
+  color: var(--tone);
 }
 .kpi-icon {
   display: inline-flex;
@@ -270,7 +281,7 @@
   .dash-group { flex-basis: 100%; }
   .dash-grid { gap: 0.75rem; }
   .kpi { min-height: 96px; }
-  .kpi-value { font-size: 1.375rem; }
+  .kpi-value { font-size: 1.5rem; }
   .dash-chart { height: 220px; }
 }
 
