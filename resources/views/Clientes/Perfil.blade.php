@@ -26,7 +26,6 @@
   $puedeEditar    = in_array($rol, ['1', '5']);
   $verDocumentos  = in_array($rol, ['1', '5']);
   $puedeEliminar  = $rol === '1';
-  $puedeNuevo     = in_array($rol, ['1', '3', '5']);
 @endphp
 
 <link rel="stylesheet" href="{{ asset('css/perfil.css') }}?v={{ filemtime(public_path('css/perfil.css')) }}">
@@ -73,9 +72,12 @@
           @else
             <span class="pf-btn is-disabled" aria-disabled="true"><i class="fas fa-phone-slash" aria-hidden="true"></i> Sin teléfono</span>
           @endif
-          @if ($puedeNuevo)
-            <button type="button" class="pf-btn" id="btn_mdl_credito">
-              <i class="fas fa-plus" aria-hidden="true"></i> Nuevo crédito
+          {{-- Ya no se renueva desde aquí: en lugar de "Nuevo crédito", acceso directo a la notificación de visita del crédito activo --}}
+          @php $creditoVisita = $activos->first(); @endphp
+          @if ($creditoVisita)
+            <button type="button" class="pf-btn" onclick="getNotificacionVisita({{ $creditoVisita->id_creditos }})"
+                    aria-label="Notificación de visita del crédito #{{ $creditoVisita->id_creditos }}">
+              <i class="fas fa-bell" aria-hidden="true"></i> Notificar visita
             </button>
           @endif
         </div>
