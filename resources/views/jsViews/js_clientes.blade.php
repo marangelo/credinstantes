@@ -14,6 +14,9 @@
         // Supervisor (rol 5): puede exportar a Excel solo la lista de Clientes Inactivos
         var ExportInactivos = {{ (($Titulo ?? '') === 'Clientes Inactivos' && in_array(Session::get('rol'), [5])) ? 'true' : 'false' }};
 
+        // En Clientes Activos no se ofrece "Copiar" (solo Excel y PDF)
+        var EsActivos = {{ ($Titulo ?? '') === 'Clientes Activos' ? 'true' : 'false' }};
+
         $('#id_select_zona').change(function() {
             // Reemplaza el último segmento (/Activos/3 -> /Activos/12); funciona con ids de 2+ dígitos
             window.location.href = currentPath.replace(/\/[^\/]*$/, '/' + this.value);
@@ -46,11 +49,12 @@
                 text: '<i class="fas fa-download" aria-hidden="true"></i><span class="cli-export-label">Exportar</span>',
                 titleAttr: 'Exportar lista',
                 className: 'cli-export-btn',
-                buttons: [
-                    { extend: 'copy',  text: '<i class="far fa-copy" aria-hidden="true"></i> Copiar' },
+                buttons: (EsActivos ? [] : [
+                    { extend: 'copy',  text: '<i class="far fa-copy" aria-hidden="true"></i> Copiar' }
+                ]).concat([
                     { extend: 'excel', text: '<i class="far fa-file-excel" aria-hidden="true"></i> Excel' },
                     { extend: 'pdf',   text: '<i class="far fa-file-pdf" aria-hidden="true"></i> PDF' }
-                ]
+                ])
             }] : (ExportInactivos ? [{
                 extend: 'excel',
                 text: '<i class="far fa-file-excel" aria-hidden="true"></i><span class="cli-export-label">Excel</span>',
