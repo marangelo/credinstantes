@@ -250,7 +250,9 @@ class Credito extends Model
                     'estado_credito'        => $Estado,
                     'activo'                => 1,
                     //CAMPO AGREGADO PARA GUARDAR EL RESPALDO DEL CREDITO
-                    'Seguro'                => $Respaldo_
+                    'Seguro'                => $Respaldo_,
+                    // Comentario de la solicitud aprobada (sale en el PDF Solicitud de crédito)
+                    'comentario'            => self::ComentarioSolicitud($request),
                 ];
 
                 $IdCredito = Credito::insertGetId($datos_credito);
@@ -444,6 +446,14 @@ class Credito extends Model
         }
         
     }
+    // Comentario de la solicitud que se aprueba (Comentario_ viene del formulario de
+    // solicitud/renovación). Fuera de ese flujo no llega y queda en null.
+    public static function ComentarioSolicitud(Request $request)
+    {
+        $Comentario = mb_substr(trim((string) $request->input('Comentario_', '')), 0, 500);
+        return $Comentario !== '' ? $Comentario : null;
+    }
+
     public static function AddCredito(Request $request)
     {
 
@@ -494,7 +504,9 @@ class Credito extends Model
                     'estado_credito'        => 1,
                     'activo'                => 1,
                     //CAMPO AGREGADO PARA GUARDAR EL RESPALDO DEL CREDITO
-                    'Seguro'                => $Respaldo_
+                    'Seguro'                => $Respaldo_,
+                    // Comentario de la solicitud aprobada (sale en el PDF Solicitud de crédito)
+                    'comentario'            => self::ComentarioSolicitud($request),
                 ];
                 
                 $IdCredito = Credito::insertGetId($datos_credito);
