@@ -271,18 +271,18 @@ class Ruleta
         return $Lock ? $q->lockForUpdate()->first() : $q->first();
     }
 
-    // Giro previo del cliente en la promoción. Se busca por cédula y no por id, porque hay
-    // clientes registrados dos veces con la misma cédula y no deben poder girar dos veces.
-    public static function ParticipacionPrevia($IdPromocion, $Cedula)
+    // Giro previo del crédito en la promoción: un giro por crédito, así al renovar el cliente
+    // puede volver a girar con su crédito nuevo. Sin crédito no hay giro previo que buscar.
+    public static function ParticipacionPrevia($IdPromocion, $IdCredito)
     {
-        $Ids = DB::table('tbl_clientes')
-            ->whereRaw(self::CEDULA_SQL . ' = ?', [self::NormalizarCedula($Cedula)])
-            ->pluck('id_clientes');
+        if (!$IdCredito) {
+            return null;
+        }
 
         $Previo = DB::table('tbl_ruleta_giros as g')
             ->leftJoin('users as u', 'u.id', '=', 'g.id_usuario')
             ->where('g.id_promocion', $IdPromocion)
-            ->whereIn('g.id_clientes', $Ids)
+            ->where('g.id_creditos', $IdCredito)
             ->select('g.fecha', 'g.tipo', 'g.monto', 'g.premio', 'g.codigo', 'u.nombre as promotor')
             ->first();
 
@@ -352,9 +352,16 @@ class Ruleta
     }
 
     // Lo que necesita la pantalla de la ruleta: cliente, premios de la promoción vigente y si ya participó.
-    public static function ClientePorId($IdCliente)
+    // $IdCredito: el crédito con el que se va a girar, para saber si ya giró en la promoción.
+    public static function ClientePorId($IdCliente, $IdCredito = null)
     {
-        return self::FichaCliente(self::QueryCliente()->where('c.id_clientes', $IdCliente)->first());
+        $Credito = $IdCredito ? DB::table('tbl_creditos')
+            ->where('id_creditos', $IdCredito)
+            ->where('id_clientes', $IdCliente)
+            ->select('id_creditos', 'estado_credito')
+            ->first() : null;
+
+        return self::FichaCliente(self::QueryCliente()->where('c.id_clientes', $IdCliente)->first(), $Credito);
     }
 
     // $Credito: el crédito activo con el que se identificó al cliente (solo en la búsqueda).
@@ -379,7 +386,7 @@ class Ruleta
             ],
             'CREDITO'      => $Credito ? ['ID' => (int) $Credito->id_creditos, 'ESTADO' => (int) $Credito->estado_credito] : null,
             'PROMOCION'    => $Promocion ? ['ID' => $Promocion->id_promocion, 'NOMBRE' => $Promocion->nombre, 'PREMIOS' => $Premios] : null,
-            'PARTICIPACION'=> $Promocion ? self::ParticipacionPrevia($Promocion->id_promocion, $Cliente->cedula) : null,
+            'PARTICIPACION'=> $Promocion && $Credito ? self::ParticipacionPrevia($Promocion->id_promocion, $Credito->id_creditos) : null,
         ]];
     }
 
@@ -518,12 +525,12 @@ class Ruleta
                 return [409, ['CODIGO' => 'SIN_PROMOCION', 'MENSAJE' => 'No hay una promoción activa en este momento.']];
             }
 
-            $Previo = self::ParticipacionPrevia($Promocion->id_promocion, $Cliente->cedula);
+            $Previo = self::ParticipacionPrevia($Promocion->id_promocion, $Credito->id_creditos);
 
             if ($Previo) {
                 return [409, [
                     'CODIGO'  => 'YA_PARTICIPO',
-                    'MENSAJE' => 'Este cliente ya participó en la promoción.',
+                    'MENSAJE' => 'Este crédito ya giró en la promoción.',
                     'GIRO'    => $Previo,
                 ]];
             }

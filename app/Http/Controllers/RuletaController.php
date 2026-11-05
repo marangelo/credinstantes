@@ -96,9 +96,9 @@ class RuletaController extends Controller
 
     public function Preparar(Request $request)
     {
-        $request->validate(['id_clientes' => 'required|integer']);
+        $request->validate(['id_clientes' => 'required|integer', 'id_creditos' => 'nullable|integer']);
 
-        list($Status, $Respuesta) = Ruleta::ClientePorId((int) $request->input('id_clientes'));
+        list($Status, $Respuesta) = Ruleta::ClientePorId((int) $request->input('id_clientes'), (int) $request->input('id_creditos'));
 
         return response()->json($Respuesta, $Status);
     }
