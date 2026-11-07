@@ -96,10 +96,38 @@
         });
     }
 
+    // Colores del gráfico tomados de los tokens del tema (public/css/theme.css)
+    function chartColors() {
+        var css = getComputedStyle(document.documentElement);
+        function token(name, def) { return $.trim(css.getPropertyValue(name)) || def; }
+        return {
+            bar   : token('--t-primary', '#2E8B47'),
+            hover : token('--t-primary-strong', token('--t-brand', '#1F6B35')),
+            muted : token('--t-text-muted', '#4E6B50'),
+            grid  : token('--t-border', '#E3EFE0')
+        };
+    }
+
+    // Al cambiar de tema (ui.js) se repintan los colores del gráfico existente
+    document.addEventListener('cs:themechange', function () {
+        if (!salesChart) return;
+        var c = chartColors();
+        var ds = salesChart.data.datasets[0];
+        ds.backgroundColor = c.bar;
+        ds.hoverBackgroundColor = c.hover;
+        var y = salesChart.options.scales.yAxes[0];
+        y.gridLines.color = c.grid;
+        y.gridLines.zeroLineColor = c.grid;
+        y.ticks.fontColor = c.muted;
+        salesChart.options.scales.xAxes[0].ticks.fontColor = c.muted;
+        salesChart.update();
+    });
+
     function renderChart(vLabel, vData) {
-        var brand   = '#86b817';
-        var muted   = '#adb5bd';
-        var grid    = 'rgba(255, 255, 255, 0.08)';
+        var colors  = chartColors();
+        var brand   = colors.bar;
+        var muted   = colors.muted;
+        var grid    = colors.grid;
         var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (salesChart) {
@@ -116,7 +144,7 @@
                 datasets: [{
                     label: 'Ingreso',
                     backgroundColor: brand,
-                    hoverBackgroundColor: '#9ad11f',
+                    hoverBackgroundColor: colors.hover,
                     borderWidth: 0,
                     maxBarThickness: 48,
                     data: vData

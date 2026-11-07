@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,8 +7,8 @@
   <link rel="icon" type="image/x-icon" href="{{asset('img/Logo.png')}}">
   <title>CREDIN$TANTE | {{$Titulo?? ''}}</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  {{-- Tema: fija claro/oscuro antes de pintar + fuente Source Sans Pro --}}
+  @include('layouts.partials.theme_head')
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
 
@@ -38,11 +38,14 @@
   
   <!-- Toastr -->
   <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
-  <!-- Sistema de diseño global (celular primero) -->
+  <!-- Tema Tómbola (tokens claro/oscuro) + sistema de diseño global (celular primero) -->
+  <link rel="stylesheet" href="{{ asset('css/theme.css') }}?v={{ filemtime(public_path('css/theme.css')) }}">
   <link rel="stylesheet" href="{{ asset('css/ui.css') }}?v={{ filemtime(public_path('css/ui.css')) }}">
 
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed {{ (request()->segment(1)  == 'Perfil' || request()->segment(1)  == 'Consolidado' ) ? ' sidebar-closed sidebar-collapse ' : '' }}">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed {{ (request()->segment(1)  == 'Perfil' || request()->segment(1)  == 'Consolidado' ) ? ' sidebar-closed sidebar-collapse ' : '' }}">
+{{-- AdminLTE usa la clase "dark-mode" para sus propios componentes: va solo con el tema oscuro --}}
+<script>if (document.documentElement.getAttribute('data-theme') === 'dark') document.body.classList.add('dark-mode');</script>
 <div class="wrapper">
 <!-- Preloader -->
 <div class="preloader flex-column justify-content-center align-items-center">

@@ -85,6 +85,48 @@
     });
   });
 
+  // --- 3. Tema claro / oscuro (Tómbola). El <head> ya fijó data-theme antes de pintar
+  //        (layouts/partials/theme_head). Aquí: botón, persistencia y aviso a la página.
+  var raiz = document.documentElement;
+
+  function temaActual() { return raiz.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+
+  function aplicarTema(tema, animar) {
+    if (animar) {
+      raiz.classList.add('theme-switching');
+      setTimeout(function () { raiz.classList.remove('theme-switching'); }, 320);
+    }
+    raiz.setAttribute('data-theme', tema);
+    // AdminLTE pinta sus propios componentes con la clase "dark-mode"
+    if (document.body) document.body.classList.toggle('dark-mode', tema === 'dark');
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.setAttribute('aria-label', tema === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro');
+    // Para lo que no es CSS (p. ej. colores de Chart.js en el Dashboard)
+    try { document.dispatchEvent(new CustomEvent('cs:themechange', { detail: { theme: tema } })); } catch (e) {}
+  }
+  window.csTema = { actual: temaActual, aplicar: aplicarTema };
+
+  $(function () {
+    aplicarTema(temaActual(), false);
+    $(document).on('click', '#themeToggle', function () {
+      var nuevo = temaActual() === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('cs-theme', nuevo); } catch (e) {}
+      aplicarTema(nuevo, true);
+    });
+  });
+
+  // Si el usuario nunca eligió, se sigue el tema del sistema en vivo
+  if (window.matchMedia) {
+    var mqOscuro = window.matchMedia('(prefers-color-scheme: dark)');
+    var alCambiarSistema = function (e) {
+      var guardado = null;
+      try { guardado = localStorage.getItem('cs-theme'); } catch (err) {}
+      if (guardado !== 'light' && guardado !== 'dark') aplicarTema(e.matches ? 'dark' : 'light', true);
+    };
+    if (mqOscuro.addEventListener) mqOscuro.addEventListener('change', alCambiarSistema);
+    else if (mqOscuro.addListener) mqOscuro.addListener(alCambiarSistema);
+  }
+
   // --- 2. Teclado adecuado en celular para campos numéricos
   $(function () {
     $('input[onkeypress*="isNumberKey"]').not('[inputmode]').attr('inputmode', 'decimal');

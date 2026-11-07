@@ -1,0 +1,307 @@
+/* ==========================================================================
+   Credin$tante · Tema "Tómbola"  (claro + oscuro)
+   Inspirado en la app Ruleta de Premios (E:\Documents\Devs\Ruleta, "MockUp de Premios"):
+   verde bosque, lima de marca, dorado para la acción principal con sombra
+   sólida "3D" y tarjetas muy redondeadas. Tipografía: Source Sans Pro en ambos temas.
+
+   ÚNICA fuente de color del sistema. Los CSS de módulo (ui, dashboard,
+   clientes, perfil, solicitudes, sol-lista, usuarios, payroll, login) toman sus
+   colores de estas variables --t-*.
+
+   Tema activo: <html data-theme="light|dark">. Lo fija un script en el <head>
+   (preferencia guardada en localStorage "cs-theme"; si no hay, la del sistema).
+   ========================================================================== */
+
+/* ---------- Claro (por defecto) ---------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Fondos y superficies */
+  --t-bg: #F7FBF4;              /* crema verdoso de la tómbola */
+  --t-bg-2: #EEF6EB;
+  --t-surface: #FFFFFF;          /* tarjetas */
+  --t-surface-2: #F2F8EF;        /* franjas, cabeceras de tabla, chips */
+  --t-field: #FFFFFF;            /* campos de formulario */
+  --t-hover: rgba(31, 107, 53, 0.06);
+  --t-overlay: rgba(10, 31, 74, 0.45);
+  --t-glass: rgba(247, 251, 244, 0.86);   /* barras fijas translúcidas */
+
+  /* Bordes */
+  --t-border: #E3EFE0;
+  --t-border-strong: #C9DEC4;
+
+  /* Texto */
+  --t-text: #2C3E50;             /* ink */
+  --t-text-muted: #4E6B50;       /* ink-soft (6.2:1 sobre blanco) */
+  --t-heading: #1F6B35;          /* títulos de página */
+  --t-name: #123E8C;             /* nombres de clientes, enlaces */
+  --t-placeholder: #7C9480;
+
+  /* Marca y acciones */
+  --t-primary: #2E8B47;          /* verde */
+  --t-primary-strong: #1F6B35;
+  --t-primary-soft: #CFEFC9;
+  --t-primary-ink: #FFFFFF;
+  --t-brand: #86B817;            /* lima de Credin$tante */
+  --t-brand-ink: #10160A;
+  --t-cta: #F2B705;              /* dorado: acción principal */
+  --t-cta-ink: #0A1F4A;          /* azul marino sobre dorado (9:1) */
+  --t-cta-edge: #B57D05;         /* "canto" de la sombra 3D */
+  --t-blue: #123E8C;
+  --t-blue-ink: #FFFFFF;
+  --t-blue-edge: #0A1F4A;
+  --t-cream: #FFF1BF;
+
+  /* Estados (texto legible sobre superficie) */
+  --t-success: #2E8B47;
+  --t-success-soft: #CFEFC9;
+  --t-danger: #C62828;
+  --t-danger-soft: #FDE3E3;
+  --t-warning: #8A5A00;
+  --t-warning-soft: #FFF1BF;
+  --t-info: #123E8C;
+  --t-info-soft: #DCE7FB;
+  --t-neutral: #5B6B60;
+
+  /* Colores por indicador del Dashboard (mismo tono que los elegidos en oscuro,
+     más intensos para leerse sobre blanco con contraste AA) */
+  --t-kpi-ingreso: #1E8A3C;
+  --t-kpi-capital: #0A7FA8;
+  --t-kpi-util-bruta: #9A6A00;
+  --t-kpi-creditos: #0E7C8C;
+  --t-kpi-saldo: #C2185B;
+  --t-kpi-mora-atrasada: #B85C00;
+  --t-kpi-mora-vencida: #C62828;
+  --t-kpi-dispensa: #2E7D32;
+
+  /* Sombras */
+  --t-shadow-card: 0 4px 14px rgba(31, 107, 53, 0.12);
+  --t-shadow-card-lg: 0 8px 24px rgba(31, 107, 53, 0.16);
+  --t-shadow-float: 0 12px 40px rgba(10, 31, 74, 0.22);
+  --t-focus: 0 0 0 3px rgba(46, 139, 71, 0.35);
+
+  /* Cromo de AdminLTE */
+  --t-navbar: rgba(255, 255, 255, 0.92);
+  --t-navbar-text: #1F6B35;
+  --t-sidebar: #1F6B35;
+  --t-sidebar-2: #174F28;
+  --t-sidebar-text: #E3F3DF;
+  --t-sidebar-muted: #A9D2A6;
+  --t-sidebar-active: #F2B705;
+  --t-sidebar-active-ink: #0A1F4A;
+}
+
+/* ---------- Oscuro: el modo oscuro "básico" original del sistema ----------
+   Paleta gris de AdminLTE que ya se usaba (superficies #2b3035 / #343a40 sobre
+   #454d55), acción principal lima de Credin$tante sin canto 3D, tarjetas planas
+   de 12px y la fuente Source Sans Pro. Solo el tema claro usa el estilo Tómbola. */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --t-bg: #454d55;
+  --t-bg-2: #3f474e;
+  --t-surface: #2b3035;
+  --t-surface-2: #343a40;
+  --t-field: #23272b;
+  --t-hover: rgba(255, 255, 255, 0.06);
+  --t-overlay: rgba(0, 0, 0, 0.5);
+  --t-glass: rgba(52, 58, 64, 0.85);
+
+  --t-border: rgba(255, 255, 255, 0.10);
+  --t-border-strong: rgba(255, 255, 255, 0.22);
+
+  --t-text: #f1f3f5;
+  --t-text-muted: #adb5bd;
+  --t-heading: #f1f3f5;
+  --t-name: #6cb6ff;
+  --t-placeholder: #8b949c;
+
+  --t-primary: #86b817;
+  --t-primary-strong: #9ad11f;
+  --t-primary-soft: rgba(134, 184, 23, 0.16);
+  --t-primary-ink: #10160a;
+  --t-brand: #86b817;
+  --t-brand-ink: #10160a;
+  --t-cta: #86b817;              /* acción principal: lima, como antes */
+  --t-cta-ink: #10160a;
+  --t-cta-edge: transparent;     /* sin canto 3D en el oscuro básico */
+  --t-blue: #007bff;             /* azul de AdminLTE */
+  --t-blue-ink: #FFFFFF;
+  --t-blue-edge: transparent;
+  --t-cream: #343a40;
+
+  --t-success: #7fd17f;
+  --t-success-soft: rgba(127, 209, 127, 0.14);
+  --t-danger: #ff7b7b;
+  --t-danger-soft: rgba(255, 123, 123, 0.14);
+  --t-warning: #ffc04d;
+  --t-warning-soft: rgba(255, 192, 77, 0.14);
+  --t-info: #6cb6ff;
+  --t-info-soft: rgba(108, 182, 255, 0.14);
+  --t-neutral: #ced4da;
+
+  /* Colores por indicador: los elegidos originalmente para el Dashboard */
+  --t-kpi-ingreso: #4CD964;
+  --t-kpi-capital: #33CCF5;
+  --t-kpi-util-bruta: #FFC107;
+  --t-kpi-creditos: #3FC1D6;
+  --t-kpi-saldo: #FF9EAC;
+  --t-kpi-mora-atrasada: #FF8C1A;
+  --t-kpi-mora-vencida: #FF6B78;
+  --t-kpi-dispensa: #4CC764;
+
+  --t-shadow-card: none;                          /* tarjetas planas */
+  --t-shadow-card-lg: none;
+  --t-shadow-float: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --t-focus: 0 0 0 3px rgba(134, 184, 23, 0.4);
+
+  /* Cromo de AdminLTE "dark" original */
+  --t-navbar: #343a40;
+  --t-navbar-text: rgba(255, 255, 255, 0.75);
+  --t-sidebar: #343a40;
+  --t-sidebar-2: #343a40;
+  --t-sidebar-text: #c2c7d0;
+  --t-sidebar-muted: #8f9aa6;
+  --t-sidebar-active: #007bff;
+  --t-sidebar-active-ink: #FFFFFF;
+
+  /* Forma y tipografía originales */
+  --t-font-display: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --t-font-body: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --t-radius: 12px;
+  --t-radius-md: 10px;
+  --t-radius-sm: 8px;
+  --t-ease: cubic-bezier(0.2, 0, 0, 1);
+  --t-ease-spring: cubic-bezier(0.2, 0, 0, 1);   /* sin rebote en el oscuro básico */
+}
+
+/* ---------- Tipografía y forma del tema claro (el oscuro tiene las suyas) ---------- */
+:root:not([data-theme="dark"]) {
+  /* Misma tipografía que el oscuro básico: Source Sans Pro (la original de AdminLTE) */
+  --t-font-display: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --t-font-body: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --t-radius: 20px;          /* tarjetas */
+  --t-radius-md: 14px;       /* botones, campos */
+  --t-radius-sm: 10px;
+  --t-ease: cubic-bezier(0.22, 1, 0.36, 1);       /* desacelera al llegar */
+  --t-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ==========================================================================
+   Base y cromo de AdminLTE (barra superior, menú lateral, contenido, pie)
+   ========================================================================== */
+html[data-theme] body {
+  font-family: var(--t-font-body);
+  color: var(--t-text);
+  background-color: var(--t-bg);
+}
+[data-theme] .content-wrapper,
+[data-theme] .wrapper { background-color: var(--t-bg); }
+[data-theme] h1, [data-theme] h2, [data-theme] h3,
+[data-theme] .h1, [data-theme] .h2, [data-theme] .h3 { font-family: var(--t-font-display); font-weight: 900; }
+[data-theme] a { color: var(--t-name); }
+[data-theme] a:hover { color: var(--t-primary); }
+
+/* Barra superior: translúcida, con el verde de marca */
+[data-theme] .main-header.navbar {
+  background: var(--t-navbar);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid var(--t-border);
+}
+[data-theme] .main-header .nav-link,
+[data-theme] .main-header .navbar-nav .nav-link { color: var(--t-navbar-text); }
+[data-theme] .main-header .nav-link:hover { color: var(--t-primary); }
+
+/* Menú lateral: verde bosque (claro) / casi negro verdoso (oscuro) */
+[data-theme] .main-sidebar,
+[data-theme] .main-sidebar::before {
+  background: linear-gradient(180deg, var(--t-sidebar), var(--t-sidebar-2));
+}
+[data-theme] .main-sidebar .brand-link,
+[data-theme] .main-sidebar .brand-link:hover {
+  /* !important: AdminLTE lo pinta gris con .layout-navbar-fixed .wrapper .sidebar-dark-primary .brand-link:not(...) */
+  background-color: transparent !important;
+  color: #FFFFFF;
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+  font-family: var(--t-font-display);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+[data-theme] .main-sidebar .user-panel { border-bottom-color: rgba(255, 255, 255, 0.12); }
+[data-theme] .main-sidebar .user-panel a,
+[data-theme] .main-sidebar .user-panel .info a { color: #FFFFFF; font-weight: 700; }
+[data-theme] .main-sidebar .user-panel small,
+[data-theme] .main-sidebar .user-panel .d-block small { color: var(--t-sidebar-muted); }
+[data-theme] .nav-sidebar .nav-header {
+  color: var(--t-sidebar-muted);
+  font-family: var(--t-font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+[data-theme] .nav-sidebar .nav-link { color: var(--t-sidebar-text); border-radius: 12px; }
+[data-theme] .nav-sidebar .nav-link:hover { color: #FFFFFF; background-color: rgba(255, 255, 255, 0.08); }
+[data-theme] .nav-sidebar .nav-item.menu-open > .nav-link,
+[data-theme] .nav-sidebar .nav-treeview > .nav-item > .nav-link.active { color: #FFFFFF; background-color: rgba(255, 255, 255, 0.10); }
+[data-theme] .nav-sidebar > .nav-item > .nav-link.active,
+[data-theme] .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+[data-theme] .nav-pills .nav-link.active {
+  color: var(--t-sidebar-active-ink);
+  background-color: var(--t-sidebar-active);
+  box-shadow: 0 3px 0 var(--t-cta-edge);
+  font-weight: 700;
+}
+[data-theme] .nav-sidebar .nav-treeview > .nav-item > .nav-link.active {
+  color: var(--t-sidebar-active-ink);
+  background-color: var(--t-sidebar-active);
+}
+
+/* Pie */
+[data-theme] .main-footer {
+  color: var(--t-text-muted);
+  background-color: var(--t-surface);
+  border-top: 1px solid var(--t-border);
+}
+[data-theme] .main-footer a { color: var(--t-name); }
+
+/* Preloader del logo */
+[data-theme] .preloader { background-color: var(--t-bg); }
+
+/* Barras de desplazamiento discretas */
+[data-theme] * { scrollbar-color: var(--t-border-strong) transparent; }
+
+/* ---------- Botón de cambio de tema (barra superior) ---------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--t-navbar-text);
+  background: var(--t-surface-2);
+  border: 1px solid var(--t-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 160ms var(--t-ease), background-color 160ms var(--t-ease);
+}
+.theme-toggle:hover { background: var(--t-hover); }
+.theme-toggle:active { transform: scale(0.94); }
+.theme-toggle:focus-visible { outline: 2px solid var(--t-primary); outline-offset: 2px; }
+.theme-toggle .ti-sun, .theme-toggle .ti-moon { font-size: 1rem; }
+[data-theme="light"] .theme-toggle .ti-sun { display: none; }
+[data-theme="dark"] .theme-toggle .ti-moon { display: none; }
+
+/* Cambio de tema suave (solo color, sin mover nada) */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: background-color 240ms var(--t-ease), color 240ms var(--t-ease), border-color 240ms var(--t-ease) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle { transition: none; }
+  html.theme-switching *, html.theme-switching *::before, html.theme-switching *::after { transition: none !important; }
+}
