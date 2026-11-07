@@ -390,7 +390,7 @@
 [data-theme] .modal-content { box-shadow: var(--t-shadow-float); }
 [data-theme] .close { color: var(--t-text); }
 
-/* Montos y números grandes con Nunito (como las cifras de la tómbola) */
+/* Montos y números grandes con la tipografía de títulos del tema */
 [data-theme] .info-box-number,
 [data-theme] .small-box h3 { font-family: var(--t-font-display); font-weight: 900; }
 

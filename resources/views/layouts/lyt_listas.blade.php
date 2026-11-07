@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="{{asset('img/Logo.png')}}">
   <title>CREDIN$TANTE | {{$Titulo?? ''}}</title>
 
-  {{-- Tema Tómbola: fija claro/oscuro antes de pintar + fuentes Nunito/Heebo --}}
+  {{-- Tema: fija claro/oscuro antes de pintar + fuente Source Sans Pro --}}
   @include('layouts.partials.theme_head')
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
