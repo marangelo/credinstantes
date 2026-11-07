@@ -500,7 +500,7 @@
             error: function(resp) {
                 var reqs = JSON.parse(resp.responseText);
                 
-                let lista = '<ul style="color:white;text-align:left">';
+                let lista = '<ul style="color:inherit;text-align:left">';
                 $.each(reqs.errors, function(key, value){
                     lista += `<li>✅ ${value}</li>`;
                 });
