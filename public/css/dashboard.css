@@ -1,0 +1,306 @@
+/* ==========================================================================
+   Dashboard (Indicadores) — rediseño
+   Tema oscuro (body.dark-mode de AdminLTE). Todos los colores salen de tokens.
+   ========================================================================== */
+
+.dash {
+  --dash-surface: #2b3035;
+  --dash-surface-2: #343a40;
+  --dash-border: rgba(255, 255, 255, 0.08);
+  --dash-text: #f1f3f5;
+  --dash-text-muted: #adb5bd;      /* 7.9:1 sobre --dash-surface */
+  --dash-brand: #86b817;           /* verde Credinstantes (btn-credi-primary) */
+  --dash-brand-ink: #10160a;
+
+  /* Tonos semánticos: el color significa lo mismo en toda la página */
+  --tone-success: #7fd17f;         /* resultados / ingresos */
+  --tone-primary: #6cb6ff;         /* cartera */
+  --tone-warning: #ffc04d;         /* mora atrasada */
+  --tone-danger:  #ff7b7b;         /* mora vencida */
+  --tone-neutral: #ced4da;         /* dispensa */
+
+  --dash-radius: 12px;
+  --dash-space-1: 0.5rem;
+  --dash-space-2: 1rem;
+  --dash-space-3: 1.5rem;
+  --dash-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  color: var(--dash-text);
+}
+
+/* ---------- Encabezado ---------- */
+.dash-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--dash-space-1);
+  padding: var(--dash-space-2) 0 var(--dash-space-1);
+}
+.dash-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.dash-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--dash-text-muted);
+}
+
+/* ---------- Barra de filtros ---------- */
+.dash-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--dash-space-2);
+  padding: var(--dash-space-2);
+  margin-bottom: var(--dash-space-3);
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+}
+.dash-filters .form-group { margin-bottom: 0; }
+.dash-filters label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--dash-text-muted);
+}
+.dash-filters .form-control,
+.dash-filters .input-group-text {
+  min-height: 44px;
+}
+.dash-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--dash-space-1);
+}
+.dash-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  font-weight: 600;
+  color: var(--dash-brand-ink);
+  background: var(--dash-brand);
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 100ms var(--dash-ease), filter 150ms var(--dash-ease);
+}
+.dash-btn:hover { filter: brightness(1.08); }
+.dash-btn:active { transform: scale(0.97); }
+.dash-btn:focus-visible {
+  outline: 2px solid var(--dash-text);
+  outline-offset: 2px;
+}
+.dash-btn[disabled] { cursor: progress; filter: saturate(0.6); }
+.dash-btn .dash-spinner { display: none; }
+.dash-btn[aria-busy="true"] .dash-spinner { display: inline-block; }
+.dash-btn[aria-busy="true"] .dash-btn-icon { display: none; }
+
+/* Exportar a Excel (botón de DataTables; la tabla en sí no se muestra) */
+.dash-export .dt-buttons { margin: 0; }
+.dash-export .dt-buttons .btn {
+  min-height: 44px;
+  border-radius: 8px;
+}
+.dash-export .dataTables_wrapper > .row { margin: 0; }
+.dash-export .dataTables_wrapper > .row > [class*="col-"] { padding: 0; }
+
+/* ---------- Grupos de KPIs ---------- */
+.dash-group { margin-bottom: var(--dash-space-3); }
+.dash-group-title {
+  margin: 0 0 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dash-text-muted);
+}
+/* Los grupos se reparten el ancho según su número de tarjetas (--n).
+   Si caben, van lado a lado (p. ej. Cartera | Riesgo); si no, cada uno toma la fila completa.
+   Nunca quedan columnas vacías: auto-fit estira las tarjetas para llenar la fila. */
+.dash-kpis {
+  --kpi-min: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--dash-space-3);
+}
+.dash-group {
+  --n: 1;
+  flex: var(--n) 1 calc(var(--n) * var(--kpi-min) + (var(--n) - 1) * var(--dash-space-2));
+  min-width: 0;
+}
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--kpi-min), 100%), 1fr));
+  gap: var(--dash-space-2);
+}
+
+/* ---------- Tarjeta KPI ---------- */
+.kpi {
+  --tone: var(--tone-neutral);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-height: 112px;
+  padding: var(--dash-space-2) var(--dash-space-2) var(--dash-space-2) 1.25rem;
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  overflow: hidden;
+}
+.kpi::before {               /* barra de acento: el color acompaña, no reemplaza, a la etiqueta */
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--tone);
+}
+.kpi--success { --tone: var(--tone-success); }
+.kpi--primary { --tone: var(--tone-primary); }
+.kpi--warning { --tone: var(--tone-warning); }
+.kpi--danger  { --tone: var(--tone-danger); }
+.kpi--neutral { --tone: var(--tone-neutral); }
+
+/* Colores por indicador, los mismos del dashboard anterior (rama master),
+   aclarados lo justo para leerse sobre el fondo oscuro */
+.kpi--ingreso       { --tone: #4cd964; }   /* Ingreso neto / Utl. neta: verde */
+.kpi--capital       { --tone: #33ccf5; }   /* Capital / Recuperación: celeste */
+.kpi--util-bruta    { --tone: #ffc107; }   /* Utl. bruta: amarillo */
+.kpi--creditos      { --tone: #3fc1d6; }   /* Créditos activos: turquesa */
+.kpi--saldo         { --tone: #ff9eac; }   /* Saldo de cartera / capital: rosado */
+.kpi--mora-atrasada { --tone: #ff8c1a; }   /* Mora atrasada: naranja */
+.kpi--mora-vencida  { --tone: #ff6b78; }   /* Mora vencida: rojo */
+.kpi--dispensa      { --tone: #4cc764; }   /* Dispensa: verde */
+
+.kpi-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dash-space-1);
+}
+.kpi-label {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--tone);
+}
+.kpi-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  font-size: 0.875rem;
+  color: var(--tone);
+  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--tone) 14%, transparent);
+  border-radius: 8px;
+}
+.kpi-value {
+  margin: auto 0 0;
+  font-size: clamp(1.25rem, 1rem + 0.6vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kpi-currency {
+  margin-right: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dash-text-muted);
+}
+
+/* Estado de carga: esqueleto en lugar de números viejos */
+.dash-kpis[aria-busy="true"] .kpi-number {
+  color: transparent;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--dash-surface-2) 25%, #454d55 50%, var(--dash-surface-2) 75%);
+  background-size: 200% 100%;
+  animation: dash-shimmer 1.4s linear infinite;
+}
+@keyframes dash-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* Los valores nuevos aparecen con un fundido corto */
+.kpi-number.is-updated { animation: dash-fade-in 240ms var(--dash-ease); }
+@keyframes dash-fade-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Gráfico ---------- */
+.dash-card {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  margin-bottom: var(--dash-space-3);
+}
+.dash-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--dash-space-1);
+  padding: var(--dash-space-2) var(--dash-space-2) 0;
+}
+.dash-card-title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+.dash-card-hint {
+  font-size: 0.8125rem;
+  color: var(--dash-text-muted);
+}
+.dash-card-body { padding: var(--dash-space-2); }
+.dash-chart { position: relative; height: 280px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 767.98px) {
+  .dash-filters { grid-template-columns: 1fr; }
+  .dash-actions { justify-content: stretch; }
+  .dash-actions .dash-btn { flex: 1; }
+  .dash-kpis { --kpi-min: 150px; }
+  .dash-group { flex-basis: 100%; }
+  .dash-grid { gap: 0.75rem; }
+  .kpi { min-height: 96px; }
+  .kpi-value { font-size: 1.5rem; }
+  .dash-chart { height: 220px; }
+}
+
+/* ---------- Accesibilidad / preferencias ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .dash-btn,
+  .kpi-number.is-updated { transition: none; animation: none; }
+  .dash-btn:active { transform: none; }
+  .dash-kpis[aria-busy="true"] .kpi-number { animation: none; }
+}
+@media (prefers-contrast: more) {
+  .dash { --dash-border: rgba(255, 255, 255, 0.35); --dash-text-muted: #dee2e6; }
+}
+
+/* Solo para lectores de pantalla */
+.dash-sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}

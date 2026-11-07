@@ -98,7 +98,7 @@
                                 <label>CLIENTE.</label>                      
                                 <select class="form-control select2" style="width: 100%;" id="id_select_cliente_deposito">
                                     @foreach($Clientes as $Cliente)
-                                    <option value="{{$Cliente->id_clientes}}">{{$Cliente->nombre}} {{$Cliente->apellidos}} </option>
+                                    <option value="{{$Cliente->id_clientes}}"> {{ strtoupper($Cliente->nombre) }} {{ strtoupper($Cliente->apellidos) }} </option>
                                     @endforeach
                                 </select>
                                 </div>

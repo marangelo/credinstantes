@@ -35,7 +35,7 @@ class ArqueosController extends Controller
         $Titulo     = "Arqueo Nuevo";
         $Arqueo     = Arqueo::find($ID); 
         $Cobrado    = Arqueo::Cobrado($ID);
-        $Clientes   = Clientes::getClientes(0);
+        $Clientes   = Clientes::getAllClientes();
         $Cuentas    = BancoCuentas::getBancoCuentas();
     
         return view('Arqueos.Nuevo', compact('Titulo','Arqueo','Cobrado','Clientes','Cuentas'));

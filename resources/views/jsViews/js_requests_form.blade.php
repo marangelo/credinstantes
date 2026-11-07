@@ -1,6 +1,11 @@
 <script type="text/javascript"> 
-    $(document).ready(function () 
+    $(document).ready(function ()
     {
+        // Comentarios: contador de caracteres (máx. 500)
+        $('#txtComentarioSolicitud').on('input', function () {
+            $('#txtComentarioSolicitudLen').text(this.value.length);
+        });
+
         $('#reservationdate').datetimepicker({
             format: 'DD/MM/YYYY'
         });
@@ -49,6 +54,20 @@
         btns_01.on('keyup touchend', function(e) {
             if (e.type === 'touchend' || isNumberKey(e)) {
                 Calc_Credito();
+            }
+        });
+
+        $('#txtMonto').on('keyup touchend', function(e) {
+            if (e.type === 'touchend' || isNumberKey(e)) {
+                Calc_Respaldo();
+            }
+        });
+
+        // Si el usuario cambia el Respaldo a mano (ej. lo deja en 0), el cálculo
+        // automático ya no lo sobrescribe en este formulario.
+        $('#txtRespaldo').on('input change paste', function() {
+            if (!$(this).prop('readonly')) {
+                RespaldoManual = true;
             }
         });
 
@@ -105,33 +124,72 @@
         
         });
 
+        // Al corregir un campo marcado, se quita la marca de error
+        $(document).on('input change', '.sol .is-invalid', function () {
+            $(this).removeClass('is-invalid').removeAttr('aria-invalid');
+        });
+
+        initSectionNav();
+
+        // Las tablas en pestañas ocultas se reajustan al mostrarse
+        $('.sol-tablist a[data-toggle="tab"]').on('shown.bs.tab', function () {
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        });
+        // Al corregir, quitar la marca de error de la pestaña
+        $(document).on('input change', '.tab-pane', function () {
+            if (!$(this).find('.is-invalid').length) {
+                $('.sol-tablist a[href="#' + this.id + '"]').removeClass('has-error');
+            }
+        });
+
+        // Resumen en la barra fija: a quién y cuánto
+        function actualizarResumen() {
+            var quien = $.trim(($('#txtNombre').val() || '') + ' ' + ($('#txtApellido').val() || ''));
+            var monto = numeral($('#txtMonto').val()).value() || 0;
+            $('#solLiveWho').text(quien || 'Sin cliente');
+            $('#solLiveAmount').text('C$ ' + numeral(monto).format('0,0.00'));
+        }
+        $('#txtNombre, #txtApellido, #txtMonto').on('input keyup change', actualizarResumen);
+
+        // Botones que repiten una acción (p. ej. "Procesar" al final del formulario)
+        $('[data-proxy-click]').on('click', function () {
+            $($(this).data('proxy-click')).trigger('click');
+        });
+
         $("#btn_save_prospecto").click(function(e) {
+            e.preventDefault();
+
+            // Datos mínimos del cliente
+            var faltanCliente = marcarVacios(['#txtNombre', '#txtApellido']);
+            if (faltanCliente.length > 0) {
+                irAlCampo(faltanCliente[0]);
+                return Swal.fire({
+                    title: 'Faltan datos del cliente',
+                    text: 'Escriba el nombre y el apellido del cliente.',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+
             const nombre = $('#id_nombres_fiador').val().trim();
 
             if (nombre) {
-                const campos = [
+                const camposIncompletos = marcarVacios([
                     '#id_apellidos_fiador',
                     '#id_cedula_fiador',
-                    '#selectEstadoCivil',
+                    '#id_estado_civil_fiador',
                     '#id_telefono_fiador',
                     '#id_dir_domicilio_fiador',
                     '#id_dir_trabajo_fiador'
-                ];
-
-                const camposIncompletos = campos.filter(selector => {
-                    const campo = $(selector);
-                    const vacio = !campo.val().trim();
-                    campo.css('border', vacio ? '2px solid red' : '');
-                    return vacio;
-                });
+                ]);
 
                 if (camposIncompletos.length > 0) {
-                    e.preventDefault();
-                    return swal.fire({
-                        title: 'Campos incompletos',
-                        text: 'Por favor, completa todos los campos obligatorios.',
+                    irAlCampo(camposIncompletos[0]);
+                    return Swal.fire({
+                        title: 'Faltan datos del fiador',
+                        text: 'Si agrega un fiador, complete todos sus datos (están marcados en rojo).',
                         icon: 'warning',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'Entendido'
                     });
                 }else{
                     swal.fire({
@@ -171,8 +229,10 @@
         var count = $("#total_garantias").html();
 
         // Verificar que los campos no estén vacíos
-        if (!detalles || !marca || !color || !valor) {
-            alert("Todos los campos son obligatorios.");
+        var faltan = marcarVacios(['#detalles', '#marca', '#color', '#valor']);
+        if (faltan.length > 0) {
+            $(faltan[0]).trigger('focus');
+            avisoCampos('Complete artículo, marca, color y valor para agregar la garantía.');
             return;
         }
 
@@ -204,8 +264,10 @@
         var count = table.data().length;
 
         // Verificar que los campos no estén vacíos
-        if (!nombre_red || !telefono_ref || !direccion_red) {
-            alert("Todos los campos son obligatorios.");
+        var faltan = marcarVacios(['#id_nombre_ref', '#id_telefono_ref', '#id_direcion_ref']);
+        if (faltan.length > 0) {
+            $(faltan[0]).trigger('focus');
+            avisoCampos('Complete nombre, teléfono y dirección para agregar la referencia.');
             return;
         }
 
@@ -253,6 +315,31 @@
         $("#txtInteresesPorCuota").val(vlInterePorCuota);
     }
 
+    // true cuando el Respaldo se editó a mano; desde ahí se respeta ese valor
+    var RespaldoManual = false;
+
+    // Respaldo sugerido según el monto: C$ 200 hasta 5,000 y C$ 50 más por cada
+    // tramo de 5,000 hasta 55,000 (C$ 700). De 55,000.01 en adelante, C$ 800.
+    function Calc_Respaldo(){
+        if (RespaldoManual) return;
+
+        // Al procesar una solicitud ya subida (IdRequest > 0), quien no puede editar el
+        // Respaldo (campo readonly, solo el admin lo edita) no debe cambiar el valor guardado.
+        var Procesando = parseInt($("#IdRequest").val()) > 0;
+        if (Procesando && $("#txtRespaldo").prop('readonly')) return;
+
+        var Monto_   = parseFloat(numeral($("#txtMonto").val()).value()) || 0;
+        var Respaldo_ = 0;
+
+        if (Monto_ > 55000) {
+            Respaldo_ = 800;
+        } else if (Monto_ > 0) {
+            Respaldo_ = 200 + (Math.ceil(Monto_ / 5000) - 1) * 50;
+        }
+
+        $("#txtRespaldo").val(numeral(Respaldo_).format('0.00'));
+    }
+
     function SaveRequest(){
         var IdProspecto = $("#IdRequest").val(); 
 
@@ -290,7 +377,8 @@
         var Dire_        = $("#txtDireccion").val();
 
 
-        var Monto_     = numeral($("#txtMonto").val()).format('0.00');   
+        var Monto_     = numeral($("#txtMonto").val()).format('0.00');
+        var Respaldo_  = numeral($("#txtRespaldo").val()).format('0.00');
         var Plato_     = numeral($("#txtPlazo").val()).format('0.00');   
         var Interes_   = numeral($("#txtInteres").val()).format('0.00');
         var Cuotas_    = numeral($("#txtCuotas").val()).format('0.00');
@@ -370,6 +458,7 @@
                     Tele_        : Tele_,
                     Dire_        : Dire_,
                     Monto_       : Monto_,  
+                    Respaldo_    : Respaldo_,
                     Plato_       : Plato_,  
                     Interes_     : Interes_,
                     Cuotas_      : Cuotas_,
@@ -386,7 +475,8 @@
                     iGarantias  : Info_garantias,
                     iReferencias: Info_referencias,
                     iFiador     : Info_fiador,
-                    IdClientes     : IdCiente_
+                    IdClientes     : IdCiente_,
+                    Comentario_    : $.trim($("#txtComentarioSolicitud").val() || '')
                 },
                 async: true,
             success: function(response) {
@@ -431,6 +521,85 @@
         }
     }
 
+
+    // Marca en rojo los campos vacíos (un select en "0" cuenta como vacío) y devuelve sus selectores
+    function marcarVacios(selectores) {
+        return selectores.filter(function (selector) {
+            var campo = $(selector);
+            if (!campo.length) return false;
+            var val = $.trim(campo.val() || '');
+            var vacio = val === '' || (campo.is('select') && val === '0');
+            campo.toggleClass('is-invalid', vacio);
+            if (vacio) { campo.attr('aria-invalid', 'true'); } else { campo.removeAttr('aria-invalid'); }
+            return vacio;
+        });
+    }
+
+    function irAlCampo(selector) {
+        var el = $(selector)[0];
+        if (!el) return;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Si el campo está en una pestaña cerrada, abrirla y marcarla
+        var pane = $(el).closest('.tab-pane');
+        if (pane.length) {
+            var tab = $('.sol-tablist a[href="#' + pane.attr('id') + '"]');
+            tab.addClass('has-error');
+            if (!pane.hasClass('active')) tab.tab('show');
+        }
+
+        setTimeout(function () {
+            el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+            setTimeout(function () { el.focus({ preventScroll: true }); }, reduce ? 0 : 300);
+        }, pane.length ? 200 : 0);
+    }
+
+    function avisoCampos(texto) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'warning',
+            title: texto,
+            showConfirmButton: false,
+            timer: 3500
+        });
+    }
+
+    // Resalta en la barra de secciones la que se está viendo
+    function initSectionNav() {
+        var links = document.querySelectorAll('.sol-nav a');
+        if (!links.length || !('IntersectionObserver' in window)) return;
+
+        var byId = {};
+        links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                links.forEach(function (a) { a.removeAttribute('aria-current'); });
+                var link = byId[entry.target.id];
+                if (link) {
+                    link.setAttribute('aria-current', 'true');
+                    link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+                }
+            });
+        }, { rootMargin: '-130px 0px -60% 0px' });
+
+        Object.keys(byId).forEach(function (id) {
+            var sec = document.getElementById(id);
+            if (sec) observer.observe(sec);
+        });
+
+        links.forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                var target = document.getElementById(a.getAttribute('href').slice(1));
+                if (!target) return;
+                e.preventDefault();
+                var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+            });
+        });
+    }
 
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode

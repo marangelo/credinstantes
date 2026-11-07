@@ -36,6 +36,11 @@ Route::get('Perfil/{id}', 'CredinstanteController@getPerfil')->name('Perfil/{id}
 
 Route::get('voucher/{id}', 'CredinstanteController@prtVoucher')->name('voucher/{id}');
 Route::get('voucherParcial/{id}', 'CredinstanteController@prtVoucherParcial')->name('voucherParcial/{id}');
+Route::get('notificacionVisita/{id}', 'CredinstanteController@prtNotificacionVisita')->name('notificacionVisita/{id}');
+Route::post('SaveNotificacionVisita', 'CredinstanteController@SaveNotificacionVisita')->name('SaveNotificacionVisita');
+Route::get('Notificaciones', 'NotificacionesController@index')->name('Notificaciones');
+Route::post('getNotificaciones', 'NotificacionesController@getNotificaciones')->name('getNotificaciones');
+Route::get('getNotificacionesCliente/{id}', 'NotificacionesController@getNotificacionesCliente')->name('getNotificacionesCliente');
 
 Route::post('SaveNewCredito', 'CredinstanteController@SaveNewCredito')->name('SaveNewCredito');
 Route::post('editClient', 'CredinstanteController@editClient')->name('editClient');
@@ -99,6 +104,13 @@ Route::get('getClientesDesembolsados', 'ReportsController@getClientesDesembolsad
 Route::get('MetricasPromotor', 'CredinstanteController@MetricasPromotor')->name('MetricasPromotor');
 Route::post('getMetricasPromotor', 'ReportsController@getMetricasPromotor')->name('getMetricasPromotor');
 Route::get('ExportMetricasPromotor', 'ReportsController@ExportMetricasPromotor')->name('ExportMetricasPromotor');
+
+Route::get('Ruleta', 'RuletaAdminController@ShowHome')->name('Ruleta');
+Route::post('getGirosRuleta', 'RuletaAdminController@getGirosRuleta')->name('getGirosRuleta');
+Route::get('RuletaPromociones', 'RuletaAdminController@ShowPromociones')->name('RuletaPromociones');
+Route::post('getPromocionesRuleta', 'RuletaAdminController@getPromocionesRuleta')->name('getPromocionesRuleta');
+Route::post('SavePromocionRuleta', 'RuletaAdminController@SavePromocionRuleta')->name('SavePromocionRuleta');
+Route::post('RemovePromocionRuleta', 'RuletaAdminController@RemovePromocionRuleta')->name('RemovePromocionRuleta');
 
 Route::get('RecuperacionCobro', 'ReportsController@RecuperacionCobro')->name('RecuperacionCobro');
 Route::post('CalcRecuperacion', 'ReportsController@CalcRecuperacion')->name('CalcRecuperacion');
@@ -270,5 +282,20 @@ Route::post('getBitacora', 'BitacoraController@getBitacora')->name('getBitacora'
 Route::get('ExportarBitacora/{dtIni}/{dtEnd}/{IdZna}', 'BitacoraController@ExportarBitacora')->name('ExportarBitacora');
 Route::post('UpdateSeguro', 'BitacoraController@UpdateSeguro')->name('UpdateSeguro');
 
+//RUTAS DE SOLICITUDES DENEGADAS
+Route::get('SolicDenegadas', 'SolicDenegadasController@SolicDenegadas')->name('SolicDenegadas');
+Route::post('getSolicDenegadas', 'SolicDenegadasController@getSolicDenegadas')->name('getSolicDenegadas');
+Route::get('ExportSolicDenegadas', 'SolicDenegadasController@ExportSolicDenegadas')->name('ExportSolicDenegadas');
+Route::post('ReactivarSolicDenegada', 'SolicDenegadasController@ReactivarSolicDenegada')->name('ReactivarSolicDenegada');
+
+//RUTAS DE REPORTE DE ACCESOS
+Route::get('LoginLog', 'LoginLogReportController@index')->name('LoginLog');
+Route::post('getLoginLog', 'LoginLogReportController@getData')->name('getLoginLog');
+Route::get('ExportLoginLog', 'LoginLogReportController@exportExcel')->name('ExportLoginLog');
 
 
+
+//RUTAS DE MONITOREO DE ACTIVIDAD (auditoria rol 3 - solo admins id 7 y 32)
+Route::get('MonitoreoActividad', 'MonitoreoActividadController@index')->name('MonitoreoActividad');
+Route::post('getMonitoreoActividad', 'MonitoreoActividadController@getData')->name('getMonitoreoActividad');
+Route::get('ExportMonitoreoActividad', 'MonitoreoActividadController@exportExcel')->name('ExportMonitoreoActividad');

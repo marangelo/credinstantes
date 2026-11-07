@@ -92,6 +92,11 @@ class ProspectosController extends Controller
     }
     public function DeleteProspecto($IdProspecto)
     {
+        // Solo Administrador (1) y Operaciones (3) pueden eliminar prospectos
+        if (!in_array(Auth::User()->id_rol, [1, 3])) {
+            return redirect()->route('Prospectos');
+        }
+
         $response = Prospectos::UpdateEstadoProspecto($IdProspecto,0);        
         
         if($response){
@@ -151,6 +156,7 @@ class ProspectosController extends Controller
             'Zona_'        => 'required|string|max:100',
             'Dire_'        => 'required|string',
             'Monto_'       => 'required|numeric',
+            'Respaldo_'    => 'required|numeric',
             'Plato_'       => 'required|numeric',
             'Interes_'     => 'required|numeric',
             'Cuotas_'      => 'required|numeric',
@@ -159,7 +165,10 @@ class ProspectosController extends Controller
             'Saldos_'      => 'required|numeric',
             'vlInteres'    => 'required|numeric',
             'InteresesPorCuota' => 'required|numeric',
-        ], $messages);
+            'Comentario_'  => 'nullable|string|max:500',
+        ], $messages + ['Comentario_.max' => 'El comentario no puede pasar de 500 caracteres.']);
+
+        $Comentario = trim((string) $request->input('Comentario_', ''));
 
         $idInsertado = RequestsCredit::insertGetId([
             'req_start_date'      => $request->FechaOpen,
@@ -174,6 +183,7 @@ class ProspectosController extends Controller
             'id_zone'             => $request->Zona_,
             'client_address'      => $request->Dire_,
             'monto'               => $request->Monto_,
+            'Seguro'              => $request->Respaldo_,
             'plazo'               => $request->Plato_,
             'interes_porcent'     => $request->Interes_,
             'num_cuotas'          => $request->Cuotas_,
@@ -185,7 +195,8 @@ class ProspectosController extends Controller
             'activo'              => 1,
             'created_by'          => Auth::id(),
             'Origen'              => $request->_Origin,
-            'id_cliente'          => $request->IdClientes	
+            'id_cliente'          => $request->IdClientes,
+            'comentario'          => $Comentario !== '' ? $Comentario : null,
         ]);
 
         if(isset($iNegocio) && $iNegocio != null) {

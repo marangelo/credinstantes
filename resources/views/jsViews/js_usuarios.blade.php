@@ -1,25 +1,47 @@
 <script type="text/javascript">
     $('[data-mask]').inputmask()
     
-    $("#tbl_usrs").DataTable({
-            "responsive": true, 
-        "lengthChange": false, 
+    // En celular cada usuario es una tarjeta (usuarios.css); en PC, tabla.
+    var tblUsuarios = $("#tbl_usrs").DataTable({
+        "responsive": false,
+        "lengthChange": false,
         "autoWidth": false,
-        "info": false,
+        "info": true,
+        "pageLength": 25,
+        "order": [[1, 'asc']],
+        "dom": "rt<'us-pager'ip>",
+        "columnDefs": [{ "targets": [6], "orderable": false }],
         "language": {
-            "zeroRecords": "NO HAY COINCIDENCIAS",
+            "zeroRecords": "No hay usuarios que coincidan con la búsqueda",
+            "info": "_START_–_END_ de _TOTAL_",
+            "infoEmpty": "0 usuarios",
+            "infoFiltered": "(de _MAX_)",
             "paginate": {
                 "first": "Primera",
-                "last": "Última ",
+                "last": "Última",
                 "next": "Siguiente",
                 "previous": "Anterior"
             },
-            "lengthMenu": "MOSTRAR _MENU_",
-            "emptyTable": "-",
-            "search": "BUSCAR"
-        },
-        "buttons": ["copy", "excel", "print"]
-    }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
+            "emptyTable": "No hay usuarios",
+            "search": "Buscar"
+        }
+    });
+
+    var tBuscarUs = null;
+    $('#usSearch').on('input', function () {
+        var q = this.value;
+        clearTimeout(tBuscarUs);
+        tBuscarUs = setTimeout(function () { tblUsuarios.search(q).draw(); }, 150);
+    });
+
+    $('#sclZonasPromotor').select2({ theme: 'bootstrap4', dropdownParent: $('#modal_xl_add_user') });
+
+    // Rol 4 = Promotor: se muestra el selector de zonas del promotor (aparte de su Zona)
+    function ToggleZonas() {
+        $("#div_zonas_promotor").toggle($("#sclPrivi").val() == 4);
+    }
+
+    $("#sclPrivi").on('change', ToggleZonas);
 
     $("#btn_form_add_user").click(function(){
         // Limpiar los campos de entrada
@@ -32,10 +54,12 @@
 
         // Restablecer el select a su valor predeterminado (1 en este caso)
         $("#sclPrivi").val(1);
+        $("#sclZonasPromotor").val(null).trigger('change');
+        ToggleZonas();
 
-        // Llamar a la función para guardar el formulario
-        $('#modal_xl_add_user').modal('show');     
-        $("#id_estado").html(0);   
+        $("#usModalTitle").text("Nuevo usuario");
+        $('#modal_xl_add_user').modal('show');
+        $("#id_estado").html(0);
     });
     function Remove_form(IdElem){
 
@@ -92,16 +116,22 @@
     }
 
     function Edit_form(usr) {
-        $('#modal_xl_add_user').modal('show');  
+
+        $("#usModalTitle").text("Editar usuario");
+        $('#modal_xl_add_user').modal('show');
         $("#txtFullName").val(usr.nombre);
         $("#txtUserName").val(usr.email);
         $("#txtPhone").val(usr.Phone);
         $("#id_estado").html(usr.id);
-        $("#txtPassWord_one").val("password-hide");
-        $("#txtPassWord_two").val("password-hide");
+        $("#txtPassWord_one").val("pwd-hide");
+        $("#txtPassWord_two").val("pwd-hide");
         $("#txtComentario").val(usr.Comment);
         $("#sclPrivi").val(usr.id_rol).change();
         $("#sclZona").val(usr.id_zona).change();
+
+        var ZonasPromotor = (usr.zonas_promotor || []).map(function (z) { return String(z.id_zona); });
+        $("#sclZonasPromotor").val(ZonasPromotor).trigger('change');
+        ToggleZonas();
     }
 
     function Save_Form() {
@@ -115,6 +145,7 @@
         var Pass02      = $("#txtPassWord_two").val();
         var Commit      = $("#txtComentario").val();
         var Estado      = $("#id_estado").text();
+        var Zonas       = $("#sclZonasPromotor").val() || [];
 
         const Formulario = {
             Permiso     : isValue(Permiso, 'N/D', true),
@@ -125,6 +156,7 @@
             Contrasena  : isValue(Pass01, 'N/D', true),
             Estado      : isValue(Estado, 'N/D', true),
             Commit      : isValue(Commit, 'N/D', true),
+            Zonas       : (Permiso == 4) ? Zonas : [],
             _token      : "{{ csrf_token() }}" 
         };
 
@@ -150,7 +182,9 @@
                     data: Formulario,
                     async: true,
                     success: function(response) {
-                        if (response) {
+                        if (response && response.success === false) {
+                            Swal.fire("Oops", response.message, "error");
+                        } else if (response) {
                             Swal.fire({
                                 title: 'Registro procesado Correctamente ',
                                 icon: 'success',
@@ -178,18 +212,20 @@
         
     }
 
-    function Lock(IdUser){
+    // El servidor alterna el estado (LockUser); el texto ahora depende de si está activo
+    function Lock(IdUser, EstaActivo){
 
- 
+        var bloquear = (EstaActivo !== false);
 
         Swal.fire({
-            title: '¿Estas Seguro de Inactivar Al usuario  ?',
-            text: "¡Se Inactivara al Usuario temporalmente!",
+            title: bloquear ? '¿Bloquear a este usuario?' : '¿Desbloquear a este usuario?',
+            text: bloquear ? 'No podrá iniciar sesión hasta que se desbloquee.' : 'Podrá volver a iniciar sesión.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si!',
+            confirmButtonText: bloquear ? 'Sí, bloquear' : 'Sí, desbloquear',
+            cancelButtonText: 'Cancelar',
             target: document.getElementById('mdlMatPrima'),
             showLoaderOnConfirm: true,
             preConfirm: () => {
@@ -204,7 +240,7 @@
                     success: function(response) {
                         if(response){
                             Swal.fire({
-                                title: 'Inactivado Correctamente ' ,
+                                title: bloquear ? 'Usuario bloqueado' : 'Usuario desbloqueado',
                                 icon: 'success',
                                 showCancelButton: false,
                                 confirmButtonColor: '#3085d6',

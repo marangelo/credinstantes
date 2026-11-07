@@ -33,7 +33,7 @@ $("#chance_password").click(function(){
   }).then((result) => {
     if (result.value) {
       $.ajax({
-        url: 'updatePassword', 
+        url: '/updatePassword', 
         type: 'POST',
         data: {
           currentPassword: result.value.currentPassword,
@@ -41,10 +41,10 @@ $("#chance_password").click(function(){
           _token  : $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-          if (response.original.success) {
+          if (response.success) {
             Swal.fire('Contraseña Actualizada!', '', 'success');
           } else {
-            Swal.fire('Contraseña no Actualizada', '', 'error');
+            Swal.fire(response.message || 'Contraseña no Actualizada', '', 'error');
           }
         },
         error: function() {

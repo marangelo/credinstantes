@@ -87,8 +87,16 @@ class SolicitudesController extends Controller
             $response = Credito::SaveNewCredito($request);   
         }
     
-        RequestsCredit::UpdateEstadoRequest($IdProspecto);  
-        
+        // Si al aprobar se ajustó el comentario, se guarda junto con la solicitud
+        if ($request->has('Comentario_')) {
+            $Comentario = mb_substr(trim((string) $request->input('Comentario_', '')), 0, 500);
+            RequestsCredit::where('id_req', $IdProspecto)->update([
+                'comentario' => $Comentario !== '' ? $Comentario : null,
+            ]);
+        }
+
+        RequestsCredit::UpRequest($IdProspecto);
+
         
         return response()->json([
             'message' => 'Credito Guardado Correctamente.',

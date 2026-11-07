@@ -7,61 +7,63 @@
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <link rel="stylesheet" href="{{ asset('css/payroll.css') }}?v={{ filemtime(public_path('css/payroll.css')) }}">
+
     <section class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">            
-            <div class="user-block">
-              <img class="img-circle img-bordered-sm" src="{{ asset('/img/nomina.png') }}" alt="user image">
-              <span class="username">
-              {{$Titulo}} - {{$Payrolls->payroll_name}} 
-              </span>
-              <span class="description">Periodo {{$Payrolls->start_date}}  al {{$Payrolls->end_date}} </span>
-            </div>
+        <div class="pr-header">
+          <img class="pr-header-icon" src="{{ asset('/img/nomina.png') }}" alt="" width="44" height="44">
+          <div class="pr-header-text">
+            <h1 class="pr-title">{{$Titulo}} · {{$Payrolls->payroll_name}}</h1>
+            <p class="pr-subtitle">Período {{ \Date::parse($Payrolls->start_date)->format('d M Y') }} al {{ \Date::parse($Payrolls->end_date)->format('d M Y') }}</p>
           </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active"><span class="badge {{$Payrolls->Status->status_color}}"> <i class="{{$Payrolls->Status->status_icon}}"></i>  {{$Payrolls->Status->payroll_status_name}}</span></li>
-            </ol>
-          </div>
+          <span class="badge pr-status {{$Payrolls->Status->status_color}}"><i class="{{$Payrolls->Status->status_icon}}" aria-hidden="true"></i> {{$Payrolls->Status->payroll_status_name}}</span>
         </div>
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
-
-    
 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <div class="card card-secondary">
+        <div class="card">
           <div class="card-body">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                    <div class="input-group date" id="dt-end" data-target-input="nearest">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        </div>
-                        <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar" aria-label="Buscar">
-                    </div>
-                </div>
+            <div class="pr-toolbar">
+              <div class="pr-search">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="search" class="form-control" id="id_txt_buscar" placeholder="Buscar colaborador" aria-label="Buscar colaborador" autocomplete="off">
+              </div>
+              <div class="pr-actions">
+                <button type="button" class="btn btn-default" id="btn_export_payroll">
+                  <i class="far fa-file-excel" aria-hidden="true"></i> <span>Exportar</span>
+                </button>
+                @if(Auth::User()->id_rol == 1  && $Payrolls->payroll_status_id < 3)
+                  <button type="button" class="btn btn-success" id="btn_process_payroll">
+                    <i class="far fa-credit-card" aria-hidden="true"></i> <span>Procesar</span>
+                  </button>
+                @elseif(Auth::User()->id_rol == 3 && $Payrolls->payroll_status_id == 1)
+                  <button type="button" class="btn btn-success" id="btn_process_payroll">
+                    <i class="fas fa-check" aria-hidden="true"></i> <span>Aprobar</span>
+                  </button>
+                @endif
               </div>
             </div>
-            <div class="table-responsive scrollbar">
-              <table class="table table-striped border-bottom" id="tbl_payroll_details">
-                <thead class="light">
-                  <tr class="bg-primary text-white dark__bg-1000">
-                  <th class="border-0">NOMBRES Y APELLIDOS</th>
-                  <th class="border-0 text-center">CEDULA</th>
-                  <th class="border-0 text-center">N INSS</th>
-                  <th class="border-0 text-center">MES</th>
-                  <th class="border-0 text-center">FECHA</th>
-                  <th class="border-0 text-center">COMISIONES</th>
-                  <th class="border-0 text-center">NETO A PAGAR</th>
-                  <th class="border-0 text-center">FIRMA</th>
-                  <th class="border-0 text-center">VACACIONES</th>
-                  <th class="border-0 text-center">PROV AGUINALDO</th>
-                  <th class="border-0 text-center">PROV. INDEMNIZACION</th>
+
+
+            <div class="table-responsive pr-table-wrap">
+              <table class="table pr-table" id="tbl_payroll_details">
+                <thead>
+                  <tr>
+                  <th>Colaborador</th>
+                  <th>Cédula</th>
+                  <th>N.º INSS</th>
+                  <th>Mes</th>
+                  <th>Fecha</th>
+                  <th class="text-right">Comisiones</th>
+                  <th class="text-right pr-col-neto">Neto a pagar</th>
+                  <th class="text-center">Firma</th>
+                  <th class="text-right">Vacaciones</th>
+                  <th class="text-right">Prov. aguinaldo</th>
+                  <th class="text-right">Prov. indemnización</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -79,23 +81,23 @@
                     @php $Indenizacion = $p->indenmnizacion @endphp
                   
                   <tr>
-                    <td class="align-middle">
+                    <td class="pr-col-name">
                       @if($Payrolls->payroll_status_id == 1 || Auth::User()->id_rol == 1)
-                        <a class="text-900" href="#!" onclick="AddGastos({{$p}})"><h6 class="mb-0 text-nowrap">{{$p->employee_full_name}}</h6></a>
+                        <a class="pr-name" href="#!" onclick="AddGastos({{$p}}); return false;" title="Editar comisión">{{$p->employee_full_name}}</a>
                       @else
-                      <a class="text-900" href="#!" ><h6 class="mb-0 text-nowrap">{{$p->employee_full_name}}</h6></a>
+                        <span class="pr-name">{{$p->employee_full_name}}</span>
                       @endif
                     </td>
-                    <td class="align-middle text-center"> {{$p->cedula}} </td>
-                    <td class="align-middle text-end">{{$p->inns}}</td>
-                    <td class="align-middle text-center"> {{ strtoupper($p->mes) }} </td>
-                    <td class="align-middle text-center"> {{ \Date::parse($p->fecha)->format('d/m/Y')}} </td>
-                    <td class="align-middle text-centrightrightrighter">C$. {{ number_format($p->comision,2) }} </td>
-                    <td class="align-middle text-right">C$. {{ number_format($NetoPagar,2) }} </td>
-                    <td class="align-middle text-center"> - </td>
-                    <td class="align-middle text-right">C$. {{ number_format($Vacaciones,2) }} </td>
-                    <td class="align-middle text-right">C$. {{ number_format($Aguinaldo,2) }} </td>
-                    <td class="align-middle text-right">C$. {{ number_format($Indenizacion,2) }}</td>
+                    <td class="text-nowrap">{{$p->cedula}}</td>
+                    <td class="text-nowrap">{{$p->inns}}</td>
+                    <td>{{ ucfirst(mb_strtolower($p->mes)) }}</td>
+                    <td class="text-nowrap" data-order="{{ $p->fecha }}">{{ \Date::parse($p->fecha)->format('d/m/Y')}}</td>
+                    <td class="pr-money">C$ {{ number_format($p->comision,2) }}</td>
+                    <td class="pr-money pr-col-neto">C$ {{ number_format($NetoPagar,2) }}</td>
+                    <td class="text-center pr-muted">—</td>
+                    <td class="pr-money">C$ {{ number_format($Vacaciones,2) }}</td>
+                    <td class="pr-money">C$ {{ number_format($Aguinaldo,2) }}</td>
+                    <td class="pr-money">C$ {{ number_format($Indenizacion,2) }}</td>
                     
                   </tr>
                     @php $ttVACACIONES += $Vacaciones; @endphp
@@ -106,36 +108,22 @@
                 </tbody>
                   <tfoot>
                     
-                    <tr>
-                      <td class="border-0" colspan="6">SUB TOTAL.</td>
-                      <td class="border-0 text-right">C$. <span id="neto_pagar_payroll">{{ number_format($ttNETO,2) }}</span></td>
-                      <td class="border-0 text-center"> - </td>
-                      <td class="border-0 text-right">C$. {{ number_format($ttVACACIONES,2) }}</td>
-                      <td class="border-0 text-right">C$. {{ number_format($ttAGUINALDO,2) }}</td>
-                      <td class="border-0 text-right">C$. {{ number_format($ttINDENMNIZACION,2) }}</td>
+                    <tr class="pr-total">
+                      <td>Subtotal <span class="pr-muted">({{ $Employes->count() }})</span></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="pr-money pr-col-neto">C$ <span id="neto_pagar_payroll">{{ number_format($ttNETO,2) }}</span></td>
+                      <td></td>
+                      <td class="pr-money">C$ {{ number_format($ttVACACIONES,2) }}</td>
+                      <td class="pr-money">C$ {{ number_format($ttAGUINALDO,2) }}</td>
+                      <td class="pr-money">C$ {{ number_format($ttINDENMNIZACION,2) }}</td>
                     </tr>
                   </tfoot>
               </table>
             </div>
-          </div>
-          <div class="card-footer">
-            
-            <div class="text-right">
-              <a href="#" class="btn bg-warning" id="btn_export_payroll">
-                <i class="fas fa-file-excel"></i> Exportar
-              </a>
-              @if(Auth::User()->id_rol == 1  && $Payrolls->payroll_status_id < 3)
-                <a href="#" class="btn btn-success" id="btn_process_payroll">
-                  <i class="far fa-credit-card"></i> Procesar
-                </a>
-                @elseif(Auth::User()->id_rol == 3 && $Payrolls->payroll_status_id == 1)
-                <a href="#" class="btn btn-primary" id="btn_process_payroll">
-                  <i class="fas fa-check"></i> Aprobar
-                </a>
-              @endif
-            </div>
-            
-            
           </div>
         </div>
       </div>

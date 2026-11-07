@@ -13,6 +13,7 @@ use App\Models\ClientesGarantia;
 use App\Models\ClientesReferencias;
 use App\Models\Departamentos;
 use App\Models\ClientesFiador;
+use App\Models\UsuarioZona;
 
 class ControllerCatalogoClientes extends Controller
 {
@@ -23,48 +24,87 @@ class ControllerCatalogoClientes extends Controller
     
     public function ViewCatalogoClientes()
     {         
+        $User       = Auth::user();
+        $ZonaUser   = $User->id_zona;
+        $Rol        = $User->id_rol;
+
+        // ADMINISTRADO Y OPERACIONS
+        if (in_array($Rol, [1, 3]))  {
+            $Clientes = Clientes::whereIn('activo', [1])->get();
+
+        // PROMOTORIA
+        }else if (in_array($Rol, [4])) {
+                $Clientes = Clientes::getInactivos(0);  
+        // OTROS ROLES
+            }else{
+                $Clientes = Clientes::whereIn('activo', [1])->where('id_zona', $ZonaUser)->get();            
+            
+        }
+
+
         $Titulo     = "Catalogo de Clientes";
-        $Clientes   = Clientes::whereIn('activo', [1])->get();
-        $Zonas      = Zonas::getZonas(); 
+
+        $Zonas      = Zonas::getZonas();
+
+        // Promotor: solo sus zonas asignadas, en la lista y en el filtro (sin zonas = ninguno)
+        $ZonasPromotor = UsuarioZona::ZonasPromotor($User);
+        if (!is_null($ZonasPromotor)) {
+            $Clientes = $Clientes->filter(function ($c) use ($ZonasPromotor) {
+                return in_array((int) $c->id_zona, $ZonasPromotor, true);
+            })->values();
+            $Zonas = $Zonas->whereIn('id_zona', $ZonasPromotor)->values();
+        }
+
         return view('ClientesCatalogo.Table', compact('Titulo', 'Clientes','Zonas'));
     }
 
     public function FiltrarClientes(Request $request)
     {
-        $id_zona       = $request->input('id_zona');
-        
-        $Clientes   = Clientes::whereIn('activo', [1])->when($id_zona > 0, function ($query) use ($id_zona) {
-            $query->where('id_zona', $id_zona);
-        })->get();  
+        $id_zona = $request->input('id_zona');
+        $User    = Auth::user();
+        $Rol     = $User->id_rol;
+        $Show    = in_array(Session::get('rol'), [1, 3]);
 
-        $arryClientes = [];
+        // Promotor: aunque pida otra zona, solo recibe clientes de sus zonas asignadas
+        $ZonasPromotor = UsuarioZona::ZonasPromotor($User);
 
-        $Show = (in_array(Session::get('rol'), [1, 3])) ? true : false ;
+        $Clientes = Clientes::with('getCreditos.Estado')
+            ->when(!is_null($ZonasPromotor), fn($q) => $q->whereIn('id_zona', $ZonasPromotor))
+            ->when($Rol == 4, fn($q) => $q
+                ->whereDoesntHave('getCreditos', fn($q2) => $q2->whereIn('estado_credito', [1, 2, 3]))
+                ->whereHas('getCreditos', fn($q2) => $q2->where('estado_credito', 4))
+            )
+            ->when($Rol != 4, fn($q) => $q->whereIn('activo', [1]))
+            ->when($id_zona > 0, fn($q) => $q->where('id_zona', $id_zona))
+            ->get();
 
-        foreach ($Clientes as $c) {
+        return response()->json($Clientes->map(function ($c) use ($Show) {
+            $credito = $c->getCreditos->first();
 
-            $Estado = '<span class="badge ' . ($c->getCreditos->count() > 0 ? 'bg-' . ['success','danger','warning',''][$c->getCreditos->first()->estado_credito - 1] : '') . ' ">
-                            ' . ($c->getCreditos->count() > 0 ? strtoupper($c->getCreditos->first()->Estado->nombre_estado) : '-') . '
-                        </span>';
+            $estado = $credito
+                ? sprintf(
+                    '<span class="badge bg-%s">%s</span>',
+                    ['success', 'danger', 'warning', 'secondary'][$credito->estado_credito - 1] ?? 'secondary',
+                    strtoupper($credito->Estado->nombre_estado ?? '-')
+                )
+                : '<span class="badge bg-secondary">-</span>';
 
-
-            $Acciones = '<button class="btn p-0 text-info" type="button" onClick="Editar('. $c->id_clientes .' )"><span class="text-500 fas fa-edit"></span></button>
-                        <button class="btn p-0 text-red ms-2" type="button"onClick="Remover('. $c->id_clientes.' )"><span class="text-500 fas fa-trash-alt"></span></button>';
-
-            $arryClientes[] = [
-                'id_clientes' => $c->id_clientes,
-                'nombre' => $c->nombre,
-                'apellidos' => $c->apellidos,                
-                'direccion_domicilio' => $c->direccion_domicilio,
-                'estado' =>$Estado,
-                'ciclo' => $c->getCreditos->count(),
-                'telefono' => $c->telefono,
-                'cedula' => $c->cedula,
-                'acciones' => ($Show) ? $Acciones : '' 
+            return [
+                'id_clientes'          => $c->id_clientes,
+                'nombre'               => $c->nombre,
+                'apellidos'            => $c->apellidos,
+                'direccion_domicilio'  => $c->direccion_domicilio,
+                'estado'               => $estado,
+                'ciclo'                => $c->getCreditos->count(),
+                'telefono'             => $c->telefono,
+                'cedula'               => $c->cedula,
+                'acciones'             => $Show ? sprintf(
+                    '<button class="btn p-0 text-info" onClick="Editar(%d)"><span class="text-500 fas fa-edit"></span></button>
+                     <button class="btn p-0 text-red ms-2" onClick="Remover(%d)"><span class="text-500 fas fa-trash-alt"></span></button>',
+                    $c->id_clientes, $c->id_clientes
+                ) : '',
             ];
-        }
-
-        return response()->json($arryClientes);
+        }));
     }
 
     public function FormClientes($id)

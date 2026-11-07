@@ -107,7 +107,7 @@
                         <p>Inactivos</p>
                     </a>
                 </li>
-                @if (in_array(Session::get('rol'), [1]))
+                @if (in_array(Session::get('rol'), [1, 5]))
                 <li class="nav-item">
                   <a href="../ClientesNA/-1" class="nav-link {{ (request()->is('ClientesNA/*')) ? 'active' : '' }}" >
                     <i class="nav-icon fas fa-user nav-icon"></i>
@@ -156,6 +156,34 @@
                 @endif
               </ul>
           </li>
+          @if (in_array(Session::get('rol'), [1]))
+          <li class="nav-item {{ (request()->is('Ruleta*')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('Ruleta*')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-dharmachakra"></i>
+              <p>Ruleta<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('Ruleta') }}" class="nav-link {{ (request()->is('Ruleta')) ? 'active' : '' }}">
+                  <i class="fas fa-chart-pie nav-icon"></i>
+                  <p>Dashboard</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('RuletaPromociones') }}" class="nav-link {{ (request()->is('RuletaPromociones')) ? 'active' : '' }}">
+                  <i class="fas fa-tags nav-icon"></i>
+                  <p>Promociones</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
+          <li class="nav-item">
+            <a href="{{ route('Notificaciones') }}" class="nav-link {{ (request()->is('Notificaciones')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-bell"></i>
+              <p>Notificaciones</p>
+            </a>
+          </li>
           @if (in_array(Session::get('rol'), [1, 5]))
           <li class="nav-item">
               <a href="#" class="nav-link {{ (request()->is('Reporte')) ? 'active' : '' }}">
@@ -169,53 +197,80 @@
             
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{route('MetricasPromotor')}}" class="nav-link {{ (request()->is('MetricasPromotor')) ? 'active' : '' }}" >
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Promotores</p>
-                    </a>
+                  <a href="{{route('MetricasPromotor')}}" class="nav-link {{ (request()->is('MetricasPromotor')) ? 'active' : '' }}" >
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <p>Promotores</p>
+                  </a>
                 </li>
                 <li class="nav-item">
+                  <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
+                    <i class="fas fa-ban nav-icon"></i>
+                    <p>Solic. Denegadas</p>
+                  </a>
+                </li>
+
+                @if (in_array(Session::get('rol'), [1]))
+                <li class="nav-item">
+                  <a href="{{route('LoginLog')}}" class="nav-link {{ (request()->is('LoginLog')) ? 'active' : '' }}" >
+                    <i class="fas fa-history nav-icon"></i>
+                    <p>Reporte Accesos</p>
+                  </a>
+                </li>
+                @endif
+
+                @if (in_array(Auth::id(), [7, 32]))
+                <li class="nav-item">
+                  <a href="{{route('MonitoreoActividad')}}" class="nav-link {{ (request()->is('MonitoreoActividad')) ? 'active' : '' }}" >
+                    <i class="fas fa-desktop nav-icon"></i>
+                    <p>Monitoreo de Actividad</p>
+                  </a>
+                </li>
+                @endif
+
+                <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-clipboard-list nav-icon"></i>
                         <p>Visitar</p>
                     </a>
                 </li>
 
+                @if (in_array(Session::get('rol'), [1]))
                 <li class="nav-item">
                   <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-money-bill-wave nav-icon"></i>
                     <p>Ingresos</p>
                   </a>
                 </li>
+                @endif
                 <li class="nav-item">
                   <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-exclamation-triangle nav-icon"></i>
                     <p>Morosidad</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos</p>
                   </a>
                 </li>
                 @if (in_array(Session::get('rol'), [1, 3]))
                 <li class="nav-item">
                   <a href="{{route('Bitacora')}}" class="nav-link {{ (request()->is('Bitacora')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-book nav-icon"></i>
                     <p>Bitacora Desembolsos</p>
                   </a>
                 </li>
                 @endif
                 <li class="nav-item">
                   <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos Prom.</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('ProxVencer')}}" class="nav-link {{ (request()->is('ProxVencer')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-clock nav-icon"></i>
                     <p>Prox. Vencer</p>
                   </a>
                 </li>
@@ -227,7 +282,7 @@
                   </a>
                 </li>
                 @endif
-                <!-- 
+                <!--
                 <li class="nav-item">
                   <a href="{{route('Dispensa')}}" class="nav-link {{ (request()->is('Dispensa')) ? 'active' : '' }}" >
                     <i class="fas fa-dollar-sign nav-icon"></i>
@@ -290,7 +345,7 @@
             </a>
           </li>
           @endif
-          @if (in_array(Session::get('rol'), [1, 5]))
+          @if (in_array(Session::get('rol'), [1]))
           <li class="nav-item" >
             <a  href="{{route('Consolidado', ['year' => date('Y')])}}"  class="nav-link {{ (request()->is('Consolidado')) ? 'active' : '' }}" >
               <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -306,7 +361,7 @@
                   <p>Cat. Clientes</p>
               </a>
           </li>
-          @if (in_array(Session::get('rol'), [1, 5]))
+          @if (in_array(Session::get('rol'), [1]))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
@@ -366,38 +421,38 @@
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="{{route('Visitar')}}" class="nav-link {{ (request()->is('Visitar')) ? 'active' : '' }}" >
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-clipboard-list nav-icon"></i>
                         <p>Visitar</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                   <a href="{{route('Abonos')}}" class="nav-link {{ (request()->is('Abonos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-money-bill-wave nav-icon"></i>
                     <p>Ingresos</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Morosidad')}}" class="nav-link {{ (request()->is('Morosidad')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-exclamation-triangle nav-icon"></i>
                     <p>Morosidad</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Arqueos')}}" class="nav-link {{ (request()->is('Arqueos')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('ArqueosPromotor')}}" class="nav-link {{ (request()->is('ArqueosPromotor')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-cash-register nav-icon"></i>
                     <p>Arqueos Prom.</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('Bitacora')}}" class="nav-link {{ (request()->is('Bitacora')) ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-book nav-icon"></i>
                     <p>Bitacora Desembolsos</p>
                   </a>
                 </li>
@@ -407,7 +462,12 @@
                     <p>Historial. Pagos</p>
                   </a>
                 </li>
-                
+                <li class="nav-item">
+                  <a href="{{route('SolicDenegadas')}}" class="nav-link {{ (request()->is('SolicDenegadas')) ? 'active' : '' }}" >
+                    <i class="fas fa-ban nav-icon"></i>
+                    <p>Solic. Denegadas</p>
+                  </a>
+                </li>                
               </ul>
               <li class="nav-header">MOVIMIENTOS</li>
               <li class="nav-item menu-open">

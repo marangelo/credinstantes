@@ -9,9 +9,8 @@
 @section('content')
 <div class="wrapper">
 
-@if (Session::get('rol') == 5)
-    @include('layouts.lyt_main')
-@else
+{{-- Supervisor (5): el menú lateral ya lo pone lyt_listas (lyt_aside); no se incluye nada más --}}
+@if (Session::get('rol') != 5)
   @include('layouts.lyt_promotor')
 @endif
 

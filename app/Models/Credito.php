@@ -192,6 +192,7 @@ class Credito extends Model
 
                 $DiaSemana_         = $request->input('DiaSemana_');
                 $Monto_             = $request->input('Monto_');
+                $Respaldo_          = $request->input('Respaldo_');
                 $Plato_             = $request->input('Plato_');
                 $Interes_           = $request->input('Interes_');
                 $Total_             = $request->input('Total_');
@@ -232,22 +233,26 @@ class Credito extends Model
                 $idInsertado = Clientes::insertGetId($datos_a_insertar);
 
                 $datos_credito = [
-                    'creado_por'          => Auth::id(),
-                    'asignado'            => $Promotor,
-                    'fecha_apertura'      => date('Y-m-d',strtotime($FechaOpen)),
-                    'id_diassemana'       => $DiaSemana_,
-                    'id_clientes'         => $idInsertado,
-                    'monto_credito'       => $Monto_,
-                    'plazo'               => $Plato_,
-                    'taza_interes'        => $Interes_,
-                    'numero_cuotas'       => $Cuotas_,
-                    'total'               => $Total_,
-                    'cuota'               => $vlCuota,
-                    'interes'             => $vlInteres,
-                    'intereses_por_cuota'=>$InteresesPorCuota,
-                    'saldo'               => $Saldos_,
-                    'estado_credito'               => $Estado,
-                    'activo'            => 1
+                    'creado_por'            => Auth::id(),
+                    'asignado'              => $Promotor,
+                    'fecha_apertura'        => date('Y-m-d',strtotime($FechaOpen)),
+                    'id_diassemana'         => $DiaSemana_,
+                    'id_clientes'           => $idInsertado,
+                    'monto_credito'         => $Monto_,
+                    'plazo'                 => $Plato_,
+                    'taza_interes'          => $Interes_,
+                    'numero_cuotas'         => $Cuotas_,
+                    'total'                 => $Total_,
+                    'cuota'                 => $vlCuota,
+                    'interes'               => $vlInteres,
+                    'intereses_por_cuota'   =>$InteresesPorCuota,
+                    'saldo'                 => $Saldos_,
+                    'estado_credito'        => $Estado,
+                    'activo'                => 1,
+                    //CAMPO AGREGADO PARA GUARDAR EL RESPALDO DEL CREDITO
+                    'Seguro'                => $Respaldo_,
+                    // Comentario de la solicitud aprobada (sale en el PDF Solicitud de crédito)
+                    'comentario'            => self::ComentarioSolicitud($request),
                 ];
 
                 $IdCredito = Credito::insertGetId($datos_credito);
@@ -441,17 +446,28 @@ class Credito extends Model
         }
         
     }
+    // Comentario de la solicitud que se aprueba (Comentario_ viene del formulario de
+    // solicitud/renovación). Fuera de ese flujo no llega y queda en null.
+    public static function ComentarioSolicitud(Request $request)
+    {
+        $Comentario = mb_substr(trim((string) $request->input('Comentario_', '')), 0, 500);
+        return $Comentario !== '' ? $Comentario : null;
+    }
+
     public static function AddCredito(Request $request)
     {
 
         if ($request->ajax()) {
             try {
+                // Definir el umbral de días para determinar si es una reactivación o un re-préstamo
+                $UmbralDias = 30; 
 
                 $idInsertado        = $request->input('IdClientes');
 
                 $DiaSemana_         = $request->input('DiaSemana_');
                 $Promotor_          = $request->input('Promotor_');
                 $Monto_             = $request->input('Monto_');
+                $Respaldo_          = $request->input('Respaldo_');
                 $Plato_             = $request->input('Plato_');
                 $Interes_           = $request->input('Interes_');
                 $Total_             = $request->input('Total_');
@@ -462,6 +478,7 @@ class Credito extends Model
                 $Saldos_             = $request->input('Saldos_');
                 $InteresesPorCuota             = $request->input('InteresesPorCuota');
                 $FechaOpen             = $request->input('FechaOpen');
+                
 
 
                 $DaysLastPayment = Clientes::getDaysLastPayment($idInsertado);    
@@ -486,6 +503,10 @@ class Credito extends Model
                     'intereses_por_cuota'   =>$InteresesPorCuota,
                     'estado_credito'        => 1,
                     'activo'                => 1,
+                    //CAMPO AGREGADO PARA GUARDAR EL RESPALDO DEL CREDITO
+                    'Seguro'                => $Respaldo_,
+                    // Comentario de la solicitud aprobada (sale en el PDF Solicitud de crédito)
+                    'comentario'            => self::ComentarioSolicitud($request),
                 ];
                 
                 $IdCredito = Credito::insertGetId($datos_credito);
@@ -514,7 +535,9 @@ class Credito extends Model
                  //VERIFICA EL ESTADO DEL CREDITO AL QUE SE LE ABONO
                 //Clientes::CheckStatus($IdCredito);            
                 
-                if($DaysLastPayment >= 10){
+
+                // Determinar si es una reactivación según los días desde el último pago
+                if($DaysLastPayment >= $UmbralDias) {
 
                     ClientesReactivacion::insert([
                         'id_clientes' => $idInsertado,
@@ -526,14 +549,17 @@ class Credito extends Model
 
                 } 
 
-                if($DaysLastPayment < 10){
+                // Determinar si es un re-préstamo según los días desde el último pago
+                if($DaysLastPayment < $UmbralDias) {
+
                     Reloan::insert([
                         'loan_id'       => $IdCredito,
                         'date_reloan'   => $FechaOpen, 
                         'amount_reloan' => $Monto_,
                         'user_created'  => $Promotor_,
                         'id_clientes'   => $idInsertado
-                    ]); 
+                    ]);
+                    
                 }
 
                 $IdProspecto           = $request->input('IdProspecto_'); 

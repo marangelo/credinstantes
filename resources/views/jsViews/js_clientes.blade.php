@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
-        var currentPath = window.location.pathname; 
-        $("#id_select_zona").val(currentPath.slice(-1)).change();
+        var currentPath = window.location.pathname;
+        // La zona seleccionada ya viene marcada desde el servidor
 
         $('[data-mask]').inputmask()
     
@@ -10,33 +10,61 @@
         });
 
         var userRole = $("#id_rol_user").text();
-        
+
+        // Supervisor (rol 5): puede exportar a Excel solo la lista de Clientes Inactivos
+        var ExportInactivos = {{ (($Titulo ?? '') === 'Clientes Inactivos' && in_array(Session::get('rol'), [5])) ? 'true' : 'false' }};
+
+        // En Clientes Activos no se ofrece "Copiar" (solo Excel y PDF)
+        var EsActivos = {{ ($Titulo ?? '') === 'Clientes Activos' ? 'true' : 'false' }};
+
         $('#id_select_zona').change(function() {
-            var selectedValue = this.value;           
-            window.location.href = currentPath.slice(0, -1) + selectedValue;
+            // Reemplaza el último segmento (/Activos/3 -> /Activos/12); funciona con ids de 2+ dígitos
+            window.location.href = currentPath.replace(/\/[^\/]*$/, '/' + this.value);
         });
 
-        $("#tbl_clientes").DataTable({
-            "responsive": true, 
-            "lengthChange": false, 
+        var tblClientes = $("#tbl_clientes").DataTable({
+            "responsive": false,          // en celular cada fila se muestra como tarjeta (clientes.css)
+            "lengthChange": false,
             "autoWidth": false,
-            "info": false,
+            "info": true,
+            "pageLength": 25,
+            "dom": "rt<'cli-pager'ip>",
             "language": {
-                "zeroRecords": "NO HAY COINCIDENCIAS",
+                "zeroRecords": "No hay clientes que coincidan con la búsqueda",
+                "info": "_START_–_END_ de _TOTAL_",
+                "infoEmpty": "0 clientes",
+                "infoFiltered": "(de _MAX_)",
                 "paginate": {
                     "first": "Primera",
-                    "last": "Última ",
+                    "last": "Última",
                     "next": "Siguiente",
                     "previous": "Anterior"
                 },
-                "lengthMenu": "MOSTRAR _MENU_",
-                "emptyTable": "-",
-                "search": "BUSCAR"
+                "emptyTable": "No hay clientes en esta lista",
+                "search": "Buscar"
             },
-            "buttons": (userRole == 1) ? ["copy", "excel", "pdf"] : [ ],
+            // Un solo botón "Exportar" con menú (en celular ocupa poco espacio)
+            "buttons": (userRole == 1) ? [{
+                extend: 'collection',
+                text: '<i class="fas fa-download" aria-hidden="true"></i><span class="cli-export-label">Exportar</span>',
+                titleAttr: 'Exportar lista',
+                className: 'cli-export-btn',
+                buttons: (EsActivos ? [] : [
+                    { extend: 'copy',  text: '<i class="far fa-copy" aria-hidden="true"></i> Copiar' }
+                ]).concat([
+                    { extend: 'excel', text: '<i class="far fa-file-excel" aria-hidden="true"></i> Excel' },
+                    { extend: 'pdf',   text: '<i class="far fa-file-pdf" aria-hidden="true"></i> PDF' }
+                ])
+            }] : (ExportInactivos ? [{
+                extend: 'excel',
+                text: '<i class="far fa-file-excel" aria-hidden="true"></i><span class="cli-export-label">Excel</span>',
+                titleAttr: 'Exportar a Excel',
+                className: 'cli-export-btn',
+                title: 'Clientes Inactivos',
+                exportOptions: { columns: [1, 2, 3, 4, 5, 6] } // sin la columna de acciones
+            }] : [ ]),
             columnDefs: [
                 { visible: false, targets: 0 },
-                {"width": "13%","targets": [0,1,2,3,4,5,6]},
             ],
             "drawCallback": function(settings) {
                 var api = this.api();
@@ -59,26 +87,44 @@
                 $("#id_al_vencido_count").text(vencidoCount);
                 
 
+                var etiquetas = { 'AL DIA': 'Al día', 'EN MORA': 'En mora', 'VENCIDO': 'Vencido', 'INACTIVO': 'Inactivo' };
                 api.column(0, { page: 'current' }).data().each(function(group, i) {
                     if (last !== group) {
-                        
-                        var tr_color = 'success'
-                        if (group != 'AL DIA') {
-                            (group === 'EN MORA') ? tr_color = 'danger' : tr_color = 'warning'
-                        }
-                        if(group === 'INACTIVO') {
-                            tr_color = ''
-                        }
+                        var tono = 'neutral';
+                        if (group === 'AL DIA')  tono = 'success';
+                        if (group === 'EN MORA') tono = 'danger';
+                        if (group === 'VENCIDO') tono = 'warning';
 
-                        $(rows).eq(i).before('<tr class="text-center bg-'+tr_color+' group"><td colspan="13">' + group + '</td></tr>');
+                        $(rows).eq(i).before(
+                            '<tr class="group cli-group cli-group--' + tono + '"><td colspan="13">' +
+                            '<span class="cli-dot" aria-hidden="true"></span>' + (etiquetas[group] || group) +
+                            '</td></tr>'
+                        );
                         last = group;
                     }
                 });
 
             },
-            
-            
-        }).buttons().container().appendTo('#tbl_clientes_wrapper .col-md-6:eq(0)');
+
+
+        });
+        tblClientes.buttons().container().appendTo('#cliExport');
+
+        // Búsqueda propia (campo grande, pensado para el celular)
+        var tBusqueda = null;
+        $('#cliSearch').on('input', function () {
+            var q = this.value;
+            clearTimeout(tBusqueda);
+            tBusqueda = setTimeout(function () { tblClientes.search(q).draw(); }, 150);
+        });
+
+        // Filtro por estado (Todos / Al día / En mora / Vencido)
+        $('.cli-filter').on('click', function () {
+            var estado = $(this).data('estado');
+            $('.cli-filter').attr('aria-pressed', 'false');
+            $(this).attr('aria-pressed', 'true');
+            tblClientes.column(0).search(estado ? '^' + estado + '$' : '', true, false).draw();
+        });
 
         $("#btn_update_credito").click(function(){
             

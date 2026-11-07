@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Usuario;
+use App\Models\LoginLog;
+use App\Helpers\UserAgentParser;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -36,7 +38,7 @@ class LoginController extends Controller
             break;
 
             case '5':
-                return 'Supervisor';
+                return 'Dashboard';
             break;
 
             default:
@@ -58,7 +60,9 @@ class LoginController extends Controller
 
     public function logout () {        
         auth()->logout();
-        return redirect('/');
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect('/')->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
     public function login(Request $request) {
 
@@ -90,7 +94,20 @@ class LoginController extends Controller
                     $request->session()->put('rol', $user->id_rol);
                     $request->session()->put('Zona', $user->id_zona);
                 }
-                //$rol = DB::table('usuario_rol')->where('usuario_id', $queryResult)->pluck('rol_id');
+
+                $agent = new UserAgentParser($request->userAgent());
+                
+                LoginLog::create([
+                    'user_id'         => $queryResult->first(),
+                    'ip'              => $request->ip(),
+                    'browser'         => $agent->browser(),
+                    'browser_version' => $agent->browserVersion(),
+                    'platform'        => $agent->platform(),
+                    'device'          => $agent->device(),
+                    'device_model'    => $request->input('device_model'),
+                    'device_brand'    => $request->input('device_brand'),
+                    'android_id'      => $request->input('device_android_id'),
+                ]);
                 
                 return $this->sendLoginResponse($request);
             }
@@ -100,7 +117,14 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return view('Usuario.home');
+        if (auth()->check()) {
+            return redirect($this->redirectTo());
+        }
+        return response()
+            ->view('Usuario.home')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
         
     }
 }

@@ -10,6 +10,8 @@ use App\Models\Departamentos;
 use App\Models\Zonas;
 use App\Models\DiasSemana;
 use App\Models\Abono;
+use App\Models\NotificacionVisita;
+use App\Models\UsuarioZona;
 use App\Models\Credito;
 use App\Models\Credinstante;
 use App\Models\Usuario;
@@ -60,6 +62,17 @@ class CredinstanteController extends Controller
         \Log::channel('log_vouchers')->info("Se imprimio el Voucher del pago Parcial de: ". $Id);
         return view('Voucher.parcial', compact('Abono'));
         
+    }
+
+    public function SaveNotificacionVisita(Request $request)
+    {
+        return NotificacionVisita::SaveNotificacion($request);
+    }
+
+    public function prtNotificacionVisita($Id){
+        $Notificacion = NotificacionVisita::find($Id);
+        \Log::channel('log_vouchers')->info("Se imprimio la Notificacion de visita: ". $Id);
+        return view('Voucher.notificacion', compact('Notificacion'));
     }
 
     public function InfoCliente($id)
@@ -353,8 +366,11 @@ class CredinstanteController extends Controller
     public function updatePassword(Request $request)
     {
         $response = Usuario::updatePassword($request);
-        
-        return response()->json($response);
+
+        return response()->json([
+            'success' => $response['success'],
+            'message' => $response['message'] ?? ''
+        ]);
     }
     public function getSaldoAbono($IdCredito,$opt)
     {
@@ -373,8 +389,14 @@ class CredinstanteController extends Controller
     public function Promotor()
     {         
         $Titulo = "Promotor";
-        
-        $Zonas  = Zonas::getZonas();  
+
+        $Zonas  = Zonas::getZonas();
+
+        // Promotor: el filtro solo muestra sus zonas asignadas
+        $ZonasPromotor = UsuarioZona::ZonasPromotor(Auth::User());
+        if (!is_null($ZonasPromotor)) {
+            $Zonas = $Zonas->whereIn('id_zona', $ZonasPromotor)->values();
+        }
         
         return view('Promotor.Home',compact('Titulo','Zonas'));
 

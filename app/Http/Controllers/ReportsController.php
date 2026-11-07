@@ -118,7 +118,10 @@ class ReportsController extends Controller
     }
     public function getMetricasPromotor(Request $request)
     {
-        $response = ReportsModels::getMetricasPromotor($request);
+        $D1   = $request->input('dtIni');
+        $D2   = $request->input('dtEnd');
+        $Prom = $request->input('Prom');
+        $response = ReportsModels::getMetricasPromotor($Prom, $D1, $D2);
         
         return response()->json($response);
     }

@@ -63,6 +63,11 @@ class Clientes extends Model
 
         return $resultados;
     }
+
+    public static function getAllClientes(){
+        $Clientes = Clientes::where('activo', 1)->orderBy('id_clientes', 'asc')->get();
+        return $Clientes;
+    }
     public static function CheckStatus($IdCred){
 
         $Estado             = 1;
@@ -183,6 +188,14 @@ class Clientes extends Model
 
         $ClientesInactivos = Clientes::getInactivos($Zona);
 
+        // Promotor: solo ve clientes de sus zonas asignadas (sin zonas = ninguno)
+        $ZonasPromotor = UsuarioZona::ZonasPromotor(Auth::User());
+        if (!is_null($ZonasPromotor)) {
+            $ClientesInactivos = $ClientesInactivos->filter(function ($c) use ($ZonasPromotor) {
+                return in_array((int) $c->id_zona, $ZonasPromotor, true);
+            })->values();
+        }
+
         $ClientePromotores = ClientePromotores::get();
 
         $ArrayClientesInactivos     = [] ;
@@ -191,6 +204,11 @@ class Clientes extends Model
 
         $position_array_cliente     = 0 ;
 
+
+        $User = Auth::User();
+        $Role = $User->id_rol;
+
+        $isCalc = (in_array($Role, [1, 3])) ? true : false;
 
         
         if ($Zona > 0) {
@@ -218,20 +236,22 @@ class Clientes extends Model
             $position_array_cliente++;
         }
         
+        if ($isCalc) {
+            foreach ($ClientePromotores as $c) {
+                $cl = Clientes::where('id_clientes',$c->id_clientes)->first();
 
-        foreach ($ClientePromotores as $c) {
-            $cl = Clientes::where('id_clientes',$c->id_clientes)->first();
+                $ArrayClientesDisponible[$position_array_cliente] = [
+                    'id_clientes'       => $c->id_clientes,
+                    'Nombre'            => $cl->nombre,
+                    'Apellidos'         => $cl->apellidos,
+                    'Departamento'      => $cl->getMunicipio->getDepartamentos->nombre_departamento,
+                    'Zona'              => $cl->getZona->nombre_zona,
+                    'Direccion'         => $cl->direccion_domicilio,
+                    'Accion'            => 'Menos de 3 Abonos',
+                ];
 
-            $ArrayClientesDisponible[$position_array_cliente] = [
-                'id_clientes'       => $c->id_clientes,
-                'Nombre'            => $cl->nombre,
-                'Apellidos'         => $cl->apellidos,
-                'Departamento'      => $cl->getMunicipio->getDepartamentos->nombre_departamento,
-                'Zona'              => $cl->getZona->nombre_zona,
-                'Direccion'         => $cl->direccion_domicilio,
-                'Accion'            => 'Menos de 3 Abonos',
-            ];
-            $position_array_cliente++;
+                $position_array_cliente++;
+            }
         }
 
         $array_merge = array_merge($ArrayClientesInactivos , $ArrayClientesDisponible);

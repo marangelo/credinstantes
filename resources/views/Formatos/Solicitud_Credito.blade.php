@@ -255,7 +255,23 @@
             <td colspan="2">Cuotas: <strong>C$. {{ number_format($Credito->cuota,2) }}</strong></td>
         </tr>
     </table>
-    
+
+    {{-- Comentario de la solicitud aprobada: el del crédito; si no lo tiene, el de su solicitud --}}
+    @php
+        $comentarioCredito = trim((string) ($Credito->comentario ?? ''));
+        if ($comentarioCredito === '') {
+            $comentarioCredito = trim((string) ($Credito->getRefResquest->getRequest->comentario ?? ''));
+        }
+    @endphp
+    <table style="margin-top: 10px;">
+        <tr>
+            <td class="section-title">COMENTARIOS</td>
+        </tr>
+        <tr>
+            <td style="height: 60px; vertical-align: top;">{!! $comentarioCredito !== '' ? nl2br(e($comentarioCredito)) : '&nbsp;' !!}</td>
+        </tr>
+    </table>
+
 
     <div class="signature">
         <table class="signature-table">

@@ -133,7 +133,7 @@ class ReportsModels extends Model {
     public static function CalcRecuperacion(Request $request)
     {
         $dtIni    = $request->input('dtIni').' 00:00:00';
-        $dtEnd    = $request->input('dtEnd').' 00:00:00';
+        $dtEnd    = $request->input('dtEnd').' 23:59:59';
         
         $Cobra    = Auth::id();
         $id_zona  = Auth::User()->id_zona;
@@ -255,7 +255,7 @@ class ReportsModels extends Model {
         $ttPagoIntereses    = 0;
 
         // CLIENTES ARCHIVADOS
-        $ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
+        //$ClientesArchivados = ClientesNA::all()->pluck('id_cliente')->toArray();
 
 
         $D1     = date('Y-m-01', strtotime($dt_end)). ' 00:00:00';
@@ -266,7 +266,7 @@ class ReportsModels extends Model {
         $MoraAtrasada = PagosFechas::getMora($Opt,'atrasada',$D1, $D2);
         $MoraVencida  = PagosFechas::getMora($Opt,'vencida',$D1, $D2);
 
-        $Dispensa     = Abono::Dispensa($D1, $D2);
+        $Dispensa     = Abono::Dispensa($D1, $D2, $Opt);
 
 
         if ($role == 2) {
@@ -277,7 +277,7 @@ class ReportsModels extends Model {
                                     SUM((CASE WHEN FECHA_ABONO <= "2024-03-16" THEN CAPITAL ELSE CAPITAL END)) CAPITAL, SUM(INTERES) INTERES')
                 ->whereBetween('FECHA_ABONO', [$D1, $D2])
                 ->where('activo', 1)
-                ->whereNotIn('id_clientes', $ClientesArchivados)
+                //->whereNotIn('id_clientes', $ClientesArchivados)
                 ->when($Opt > -1, function ($query) use ($Opt) {
                     $query->where('id_zona', $Opt);
                 })
@@ -400,12 +400,106 @@ class ReportsModels extends Model {
 
         return $array_dashboard;
     }
-    public static function getMetricasPromotor( Request $request )
+    public static function getMetricasPromotor($Prom, $D1, $D2)
     {
+        
+        $array_dashboard         = [];
+        $ArrayClientesNuevos     = [] ;
+        $ArrayReprestamo         = [] ;
+        $ArrayReactivaciones     = [] ;
+        $Loadarray               = [] ;
+        $NotInReactivacion       = [] ;
+        $position_array          = 0 ;
 
-        $D1     = $request->input('dtIni');
-        $D2     = $request->input('dtEnd');
-        $Prom   = $request->input('Prom');
+        
+        if ($Prom > 0) {
+            $Represtamo = Reloan::whereBetween('date_reloan', [$D1, $D2])->where('user_created',$Prom)->get();
+        }else{
+            $Represtamo = Reloan::whereBetween('date_reloan', [$D1, $D2])->get();
+        }
+        
+        foreach ($Represtamo as $rc) {            
+            $ArrayReprestamo[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos,
+                'Fecha'             => \Date::parse($rc->date_reloan)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->amount_reloan,2),
+                'Origen'            => 'RePrestamo',
+            ];
+            $Loadarray[$position_array] = $rc->loan_id;
+            $position_array++;
+        }
+
+
+
+
+        if ($Prom > 0) {
+            $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->where('user_created',$Prom)->get();
+        }else{
+            $Clientes_Reactivacion = ClientesReactivacion::whereBetween('fecha_reactivacion', [$D1, $D2])->get();
+        }
+
+
+        $Count_Reactivacion    = $Clientes_Reactivacion->count();
+        $Monto_Reactivacion    = $Clientes_Reactivacion->sum('monto_reactivacion');
+
+
+        foreach ($Clientes_Reactivacion as $rc) {
+            $ArrayReactivaciones[$position_array] = [
+                'id_clientes'       => $rc->id_clientes,
+                'Nombre'            => $rc->Clientes->nombre . " " . $rc->Clientes->apellidos . " (".$rc->Clientes->id_clientes.")",
+                'Fecha'             => \Date::parse($rc->fecha_reactivacion)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($rc->monto_reactivacion,2),
+                'Origen'            => 'Reactivacion',
+            ];
+            $NotInReactivacion[$position_array] = $rc->Id_credito;
+            $position_array++;
+        }
+
+
+        if ($Prom > 0) {
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->where('activo','1')->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->where('asignado',$Prom)->get();
+        }else{
+            $Creditos   = Credito::whereBetween('fecha_apertura', [$D1, $D2])->where('activo','1')->whereNotIn('id_creditos', array_merge($NotInReactivacion,$Loadarray))->get();
+        }
+
+        
+        
+        foreach ($Creditos as $c) {
+            $ArrayClientesNuevos[$position_array] = [
+                'id_clientes'       => $c->id_clientes,
+                'Nombre'            => $c->Clientes->nombre . " " . $c->Clientes->apellidos,
+                'Fecha'             => \Date::parse($c->fecha_apertura)->format('D, M d, Y') ,
+                'Monto'             => "C$ ".number_format($c->monto_credito,2),
+                'Origen'            => 'Nuevo',
+            ];
+            $position_array++;
+        }
+
+        $SALDOS_COLOCADOS = $Represtamo->sum('amount_reloan') + $Creditos->sum('monto_credito'); 
+
+        $SALDOS_COLOCADOS = $SALDOS_COLOCADOS + $Monto_Reactivacion;
+
+        $array_merge = array_merge($ArrayClientesNuevos ,$ArrayReprestamo, $ArrayReactivaciones);
+
+        $array_dashboard = [
+            "CLIENTES_NUEVO"        => $Creditos->count(),
+            "RE_PRESTAMOS"          => $Represtamo->count(),
+            "SALDOS_COLOCADOS"      => $SALDOS_COLOCADOS,
+            "LISTA_CLIENTES"        => $array_merge,
+            'COUNT_REACT'           => number_format($Count_Reactivacion,0),
+            
+        ];
+
+        
+
+        return $array_dashboard;
+    }
+    public static function getCalcPromotor($Prom)
+    {
+        $dtNow  = date('Y-m-d');
+        $D1     = date('Y-m-01', strtotime($dtNow)). ' 00:00:00';
+        $D2     = date('Y-m-t', strtotime($dtNow)). ' 23:59:59'; 
         
         $array_dashboard         = [];
         $ArrayClientesNuevos     = [] ;
