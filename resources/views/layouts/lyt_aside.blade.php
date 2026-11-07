@@ -10,6 +10,12 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
+      {{-- Cambio de tema claro / oscuro (public/js/ui.js) --}}
+      <li class="nav-item d-flex align-items-center mr-1">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema claro / oscuro">
+          <i class="fas fa-moon ti-moon" aria-hidden="true"></i><i class="fas fa-sun ti-sun" aria-hidden="true"></i>
+        </button>
+      </li>
 
 
       <!-- Messages Dropdown Menu -->
