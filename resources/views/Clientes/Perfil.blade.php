@@ -10,6 +10,10 @@
   $iniciales = mb_strtoupper(mb_substr(trim($cli->nombre), 0, 1) . mb_substr(trim($cli->apellidos), 0, 1));
   $tel      = trim((string) $cli->telefono);
   $telLink  = preg_replace('/[^0-9+]/', '', $tel);
+  // WhatsApp: solo celulares de Nicaragua (8 dígitos que empiezan en 5, 7 u 8), con o sin 505 delante
+  $telDigitos = preg_replace('/\D/', '', $tel);
+  if (strlen($telDigitos) === 11 && substr($telDigitos, 0, 3) === '505') { $telDigitos = substr($telDigitos, 3); }
+  $waLink = (strlen($telDigitos) === 8 && in_array($telDigitos[0], ['5', '7', '8'])) ? 'https://wa.me/505' . $telDigitos : null;
   $municipio = $cli->getMunicipio->nombre_municipio ?? '';
   $depto     = $cli->getMunicipio->getDepartamentos->nombre_departamento ?? '';
   $zona      = $cli->getZona->nombre_zona ?? '';
@@ -66,9 +70,17 @@
 
         <div class="pf-client-actions">
           @if ($telLink !== '' && $telLink !== '0')
-            <a href="tel:{{ $telLink }}" class="pf-btn pf-call" aria-label="Llamar a {{ $nombre }}: {{ $tel }}">
-              <i class="fas fa-phone-alt" aria-hidden="true"></i> {{ $tel }}
-            </a>
+            <div class="pf-phone">
+              <a href="tel:{{ $telLink }}" class="pf-btn pf-call" aria-label="Llamar a {{ $nombre }}: {{ $tel }}">
+                <i class="fas fa-phone-alt" aria-hidden="true"></i> {{ $tel }}
+              </a>
+              @if ($waLink)
+                <a href="{{ $waLink }}" target="_blank" rel="noopener" class="pf-btn pf-wa"
+                   title="Enviar WhatsApp" aria-label="Enviar WhatsApp a {{ $nombre }}: {{ $tel }}">
+                  <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                </a>
+              @endif
+            </div>
           @else
             <span class="pf-btn is-disabled" aria-disabled="true"><i class="fas fa-phone-slash" aria-hidden="true"></i> Sin teléfono</span>
           @endif

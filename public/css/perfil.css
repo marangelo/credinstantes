@@ -127,9 +127,15 @@
 .pf-client-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
 .pf-client-actions .pf-btn { flex: 1 1 10rem; }
 .pf-call i { color: var(--tone-success); }
+/* Teléfono + WhatsApp siempre en la misma fila (también en celular, donde las acciones se apilan) */
+.pf-phone { display: flex; gap: 0.5rem; flex: 1 1 10rem; min-width: 0; }
+.pf-client-actions .pf-phone .pf-call { flex: 1 1 auto; width: auto; }
+.pf-client-actions .pf-phone .pf-wa { flex: 0 0 44px; width: 44px; padding: 0; }
+.pf-wa i { color: #25d366; font-size: 1.375rem; }
 @media (min-width: 768px) {
   .pf-client-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pf-client-actions .pf-btn { flex: 0 0 auto; }
+  .pf-phone { flex: 0 0 auto; }
 }
 
 /* ---------- Encabezado de secciones ---------- */
@@ -497,6 +503,7 @@
   .pf-client-details { grid-template-columns: minmax(0, 1fr); }
   .pf-client-actions { flex-direction: column; }
   .pf-client-actions .pf-btn { flex: none; width: 100%; }
+  .pf-phone { flex: none; width: 100%; }
 
   /* Un crédito activo ocupa todo el ancho; si hay varios, también (se leen mejor) */
   .pf-credits--active { grid-template-columns: minmax(0, 1fr); }
