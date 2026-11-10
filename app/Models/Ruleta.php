@@ -271,26 +271,61 @@ class Ruleta
         return $Lock ? $q->lockForUpdate()->first() : $q->first();
     }
 
-    // Giro previo del crédito en la promoción: un giro por crédito, así al renovar el cliente
-    // puede volver a girar con su crédito nuevo. Sin crédito no hay giro previo que buscar.
-    public static function ParticipacionPrevia($IdPromocion, $IdCredito)
+    // Giros por crédito: uno apenas se abre y otro al llegar al 60% pagado. Máximo 2 en toda la
+    // vida del crédito, sin importar la promoción (al renovar, el crédito nuevo arranca de cero).
+    const MAX_GIROS_CREDITO       = 2;
+    const PORCENTAJE_SEGUNDO_GIRO = 60;
+
+    // Porcentaje pagado del crédito, redondeado a 2 decimales (lo que se muestra es lo que se compara).
+    // Replica la fórmula de Clientes::creditCheck (app/Models/Clientes.php:331), que es la que ven
+    // en Credinstantes; no se reutiliza para no tocar esa validación. Si cambia allá, cambiarla acá.
+    public static function PorcentajePagado($Credito)
     {
-        if (!$IdCredito) {
+        $Total = (float) $Credito->total;
+        return $Total > 0 ? round((($Total - (float) $Credito->saldo) / $Total) * 100, 2) : 0.0;
+    }
+
+    // Cuántos giros usó el crédito, cuántos le corresponden y el último (para "Ver su premio").
+    // $Credito necesita id_creditos, total y saldo.
+    public static function GirosDelCredito($Credito)
+    {
+        $Giros = DB::table('tbl_ruleta_giros as g')
+            ->leftJoin('users as u', 'u.id', '=', 'g.id_usuario')
+            ->where('g.id_creditos', $Credito->id_creditos)
+            ->orderBy('g.fecha', 'desc')
+            ->orderBy('g.id_giro', 'desc')
+            ->select('g.fecha', 'g.tipo', 'g.monto', 'g.premio', 'g.codigo', 'u.nombre as promotor')
+            ->get();
+
+        $Porcentaje = self::PorcentajePagado($Credito);
+        $Permitidos = $Porcentaje >= self::PORCENTAJE_SEGUNDO_GIRO ? self::MAX_GIROS_CREDITO : 1;
+        $Ultimo     = $Giros->first();
+
+        return [
+            'USADOS'                  => $Giros->count(),
+            'PERMITIDOS'              => $Permitidos,
+            'DISPONIBLES'             => max(0, $Permitidos - $Giros->count()),
+            'PORCENTAJE_PAGADO'       => $Porcentaje,
+            'PORCENTAJE_SEGUNDO_GIRO' => self::PORCENTAJE_SEGUNDO_GIRO,
+            'ULTIMO'                  => $Ultimo ? [
+                'FECHA'    => $Ultimo->fecha,
+                'CODIGO'   => $Ultimo->codigo,
+                'PROMOTOR' => $Ultimo->promotor,
+            ] + self::PremioDeGiro($Ultimo) : null,
+        ];
+    }
+
+    // Por qué el crédito no puede girar más (null si le quedan giros).
+    private static function MotivoSinGiros(array $Giros)
+    {
+        if ($Giros['DISPONIBLES'] > 0) {
             return null;
         }
-
-        $Previo = DB::table('tbl_ruleta_giros as g')
-            ->leftJoin('users as u', 'u.id', '=', 'g.id_usuario')
-            ->where('g.id_promocion', $IdPromocion)
-            ->where('g.id_creditos', $IdCredito)
-            ->select('g.fecha', 'g.tipo', 'g.monto', 'g.premio', 'g.codigo', 'u.nombre as promotor')
-            ->first();
-
-        return $Previo ? [
-            'FECHA'    => $Previo->fecha,
-            'CODIGO'   => $Previo->codigo,
-            'PROMOTOR' => $Previo->promotor,
-        ] + self::PremioDeGiro($Previo) : null;
+        if ($Giros['USADOS'] >= self::MAX_GIROS_CREDITO) {
+            return 'Este crédito ya usó sus ' . self::MAX_GIROS_CREDITO . ' giros.';
+        }
+        return 'Este crédito ya usó su giro. El segundo se habilita al ' . self::PORCENTAJE_SEGUNDO_GIRO
+            . '% pagado (lleva ' . (int) floor($Giros['PORCENTAJE_PAGADO']) . '%).'; // sin decimales, como la app
     }
 
     private static function QueryCliente()
@@ -318,7 +353,7 @@ class Ruleta
             ->join('tbl_clientes as c', 'c.id_clientes', '=', 'cr.id_clientes')
             ->where('cr.id_creditos', $IdCredito)
             ->where('cr.activo', 1)
-            ->select('cr.id_creditos', 'cr.id_clientes', 'cr.estado_credito', 'c.cedula')
+            ->select('cr.id_creditos', 'cr.id_clientes', 'cr.estado_credito', 'cr.total', 'cr.saldo', 'c.cedula')
             ->first();
 
         if (!$Credito) {
@@ -351,14 +386,14 @@ class Ruleta
         return $Ficha;
     }
 
-    // Lo que necesita la pantalla de la ruleta: cliente, premios de la promoción vigente y si ya participó.
-    // $IdCredito: el crédito con el que se va a girar, para saber si ya giró en la promoción.
+    // Lo que necesita la pantalla de la ruleta: cliente, premios de la promoción vigente y los giros del crédito.
+    // $IdCredito: el crédito con el que se va a girar, para saber cuántos giros le quedan.
     public static function ClientePorId($IdCliente, $IdCredito = null)
     {
         $Credito = $IdCredito ? DB::table('tbl_creditos')
             ->where('id_creditos', $IdCredito)
             ->where('id_clientes', $IdCliente)
-            ->select('id_creditos', 'estado_credito')
+            ->select('id_creditos', 'estado_credito', 'total', 'saldo')
             ->first() : null;
 
         return self::FichaCliente(self::QueryCliente()->where('c.id_clientes', $IdCliente)->first(), $Credito);
@@ -373,6 +408,7 @@ class Ruleta
 
         $Promocion = self::PromocionVigente();
         $Premios   = $Promocion ? self::PremiosDe($Promocion->id_promocion) : [];
+        $Giros     = $Credito ? self::GirosDelCredito($Credito) : null;
 
         return [200, [
             'CODIGO'  => 'OK',
@@ -386,7 +422,11 @@ class Ruleta
             ],
             'CREDITO'      => $Credito ? ['ID' => (int) $Credito->id_creditos, 'ESTADO' => (int) $Credito->estado_credito] : null,
             'PROMOCION'    => $Promocion ? ['ID' => $Promocion->id_promocion, 'NOMBRE' => $Promocion->nombre, 'PREMIOS' => $Premios] : null,
-            'PARTICIPACION'=> $Promocion && $Credito ? self::ParticipacionPrevia($Promocion->id_promocion, $Credito->id_creditos) : null,
+            // GIROS: cuántos usó el crédito y cuántos le corresponden (null sin crédito)
+            'GIROS'        => $Giros,
+            // Último giro solo si ya no le quedan: así la app anterior (que bloquea con PARTICIPACION)
+            // sigue la regla nueva
+            'PARTICIPACION'=> $Giros && $Giros['DISPONIBLES'] === 0 ? $Giros['ULTIMO'] : null,
         ]];
     }
 
@@ -525,13 +565,16 @@ class Ruleta
                 return [409, ['CODIGO' => 'SIN_PROMOCION', 'MENSAJE' => 'No hay una promoción activa en este momento.']];
             }
 
-            $Previo = self::ParticipacionPrevia($Promocion->id_promocion, $Credito->id_creditos);
+            // Dentro de la transacción: con la promoción bloqueada, dos giros del mismo crédito no
+            // pueden pasar a la vez
+            $Giros  = self::GirosDelCredito($Credito);
+            $Motivo = self::MotivoSinGiros($Giros);
 
-            if ($Previo) {
+            if ($Motivo) {
                 return [409, [
                     'CODIGO'  => 'YA_PARTICIPO',
-                    'MENSAJE' => 'Este crédito ya giró en la promoción.',
-                    'GIRO'    => $Previo,
+                    'MENSAJE' => $Motivo,
+                    'GIRO'    => $Giros['ULTIMO'],
                 ]];
             }
 
