@@ -104,8 +104,8 @@ class Abono extends Model
                 // AQUI SE CALCULA TOMANDO EL SALDO PENDIENTE YA QUE CONTIENE EL INTERES NECESARIO                
                 $Saldo_to_cancelar = $Credito->saldo;
 
-                $LstAbono = Abono::selectRaw('NumPago')->where('id_creditos', $IdCredito)->groupBy('NumPago')->orderByDesc('NumPago')->first();                
-                $IntePago  = Abono::where('id_creditos',$IdCredito)->where('NumPago',$LstAbono->NumPago)->sum('pago_intereses');
+                $LstAbono = Abono::selectRaw('NumPago')->where('id_creditos', $IdCredito)->where('activo',1)->groupBy('NumPago')->orderByDesc('NumPago')->first();
+                $IntePago  = ($LstAbono) ? Abono::where('id_creditos',$IdCredito)->where('NumPago',$LstAbono->NumPago)->where('activo',1)->sum('pago_intereses') : 0;
                 $IntePend  = $Credito->intereses_por_cuota - $IntePago ;
                 $IntResta = ($IntePend <= 0) ? 0 : $IntePend ;                
 
@@ -265,8 +265,9 @@ class Abono extends Model
                 $Descuento      = $request->input('Desc');
                 $ttAbono        = $request->input('Total_');
 
-                $InteresPagado  = Abono::where('id_creditos',$IdCred)->where('NumPago',$NumPago)->sum('pago_intereses');
-                $Info_Credito   = Credito::where('id_creditos',$IdCred)->where('activo',1)->first();            
+                // Solo abonos activos: los revertidos (activo = 0) no cuentan como interés pagado
+                $InteresPagado  = Abono::where('id_creditos',$IdCred)->where('NumPago',$NumPago)->where('activo',1)->sum('pago_intereses');
+                $Info_Credito   = Credito::where('id_creditos',$IdCred)->where('activo',1)->first();
                 $Interes_Abono  = $Info_Credito->intereses_por_cuota - $InteresPagado;                
                 $Credito_Saldo  = $Info_Credito->saldo;
 
@@ -463,7 +464,7 @@ class Abono extends Model
                 $NumPago        = $request->input('NumPago');
 
                 //OBTENEMOS LA INFORMACION DEL CREDITO
-                $InteresPagado  = Abono::where('id_creditos',$IdCred)->where('NumPago',$NumPago)->sum('pago_intereses');
+                $InteresPagado  = Abono::where('id_creditos',$IdCred)->where('NumPago',$NumPago)->where('activo',1)->sum('pago_intereses');
                 $Info_Credito   = Credito::where('id_creditos',$IdCred)->where('activo',1)->first();
                 $Cuotas_pend    = RefAbonos::WHERE('id_creditos',$IdCred)->where('Pagado',0)->count();
                 
