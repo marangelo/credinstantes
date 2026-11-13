@@ -117,6 +117,8 @@
             $pendiente = $ultimo ? (float) $ultimo->saldo_cuota : 0;
             // Cuotas realmente pagadas (tbl_pagosabonos); abonosCount() cuenta también los abonos parciales
             $cuotasPagadas = \App\Models\RefAbonos::where('id_creditos', $c->id_creditos)->where('Pagado', 1)->count();
+            // Día de visita pactado en el crédito (cat_diassemana)
+            $diaCuota = optional($c->getDiasSemana)->dia_semana;
           @endphp
           <article class="pf-credit pf-credit--{{ $tono }}" aria-labelledby="cr-{{ $c->id_creditos }}">
             <div class="pf-credit-head">
@@ -149,7 +151,7 @@
             <dl class="pf-facts pf-facts--main">
               <div class="pf-fact"><dt>Cuota</dt><dd>C$ {{ number_format($c->cuota, 2) }}</dd></div>
               <div class="pf-fact"><dt>Cuotas pagadas</dt><dd>{{ $cuotasPagadas }} / {{ number_format($c->numero_cuotas, 0) }}</dd></div>
-              <div class="pf-fact"><dt>Último pago</dt><dd>{{ $ultimo ? $fmtFecha($ultimo->fecha_cuota) : '—' }}</dd></div>
+              <div class="pf-fact"><dt>Día de cuota</dt><dd>{{ $diaCuota ? ucfirst(mb_strtolower($diaCuota)) : '—' }}</dd></div>
               <div class="pf-fact"><dt>Monto</dt><dd>C$ {{ number_format($c->monto_credito, 2) }}</dd></div>
               <div class="pf-fact"><dt>Inicio</dt><dd>{{ $fmtFecha($c->fecha_apertura) }}</dd></div>
               <div class="pf-fact"><dt>Vence</dt><dd>{{ $fmtFecha($c->fecha_ultimo_abono) }}</dd></div>
